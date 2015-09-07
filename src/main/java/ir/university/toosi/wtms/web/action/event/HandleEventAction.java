@@ -1,0 +1,315 @@
+package ir.university.toosi.wtms.web.action.event;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.wtms.web.action.AccessControlAction;
+import ir.university.toosi.wtms.web.action.UserManagementAction;
+import ir.university.toosi.wtms.web.helper.GeneralHelper;
+import ir.university.toosi.wtms.web.model.entity.EventLog;
+import ir.university.toosi.wtms.web.model.entity.MenuType;
+import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.richfaces.component.SortOrder;
+import org.richfaces.model.Filter;
+
+import javax.enterprise.context.SessionScoped;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * @author : Hamed Hatami , Arsham Sedaghatbin, Farzad Sedaghatbin, Atefeh Ahmadi
+ * @version : 0.8
+ */
+
+@Named(value = "handleEventAction")
+@SessionScoped
+public class HandleEventAction implements Serializable {
+
+    @Inject
+    private UserManagementAction me;
+    @Inject
+    private GeneralHelper generalHelper;
+    @Inject
+    private AccessControlAction accessControlAction;
+    private DataModel<EventLog> eventLogList = null;
+    private SortOrder eventLogOperationOrder = SortOrder.descending;
+    private SortOrder eventLogDateOrder = SortOrder.descending;
+    private SortOrder eventLogUsernameOrder = SortOrder.descending;
+    private SortOrder eventLogObjectOrder = SortOrder.unsorted;
+    private SortOrder tableNameOrder = SortOrder.unsorted;
+    private String eventLogOperationFilter;
+    private String eventLogDateFilter;
+    private String eventLogUsernameFilter;
+    private String fromDate;
+    private String toDate;
+    private int page = 1;
+
+    public String begin() {
+        me.setActiveMenu(MenuType.REPORT);
+        refresh();
+        return "list-eventLog";
+    }
+
+    private void refresh() {
+        page = 1;
+        fromDate = "";
+        toDate = "";
+        eventLogOperationFilter = "";
+        eventLogDateFilter = "";
+        eventLogUsernameFilter = "";
+        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllEventLog");
+        List<EventLog> innerEventLogList = null;
+        try {
+            innerEventLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<EventLog>>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        eventLogList = new ListDataModel<>(innerEventLogList);
+    }
+
+
+    public void sortByEventLogOperation() {
+
+
+        if (eventLogOperationOrder.equals(SortOrder.ascending)) {
+            setEventLogOperationOrder(SortOrder.descending);
+        } else {
+            setEventLogOperationOrder(SortOrder.ascending);
+        }
+    }
+
+    public Filter<?> getEventLognameFilterImpl() {
+        return new Filter<EventLog>() {
+            public boolean accept(EventLog eventLog) {
+                return eventLogOperationFilter == null || eventLogOperationFilter.length() == 0 || eventLog.getOperation().getDescription().toLowerCase().contains(eventLogOperationFilter.toLowerCase());
+            }
+        };
+    }
+
+    public void sortByEventLogDate() {
+        if (eventLogDateOrder.equals(SortOrder.ascending)) {
+            setEventLogDateOrder(SortOrder.descending);
+        } else {
+            setEventLogDateOrder(SortOrder.ascending);
+        }
+    }
+
+    public Filter<?> getEventLogDateFilterImpl() {
+        return new Filter<EventLog>() {
+            public boolean accept(EventLog eventLog) {
+                return eventLogDateFilter == null || eventLogDateFilter.length() == 0 || eventLog.getDate().toLowerCase().contains(eventLogDateFilter.toLowerCase().replace("/", ""));
+            }
+        };
+    }
+
+    public void sortByEventLogUsername() {
+
+
+        if (eventLogUsernameOrder.equals(SortOrder.ascending)) {
+            setEventLogUsernameOrder(SortOrder.descending);
+        } else {
+            setEventLogUsernameOrder(SortOrder.ascending);
+        }
+    }
+    public void sortByEventObject() {
+
+
+        if (eventLogObjectOrder.equals(SortOrder.ascending)) {
+            setEventLogObjectOrder(SortOrder.descending);
+        } else {
+            setEventLogObjectOrder(SortOrder.ascending);
+        }
+    }    public void sortByTableName() {
+
+
+        if (tableNameOrder.equals(SortOrder.ascending)) {
+            setTableNameOrder(SortOrder.descending);
+        } else {
+            setTableNameOrder(SortOrder.ascending);
+        }
+    }
+
+    public SortOrder getTableNameOrder() {
+        return tableNameOrder;
+    }
+
+    public void setTableNameOrder(SortOrder tableNameOrder) {
+        this.tableNameOrder = tableNameOrder;
+    }
+
+    public Filter<?> getEventLogUsernameFilterImpl() {
+        return new Filter<EventLog>() {
+            public boolean accept(EventLog eventLog) {
+                return eventLog.getUsername() != null && (eventLogUsernameFilter == null || eventLogUsernameFilter.length() == 0 || eventLog.getUsername().toLowerCase().contains(eventLogUsernameFilter.toLowerCase()));
+            }
+        };
+    }
+
+    public void search() {
+        List<EventLog> eventLogs = null;
+        if (fromDate != null && toDate != null && !fromDate.equalsIgnoreCase("") && !toDate.equalsIgnoreCase("")) {
+            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findEventInDuration");
+            try {
+                eventLogs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), fromDate + "#" + toDate), new TypeReference<List<EventLog>>() {
+                });
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        } else if (fromDate != null && !fromDate.equalsIgnoreCase("")) {
+            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findEventAfterDate");
+            try {
+                eventLogs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), fromDate), new TypeReference<List<EventLog>>() {
+                });
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        } else if (toDate != null && !toDate.equalsIgnoreCase("")) {
+            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findEventBeforeDate");
+            try {
+                eventLogs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), toDate), new TypeReference<List<EventLog>>() {
+                });
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        } else {
+            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllEventLog");
+            try {
+                eventLogs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<EventLog>>() {
+                });
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+        eventLogList = new ListDataModel<>(eventLogs);
+    }
+
+    public void resetPage() {
+        setPage(1);
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
+    }
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public DataModel<EventLog> getEventLogList() {
+        return eventLogList;
+    }
+
+    public void setEventLogList(DataModel<EventLog> eventLogList) {
+        this.eventLogList = eventLogList;
+    }
+
+    public SortOrder getEventLogOperationOrder() {
+        return eventLogOperationOrder;
+    }
+
+    public void setEventLogOperationOrder(SortOrder eventLogOperationOrder) {
+        this.eventLogOperationOrder = eventLogOperationOrder;
+    }
+
+    public String getEventLognameFilter() {
+        return eventLogOperationFilter;
+    }
+
+    public void setEventLognameFilter(String eventLognameFilter) {
+        this.eventLogOperationFilter = eventLognameFilter;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public String getEventLogOperationFilter() {
+        return eventLogOperationFilter;
+    }
+
+    public void setEventLogOperationFilter(String eventLogOperationFilter) {
+        this.eventLogOperationFilter = eventLogOperationFilter;
+    }
+
+    public SortOrder getEventLogDateOrder() {
+        return eventLogDateOrder;
+    }
+
+    public void setEventLogDateOrder(SortOrder eventLogDateOrder) {
+        this.eventLogDateOrder = eventLogDateOrder;
+    }
+
+    public SortOrder getEventLogUsernameOrder() {
+        return eventLogUsernameOrder;
+    }
+
+    public void setEventLogUsernameOrder(SortOrder eventLogUsernameOrder) {
+        this.eventLogUsernameOrder = eventLogUsernameOrder;
+    }
+
+    public String getEventLogUsernameFilter() {
+        return eventLogUsernameFilter;
+    }
+
+    public void setEventLogUsernameFilter(String eventLogUsernameFilter) {
+        this.eventLogUsernameFilter = eventLogUsernameFilter;
+    }
+
+    public SortOrder getEventLogObjectOrder() {
+        return eventLogObjectOrder;
+    }
+
+    public void setEventLogObjectOrder(SortOrder eventLogObjectOrder) {
+        this.eventLogObjectOrder = eventLogObjectOrder;
+    }
+
+    public AccessControlAction getAccessControlAction() {
+        return accessControlAction;
+    }
+
+    public void setAccessControlAction(AccessControlAction accessControlAction) {
+        this.accessControlAction = accessControlAction;
+    }
+
+    public GeneralHelper getGeneralHelper() {
+        return generalHelper;
+    }
+
+    public void setGeneralHelper(GeneralHelper generalHelper) {
+        this.generalHelper = generalHelper;
+    }
+
+    public UserManagementAction getMe() {
+        return me;
+    }
+
+    public void setMe(UserManagementAction me) {
+        this.me = me;
+    }
+
+    public String getEventLogDateFilter() {
+        return eventLogDateFilter;
+    }
+
+    public void setEventLogDateFilter(String eventLogDateFilter) {
+        this.eventLogDateFilter = eventLogDateFilter;
+    }
+}

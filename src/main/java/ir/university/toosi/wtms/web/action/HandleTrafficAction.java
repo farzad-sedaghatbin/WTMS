@@ -1,0 +1,477 @@
+package ir.university.toosi.wtms.web.action;
+
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import ir.university.toosi.wtms.web.helper.GeneralHelper;
+import ir.university.toosi.wtms.web.model.entity.MenuType;
+import ir.university.toosi.wtms.web.model.entity.TrafficLog;
+import ir.university.toosi.wtms.web.model.entity.TrafficLogDataModel;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
+import ir.university.toosi.wtms.web.util.Configuration;
+import ir.university.toosi.wtms.web.util.LangUtil;
+import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.richfaces.component.SortOrder;
+import org.richfaces.model.Filter;
+
+import javax.enterprise.context.SessionScoped;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * @author : Hamed Hatami , Arsham Sedaghatbin, Farzad Sedaghatbin, Atefeh Ahmadi
+ * @version : 0.8
+ */
+
+@Named(value = "handleTrafficAction")
+@SessionScoped
+public class HandleTrafficAction implements Serializable {
+    @Inject
+    private UserManagementAction me;
+    @Inject
+    private GeneralHelper generalHelper;
+    @Inject
+    private AccessControlAction accessControlAction;
+    TrafficLogDataModel trafficLog;
+    private DataModel<TrafficLogDataModel> eventLogList = null;
+    private SortOrder eventLogOperationOrder = SortOrder.descending;
+    private SortOrder eventLogDateOrder = SortOrder.descending;
+    private SortOrder eventLogUsernameOrder = SortOrder.descending;
+    private String eventLogOperationFilter;
+    private String eventLogDateFilter;
+    private String eventLogUsernameFilter;
+    private String dateFilter;
+    private String fromDate;
+    private String toDate;
+    private int page = 1;
+    private int index = 0;
+    TrafficLogDataModel currentTrraficLog;
+    private boolean selectRow = false;
+
+    private SortOrder gatewayNameOrder = SortOrder.unsorted;
+    private String gatewayNameFilter;
+
+    public String begin() {
+        me.setActiveMenu(MenuType.REPORT);
+        refresh();
+//        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllTrafficLog");
+//        List<TrafficLog> innerTrafficLogList = null;
+//        try {
+//            innerTrafficLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<TrafficLog>>() {
+//            });
+//        } catch (IOException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
+        fromDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
+        toDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
+        search();
+//        refresh();
+        return "list-trafficLog";
+
+    }
+
+
+    public void handle() {
+        trafficLog = getTrafficLogList().getRowData();
+    }
+
+    public void search() {
+        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findTrafficInDuration");
+        List<TrafficLog> innerTrafficLogList = null;
+        try {
+            innerTrafficLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), fromDate + "#" + toDate), new TypeReference<List<TrafficLog>>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        List<TrafficLogDataModel> logDataModels = new ArrayList<>();
+        TrafficLogDataModel dataModel;
+        for (TrafficLog log : innerTrafficLogList) {
+            dataModel = new TrafficLogDataModel();
+            dataModel.setVideo(log.getVideo());
+            dataModel.setTime(LangUtil.getFarsiNumber(log.getTime()));
+            dataModel.setDate(log.getDate());
+            dataModel.setExit(log.isExit());
+            dataModel.setGate(log.getGateway().getName());
+            dataModel.setPictures(log.getPictures());
+            dataModel.setValid(log.isValid());
+            dataModel.setId(log.getId());
+            dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
+            logDataModels.add(dataModel);
+
+        }
+        eventLogList = new ListDataModel<>(Lists.reverse(logDataModels));
+        dateFilter = "";
+    }
+
+    public void increase() {
+        index++;
+    }
+
+    public void decrease() {
+        index--;
+    }
+
+    private void refresh() {
+        index = 0;
+        page = 1;
+        selectRow = false;
+//        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllTrafficLog");
+//        List<TrafficLog> innerTrafficLogList = null;
+//        try {
+//            innerTrafficLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<TrafficLog>>() {
+//            });
+//        } catch (IOException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
+//        List<TrafficLogDataModel> logDataModels = new ArrayList<>();
+//        TrafficLogDataModel dataModel;
+//        for (TrafficLog log : innerTrafficLogList) {
+//            dataModel = new TrafficLogDataModel();
+//            dataModel.setVideo(log.getVideo());
+//            dataModel.setTime(log.getTime());
+//            dataModel.setDate(log.getDate());
+//            dataModel.setExit(log.isExit());
+//            dataModel.setGate(log.getGateway().getName());
+//            dataModel.setPictures(log.getPictures());
+//            dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
+//            logDataModels.add(dataModel);
+//
+//        }
+//        eventLogList = new ListDataModel<>(logDataModels);
+    }
+
+
+    public Filter<?> getUserNameFilterImpl() {
+        return new Filter<TrafficLogDataModel>() {
+            public boolean accept(TrafficLogDataModel trafficLog) {
+                return eventLogUsernameFilter == null || eventLogUsernameFilter.length() == 0 || trafficLog.getName().toLowerCase().contains(eventLogUsernameFilter.toLowerCase());
+            }
+        };
+    }
+
+    public Filter<?> getDateFilterImpl() {
+        return new Filter<TrafficLogDataModel>() {
+            public boolean accept(TrafficLogDataModel trafficLog) {
+                return dateFilter == null || dateFilter.length() == 0 || trafficLog.getDate().equals(dateFilter);
+            }
+        };
+    }
+
+    public void sortByTrafficLogUsername() {
+        if (eventLogUsernameOrder.equals(SortOrder.ascending)) {
+            setTrafficLogUsernameOrder(SortOrder.descending);
+        } else {
+            setTrafficLogUsernameOrder(SortOrder.ascending);
+        }
+    }
+
+    public Filter<?> getGatewayeNameFilterImpl() {
+        return new Filter<TrafficLogDataModel>() {
+            public boolean accept(TrafficLogDataModel trafficLog) {
+                return gatewayNameFilter == null || gatewayNameFilter.length() == 0 || trafficLog.getGate().toLowerCase().contains(gatewayNameFilter.toLowerCase());
+            }
+        };
+    }
+
+    public void sortByGatewayeName() {
+        if (gatewayNameOrder.equals(SortOrder.ascending)) {
+            setGatewayNameOrder(SortOrder.descending);
+        } else {
+            setGatewayNameOrder(SortOrder.ascending);
+        }
+    }
+
+
+    public DataModel<TrafficLogDataModel> getTrafficLogList() {
+        return eventLogList;
+    }
+
+    public void setTrafficLogList(DataModel<TrafficLogDataModel> eventLogList) {
+        this.eventLogList = eventLogList;
+    }
+
+    public SortOrder getTrafficLogOperationOrder() {
+        return eventLogOperationOrder;
+    }
+
+    public void setTrafficLogOperationOrder(SortOrder eventLogOperationOrder) {
+        this.eventLogOperationOrder = eventLogOperationOrder;
+    }
+
+    public String getTrafficLognameFilter() {
+        return eventLogOperationFilter;
+    }
+
+    public void setTrafficLognameFilter(String eventLognameFilter) {
+        this.eventLogOperationFilter = eventLognameFilter;
+    }
+
+    public void selectForEdit() {
+        index=0;
+        currentTrraficLog = eventLogList.getRowData();
+        setSelectRow(true);
+    }
+
+    public void paint(OutputStream stream, Object object) {
+        Long traffic = (Long) object;
+
+        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findTrafficLogById");
+        TrafficLog trafficLog1 = null;
+        try {
+            trafficLog1 = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(traffic)), TrafficLog.class);
+        } catch (IOException e) {
+            System.out.println("---");
+        }
+        if (trafficLog1 != null) {
+            String address = trafficLog1.getPictures();
+            if (address == null)
+                return;
+            address = address + "/" + index + ".png";
+            try {
+                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("jboss.name") + address)));
+                stream.flush();
+                stream.close();
+            } catch (IOException e) {
+                return;
+            }
+
+        }
+    }
+    public void painter(OutputStream stream, Object object) throws IOException {
+        if (currentTrraficLog != null) {
+            String address = currentTrraficLog.getPictures();
+            if (address == null)
+                return;
+            address = address + "/" + index + ".png";
+            try {
+                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("jboss.name") + address)));
+                stream.flush();
+                stream.close();
+            } catch (IOException e) {
+                index=0;
+                painter(stream,object);
+                return;
+            }
+
+        }
+    }
+
+    public void resetPage() {
+        setPage(1);
+    }
+
+    public int getPage() {
+
+        return page;
+    }
+
+    public int getIndex() {
+
+        return index;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+
+    public String getTrafficLogOperationFilter() {
+        return eventLogOperationFilter;
+    }
+
+    public void setTrafficLogOperationFilter(String eventLogOperationFilter) {
+        this.eventLogOperationFilter = eventLogOperationFilter;
+    }
+
+    public SortOrder getTrafficLogDateOrder() {
+        return eventLogDateOrder;
+    }
+
+    public void setTrafficLogDateOrder(SortOrder eventLogDateOrder) {
+        this.eventLogDateOrder = eventLogDateOrder;
+    }
+
+    public SortOrder getTrafficLogUsernameOrder() {
+        return eventLogUsernameOrder;
+    }
+
+    public void setTrafficLogUsernameOrder(SortOrder eventLogUsernameOrder) {
+        this.eventLogUsernameOrder = eventLogUsernameOrder;
+    }
+
+    public String getTrafficLogUsernameFilter() {
+        return eventLogUsernameFilter;
+    }
+
+    public void setTrafficLogUsernameFilter(String eventLogUsernameFilter) {
+        this.eventLogUsernameFilter = eventLogUsernameFilter;
+    }
+
+    public String getTrafficLogDateFilter() {
+        return eventLogDateFilter;
+    }
+
+    public void setTrafficLogDateFilter(String eventLogDateFilter) {
+        this.eventLogDateFilter = eventLogDateFilter;
+    }
+
+    public SortOrder getGatewayNameOrder() {
+        return gatewayNameOrder;
+    }
+
+    public void setGatewayNameOrder(SortOrder gatewayNameOrder) {
+        this.gatewayNameOrder = gatewayNameOrder;
+    }
+
+    public String getGatewayNameFilter() {
+        return gatewayNameFilter;
+    }
+
+    public void setGatewayNameFilter(String gatewayNameFilter) {
+        this.gatewayNameFilter = gatewayNameFilter;
+    }
+
+    public TrafficLogDataModel getTrafficLog() {
+        return trafficLog;
+    }
+
+    public void setTrafficLog(TrafficLogDataModel trafficLog) {
+        this.trafficLog = trafficLog;
+    }
+
+    public DataModel<TrafficLogDataModel> getEventLogList() {
+        return eventLogList;
+    }
+
+    public void setEventLogList(DataModel<TrafficLogDataModel> eventLogList) {
+        this.eventLogList = eventLogList;
+    }
+
+    public SortOrder getEventLogOperationOrder() {
+        return eventLogOperationOrder;
+    }
+
+    public void setEventLogOperationOrder(SortOrder eventLogOperationOrder) {
+        this.eventLogOperationOrder = eventLogOperationOrder;
+    }
+
+    public SortOrder getEventLogDateOrder() {
+        return eventLogDateOrder;
+    }
+
+    public void setEventLogDateOrder(SortOrder eventLogDateOrder) {
+        this.eventLogDateOrder = eventLogDateOrder;
+    }
+
+    public SortOrder getEventLogUsernameOrder() {
+        return eventLogUsernameOrder;
+    }
+
+    public void setEventLogUsernameOrder(SortOrder eventLogUsernameOrder) {
+        this.eventLogUsernameOrder = eventLogUsernameOrder;
+    }
+
+    public String getEventLogOperationFilter() {
+        return eventLogOperationFilter;
+    }
+
+    public void setEventLogOperationFilter(String eventLogOperationFilter) {
+        this.eventLogOperationFilter = eventLogOperationFilter;
+    }
+
+    public String getEventLogDateFilter() {
+        return eventLogDateFilter;
+    }
+
+    public void setEventLogDateFilter(String eventLogDateFilter) {
+        this.eventLogDateFilter = eventLogDateFilter;
+    }
+
+    public String getEventLogUsernameFilter() {
+        return eventLogUsernameFilter;
+    }
+
+    public void setEventLogUsernameFilter(String eventLogUsernameFilter) {
+        this.eventLogUsernameFilter = eventLogUsernameFilter;
+    }
+
+    public UserManagementAction getMe() {
+        return me;
+    }
+
+    public void setMe(UserManagementAction me) {
+        this.me = me;
+    }
+
+    public GeneralHelper getGeneralHelper() {
+        return generalHelper;
+    }
+
+    public void setGeneralHelper(GeneralHelper generalHelper) {
+        this.generalHelper = generalHelper;
+    }
+
+    public AccessControlAction getAccessControlAction() {
+        return accessControlAction;
+    }
+
+    public void setAccessControlAction(AccessControlAction accessControlAction) {
+        this.accessControlAction = accessControlAction;
+    }
+
+    public TrafficLogDataModel getCurrentTrraficLog() {
+        return currentTrraficLog;
+    }
+
+    public void setCurrentTrraficLog(TrafficLogDataModel currentTrraficLog) {
+        this.currentTrraficLog = currentTrraficLog;
+    }
+
+    public boolean isSelectRow() {
+        return selectRow;
+    }
+
+    public void setSelectRow(boolean selectRow) {
+        this.selectRow = selectRow;
+    }
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public String getDateFilter() {
+        return dateFilter;
+    }
+
+    public void setDateFilter(String dateFilter) {
+        this.dateFilter = dateFilter.replace("/", "");
+    }
+}
