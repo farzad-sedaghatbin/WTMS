@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.rule.RuleException;
-import ir.university.toosi.wtms.web.model.entity.rule.RulePackage;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.rule.RuleException;
+import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.zone.HandleGatewayAction;
-import ir.university.toosi.wtms.web.model.entity.Map;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.zone.DeviceDataModel;
-import ir.university.toosi.wtms.web.model.entity.zone.Gateway;
+import ir.university.toosi.tms.model.entity.Map;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.zone.DeviceDataModel;
+import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 

@@ -3,11 +3,11 @@ package ir.university.toosi.wtms.web.action.report;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.model.entity.*;
-import ir.university.toosi.wtms.web.model.entity.personnel.Card;
-import ir.university.toosi.wtms.web.model.entity.personnel.Person;
-import ir.university.toosi.wtms.web.model.entity.zone.Gateway;
-import ir.university.toosi.wtms.web.model.entity.zone.PDP;
+import ir.university.toosi.tms.model.entity.*;
+import ir.university.toosi.tms.model.entity.personnel.Card;
+import ir.university.toosi.tms.model.entity.personnel.Person;
+import ir.university.toosi.tms.model.entity.zone.Gateway;
+import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import ir.university.toosi.wtms.web.util.ReportUtils;
 import ir.university.toosi.wtms.web.util.Storage;
@@ -1719,14 +1719,14 @@ public class HandleCardReportAction implements Serializable {
             me.redirect("/report/list-report.htm");
             return;
         }
-        SavedQuery savedQuery = new SavedQuery(query, "1", count, type, kind);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createSavedQuery");
+//        SavedQuery savedQuery = new SavedQuery(query, "1", count, type, kind);
+//        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createSavedQuery");
         SavedQuery savedQuery1 = null;
-        try {
-            savedQuery1 = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(savedQuery)), SavedQuery.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            savedQuery1 = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(savedQuery)), SavedQuery.class);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         me.addErrorMessage("result_list_is_too_large");
         me.redirect("/report/list-report.htm");
         return;

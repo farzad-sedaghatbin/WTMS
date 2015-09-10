@@ -3,11 +3,11 @@ package ir.university.toosi.wtms.web.action.zone;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.rule.RulePackage;
-import ir.university.toosi.wtms.web.model.entity.zone.Gateway;
-import ir.university.toosi.wtms.web.model.entity.zone.HardwareTree;
-import ir.university.toosi.wtms.web.model.entity.zone.Zone;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.rule.RulePackage;
+import ir.university.toosi.tms.model.entity.zone.Gateway;
+import ir.university.toosi.tms.model.entity.zone.HardwareTree;
+import ir.university.toosi.tms.model.entity.zone.Zone;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
@@ -455,7 +455,7 @@ public class HandleZoneAction implements Serializable {
                 me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllZone");
                 List<Zone> zones = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Zone>>() {
                 });
-                rootZones = Zone.prepareHierarchy(zones, me);
+//                rootZones = Zone.prepareHierarchy(zones, me);
             } catch (IOException e) {
                 e.printStackTrace();
             }

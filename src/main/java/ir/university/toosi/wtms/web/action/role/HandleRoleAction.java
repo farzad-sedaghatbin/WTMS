@@ -6,11 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.operation.HandleOperationAction;
 import ir.university.toosi.wtms.web.action.workgroup.HandleWorkGroupAction;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.Permission;
-import ir.university.toosi.wtms.web.model.entity.PermissionType;
-import ir.university.toosi.wtms.web.model.entity.usermanagement.Operation;
-import ir.university.toosi.wtms.web.model.entity.usermanagement.Role;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.Permission;
+import ir.university.toosi.tms.model.entity.PermissionType;
+import ir.university.toosi.tms.model.entity.Operation;
+import ir.university.toosi.tms.model.entity.Role;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 

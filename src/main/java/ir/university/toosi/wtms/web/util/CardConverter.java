@@ -1,7 +1,7 @@
 package ir.university.toosi.wtms.web.util;
 
 import ir.university.toosi.wtms.web.action.person.HandleCardAction;
-import ir.university.toosi.wtms.web.model.entity.personnel.Card;
+import ir.university.toosi.tms.model.entity.personnel.Card;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

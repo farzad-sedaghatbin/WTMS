@@ -5,16 +5,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
-import ir.university.toosi.wtms.web.model.entity.BLookup;
-import ir.university.toosi.wtms.web.model.entity.Lookup;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.WebServiceInfo;
-import ir.university.toosi.wtms.web.model.entity.calendar.Calendar;
-import ir.university.toosi.wtms.web.model.entity.calendar.DayType;
-import ir.university.toosi.wtms.web.model.entity.personnel.Organ;
-import ir.university.toosi.wtms.web.model.entity.personnel.Person;
-import ir.university.toosi.wtms.web.model.entity.rule.Rule;
-import ir.university.toosi.wtms.web.model.entity.rule.RulePackage;
+import ir.university.toosi.tms.model.entity.BLookup;
+import ir.university.toosi.tms.model.entity.Lookup;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.WebServiceInfo;
+import ir.university.toosi.tms.model.entity.calendar.Calendar;
+import ir.university.toosi.tms.model.entity.calendar.DayType;
+import ir.university.toosi.tms.model.entity.personnel.Organ;
+import ir.university.toosi.tms.model.entity.personnel.Person;
+import ir.university.toosi.tms.model.entity.rule.Rule;
+import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
@@ -104,7 +104,7 @@ public class HandleOrganAction implements Serializable {
 
 
     public String begin() {
-        me.setActiveMenu(MenuType.MANAGEMENT);
+//        me.setActiveMenu(MenuType.MANAGEMENT);
 
         refresh();
         return "list-organ";
@@ -832,7 +832,7 @@ public class HandleOrganAction implements Serializable {
                 me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOrgan");
                 List<Organ> organs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Organ>>() {
                 });
-                rootOrgans = Organ.prepareHierarchy(organs);
+//                rootOrgans = Organ.prepareHierarchy(organs);
             } catch (IOException e) {
                 e.printStackTrace();
             }

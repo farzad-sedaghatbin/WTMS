@@ -3,8 +3,8 @@ package ir.university.toosi.wtms.web.action;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
-import ir.university.toosi.wtms.web.model.entity.Comment;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.Comment;
+import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 
 import javax.enterprise.context.SessionScoped;

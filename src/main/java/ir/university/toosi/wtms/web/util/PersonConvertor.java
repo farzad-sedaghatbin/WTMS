@@ -1,7 +1,7 @@
 package ir.university.toosi.wtms.web.util;
 
 import ir.university.toosi.wtms.web.action.zone.HandleGatewayAction;
-import ir.university.toosi.wtms.web.model.entity.personnel.Person;
+import ir.university.toosi.tms.model.entity.personnel.Person;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

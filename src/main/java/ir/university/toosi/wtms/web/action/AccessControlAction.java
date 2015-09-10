@@ -1,7 +1,7 @@
 package ir.university.toosi.wtms.web.action;
 
 
-import ir.university.toosi.wtms.web.model.entity.usermanagement.WorkGroup;
+import ir.university.toosi.tms.model.entity.WorkGroup;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;

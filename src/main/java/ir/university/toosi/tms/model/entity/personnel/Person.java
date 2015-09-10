@@ -171,6 +171,8 @@ public class Person extends BaseEntity {
     @ManyToOne
     private Organ organRef;
 
+    @Transient
+    private boolean selected;
     public Person() {
     }
 
@@ -405,5 +407,13 @@ public class Person extends BaseEntity {
 
     public void setPersonOtherId(String personOtherId) {
         this.personOtherId = personOtherId;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

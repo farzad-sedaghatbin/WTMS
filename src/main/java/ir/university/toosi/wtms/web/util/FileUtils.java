@@ -1,6 +1,8 @@
 package ir.university.toosi.wtms.web.util;
 
 
+import ir.university.toosi.tms.util.Configuration;
+
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;

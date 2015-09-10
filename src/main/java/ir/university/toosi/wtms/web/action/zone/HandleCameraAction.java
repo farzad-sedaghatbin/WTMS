@@ -3,10 +3,10 @@ package ir.university.toosi.wtms.web.action.zone;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.zone.Camera;
-import ir.university.toosi.wtms.web.model.entity.zone.Gateway;
-import ir.university.toosi.wtms.web.model.entity.zone.PDP;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.zone.Camera;
+import ir.university.toosi.tms.model.entity.zone.Gateway;
+import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
@@ -67,7 +67,7 @@ public class HandleCameraAction implements Serializable {
 
 
     public void begin() {
-        me.setActiveMenu(MenuType.HARDWARE);
+//        me.setActiveMenu(MenuType.HARDWARE);
         refresh();
         //return "list-camera";
     }

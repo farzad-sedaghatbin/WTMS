@@ -4,11 +4,11 @@ package ir.university.toosi.wtms.web.helper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.model.entity.Languages;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.SystemParameterType;
-import ir.university.toosi.wtms.web.model.entity.WebServiceInfo;
-import ir.university.toosi.wtms.web.model.entity.zone.Zone;
+import ir.university.toosi.tms.model.entity.Languages;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.SystemParameterType;
+import ir.university.toosi.tms.model.entity.WebServiceInfo;
+import ir.university.toosi.tms.model.entity.zone.Zone;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import ir.university.toosi.wtms.web.util.Storage;
 
@@ -101,7 +101,7 @@ public class GeneralHelper implements Serializable {
 
 
     public void initme() {
-        me.setActiveMenu(MenuType.HARDWARE);
+//        me.setActiveMenu(MenuType.HARDWARE);
         if (lastLanguages == null) {
             loadLanguage();
         }

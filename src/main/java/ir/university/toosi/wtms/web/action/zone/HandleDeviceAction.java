@@ -3,11 +3,11 @@ package ir.university.toosi.wtms.web.action.zone;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.model.entity.BaseEntity;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.zone.Camera;
-import ir.university.toosi.wtms.web.model.entity.zone.DeviceDataModel;
-import ir.university.toosi.wtms.web.model.entity.zone.PDP;
+import ir.university.toosi.tms.model.entity.BaseEntity;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.zone.Camera;
+import ir.university.toosi.tms.model.entity.zone.DeviceDataModel;
+import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
@@ -41,7 +41,7 @@ public class HandleDeviceAction implements Serializable {
     private String deviceIPFilter;
 
     public String beginDevice() {
-        me.setActiveMenu(MenuType.HARDWARE);
+//        me.setActiveMenu(MenuType.HARDWARE);
         refreshDevice();
         return "pdp-monitor";
     }

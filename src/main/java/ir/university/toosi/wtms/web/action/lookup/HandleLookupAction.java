@@ -4,9 +4,9 @@ package ir.university.toosi.wtms.web.action.lookup;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.model.entity.Lookup;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.WebServiceInfo;
+import ir.university.toosi.tms.model.entity.Lookup;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.WebServiceInfo;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
@@ -49,7 +49,7 @@ public class HandleLookupAction implements Serializable {
     private boolean definable = false;
 
     public String begin() {
-        me.setActiveMenu(MenuType.SETTING);
+//        me.setActiveMenu(MenuType.SETTING);
         refresh();
         return "list-lookup";
     }

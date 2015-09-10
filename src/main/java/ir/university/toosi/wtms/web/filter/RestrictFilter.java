@@ -2,9 +2,9 @@ package ir.university.toosi.wtms.web.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.wtms.web.model.entity.WebServiceInfo;
-import ir.university.toosi.wtms.web.model.entity.usermanagement.User;
-import ir.university.toosi.wtms.web.util.Configuration;
+import ir.university.toosi.tms.model.entity.WebServiceInfo;
+import ir.university.toosi.tms.model.entity.User;
+import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 
 import javax.inject.Inject;

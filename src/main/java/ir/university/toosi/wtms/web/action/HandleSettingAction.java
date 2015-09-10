@@ -3,8 +3,8 @@ package ir.university.toosi.wtms.web.action;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.SystemConfiguration;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.SystemConfiguration;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
@@ -39,7 +39,7 @@ public class HandleSettingAction implements Serializable {
     private SortOrder descriptionOrder = SortOrder.UNSORTED;
 
     public String begin() {
-        me.setActiveMenu(MenuType.SETTING);
+//        me.setActiveMenu(MenuType.SETTING);
         refresh();
         return "system-setting";
     }

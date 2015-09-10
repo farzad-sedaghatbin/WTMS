@@ -1,7 +1,7 @@
 package ir.university.toosi.wtms.web.action;
 
 import ir.university.toosi.wtms.web.action.zone.HandleGatewayAction;
-import ir.university.toosi.wtms.web.util.Configuration;
+import ir.university.toosi.tms.util.Configuration;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;

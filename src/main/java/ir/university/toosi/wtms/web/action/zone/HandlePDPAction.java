@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.zone.*;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.zone.*;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
@@ -74,7 +74,7 @@ public class HandlePDPAction implements Serializable {
 
 
     public String begin() {
-        me.setActiveMenu(MenuType.HARDWARE);
+//        me.setActiveMenu(MenuType.HARDWARE);
         refresh();
         return "list-pdp";
     }
@@ -224,13 +224,13 @@ public class HandlePDPAction implements Serializable {
     }
 
     public void synch() {
-        me.setActiveMenu(MenuType.SEND_RECEIVE);
+//        me.setActiveMenu(MenuType.SEND_RECEIVE);
         finger = false;
         refresh();
     }
 
     public void finger() {
-        me.setActiveMenu(MenuType.SEND_RECEIVE);
+//        me.setActiveMenu(MenuType.SEND_RECEIVE);
         finger = true;
         refresh();
     }

@@ -2,16 +2,18 @@ package ir.university.toosi.wtms.web.action.person;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.wtms.web.model.entity.*;
-import ir.university.toosi.wtms.web.model.entity.calendar.Calendar;
-import ir.university.toosi.wtms.web.model.entity.calendar.DayType;
-import ir.university.toosi.wtms.web.model.entity.personnel.*;
-import ir.university.toosi.wtms.web.model.entity.rule.Rule;
-import ir.university.toosi.wtms.web.model.entity.rule.RulePackage;
+import ir.university.toosi.tms.model.entity.*;
+import ir.university.toosi.tms.model.entity.calendar.Calendar;
+import ir.university.toosi.tms.model.entity.calendar.DayType;
+import ir.university.toosi.tms.model.entity.personnel.*;
+import ir.university.toosi.tms.model.entity.rule.Rule;
+import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.*;
+import ir.university.toosi.wtms.web.util.ReportUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -257,7 +259,7 @@ public class HandlePersonAction implements Serializable {
     }
 
     public String begin() {
-        me.setActiveMenu(MenuType.MANAGEMENT);
+//        me.setActiveMenu(MenuType.MANAGEMENT);
         refresh();
         return "list-person";
     }

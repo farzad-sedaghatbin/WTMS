@@ -5,9 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.usermanagement.Operation;
-import ir.university.toosi.wtms.web.util.Configuration;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.Operation;
+import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
@@ -181,7 +181,7 @@ public class HandleOperationAction implements Serializable {
     }
 
     public void backUp() {
-        me.setActiveMenu(MenuType.SETTING);
+//        me.setActiveMenu(MenuType.SETTING);
 
         String db = Configuration.getProperty("db");
         if (db.equalsIgnoreCase("derby")) {

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
-import ir.university.toosi.wtms.web.model.entity.*;
+import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
@@ -15,6 +15,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,9 +32,9 @@ import java.util.Set;
 @SessionScoped
 public class HandlePCAction implements Serializable {
 
-    @EJB
+    @Inject
     private UserManagementAction me;
-    @EJB
+    @Inject
     private HandleRoleAction handleRoleAction;
     private DataModel<PC> pcList = null;
     private String editable = "false";

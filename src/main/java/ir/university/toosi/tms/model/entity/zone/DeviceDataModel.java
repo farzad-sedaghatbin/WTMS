@@ -1,4 +1,4 @@
-package ir.university.toosi.wtms.web.model.entity.zone;
+package ir.university.toosi.tms.model.entity.zone;
 
 public class DeviceDataModel {
 

@@ -1,8 +1,8 @@
 package ir.university.toosi.wtms.web.action.report;
 
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.model.entity.personnel.Card;
-import ir.university.toosi.wtms.web.model.entity.usermanagement.Role;
+import ir.university.toosi.tms.model.entity.personnel.Card;
+import ir.university.toosi.tms.model.entity.Role;
 import ir.university.toosi.wtms.web.server.CardReport;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;

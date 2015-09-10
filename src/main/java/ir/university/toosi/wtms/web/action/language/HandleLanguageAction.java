@@ -4,7 +4,7 @@ package ir.university.toosi.wtms.web.action.language;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.model.entity.*;
+import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 //import org.richfaces.event.DataScrollEvent;
@@ -50,7 +50,7 @@ public class HandleLanguageAction implements Serializable {
     private boolean selectRow = false;
 
     public void begin() {
-        me.setActiveMenu(MenuType.SETTING);
+//        me.setActiveMenu(MenuType.SETTING);
         refresh();
     }
 

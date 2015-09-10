@@ -1,6 +1,7 @@
 package ir.university.toosi.wtms.web.action.jnlp;
 
-import ir.university.toosi.wtms.web.util.Configuration;
+
+import ir.university.toosi.tms.util.Configuration;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

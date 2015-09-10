@@ -2,8 +2,9 @@ package ir.university.toosi.wtms.web.servlet;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.wtms.web.model.entity.personnel.Person;
+//import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.wtms.web.util.ManagedBeanManager;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 

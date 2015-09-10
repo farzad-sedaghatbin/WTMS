@@ -1,10 +1,15 @@
 package ir.university.toosi.tms.model.entity.zone;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Iterators;
 import ir.university.toosi.tms.model.entity.BaseEntity;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
 
 import javax.persistence.*;
+import javax.swing.tree.TreeNode;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -47,7 +52,7 @@ import java.util.List;
                 query = "select g from Gateway g join g.cameras c where c.id in:cameraId and g.deleted='0'"
         )
 })
-public class Gateway extends BaseEntity {
+public class Gateway extends BaseEntity implements TreeNode {
 
     @Id
     @GeneratedValue
@@ -88,6 +93,12 @@ public class Gateway extends BaseEntity {
     private RulePackage rulePackage;
 
 
+    @JsonIgnore
+    @Transient
+    private Zone parentZone;
+
+    @Transient
+private List<PDP> children = new ArrayList<>();
     public boolean isSelected() {
         return selected;
     }
@@ -174,9 +185,68 @@ public class Gateway extends BaseEntity {
     }
 
 
+    public List<PDP> getChildren() {
+        return children;
+    }
 
+    public void setChildren(List<PDP> children) {
+        this.children = children;
+    }
 
+    @JsonIgnore
+    public void addChild(PDP pdp) {
+        children.add(pdp);
+    }
 
+    @JsonIgnore
+    public TreeNode getChildAt(int childIndex) {
+        return children.get(childIndex);
+    }
+    @JsonIgnore
+ 
+    public int getChildCount() {
+        return children.size();
+    }
+    @JsonIgnore
+ 
+    public TreeNode getParent() {
+        return parentZone;
+    }
+    @JsonIgnore
+ 
+    public int getIndex(TreeNode node) {
+        return children.indexOf(node);
+    }
+    @JsonIgnore
+ 
+    public boolean getAllowsChildren() {
+        return false;
+    }
+    @JsonIgnore
+ 
+    public boolean isLeaf() {
+        return false;
+    }
+    @JsonIgnore
 
+    public Enumeration children() {
+        return Iterators.asEnumeration(children.iterator());
+    }
+
+    @JsonIgnore
+
+    public Zone getParentZone() {
+        return parentZone;
+    }
+
+    @JsonIgnore
+    public void setParentZone(Zone parentZone) {
+        this.parentZone = parentZone;
+    }
+    @JsonIgnore
+
+    public String getType(){
+        return "gateway";
+    }
 
 }

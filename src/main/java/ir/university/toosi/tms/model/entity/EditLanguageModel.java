@@ -4,6 +4,7 @@ package ir.university.toosi.tms.model.entity;
 public class EditLanguageModel {
     private String key;
     private String title;
+    private String type;
     private boolean edited;
 
     public EditLanguageModel() {
@@ -32,5 +33,13 @@ public class EditLanguageModel {
 
     public void setEdited(boolean edited) {
         this.edited = edited;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

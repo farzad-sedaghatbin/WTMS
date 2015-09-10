@@ -1,5 +1,5 @@
 package ir.university.toosi.wtms.web.server;
-import ir.university.toosi.wtms.web.model.entity.EventLog;
+import ir.university.toosi.tms.model.entity.EventLog;
 
 import java.io.IOException;
 import java.io.InputStream;

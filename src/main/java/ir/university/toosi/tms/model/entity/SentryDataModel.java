@@ -6,6 +6,7 @@ public class SentryDataModel extends BaseEntity {
     private long id;
     private long personId;
     private String name;
+    private String pdpName;
     private String gate;
     private String traffic_time;
     private String traffic_date;
@@ -110,5 +111,13 @@ public class SentryDataModel extends BaseEntity {
 
     public void setPersonId(long personId) {
         this.personId = personId;
+    }
+
+    public String getPdpName() {
+        return pdpName;
+    }
+
+    public void setPdpName(String pdpName) {
+        this.pdpName = pdpName;
     }
 }

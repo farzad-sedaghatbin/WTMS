@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.calendar.Calendar;
-import ir.university.toosi.wtms.web.model.entity.calendar.DayType;
-import ir.university.toosi.wtms.web.model.entity.rule.Rule;
-import ir.university.toosi.wtms.web.model.entity.rule.RulePackage;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.calendar.Calendar;
+import ir.university.toosi.tms.model.entity.calendar.DayType;
+import ir.university.toosi.tms.model.entity.rule.Rule;
+import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 

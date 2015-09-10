@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import ir.university.toosi.tms.model.entity.BaseEntity;
 
 import javax.persistence.*;
+import javax.swing.tree.TreeNode;
+import java.util.Enumeration;
 
 @Entity
 @Table(name = "tb_PDP")
@@ -41,7 +43,7 @@ import javax.persistence.*;
 })
 
 
-public class PDP extends BaseEntity {
+public class PDP extends BaseEntity implements TreeNode {
     @Id
     @GeneratedValue
     @JsonProperty
@@ -210,5 +212,40 @@ public class PDP extends BaseEntity {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    @Override
+    public TreeNode getChildAt(int childIndex) {
+        return null;
+    }
+
+    @Override
+    public int getChildCount() {
+        return 0;
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return null;
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+        return 0;
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return false;
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return false;
+    }
+
+    @Override
+    public Enumeration children() {
+        return null;
     }
 }

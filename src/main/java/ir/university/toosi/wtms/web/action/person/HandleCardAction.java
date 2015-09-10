@@ -2,13 +2,14 @@ package ir.university.toosi.wtms.web.action.person;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.model.entity.BLookup;
-import ir.university.toosi.wtms.web.model.entity.Lookup;
-import ir.university.toosi.wtms.web.model.entity.MenuType;
-import ir.university.toosi.wtms.web.model.entity.WebServiceInfo;
-import ir.university.toosi.wtms.web.model.entity.personnel.Card;
-import ir.university.toosi.wtms.web.model.entity.personnel.Person;
+import ir.university.toosi.tms.model.entity.BLookup;
+import ir.university.toosi.tms.model.entity.Lookup;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.WebServiceInfo;
+import ir.university.toosi.tms.model.entity.personnel.Card;
+import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.wtms.web.util.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -167,21 +168,21 @@ public class HandleCardAction implements Serializable {
     }
 
     public void begin() {
-        me.setActiveMenu(MenuType.CARD);
+//        me.setActiveMenu(MenuType.CARD);
         refresh();
 
         //return "list-card";
     }
 
     public String beginInvisible() {
-        me.setActiveMenu(MenuType.CARD);
+//        me.setActiveMenu(MenuType.CARD);
 
         refreshInvis();
         return "list-invisible-card";
     }
 
     public String beginAssignCardToPersonList() {
-        me.setActiveMenu(MenuType.CARD);
+//        me.setActiveMenu(MenuType.CARD);
 
         refreshAssignCardToPersonList();
         return "list-assign-card-to-person";

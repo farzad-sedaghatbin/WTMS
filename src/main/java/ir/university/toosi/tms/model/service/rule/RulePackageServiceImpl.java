@@ -201,37 +201,37 @@ public class RulePackageServiceImpl<T extends RulePackage> {
 
     public void fillRulePackageHashTable() {
 
-        String todayIndex = CalendarUtil.getPersianDateIndexInYear(new Locale("fa"));
-        Initializer.dateRuleHashTables = new Hashtable<>();
-        List<RulePackage> rulePackages = (List<RulePackage>) getAllRulePackage();
-        if (rulePackages == null || rulePackages.size() == 0)
-            return;
-        for (RulePackage rulePackage : rulePackages) {
-            Calendar calendar = rulePackage.getCalendar();
-            if (calendar == null)
-                continue;
-            Hashtable<String, DayType> calendarDateHashtable = new Hashtable<>();
-            Hashtable<String, List<Rule>> ruleListHashtable = new Hashtable<>();
-            Hashtable<String, List<RuleException>> ruleExcptionListHashtable = new Hashtable<>();
-            for (int i = 0; i < 6; i++) {
-                Integer index = Integer.valueOf(Integer.valueOf(todayIndex) + i);
-                List<RuleException> ruleExceptions = ruleExceptionService.getByRulePackageIdAndIndex(rulePackage.getId(), index);
-                if (ruleExceptions != null && ruleExceptions.size() != 0) {
-                    ruleExcptionListHashtable.put(String.valueOf(index), ruleExceptions);
-                    continue;
-                }
-                CalendarDate calendarDate = calendarDateService.findByCalendarIdAndIndex(String.valueOf(calendar.getId()), String.valueOf(index));
-                if (calendarDate != null)
-                    calendarDateHashtable.put(String.valueOf(index), calendarDate.getDayType());
-            }
-            for (String s : calendarDateHashtable.keySet()) {
-                DayType dayType = calendarDateHashtable.get(s);
-                List<Rule> rules = ruleService.findByRulePackageIdAndType(rulePackage.getId(), dayType.getId());
-                ruleListHashtable.put(s, rules);
-            }
-
-            Initializer.dateRuleExceptionHashTables.put(rulePackage.getId(), ruleExcptionListHashtable);
-            Initializer.dateRuleHashTables.put(rulePackage.getId(), ruleListHashtable);
-        }
+//        String todayIndex = CalendarUtil.getPersianDateIndexInYear(new Locale("fa"));
+//        Initializer.dateRuleHashTables = new Hashtable<>();
+//        List<RulePackage> rulePackages = (List<RulePackage>) getAllRulePackage();
+//        if (rulePackages == null || rulePackages.size() == 0)
+//            return;
+//        for (RulePackage rulePackage : rulePackages) {
+//            Calendar calendar = rulePackage.getCalendar();
+//            if (calendar == null)
+//                continue;
+//            Hashtable<String, DayType> calendarDateHashtable = new Hashtable<>();
+//            Hashtable<String, List<Rule>> ruleListHashtable = new Hashtable<>();
+//            Hashtable<String, List<RuleException>> ruleExcptionListHashtable = new Hashtable<>();
+//            for (int i = 0; i < 6; i++) {
+//                Integer index = Integer.valueOf(Integer.valueOf(todayIndex) + i);
+//                List<RuleException> ruleExceptions = ruleExceptionService.getByRulePackageIdAndIndex(rulePackage.getId(), index);
+//                if (ruleExceptions != null && ruleExceptions.size() != 0) {
+//                    ruleExcptionListHashtable.put(String.valueOf(index), ruleExceptions);
+//                    continue;
+//                }
+//                CalendarDate calendarDate = calendarDateService.findByCalendarIdAndIndex(String.valueOf(calendar.getId()), String.valueOf(index));
+//                if (calendarDate != null)
+//                    calendarDateHashtable.put(String.valueOf(index), calendarDate.getDayType());
+//            }
+//            for (String s : calendarDateHashtable.keySet()) {
+//                DayType dayType = calendarDateHashtable.get(s);
+//                List<Rule> rules = ruleService.findByRulePackageIdAndType(rulePackage.getId(), dayType.getId());
+//                ruleListHashtable.put(s, rules);
+//            }
+//
+//            Initializer.dateRuleExceptionHashTables.put(rulePackage.getId(), ruleExcptionListHashtable);
+//            Initializer.dateRuleHashTables.put(rulePackage.getId(), ruleListHashtable);
+//        }
     }
 }
