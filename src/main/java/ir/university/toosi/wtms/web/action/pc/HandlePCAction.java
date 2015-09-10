@@ -3,6 +3,7 @@ package ir.university.toosi.wtms.web.action.pc;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.PCServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.tms.model.entity.*;
@@ -36,8 +37,11 @@ public class HandlePCAction implements Serializable {
     private UserManagementAction me;
     @Inject
     private HandleRoleAction handleRoleAction;
-    private DataModel<PC> pcList = null;
-    private String editable = "false";
+    @EJB
+    private PCServiceImpl pcService;
+    private List<PC> pcList = null;
+    private boolean editable;
+    private boolean disableFields = true;
     private String pcName;
     private boolean pcEnabled;
     private String pcIP;
@@ -60,22 +64,23 @@ public class HandlePCAction implements Serializable {
 
 
     public String begin() {
-        me.setActiveMenu(MenuType.USER);
+//        todo:solve this comment
+//        me.setActiveMenu(MenuType.USER);
         refresh();
         return "list-pc";
     }
 
-    public void selectPCs(ValueChangeEvent event) {
-        currentPC = pcList.getRowData();
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            currentPC.setSelected(true);
-            selectedPCs.add(currentPC);
-        } else {
-            currentPC.setSelected(false);
-            selectedPCs.remove(currentPC);
-        }
-    }
+//    public void selectPCs(ValueChangeEvent event) {
+//        currentPC = pcList.getRowData();
+//        boolean temp = (Boolean) event.getNewValue();
+//        if (temp) {
+//            currentPC.setSelected(true);
+//            selectedPCs.add(currentPC);
+//        } else {
+//            currentPC.setSelected(false);
+//            selectedPCs.remove(currentPC);
+//        }
+//    }
 
     public void changePCs(ValueChangeEvent event) {
         boolean temp = (Boolean) event.getNewValue();
@@ -85,7 +90,7 @@ public class HandlePCAction implements Serializable {
             pcEnabled = false;
     }
 
-    public DataModel<PC> getSelectionGrid() {
+    public List<PC> getSelectionGrid() {
         List<PC> pcs = new ArrayList<>();
         refresh();
         return pcList;
@@ -93,40 +98,27 @@ public class HandlePCAction implements Serializable {
 
     private void refresh() {
         init();
-        WebServiceInfo pcService = new WebServiceInfo();
-        pcService.setServiceName("/getAllPC");
-        try {
-            List<PC> pcs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(pcService.getServerUrl(), pcService.getServiceName()), new TypeReference<List<PC>>() {
-            });
+        List<PC> pcs = pcService.getAllPCs();
             for (PC pc : pcs) {
                 pc.getLocation().setTitleText(me.getValue(pc.getLocation().getCode()));
             }
-            pcList = new ListDataModel<>(pcs);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            pcList = new ArrayList<>(pcs);
     }
 
     public void add() {
         init();
-        setEditable("false");
-
+        setEditable(false);
+        setDisableFields(false);
     }
 
 
     public void doDelete() {
 
         currentPC.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deletePC");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPC)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/pc/list-pc.htm");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        pcService.deletePC(currentPC);
+        refresh();
+        me.addInfoMessage("delete was successful");
+        me.redirect("/pc/list-pc.htm");
     }
 
     public void init() {
@@ -141,50 +133,47 @@ public class HandlePCAction implements Serializable {
         pcNameFilter = "";
         pcLocationFilter = "";
         setSelectRow(false);
+        setDisableFields(true);
     }
 
     public void edit() {
-        setEditable("true");
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPCById");
-        try {
-            currentPC = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPC.getId())), PC.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        setEditable(true);
+        setDisableFields(false);
+//        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPCById");
+//        try {
+//            currentPC = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPC.getId())), PC.class);
+//        } catch (IOException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
         pcName = currentPC.getName();
         pcIP = currentPC.getIp();
         pcLocation = currentPC.getLocation();
     }
 
     public void saveOrUpdate() {
-        if (editable.equalsIgnoreCase("false")) {
+        if (!editable) {
             doAdd();
         } else {
             doEdit();
         }
     }
 
+    public void resetEditable() {
+        setEditable(false);
+    }
+
     private void doEdit() {
         currentPC.setIp(pcIP);
         currentPC.setName(pcName);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/existPC");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPC)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-
-                me.addInfoMessage("pc.exist");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = pcService.exist(currentPC.getIp(),currentPC.getId());
+        if (condition) {
+            me.addInfoMessage("pc.exist");
+            return;
         }
 
         currentPC.setEffectorUser(me.getUsername());
-        try {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editPC");
-
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPC)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+        condition = pcService.editPC(currentPC);
+            if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
                 me.redirect("/pc/list-pc.htm");
@@ -192,9 +181,6 @@ public class HandlePCAction implements Serializable {
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -206,27 +192,14 @@ public class HandlePCAction implements Serializable {
         newPC.setStatus("c");
         newPC.setEffectorUser(me.getUsername());
         newPC.setLocation(pcLocation);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/PCexistNotId");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newPC)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-
+        boolean condition = pcService.existNotId(String.valueOf(currentPC.getId()));
+            if (condition) {
                 me.addInfoMessage("pc.exist");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createPC");
         PC insertedPC = null;
-        try {
-            insertedPC = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newPC)), PC.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        insertedPC = pcService.createPC(currentPC);
         if (insertedPC != null) {
             refresh();
             me.addInfoMessage("operation.occurred");
@@ -290,19 +263,11 @@ public class HandlePCAction implements Serializable {
         }
     }
 
-    public void selectForEdit() {
-        currentPC = pcList.getRowData();
-        setSelectRow(true);
-    }
+//    public void selectForEdit() {
+//        currentPC = pcList.getRowData();
+//        setSelectRow(true);
+//    }
 
-    public void selectLocation(ValueChangeEvent event) {
-        Long selectedId = (Long) event.getNewValue();
-        for (BLookup bLookup : getLocations()) {
-            if (selectedId.equals(bLookup.getId())) {
-                pcLocation = bLookup;
-            }
-        }
-    }
 
     public boolean isSelectRow() {
         return selectRow;
@@ -312,11 +277,11 @@ public class HandlePCAction implements Serializable {
         this.selectRow = selectRow;
     }
 
-    public DataModel<PC> getPCList() {
+    public List<PC> getPCList() {
         return pcList;
     }
 
-    public void setPCList(DataModel<PC> pcList) {
+    public void setPCList(List<PC> pcList) {
         this.pcList = pcList;
     }
 
@@ -336,11 +301,11 @@ public class HandlePCAction implements Serializable {
         this.pcDescriptionOrder = pcDescriptionOrder;
     }
 
-    public String getEditable() {
+    public boolean getEditable() {
         return editable;
     }
 
-    public void setEditable(String editable) {
+    public void setEditable(boolean editable) {
         this.editable = editable;
     }
 
@@ -394,11 +359,11 @@ public class HandlePCAction implements Serializable {
         this.page = page;
     }
 
-    public DataModel<PC> getPcList() {
+    public List<PC> getPcList() {
         return pcList;
     }
 
-    public void setPcList(DataModel<PC> pcList) {
+    public void setPcList(List<PC> pcList) {
         this.pcList = pcList;
     }
 
@@ -482,37 +447,6 @@ public class HandlePCAction implements Serializable {
         this.pcLocationFilter = pcLocationFilter;
     }
 
-    public List<BLookup> getLocations() {
-        if (locations == null || locations.size() == 0) {
-            WebServiceInfo bLookupService = new WebServiceInfo();
-            bLookupService.setServiceName("/getByLookupId");
-            try {
-                locations = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), new ObjectMapper().writeValueAsString(Lookup.PC_LOCATION_ID)), new TypeReference<List<BLookup>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            for (BLookup bLookup : locations) {
-                bLookup.setTitleText(me.getValue(bLookup.getCode()));
-            }
-        }
-
-        return locations;
-    }
-
-    public void setLocations(List<BLookup> locations) {
-        this.locations = locations;
-    }
-
-    public BLookup getPcLocation() {
-        if (pcLocation == null) {
-            if (getLocations().size() > 0) {
-                pcLocation = getLocations().get(0);
-            }
-        }
-        return pcLocation;
-    }
-
     public void setPcLocation(BLookup pcLocation) {
         this.pcLocation = pcLocation;
     }
@@ -547,5 +481,13 @@ public class HandlePCAction implements Serializable {
 
     public void setPcIPFilter(String pcIPFilter) {
         this.pcIPFilter = pcIPFilter;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }
