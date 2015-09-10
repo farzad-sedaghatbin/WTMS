@@ -7,15 +7,14 @@ import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.wtms.web.model.entity.*;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
 
-import javax.enterprise.context.SessionScoped;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,13 +27,13 @@ import java.util.Set;
  * @version : 0.8
  */
 
-@Named(value = "handlePCAction")
+@ManagedBean(name = "handlePCAction")
 @SessionScoped
 public class HandlePCAction implements Serializable {
 
-    @Inject
+    @EJB
     private UserManagementAction me;
-    @Inject
+    @EJB
     private HandleRoleAction handleRoleAction;
     private DataModel<PC> pcList = null;
     private String editable = "false";
@@ -53,10 +52,10 @@ public class HandlePCAction implements Serializable {
     private boolean selectRow = false;
     private String pcNameFilter;
     private String pcLocationFilter;
-    private SortOrder pcIpOrder = SortOrder.unsorted;
-    private SortOrder pcNameOrder = SortOrder.unsorted;
-    private SortOrder pcLocationOrder = SortOrder.unsorted;
-    private SortOrder pcDescriptionOrder = SortOrder.unsorted;
+    private SortOrder pcIpOrder = SortOrder.UNSORTED;
+    private SortOrder pcNameOrder = SortOrder.UNSORTED;
+    private SortOrder pcLocationOrder = SortOrder.UNSORTED;
+    private SortOrder pcDescriptionOrder = SortOrder.UNSORTED;
 
 
     public String begin() {
@@ -237,29 +236,29 @@ public class HandlePCAction implements Serializable {
 
     }
 
-    public Filter<?> getPCIPFilterImpl() {
-        return new Filter<PC>() {
-            public boolean accept(PC pc) {
-                return pcIPFilter == null || pcIPFilter.length() == 0 || pc.getIp().startsWith(pcIPFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getPcNameFilterImpl() {
-        return new Filter<PC>() {
-            public boolean accept(PC pc) {
-                return pcNameFilter == null || pcNameFilter.length() == 0 || pc.getName().toLowerCase().contains(pcNameFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getPcLocationFilterImpl() {
-        return new Filter<PC>() {
-            public boolean accept(PC pc) {
-                return pcLocationFilter == null || pcLocationFilter.length() == 0 || pc.getLocation().getTitleText().toLowerCase().contains(pcLocationFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getPCIPFilterImpl() {
+//        return new Filter<PC>() {
+//            public boolean accept(PC pc) {
+//                return pcIPFilter == null || pcIPFilter.length() == 0 || pc.getIp().startsWith(pcIPFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getPcNameFilterImpl() {
+//        return new Filter<PC>() {
+//            public boolean accept(PC pc) {
+//                return pcNameFilter == null || pcNameFilter.length() == 0 || pc.getName().toLowerCase().contains(pcNameFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getPcLocationFilterImpl() {
+//        return new Filter<PC>() {
+//            public boolean accept(PC pc) {
+//                return pcLocationFilter == null || pcLocationFilter.length() == 0 || pc.getLocation().getTitleText().toLowerCase().contains(pcLocationFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByPcIp() {
         pcIpOrder = newSortOrder(pcIpOrder);
@@ -278,15 +277,15 @@ public class HandlePCAction implements Serializable {
     }
 
     private SortOrder newSortOrder(SortOrder currentSortOrder) {
-        pcIpOrder = SortOrder.unsorted;
-        pcNameOrder = SortOrder.unsorted;
-        pcLocationOrder = SortOrder.unsorted;
-        pcDescriptionOrder = SortOrder.unsorted;
+        pcIpOrder = SortOrder.UNSORTED;
+        pcNameOrder = SortOrder.UNSORTED;
+        pcLocationOrder = SortOrder.UNSORTED;
+        pcDescriptionOrder = SortOrder.UNSORTED;
 
-        if (currentSortOrder.equals(SortOrder.descending)) {
-            return SortOrder.ascending;
+        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
+            return SortOrder.ASCENDING;
         } else {
-            return SortOrder.descending;
+            return SortOrder.DESCENDING;
         }
     }
 
