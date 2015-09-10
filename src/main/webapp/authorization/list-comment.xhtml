@@ -1,0 +1,63 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:form>
+
+            <p:dataTable id="commentTable"
+                         keepSaved="true"
+                         value="#{handleCommentAction.comments}"
+                         rowKeyVar="rowIndex"
+                         noDataLabel="no_result_found"
+                         sortMode="single"
+                         var="comment"
+                         rows="10">
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="effectorUser"/>
+                    </f:facet>
+                    <h:outputText value="#{comment.effectorUser}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="message"/>
+                    </f:facet>
+                    <h:outputText value="#{comment.message}"/>
+
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="person"/>
+                    </f:facet>
+                    <h:outputText value="#{comment.trafficLog.person.name}"/>
+                    &#160;&#160;
+                    <h:outputText value="#{comment.trafficLog.person.lastName}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="date"/>
+                    </f:facet>
+                    <h:outputText value="#{comment.trafficLog.date}" converter="dateConverter"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="time"/>
+                    </f:facet>
+                    <h:outputText value="#{comment.trafficLog.time}"/>
+                </p:column>
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this"
+                                    render="commentTable"
+                                    page="#{handleCommentAction.page}"/>
+                </f:facet>
+            </p:dataTable>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

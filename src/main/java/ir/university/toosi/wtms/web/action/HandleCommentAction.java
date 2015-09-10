@@ -2,11 +2,13 @@ package ir.university.toosi.wtms.web.action;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.CommentServiceImpl;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
 import ir.university.toosi.tms.model.entity.Comment;
 import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -32,23 +34,23 @@ public class HandleCommentAction implements Serializable {
     private HandleTrafficAction handleTrafficAction;
     @Inject
     private HandleMonitoringAction handleMonitoringAction;
+
+    @EJB
+    private CommentServiceImpl commentService;
     private int page = 1;
     private String message = "";
-    private DataModel<Comment> commentDataModel = null;
     private List<Comment> comments = null;
+    private Comment currentComment = null;
 
-    public String beginAuthorize() {
+    public void beginAuthorize() {
         me.setActiveMenu(MenuType.SENTRY);
 
         refreshAuthorize();
-        return "authorize";
     }
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.SENTRY);
-
         refresh();
-        return "comments";
     }
 
     public void submit() {
@@ -58,64 +60,29 @@ public class HandleCommentAction implements Serializable {
         comment.setMessage(message);
         comment.setAuthorize(false);
         comment.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createComment");
-        try {
-            comment = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(comment)), Comment.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        commentService.createComment(comment);
 
     }
 
     private void refreshAuthorize() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllAuthorizeComment");
-        try {
-            comments = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Comment>>() {
-            });
-            commentDataModel = new ListDataModel<>(comments);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        comments = commentService.getAllAuthorizeComment();
         page = 1;
-        comments = new ArrayList<>();
 
     }
 
     private void refresh() {
         if ("admin".equalsIgnoreCase(me.getUsername())) {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllComment");
-            try {
-                comments = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Comment>>() {
-                });
-                commentDataModel = new ListDataModel<>(comments);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            comments = commentService.getAllComment();
         } else {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findByEffectorUser");
-            try {
-                comments = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), me.getUsername()), new TypeReference<List<Comment>>() {
-                });
-                commentDataModel = new ListDataModel<>(comments);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            comments = commentService.findByEffectorUser(me.getUsername());
         }
         page = 1;
-        comments = new ArrayList<>();
 
     }
 
     public void accept() {
-        Comment comment = commentDataModel.getRowData();
-        comment.setAuthorize(true);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editComment");
-        try {
-            String c = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(comment)), String.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        currentComment.setAuthorize(true);
+        commentService.editComment(currentComment);
         me.addInfoMessage("operation.occurred");
 
         refreshAuthorize();
@@ -123,13 +90,7 @@ public class HandleCommentAction implements Serializable {
     }
 
     public void refuse() {
-        Comment comment = commentDataModel.getRowData();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/rejectComment");
-        try {
-            String c = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(comment)), String.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        commentService.rejectComment(currentComment);
         me.addInfoMessage("operation.occurred");
         refreshAuthorize();
 
@@ -151,14 +112,6 @@ public class HandleCommentAction implements Serializable {
         this.page = page;
     }
 
-    public DataModel<Comment> getCommentDataModel() {
-        return commentDataModel;
-    }
-
-    public void setCommentDataModel(DataModel<Comment> commentDataModel) {
-        this.commentDataModel = commentDataModel;
-    }
-
     public List<Comment> getComments() {
         return comments;
     }
@@ -173,5 +126,13 @@ public class HandleCommentAction implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Comment getCurrentComment() {
+        return currentComment;
+    }
+
+    public void setCurrentComment(Comment currentComment) {
+        this.currentComment = currentComment;
     }
 }

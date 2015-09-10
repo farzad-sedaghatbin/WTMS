@@ -9,6 +9,18 @@
         <component-type>org.primefaces.component.ModenaMenu</component-type>
         <component-class>org.primefaces.modena.component.menu.ModenaMenu</component-class>
     </component>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>/authorize</from-outcome>
+            <to-view-id>/authorization/authorization.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>/comment</from-outcome>
+            <to-view-id>/authorization/list-comment.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
     
     <render-kit>
         <renderer>

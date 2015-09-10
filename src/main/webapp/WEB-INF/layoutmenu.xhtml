@@ -10,6 +10,8 @@
         <h:form>
         <pm:menu>
             <p:menuitem id="rm_dashboard" value="Dashboard" icon="icon-dvr" outcome="/dashboard"/>
+            <p:menuitem id="rm_authorize" value="authorize" icon="icon-person" outcome="/authorize" action="#{handleCommentAction.beginAuthorize}"/>
+            <p:menuitem id="rm_comment" value="comment" icon="icon-comment" outcome="/comment"  action="#{handleCommentAction.begin}"/>
 
         </pm:menu>
         </h:form>
