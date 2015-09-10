@@ -1,7 +1,7 @@
 /*
  * In the name of God
  * SimplePersianCalendar.java
- * � Ghasem Kiani
+ *  Ghasem Kiani
  * 24/09/2003 02:56:36 PM
  * ghasemkiani@yahoo.com
  */

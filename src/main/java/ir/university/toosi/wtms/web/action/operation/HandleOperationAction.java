@@ -9,8 +9,8 @@ import ir.university.toosi.wtms.web.model.entity.MenuType;
 import ir.university.toosi.wtms.web.model.entity.usermanagement.Operation;
 import ir.university.toosi.wtms.web.util.Configuration;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -46,7 +46,7 @@ public class HandleOperationAction implements Serializable {
     private Operation currentOperation = null;
     private String currentPage;
     private int page = 1;
-    private SortOrder operationDescriptionOrder = SortOrder.unsorted;
+    private SortOrder operationDescriptionOrder = SortOrder.UNSORTED;
     private String operationDescriptionFilter;
     private boolean selected;
     private boolean selectAll;
@@ -249,20 +249,20 @@ public class HandleOperationAction implements Serializable {
 
 
     public void sortByOperationDescription() {
-        if (operationDescriptionOrder.equals(SortOrder.ascending)) {
-            setOperationDescriptionOrder(SortOrder.descending);
+        if (operationDescriptionOrder.equals(SortOrder.ASCENDING)) {
+            setOperationDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setOperationDescriptionOrder(SortOrder.ascending);
+            setOperationDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 
-    public Filter<?> getOperationDescriptionFilterImpl() {
+/*    public Filter<?> getOperationDescriptionFilterImpl() {
         return new Filter<Operation>() {
             public boolean accept(Operation operation) {
                 return operationDescriptionFilter == null || operationDescriptionFilter.length() == 0 || operation.getDescription().toLowerCase().contains(operationDescriptionFilter.toLowerCase());
             }
         };
-    }
+    }*/
 
     public DataModel<Operation> getOperationList() {
         return operationList;

@@ -16,8 +16,7 @@ import ir.university.toosi.wtms.web.model.entity.calendar.CalendarInfo;
 import ir.university.toosi.wtms.web.model.entity.calendar.DayType;
 import ir.university.toosi.wtms.web.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
@@ -60,8 +59,8 @@ public class HandleCalendarAction implements Serializable {
     private boolean selectRow = false;
     private String calendarNameFilter;
     private String calendarDescriptionFilter;
-    private SortOrder calendarNameOrder = SortOrder.unsorted;
-    private SortOrder calendarDescriptionOrder = SortOrder.unsorted;
+    private SortOrder calendarNameOrder = SortOrder.UNSORTED;
+    private SortOrder calendarDescriptionOrder = SortOrder.UNSORTED;
 
 
     public String begin() {
@@ -433,41 +432,41 @@ public class HandleCalendarAction implements Serializable {
 
     }
 
-    public Filter<?> getCalendarNameFilterImpl() {
-        return new Filter<Calendar>() {
-            public boolean accept(Calendar calendar) {
-                return calendarNameFilter == null || calendarNameFilter.length() == 0 || calendar.getName().toLowerCase().contains(calendarNameFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getCalendarNameFilterImpl() {
+//        return new Filter<Calendar>() {
+//            public boolean accept(Calendar calendar) {
+//                return calendarNameFilter == null || calendarNameFilter.length() == 0 || calendar.getName().toLowerCase().contains(calendarNameFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByCalendarName() {
-        calendarDescriptionOrder = SortOrder.unsorted;
+        calendarDescriptionOrder = SortOrder.UNSORTED;
 
-        if (calendarNameOrder.equals(SortOrder.ascending)) {
-            setCalendarNameOrder(SortOrder.descending);
+        if (calendarNameOrder.equals(SortOrder.ASCENDING)) {
+            setCalendarNameOrder(SortOrder.DESCENDING);
         } else {
-            setCalendarNameOrder(SortOrder.ascending);
+            setCalendarNameOrder(SortOrder.ASCENDING);
         }
     }
 
     public void sortByCalendarDescription() {
-        calendarNameOrder = SortOrder.unsorted;
+        calendarNameOrder = SortOrder.UNSORTED;
 
-        if (calendarDescriptionOrder.equals(SortOrder.ascending)) {
-            setCalendarDescriptionOrder(SortOrder.descending);
+        if (calendarDescriptionOrder.equals(SortOrder.ASCENDING)) {
+            setCalendarDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setCalendarDescriptionOrder(SortOrder.ascending);
+            setCalendarDescriptionOrder(SortOrder.ASCENDING);
         }
     }
-
-    public Filter<?> getCalendarDescriptionFilterImpl() {
-        return new Filter<Calendar>() {
-            public boolean accept(Calendar calendar) {
-                return calendarDescriptionFilter == null || calendarDescriptionFilter.length() == 0 || calendar.getDescription().toLowerCase().contains(calendarDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//
+//    public Filter<?> getCalendarDescriptionFilterImpl() {
+//        return new Filter<Calendar>() {
+//            public boolean accept(Calendar calendar) {
+//                return calendarDescriptionFilter == null || calendarDescriptionFilter.length() == 0 || calendar.getDescription().toLowerCase().contains(calendarDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void selectForEdit() {
         currentCalendar = calendarList.getRowData();

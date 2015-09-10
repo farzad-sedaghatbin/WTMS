@@ -14,8 +14,8 @@ import ir.university.toosi.wtms.web.model.entity.zone.Camera;
 import ir.university.toosi.wtms.web.model.entity.zone.Gateway;
 import ir.university.toosi.wtms.web.model.entity.zone.PreRequestGateway;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -69,7 +69,7 @@ public class HandleGatewayAction implements Serializable {
     private boolean selectAllPre;
     private boolean selectAllCamera;
     private Set<Gateway> selectedGateways = new HashSet<>();
-    private SortOrder operationDescriptionOrder = SortOrder.unsorted;
+    private SortOrder operationDescriptionOrder = SortOrder.UNSORTED;
     private String operationDescriptionFilter;
     private RulePackage selectedRulePackage;
     private String rulePackageName;
@@ -91,8 +91,8 @@ public class HandleGatewayAction implements Serializable {
     private DataModel<Person> notAssignPersonList = new ListDataModel<>();
     private String gatewayNameFilter;
     private String gatewayDescriptionFilter;
-    private SortOrder gatewayNameOrder = SortOrder.unsorted;
-    private SortOrder gatewayDescriptionOrder = SortOrder.unsorted;
+    private SortOrder gatewayNameOrder = SortOrder.UNSORTED;
+    private SortOrder gatewayDescriptionOrder = SortOrder.UNSORTED;
 
 
     public String begin() {
@@ -449,10 +449,10 @@ if(currentGetway.getZone()!=null){
 
 
 //        public void sortByOperationDescription() {
-//            if (operationDescriptionOrder.equals(SortOrder.ascending)) {
-//                setOperationDescriptionOrder(SortOrder.descending);
+//            if (operationDescriptionOrder.equals(SortOrder.ASCENDING)) {
+//                setOperationDescriptionOrder(SortOrder.DESCENDING);
 //            } else {
-//                setOperationDescriptionOrder(SortOrder.ascending);
+//                setOperationDescriptionOrder(SortOrder.ASCENDING);
 //            }
 //        }
 //
@@ -720,39 +720,39 @@ if(currentGetway.getZone()!=null){
         }
     }
 
-    public Filter<?> getGatewayNameFilterImpl() {
-        return new Filter<Gateway>() {
-            public boolean accept(Gateway gateway) {
-                return gatewayNameFilter == null || gatewayNameFilter.length() == 0 || gateway.getName().toLowerCase().contains(gatewayNameFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getGatewayDescriptionFilterImpl() {
-        return new Filter<Gateway>() {
-            public boolean accept(Gateway gateway) {
-                return gatewayDescriptionFilter == null || gatewayDescriptionFilter.length() == 0 || gateway.getDescription().toLowerCase().contains(gatewayDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getGatewayNameFilterImpl() {
+//        return new Filter<Gateway>() {
+//            public boolean accept(Gateway gateway) {
+//                return gatewayNameFilter == null || gatewayNameFilter.length() == 0 || gateway.getName().toLowerCase().contains(gatewayNameFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getGatewayDescriptionFilterImpl() {
+//        return new Filter<Gateway>() {
+//            public boolean accept(Gateway gateway) {
+//                return gatewayDescriptionFilter == null || gatewayDescriptionFilter.length() == 0 || gateway.getDescription().toLowerCase().contains(gatewayDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByGatewayName() {
-        gatewayDescriptionOrder = SortOrder.unsorted;
+        gatewayDescriptionOrder = SortOrder.UNSORTED;
 
-        if (gatewayNameOrder.equals(SortOrder.ascending)) {
-            setGatewayNameOrder(SortOrder.descending);
+        if (gatewayNameOrder.equals(SortOrder.ASCENDING)) {
+            setGatewayNameOrder(SortOrder.DESCENDING);
         } else {
-            setGatewayNameOrder(SortOrder.ascending);
+            setGatewayNameOrder(SortOrder.ASCENDING);
         }
     }
 
     public void sortByGatewayDescription() {
-        gatewayNameOrder = SortOrder.unsorted;
+        gatewayNameOrder = SortOrder.UNSORTED;
 
-        if (gatewayDescriptionOrder.equals(SortOrder.ascending)) {
-            setGatewayDescriptionOrder(SortOrder.descending);
+        if (gatewayDescriptionOrder.equals(SortOrder.ASCENDING)) {
+            setGatewayDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setGatewayDescriptionOrder(SortOrder.ascending);
+            setGatewayDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 

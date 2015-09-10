@@ -11,7 +11,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections.map.HashedMap;
-import org.richfaces.component.SortOrder;
+import org.primefaces.model.SortOrder;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -58,7 +58,7 @@ public class HandlePersonReportAction implements Serializable{
         private Role currentRole = null;
         private String currentPage;
         private int page = 1;
-        private SortOrder roleDescriptionOrder = SortOrder.unsorted;
+        private SortOrder roleDescriptionOrder = SortOrder.UNSORTED;
         private String roleDescriptionFilter;
         private boolean selected;
         private boolean selectAll = false;

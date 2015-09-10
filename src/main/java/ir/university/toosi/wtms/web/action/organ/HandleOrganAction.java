@@ -16,9 +16,8 @@ import ir.university.toosi.wtms.web.model.entity.personnel.Person;
 import ir.university.toosi.wtms.web.model.entity.rule.Rule;
 import ir.university.toosi.wtms.web.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.apache.commons.lang.StringUtils;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -97,9 +96,9 @@ public class HandleOrganAction implements Serializable {
     private String organNameFilter;
     private String organTypeFilter;
     private String organDescriptionFilter;
-    private SortOrder organNameOrder = SortOrder.unsorted;
-    private SortOrder organTypeOrder = SortOrder.unsorted;
-    private SortOrder organDescriptionOrder = SortOrder.unsorted;
+    private SortOrder organNameOrder = SortOrder.UNSORTED;
+    private SortOrder organTypeOrder = SortOrder.UNSORTED;
+    private SortOrder organDescriptionOrder = SortOrder.UNSORTED;
     private int personPage = 1;
     private String listPerson;
 
@@ -548,7 +547,7 @@ public class HandleOrganAction implements Serializable {
         }
     }
 
-
+/*
     public Filter<?> getOrganNameFilterImpl() {
         return new Filter<Organ>() {
             public boolean accept(Organ organ) {
@@ -571,7 +570,7 @@ public class HandleOrganAction implements Serializable {
                 return organDescriptionFilter == null || organDescriptionFilter.length() == 0 || organ.getTitle().toLowerCase().contains(organDescriptionFilter.toLowerCase());
             }
         };
-    }
+    }*/
 
     public void sortByOrganName() {
         organNameOrder = newSortOrder(organNameOrder);
@@ -586,14 +585,14 @@ public class HandleOrganAction implements Serializable {
     }
 
     private SortOrder newSortOrder(SortOrder currentSortOrder) {
-        organNameOrder = SortOrder.unsorted;
-        organTypeOrder = SortOrder.unsorted;
-        organDescriptionOrder = SortOrder.unsorted;
+        organNameOrder = SortOrder.UNSORTED;
+        organTypeOrder = SortOrder.UNSORTED;
+        organDescriptionOrder = SortOrder.UNSORTED;
 
-        if (currentSortOrder.equals(SortOrder.descending)) {
-            return SortOrder.ascending;
+        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
+            return SortOrder.ASCENDING;
         } else {
-            return SortOrder.descending;
+            return SortOrder.DESCENDING;
         }
     }
 

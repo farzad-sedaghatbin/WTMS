@@ -31,7 +31,7 @@ public class LangUtils {
         for (int i = 0; i < number.length(); i++) {
             c = number.charAt(i);
             switch (c) {
-                case '?':
+              /*  case '?':
                     farsiNumberString.append('0');
                     break;
 
@@ -70,7 +70,7 @@ public class LangUtils {
                 case '?':
                     farsiNumberString.append('9');
                     break;
-
+*/
                 default:
                     farsiNumberString.append(c);
                     break;

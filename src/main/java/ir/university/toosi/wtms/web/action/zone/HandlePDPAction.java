@@ -7,8 +7,8 @@ import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
 import ir.university.toosi.wtms.web.model.entity.MenuType;
 import ir.university.toosi.wtms.web.model.entity.zone.*;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -65,9 +65,9 @@ public class HandlePDPAction implements Serializable {
     private boolean finger = false;
     private boolean online = false;
     private boolean entrance = false;
-    private SortOrder pdpNameOrder = SortOrder.unsorted;
-    private SortOrder pdpDescriptionOrder = SortOrder.unsorted;
-    private SortOrder ipOrder = SortOrder.unsorted;
+    private SortOrder pdpNameOrder = SortOrder.UNSORTED;
+    private SortOrder pdpDescriptionOrder = SortOrder.UNSORTED;
+    private SortOrder ipOrder = SortOrder.UNSORTED;
     private String pdpNameFilter;
     private String pdpDescriptionFilter;
     private String pdpIPFilter;
@@ -493,29 +493,29 @@ public class HandlePDPAction implements Serializable {
     }
 
 
-    public Filter<?> getPDPIPFilterImpl() {
-        return new Filter<PDP>() {
-            public boolean accept(PDP pdp) {
-                return pdpIPFilter == null || pdpIPFilter.length() == 0 || pdp.getIp().startsWith(pdpIPFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getPdpNameFilterImpl() {
-        return new Filter<PDP>() {
-            public boolean accept(PDP pdp) {
-                return pdpNameFilter == null || pdpNameFilter.length() == 0 || pdp.getName().toLowerCase().contains(pdpNameFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getPdpDescriptionFilterImpl() {
-        return new Filter<PDP>() {
-            public boolean accept(PDP pdp) {
-                return pdpDescriptionFilter == null || pdpDescriptionFilter.length() == 0 || pdp.getDescription().toLowerCase().contains(pdpDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getPDPIPFilterImpl() {
+//        return new Filter<PDP>() {
+//            public boolean accept(PDP pdp) {
+//                return pdpIPFilter == null || pdpIPFilter.length() == 0 || pdp.getIp().startsWith(pdpIPFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getPdpNameFilterImpl() {
+//        return new Filter<PDP>() {
+//            public boolean accept(PDP pdp) {
+//                return pdpNameFilter == null || pdpNameFilter.length() == 0 || pdp.getName().toLowerCase().contains(pdpNameFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getPdpDescriptionFilterImpl() {
+//        return new Filter<PDP>() {
+//            public boolean accept(PDP pdp) {
+//                return pdpDescriptionFilter == null || pdpDescriptionFilter.length() == 0 || pdp.getDescription().toLowerCase().contains(pdpDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByPdpName() {
         pdpNameOrder = newSortOrder(pdpNameOrder);
@@ -530,14 +530,14 @@ public class HandlePDPAction implements Serializable {
     }
 
     private SortOrder newSortOrder(SortOrder currentSortOrder) {
-        pdpNameOrder = SortOrder.unsorted;
-        pdpDescriptionOrder = SortOrder.unsorted;
-        ipOrder = SortOrder.unsorted;
+        pdpNameOrder = SortOrder.UNSORTED;
+        pdpDescriptionOrder = SortOrder.UNSORTED;
+        ipOrder = SortOrder.UNSORTED;
 
-        if (currentSortOrder.equals(SortOrder.descending)) {
-            return SortOrder.ascending;
+        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
+            return SortOrder.ASCENDING;
         } else {
-            return SortOrder.descending;
+            return SortOrder.DESCENDING;
         }
 
     }

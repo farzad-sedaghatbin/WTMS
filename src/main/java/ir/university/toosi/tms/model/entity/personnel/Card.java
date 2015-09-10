@@ -93,19 +93,19 @@ public class Card extends BaseEntity {
     private String expirationDate;
     @Transient
     public static final String CARD_STATUS_STOLEN = "CARD_STATUS_STOLEN";
-    @Transient//„”—ÊﬁÂ
-    public static final String CARD_STATUS_LOST = "CARD_STATUS_LOST";         //„›ﬁÊœ
+    @Transient//
+    public static final String CARD_STATUS_LOST = "CARD_STATUS_LOST";         //
     @Transient
-    public static final String CARD_STATUS_CLOSED = "CARD_STATUS_CLOSED";  //„”œÊœ
+    public static final String CARD_STATUS_CLOSED = "CARD_STATUS_CLOSED";  //
     @Transient
-    public static final String CARD_IS_INVALID = "CARD_IS_INVALID";       //»«ÿ·
+    public static final String CARD_IS_INVALID = "CARD_IS_INVALID";       //
     @Transient
-    public static final String CARD_IS_OPEN = "CARD_IS_OPEN";       //»«“
+    public static final String CARD_IS_OPEN = "CARD_IS_OPEN";       //
 
     @Transient
-    public static final String CARD_SPECIAL = "CARD_SPECIAL";       //Ê?éÂ
+    public static final String CARD_SPECIAL = "CARD_SPECIAL";       //?
     @Transient
-    public static final String CARD_NORMAL = "CARD_NORMAL";      //⁄«œ?
+    public static final String CARD_NORMAL = "CARD_NORMAL";      //?
 
     public Card() {
     }

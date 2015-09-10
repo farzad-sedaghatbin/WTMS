@@ -7,15 +7,15 @@ import java.io.Serializable;
 
 @JsonIgnoreProperties(value = "@id")
 public class BLookup extends BaseEntity implements Serializable {
-    public static final String CARD_STATUS_STOLEN = "CARD_STATUS_STOLEN";   //„”—ÊﬁÂ
-    public static final String CARD_STATUS_LOST = "CARD_STATUS_LOST";         //„›ﬁÊœ
-    public static final String CARD_STATUS_CLOSED = "CARD_STATUS_CLOSED";  //„”œÊœ
-    public static final String CARD_IS_INVALID = "CARD_IS_INVALID";       //»«ÿ·
-    public static final String CARD_IS_OPEN = "CARD_IS_OPEN";       //»«“
+    public static final String CARD_STATUS_STOLEN = "CARD_STATUS_STOLEN";   //
+    public static final String CARD_STATUS_LOST = "CARD_STATUS_LOST";         //
+    public static final String CARD_STATUS_CLOSED = "CARD_STATUS_CLOSED";  //
+    public static final String CARD_IS_INVALID = "CARD_IS_INVALID";       //
+    public static final String CARD_IS_OPEN = "CARD_IS_OPEN";       //
 
 
-    public static final String CARD_SPECIAL = "CARD_SPECIAL";       //Ê?éÂ
-    public static final String CARD_NORMAL = "CARD_NORMAL";      //⁄«œ?
+    public static final String CARD_SPECIAL = "CARD_SPECIAL";       //?
+    public static final String CARD_NORMAL = "CARD_NORMAL";      //?
 
 
 

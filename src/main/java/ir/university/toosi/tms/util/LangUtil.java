@@ -78,7 +78,7 @@ public class LangUtil {
         for (int i = 0; i < number.length(); i++) {
             c = number.charAt(i);
             switch (c) {
-                case '?':
+               /* case '0':
                     englishNumberString.append('0');
                     break;
 
@@ -117,7 +117,7 @@ public class LangUtil {
                 case '?':
                     englishNumberString.append('9');
                     break;
-
+*/
                 default:
                     englishNumberString.append(c);
                     break;

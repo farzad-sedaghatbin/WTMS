@@ -8,8 +8,8 @@ import ir.university.toosi.wtms.web.model.entity.zone.Camera;
 import ir.university.toosi.wtms.web.model.entity.zone.Gateway;
 import ir.university.toosi.wtms.web.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -61,9 +61,9 @@ public class HandleCameraAction implements Serializable {
     private String cameraNameFilter;
     private String cameraDescFilter;
     private String cameraIPFilter;
-    private SortOrder cameraNameOrder = SortOrder.unsorted;
-    private SortOrder ipOrder = SortOrder.unsorted;
-    private SortOrder descriptionOrder = SortOrder.unsorted;
+    private SortOrder cameraNameOrder = SortOrder.UNSORTED;
+    private SortOrder ipOrder = SortOrder.UNSORTED;
+    private SortOrder descriptionOrder = SortOrder.UNSORTED;
 
 
     public void begin() {
@@ -390,29 +390,29 @@ public class HandleCameraAction implements Serializable {
             me.addInfoMessage("operation.not.occurred");
         }
     }
-
-    public Filter<?> getCameraNameFilterImpl() {
-        return new Filter<Camera>() {
-            public boolean accept(Camera camera) {
-                return cameraNameFilter == null || cameraNameFilter.length() == 0 || camera.getName().toLowerCase().contains(cameraNameFilter.toLowerCase());
-            }
-        };
-    }    public Filter<?> getCameraDescFilterImpl() {
-        return new Filter<Camera>() {
-            public boolean accept(Camera camera) {
-                return cameraDescFilter == null || cameraDescFilter.length() == 0 || camera.getDescription().toLowerCase().contains(cameraDescFilter.toLowerCase());
-            }
-        };
-    }
-    public Filter<?> getCameraIPFilterImpl() {
-        return new Filter<Camera>() {
-            public boolean accept(Camera camera) {
-                return cameraIPFilter == null || cameraIPFilter.length() == 0 || camera.getIp().contains(cameraIPFilter.toLowerCase());
-            }
-        };
-    }
-
-
+//
+//    public Filter<?> getCameraNameFilterImpl() {
+//        return new Filter<Camera>() {
+//            public boolean accept(Camera camera) {
+//                return cameraNameFilter == null || cameraNameFilter.length() == 0 || camera.getName().toLowerCase().contains(cameraNameFilter.toLowerCase());
+//            }
+//        };
+//    }    public Filter<?> getCameraDescFilterImpl() {
+//        return new Filter<Camera>() {
+//            public boolean accept(Camera camera) {
+//                return cameraDescFilter == null || cameraDescFilter.length() == 0 || camera.getDescription().toLowerCase().contains(cameraDescFilter.toLowerCase());
+//            }
+//        };
+//    }
+//    public Filter<?> getCameraIPFilterImpl() {
+//        return new Filter<Camera>() {
+//            public boolean accept(Camera camera) {
+//                return cameraIPFilter == null || cameraIPFilter.length() == 0 || camera.getIp().contains(cameraIPFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//
 
 
     public void sortByCameraName() {
@@ -428,14 +428,14 @@ public class HandleCameraAction implements Serializable {
     }
 
     private SortOrder newSortOrder(SortOrder currentSortOrder) {
-        ipOrder = SortOrder.unsorted;
-        cameraNameOrder = SortOrder.unsorted;
-        descriptionOrder = SortOrder.unsorted;
+        ipOrder = SortOrder.UNSORTED;
+        cameraNameOrder = SortOrder.UNSORTED;
+        descriptionOrder = SortOrder.UNSORTED;
 
-        if (currentSortOrder.equals(SortOrder.descending)) {
-            return SortOrder.ascending;
+        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
+            return SortOrder.ASCENDING;
         } else {
-            return SortOrder.descending;
+            return SortOrder.DESCENDING;
         }
     }
 

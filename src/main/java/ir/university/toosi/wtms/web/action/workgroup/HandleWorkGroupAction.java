@@ -10,8 +10,8 @@ import ir.university.toosi.wtms.web.model.entity.MenuType;
 import ir.university.toosi.wtms.web.model.entity.usermanagement.Role;
 import ir.university.toosi.wtms.web.model.entity.usermanagement.WorkGroup;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -62,9 +62,9 @@ public class HandleWorkGroupAction implements Serializable {
     private int page = 1;
     private String workGroupDescriptionFilter;
     private boolean selectRow = false;
-    private SortOrder titleOrder = SortOrder.unsorted;
-    private SortOrder workGroupTitleOrder = SortOrder.unsorted;
-    private SortOrder workGroupDescriptionOrder = SortOrder.unsorted;
+    private SortOrder titleOrder = SortOrder.UNSORTED;
+    private SortOrder workGroupTitleOrder = SortOrder.UNSORTED;
+    private SortOrder workGroupDescriptionOrder = SortOrder.UNSORTED;
 
     public String begin() {
         me.setActiveMenu(MenuType.USER);
@@ -322,13 +322,13 @@ public class HandleWorkGroupAction implements Serializable {
 
     }
 
-    public Filter<?> getWorkGroupDescriptionFilterImpl() {
-        return new Filter<WorkGroup>() {
-            public boolean accept(WorkGroup workGroup) {
-                return workGroupDescriptionFilter == null || workGroupDescriptionFilter.length() == 0 || workGroup.getDescText().toLowerCase().contains(workGroupDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getWorkGroupDescriptionFilterImpl() {
+//        return new Filter<WorkGroup>() {
+//            public boolean accept(WorkGroup workGroup) {
+//                return workGroupDescriptionFilter == null || workGroupDescriptionFilter.length() == 0 || workGroup.getDescText().toLowerCase().contains(workGroupDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void selectForEdit() {
         currentWorkGroup = workGroupList.getRowData();
@@ -351,14 +351,14 @@ public class HandleWorkGroupAction implements Serializable {
     }
 
     private SortOrder newSortOrder(SortOrder currentSortOrder) {
-        titleOrder = SortOrder.unsorted;
-        workGroupTitleOrder = SortOrder.unsorted;
-        workGroupDescriptionOrder = SortOrder.unsorted;
+        titleOrder = SortOrder.UNSORTED;
+        workGroupTitleOrder = SortOrder.UNSORTED;
+        workGroupDescriptionOrder = SortOrder.UNSORTED;
 
-        if (currentSortOrder.equals(SortOrder.descending)) {
-            return SortOrder.ascending;
+        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
+            return SortOrder.ASCENDING;
         } else {
-            return SortOrder.descending;
+            return SortOrder.DESCENDING;
         }
     }
 

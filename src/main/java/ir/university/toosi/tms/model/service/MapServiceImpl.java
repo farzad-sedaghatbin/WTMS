@@ -127,7 +127,7 @@ public class MapServiceImpl<T extends Map> {
         String s = JaxbUtil.ObjectToXml(element, "ir.university.toosi.tms.model.entity.objectValue.alert");
         s=s.replaceAll("\"", "\'");
         s = s.substring(s.indexOf(">") + 1).replace("<element>", "<element xmlns=\"http://www.w3.org/1999/xhtml\" status=\"true\" operation=\"Get_Last\">");
-//        String s=" <element xmlns=\"http://www.w3.org/1999/xhtml\" status=\"true\" operation=\"Get_Last\"><number node_id=\'7\' alertname=\'ãÍãÏ\' alertlastname=\'ãÎÊÇÑÇä? 2\' alertpersonnum=\'123456\' alertdatetime=\'1393/08/05\' alertdiffusecolor=\'0 1 0\' alertnotiftitle=\'ãÍãÏ\' alertnotifdescription=\'ãÎÊÇÑÇä? 2 123456\'/></element>";
+//        String s=" <element xmlns=\"http://www.w3.org/1999/xhtml\" status=\"true\" operation=\"Get_Last\"><number node_id=\'7\' alertname=\'\' alertlastname=\'? 2\' alertpersonnum=\'123456\' alertdatetime=\'1393/08/05\' alertdiffusecolor=\'0 1 0\' alertnotiftitle=\'\' alertnotifdescription=\'? 2 123456\'/></element>";
 
         return s;
     }

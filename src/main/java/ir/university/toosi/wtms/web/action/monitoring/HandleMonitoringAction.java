@@ -18,9 +18,9 @@ import ir.university.toosi.wtms.web.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.LangUtil;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.application.push.TopicKey;
-import org.richfaces.application.push.TopicsContext;
-import org.richfaces.cdi.push.Push;
+//import org.richfaces.application.push.TopicKey;
+//import org.richfaces.application.push.TopicsContext;
+//import org.richfaces.cdi.push.Push;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -52,7 +52,7 @@ public class HandleMonitoringAction implements Serializable {
     private HandlePersonAction handlePersonAction;
 
     @Inject
-    @Push(topic = CDI_PUSH_TOPIC)
+//    @Push(topic = CDI_PUSH_TOPIC)
     private Event<SentryDataModel> pushEvent;
 
     private static final String CDI_PUSH_TOPIC = "pushCdi";
@@ -88,8 +88,8 @@ public class HandleMonitoringAction implements Serializable {
     @PostConstruct
     public void init() {
         try {
-            TopicsContext topicsContext = TopicsContext.lookup();
-            topicsContext.getOrCreateTopic(new TopicKey(CDI_PUSH_TOPIC));
+//            TopicsContext topicsContext = TopicsContext.lookup();
+//            topicsContext.getOrCreateTopic(new TopicKey(CDI_PUSH_TOPIC));
             sentryCount = Long.valueOf(me.SENTRY_COUNT);
 
         } catch (Exception e) {

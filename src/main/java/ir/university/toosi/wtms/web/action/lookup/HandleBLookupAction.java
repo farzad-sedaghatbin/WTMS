@@ -8,8 +8,7 @@ import ir.university.toosi.wtms.web.model.entity.BLookup;
 import ir.university.toosi.wtms.web.model.entity.Lookup;
 import ir.university.toosi.wtms.web.model.entity.WebServiceInfo;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
@@ -43,7 +42,7 @@ public class HandleBLookupAction implements Serializable {
     private Lookup currentLookup = null;
     private String currentPage;
     private int page = 1;
-    private SortOrder bLookupDescriptionOrder = SortOrder.unsorted;
+    private SortOrder bLookupDescriptionOrder = SortOrder.UNSORTED;
     private String bLookupDescriptionFilter;
     private boolean selected;
     private Set<BLookup> selectedBLookups = new HashSet<>();
@@ -178,20 +177,20 @@ public class HandleBLookupAction implements Serializable {
 
 
     public void sortByBLookupDescription() {
-        if (bLookupDescriptionOrder.equals(SortOrder.ascending)) {
-            setBLookupDescriptionOrder(SortOrder.descending);
+        if (bLookupDescriptionOrder.equals(SortOrder.ASCENDING)) {
+            setBLookupDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setBLookupDescriptionOrder(SortOrder.ascending);
+            setBLookupDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 
-    public Filter<?> getBLookupDescriptionFilterImpl() {
-        return new Filter<BLookup>() {
-            public boolean accept(BLookup bLookup) {
-                return bLookupDescriptionFilter == null || bLookupDescriptionFilter.length() == 0 || bLookup.getTitleText().toLowerCase().contains(bLookupDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getBLookupDescriptionFilterImpl() {
+//        return new Filter<BLookup>() {
+//            public boolean accept(BLookup bLookup) {
+//                return bLookupDescriptionFilter == null || bLookupDescriptionFilter.length() == 0 || bLookup.getTitleText().toLowerCase().contains(bLookupDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public DataModel<BLookup> getBLookupList() {
         return bLookupList;

@@ -11,8 +11,8 @@ import ir.university.toosi.wtms.web.model.entity.calendar.DayType;
 import ir.university.toosi.wtms.web.model.entity.rule.Rule;
 import ir.university.toosi.wtms.web.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
@@ -68,7 +68,7 @@ public class HandleRuleAction implements Serializable {
     private RulePackage selectedRulePackage;
     private SelectItem[] calendarItems = me.calendarItem;
     private boolean selectRow = false;
-    private SortOrder ruleNameOrder = SortOrder.unsorted;
+    private SortOrder ruleNameOrder = SortOrder.UNSORTED;
     private String ruleNameFilter;
 
     private Hashtable<String, DayType> dayTypeHashtable = new Hashtable<>();
@@ -346,20 +346,20 @@ public class HandleRuleAction implements Serializable {
 
         }
     }
-
-    public Filter<?> getRuleNameFilterImpl() {
-        return new Filter<RulePackage>() {
-            public boolean accept(RulePackage rulePackage) {
-                return ruleNameFilter == null || ruleNameFilter.length() == 0 || rulePackage.getName().toLowerCase().contains(ruleNameFilter.toLowerCase());
-            }
-        };
-    }
+//
+//    public Filter<?> getRuleNameFilterImpl() {
+//        return new Filter<RulePackage>() {
+//            public boolean accept(RulePackage rulePackage) {
+//                return ruleNameFilter == null || ruleNameFilter.length() == 0 || rulePackage.getName().toLowerCase().contains(ruleNameFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByRuleName() {
-        if (ruleNameOrder.equals(SortOrder.ascending)) {
-            setRuleNameOrder(SortOrder.descending);
+        if (ruleNameOrder.equals(SortOrder.ASCENDING)) {
+            setRuleNameOrder(SortOrder.DESCENDING);
         } else {
-            setRuleNameOrder(SortOrder.ascending);
+            setRuleNameOrder(SortOrder.ASCENDING);
         }
     }
 

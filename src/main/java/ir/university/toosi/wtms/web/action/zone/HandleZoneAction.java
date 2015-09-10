@@ -9,8 +9,8 @@ import ir.university.toosi.wtms.web.model.entity.zone.Gateway;
 import ir.university.toosi.wtms.web.model.entity.zone.HardwareTree;
 import ir.university.toosi.wtms.web.model.entity.zone.Zone;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -62,8 +62,8 @@ public class HandleZoneAction implements Serializable {
     private String zoneNameFilter;
     private String zoneDescriptionFilter;
     private List<HardwareTree> rootZones;
-    private SortOrder zoneNameOrder = SortOrder.unsorted;
-    private SortOrder zoneDescriptionOrder = SortOrder.unsorted;
+    private SortOrder zoneNameOrder = SortOrder.UNSORTED;
+    private SortOrder zoneDescriptionOrder = SortOrder.UNSORTED;
 
 
     public String begin() {
@@ -380,40 +380,40 @@ public class HandleZoneAction implements Serializable {
         }
 
     }
-
-    public Filter<?> getZoneNameFilterImpl() {
-        return new Filter<Zone>() {
-            public boolean accept(Zone zone) {
-                return zoneNameFilter == null || zoneNameFilter.length() == 0 || zone.getName().toLowerCase().contains(zoneNameFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getZoneDescriptionFilterImpl() {
-        return new Filter<Zone>() {
-            public boolean accept(Zone zone) {
-                return zoneDescriptionFilter == null || zoneDescriptionFilter.length() == 0 || zone.getDescription().toLowerCase().contains(zoneDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//
+//    public Filter<?> getZoneNameFilterImpl() {
+//        return new Filter<Zone>() {
+//            public boolean accept(Zone zone) {
+//                return zoneNameFilter == null || zoneNameFilter.length() == 0 || zone.getName().toLowerCase().contains(zoneNameFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getZoneDescriptionFilterImpl() {
+//        return new Filter<Zone>() {
+//            public boolean accept(Zone zone) {
+//                return zoneDescriptionFilter == null || zoneDescriptionFilter.length() == 0 || zone.getDescription().toLowerCase().contains(zoneDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByZoneName() {
-        zoneDescriptionOrder = SortOrder.unsorted;
+        zoneDescriptionOrder = SortOrder.UNSORTED;
 
-        if (zoneNameOrder.equals(SortOrder.ascending)) {
-            setZoneNameOrder(SortOrder.descending);
+        if (zoneNameOrder.equals(SortOrder.ASCENDING)) {
+            setZoneNameOrder(SortOrder.DESCENDING);
         } else {
-            setZoneNameOrder(SortOrder.ascending);
+            setZoneNameOrder(SortOrder.ASCENDING);
         }
     }
 
     public void sortByZoneDescription() {
-        zoneNameOrder = SortOrder.unsorted;
+        zoneNameOrder = SortOrder.UNSORTED;
 
-        if (zoneDescriptionOrder.equals(SortOrder.ascending)) {
-            setZoneDescriptionOrder(SortOrder.descending);
+        if (zoneDescriptionOrder.equals(SortOrder.ASCENDING)) {
+            setZoneDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setZoneDescriptionOrder(SortOrder.ascending);
+            setZoneDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 

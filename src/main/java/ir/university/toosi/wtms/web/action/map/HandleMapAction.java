@@ -9,8 +9,8 @@ import ir.university.toosi.wtms.web.model.entity.MenuType;
 import ir.university.toosi.wtms.web.model.entity.zone.DeviceDataModel;
 import ir.university.toosi.wtms.web.model.entity.zone.Gateway;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -66,9 +66,9 @@ public class HandleMapAction implements Serializable {
     private boolean finger = false;
     private boolean online = false;
     private boolean entrance = false;
-    private SortOrder mapCodeOrder = SortOrder.unsorted;
+    private SortOrder mapCodeOrder = SortOrder.UNSORTED;
     private String mapCodeFilter;
-    private SortOrder mapDescriptionOrder = SortOrder.unsorted;
+    private SortOrder mapDescriptionOrder = SortOrder.UNSORTED;
     private String mapDescriptionFilter;
 
 
@@ -222,20 +222,20 @@ public class HandleMapAction implements Serializable {
         }
     }
 
-
+/*
     public Filter<?> getMapCodeFilterImpl() {
         return new Filter<Map>() {
             public boolean accept(Map map) {
                 return mapCodeFilter == null || mapCodeFilter.length() == 0 || map.getCode().toLowerCase().contains(mapCodeFilter.toLowerCase());
             }
         };
-    }
+    }*/
 
     public void sortByMapCode() {
-        if (mapCodeOrder.equals(SortOrder.ascending)) {
-            setMapCodeOrder(SortOrder.descending);
+        if (mapCodeOrder.equals(SortOrder.ASCENDING)) {
+            setMapCodeOrder(SortOrder.DESCENDING);
         } else {
-            setMapCodeOrder(SortOrder.ascending);
+            setMapCodeOrder(SortOrder.ASCENDING);
         }
     }
 

@@ -8,8 +8,8 @@ import ir.university.toosi.wtms.web.model.entity.Lookup;
 import ir.university.toosi.wtms.web.model.entity.MenuType;
 import ir.university.toosi.wtms.web.model.entity.WebServiceInfo;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
@@ -41,7 +41,7 @@ public class HandleLookupAction implements Serializable {
     private Lookup currentLookup = null;
     private String currentPage;
     private int page = 1;
-    private SortOrder lookupDescriptionOrder = SortOrder.unsorted;
+    private SortOrder lookupDescriptionOrder = SortOrder.UNSORTED;
     private String lookupDescriptionFilter;
     private boolean selected;
     private Set<Lookup> selectedLookups = new HashSet<>();
@@ -139,20 +139,20 @@ public class HandleLookupAction implements Serializable {
 
 
     public void sortByLookupDescription() {
-        if (lookupDescriptionOrder.equals(SortOrder.ascending)) {
-            setLookupDescriptionOrder(SortOrder.descending);
+        if (lookupDescriptionOrder.equals(SortOrder.ASCENDING)) {
+            setLookupDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setLookupDescriptionOrder(SortOrder.ascending);
+            setLookupDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 
-    public Filter<?> getLookupDescriptionFilterImpl() {
+   /* public Filter<?> getLookupDescriptionFilterImpl() {
         return new Filter<Lookup>() {
             public boolean accept(Lookup lookup) {
                 return lookupDescriptionFilter == null || lookupDescriptionFilter.length() == 0 || lookup.getTitle().toLowerCase().contains(lookupDescriptionFilter.toLowerCase());
             }
         };
-    }
+    }*/
 
     public void selectForEdit() {
         currentLookup = lookupList.getRowData();

@@ -18,9 +18,9 @@ import ir.university.toosi.wtms.web.model.entity.usermanagement.WorkGroup;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.apache.commons.lang.StringUtils;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+//import org.apache.commons.lang.StringUtils;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -29,7 +29,7 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.AssertTrue;
+//import javax.validation.constraints.AssertTrue;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -110,12 +110,12 @@ public class HandleUserAction implements Serializable {
     private String personNameFilter;
     private String personLastNameFilter;
 
-    private SortOrder usernameOrder = SortOrder.unsorted;
-    private SortOrder workgroupOrder = SortOrder.unsorted;
-    private SortOrder pcIpOrder = SortOrder.unsorted;
-    private SortOrder roleDescriptionOrder = SortOrder.unsorted;
-    private SortOrder personNameOrder = SortOrder.unsorted;
-    private SortOrder personLastNameOrder = SortOrder.unsorted;
+    private SortOrder usernameOrder = SortOrder.UNSORTED;
+    private SortOrder workgroupOrder = SortOrder.UNSORTED;
+    private SortOrder pcIpOrder = SortOrder.UNSORTED;
+    private SortOrder roleDescriptionOrder = SortOrder.UNSORTED;
+    private SortOrder personNameOrder = SortOrder.UNSORTED;
+    private SortOrder personLastNameOrder = SortOrder.UNSORTED;
 
     public String begin() {
         me.setActiveMenu(MenuType.USER);
@@ -272,8 +272,8 @@ public class HandleUserAction implements Serializable {
     }
 
     public void assignPerson() {
-        handlePersonAction.setPersonnameOrder(SortOrder.unsorted);
-        handlePersonAction.setPersonFamilyOrder(SortOrder.ascending);
+        handlePersonAction.setPersonnameOrder(SortOrder.UNSORTED);
+        handlePersonAction.setPersonFamilyOrder(SortOrder.ASCENDING);
         handlePersonAction.setPersonnameFilter("");
         handlePersonAction.setPersonFamilyFilter("");
         personPage=1;
@@ -452,30 +452,30 @@ public class HandleUserAction implements Serializable {
 
 
     }
-
-    public Filter<?> getUsernameFilterImpl() {
-        return new Filter<User>() {
-            public boolean accept(User user) {
-                return usernameFilter == null || usernameFilter.length() == 0 || user.getUsername().toLowerCase().contains(usernameFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getPersonNameFilterImpl() {
-        return new Filter<User>() {
-            public boolean accept(User user) {
-                return StringUtils.isEmpty(personNameFilter) || user.getPerson().getName().contains(personNameFilter);
-            }
-        };
-    }
-
-    public Filter<?> getPersonLastNameFilterImpl() {
-        return new Filter<User>() {
-            public boolean accept(User user) {
-                return StringUtils.isEmpty(personLastNameFilter) || user.getPerson().getLastName().contains(personLastNameFilter);
-            }
-        };
-    }
+//
+//    public Filter<?> getUsernameFilterImpl() {
+//        return new Filter<User>() {
+//            public boolean accept(User user) {
+//                return usernameFilter == null || usernameFilter.length() == 0 || user.getUsername().toLowerCase().contains(usernameFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getPersonNameFilterImpl() {
+//        return new Filter<User>() {
+//            public boolean accept(User user) {
+//                return StringUtils.isEmpty(personNameFilter) || user.getPerson().getName().contains(personNameFilter);
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getPersonLastNameFilterImpl() {
+//        return new Filter<User>() {
+//            public boolean accept(User user) {
+//                return StringUtils.isEmpty(personLastNameFilter) || user.getPerson().getLastName().contains(personLastNameFilter);
+//            }
+//        };
+//    }
 
     public void sortByUsername() {
         usernameOrder = newSortOrder(usernameOrder);
@@ -503,19 +503,19 @@ public class HandleUserAction implements Serializable {
 
 
     private SortOrder newSortOrder(SortOrder currentSortOrder) {
-        usernameOrder = SortOrder.unsorted;
-        workgroupOrder = SortOrder.unsorted;
-        pcIpOrder = SortOrder.unsorted;
-        roleDescriptionOrder = SortOrder.unsorted;
+        usernameOrder = SortOrder.UNSORTED;
+        workgroupOrder = SortOrder.UNSORTED;
+        pcIpOrder = SortOrder.UNSORTED;
+        roleDescriptionOrder = SortOrder.UNSORTED;
 
-        if (currentSortOrder.equals(SortOrder.descending)) {
-            return SortOrder.ascending;
+        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
+            return SortOrder.ASCENDING;
         } else {
-            return SortOrder.descending;
+            return SortOrder.DESCENDING;
         }
     }
 
-    @AssertTrue
+//    @AssertTrue
     public boolean isPasswordsEquals() {
         if (!rePassword.equals(newPassword)) {
             me.addInfoMessage(" Different passwords entered!");

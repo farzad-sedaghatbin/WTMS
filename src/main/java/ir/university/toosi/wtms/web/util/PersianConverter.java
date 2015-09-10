@@ -14,8 +14,8 @@ import javax.faces.convert.FacesConverter;
 public class PersianConverter implements Converter {
 
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String value) {
-        if (value != null && !value.isEmpty() && value.contains("í") && !value.equalsIgnoreCase("null") && !value.contains("*")) {
-            value = value.replace("í", "?");
+        if (value != null && !value.isEmpty() && value.contains("") && !value.equalsIgnoreCase("null") && !value.contains("*")) {
+            value = value.replace("", "?");
         }
         value = LangUtils.getEnglishNumber(value);
 

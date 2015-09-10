@@ -1,7 +1,7 @@
 package ir.university.toosi.tms.util;
 
 
-import com.ghasemkiani.util.icu.PersianCalendar;
+//import com.ghasemkiani.util.icu.PersianCalendar;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -61,11 +61,14 @@ public class CalendarUtil {
         Calendar calendar;
 
         if (locale != null && locale.equals(LangUtil.LOCALE_FARSI)) {
-            calendar = new PersianCalendar(locale);
-            calendar.setTime(date);
-            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
+//            calendar = new PersianCalendar(locale);
+//            calendar.setTime(date);
+//            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
 
-            return sdf.format(calendar.getTime());
+
+
+            return "";
+//            return sdf.format(calendar.getTime());
         } else {
             sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             //sdf.setTimeZone(TIME_ZONE);
@@ -220,29 +223,29 @@ public class CalendarUtil {
             int date_month = Integer.valueOf(date.substring(4, 6));
             int date_day = Integer.valueOf(date.substring(6, 8));
 
-            PersianCalendar calendar = new PersianCalendar(new Locale("fa"));
-            calendar.set(date_year, date_month, date_day);
-
-            calendar.add(Calendar.MONTH, month);
-
-            String now_year = String.valueOf(calendar.get(Calendar.YEAR));
-            String now_month = String.valueOf(calendar.get(Calendar.MONTH));
-            String now_day = String.valueOf(calendar.get(Calendar.DATE));
-
-            if (now_month.length() != 2) {
-                now_month = "0" + now_month;
-            }
-
-            if (now_month.equalsIgnoreCase("00")) {
-                now_month = "12";
-                now_year = String.valueOf(Integer.valueOf(now_year) - 1);
-            }
-
-            if (now_day.length() != 2) {
-                now_day = "0" + now_day;
-            }
-
-            currentdate = now_year + "/" + now_month + "/" + now_day;
+//            PersianCalendar calendar = new PersianCalendar(new Locale("fa"));
+//            calendar.set(date_year, date_month, date_day);
+//
+//            calendar.add(Calendar.MONTH, month);
+//
+//            String now_year = String.valueOf(calendar.get(Calendar.YEAR));
+//            String now_month = String.valueOf(calendar.get(Calendar.MONTH));
+//            String now_day = String.valueOf(calendar.get(Calendar.DATE));
+//
+//            if (now_month.length() != 2) {
+//                now_month = "0" + now_month;
+//            }
+//
+//            if (now_month.equalsIgnoreCase("00")) {
+//                now_month = "12";
+//                now_year = String.valueOf(Integer.valueOf(now_year) - 1);
+//            }
+//
+//            if (now_day.length() != 2) {
+//                now_day = "0" + now_day;
+//            }
+//
+//            currentdate = now_year + "/" + now_month + "/" + now_day;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -258,13 +261,14 @@ public class CalendarUtil {
         Calendar calendar;
 
         if (locale != null && locale.equals(LangUtil.LOCALE_FARSI)) {
-            calendar = new PersianCalendar(locale);
-            calendar.setTime(date);
-
-            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
-            sdf.applyPattern(pattern);
-
-            return sdf.format(calendar.getTime());
+//            calendar = new PersianCalendar(locale);
+//            calendar.setTime(date);
+//
+//            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
+//            sdf.applyPattern(pattern);
+//
+//            return sdf.format(calendar.getTime());
+            return "";
         } else {
             sdf = new SimpleDateFormat(pattern);
             return sdf.format(date);
@@ -281,13 +285,14 @@ public class CalendarUtil {
 
 
         if (locale != null && locale.equals(LangUtil.LOCALE_FARSI)) {
-            calendar = new PersianCalendar(locale);
-            calendar.setTime(date);
-
-            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
-            sdf.applyPattern("HH:mm:ss");
-
-            return LangUtil.getEnglishNumber(sdf.format(calendar.getTime()));
+//            calendar = new PersianCalendar(locale);
+//            calendar.setTime(date);
+//
+//            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
+//            sdf.applyPattern("HH:mm:ss");
+//
+//            return LangUtil.getEnglishNumber(sdf.format(calendar.getTime()));
+            return "";
         } else {
             sdf = new SimpleDateFormat("HH:mm:ss");
             return sdf.format(date);
@@ -306,13 +311,14 @@ public class CalendarUtil {
 
 
         if (locale != null && locale.equals(LangUtil.LOCALE_FARSI)) {
-            calendar = new PersianCalendar(locale);
-            calendar.setTime(date);
-
-            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
-            sdf.applyPattern("HHmmss");
-
-            return LangUtil.getEnglishNumber(sdf.format(calendar.getTime()));
+//            calendar = new PersianCalendar(locale);
+//            calendar.setTime(date);
+//
+//            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
+//            sdf.applyPattern("HHmmss");
+//
+            return "";
+//            return LangUtil.getEnglishNumber(sdf.format(calendar.getTime()));
         } else {
             sdf = new SimpleDateFormat("HHmmss");
             return sdf.format(date);

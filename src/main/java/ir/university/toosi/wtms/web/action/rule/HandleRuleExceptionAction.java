@@ -8,8 +8,8 @@ import ir.university.toosi.wtms.web.model.entity.MenuType;
 import ir.university.toosi.wtms.web.model.entity.rule.RuleException;
 import ir.university.toosi.wtms.web.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -56,7 +56,7 @@ public class HandleRuleExceptionAction implements Serializable {
     private boolean selectAll;
     private boolean selectRow = false;
     private boolean ruleDeny = false;
-    private SortOrder exceptionNameOrder = SortOrder.unsorted;
+    private SortOrder exceptionNameOrder = SortOrder.UNSORTED;
     private String exceptionNameFilter;
 
 
@@ -341,20 +341,20 @@ public class HandleRuleExceptionAction implements Serializable {
         String s = (d[0].length() == 2 ? d[0] : '0' + d[0]) + (d[1].length() == 2 ? d[1] : '0' + d[1]) + (d[2].length() == 2 ? d[2] : '0' + d[2]);
         return Long.valueOf(s);
     }
-
-    public Filter<?> getExceptionNameFilterImpl() {
-        return new Filter<RuleException>() {
-            public boolean accept(RuleException ruleException) {
-                return exceptionNameFilter == null || exceptionNameFilter.length() == 0 || ruleException.getName().toLowerCase().contains(exceptionNameFilter.toLowerCase());
-            }
-        };
-    }
+//
+//    public Filter<?> getExceptionNameFilterImpl() {
+//        return new Filter<RuleException>() {
+//            public boolean accept(RuleException ruleException) {
+//                return exceptionNameFilter == null || exceptionNameFilter.length() == 0 || ruleException.getName().toLowerCase().contains(exceptionNameFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByExceptionName() {
-        if (exceptionNameOrder.equals(SortOrder.ascending)) {
-            setExceptionNameOrder(SortOrder.descending);
+        if (exceptionNameOrder.equals(SortOrder.ASCENDING)) {
+            setExceptionNameOrder(SortOrder.DESCENDING);
         } else {
-            setExceptionNameOrder(SortOrder.ascending);
+            setExceptionNameOrder(SortOrder.ASCENDING);
         }
     }
 

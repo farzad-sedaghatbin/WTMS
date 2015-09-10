@@ -17,10 +17,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.richfaces.component.SortOrder;
-import org.richfaces.event.FileUploadEvent;
-import org.richfaces.model.Filter;
-import org.richfaces.model.UploadedFile;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.SortOrder;
+import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -123,9 +122,9 @@ public class HandlePersonAction implements Serializable {
     private String lastPageIndex = "1";
     private DataModel<PersonSearch> personSearches = null;
 
-    private SortOrder personnameOrder = SortOrder.unsorted;
-    private SortOrder personFamilyOrder = SortOrder.unsorted;
-    private SortOrder personnelNoOrder = SortOrder.unsorted;
+    private SortOrder personnameOrder = SortOrder.UNSORTED;
+    private SortOrder personFamilyOrder = SortOrder.UNSORTED;
+    private SortOrder personnelNoOrder = SortOrder.UNSORTED;
 
     private String personnameFilter;
     private String personFamilyFilter;
@@ -404,7 +403,7 @@ public class HandlePersonAction implements Serializable {
         titles.add(me.getValue("personnelCode"));
         titles.add(me.getValue("nationalCode"));
         Workbook currentWorkbook = new HSSFWorkbook();
-        Sheet sheet = currentWorkbook.createSheet("ê“«—‘");
+        Sheet sheet = currentWorkbook.createSheet("");
         sheet.autoSizeColumn(0);
 
         int rowCounter = 0;
@@ -1218,14 +1217,14 @@ public class HandlePersonAction implements Serializable {
     }
 
     private SortOrder newSortOrder(SortOrder currentSortOrder) {
-        personnameOrder = SortOrder.unsorted;
-        personFamilyOrder = SortOrder.unsorted;
-        personnelNoOrder = SortOrder.unsorted;
+        personnameOrder = SortOrder.UNSORTED;
+        personFamilyOrder = SortOrder.UNSORTED;
+        personnelNoOrder = SortOrder.UNSORTED;
 
-        if (currentSortOrder.equals(SortOrder.descending)) {
-            return SortOrder.ascending;
+        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
+            return SortOrder.ASCENDING;
         } else {
-            return SortOrder.descending;
+            return SortOrder.DESCENDING;
         }
 
     }
@@ -1263,6 +1262,7 @@ public class HandlePersonAction implements Serializable {
         picture = new byte[0];
         currentPerson.setPicture(new byte[0]);
     }
+/*
 
     public Filter<?> getPersonnameFilterImpl() {
         return new Filter<Person>() {
@@ -1288,6 +1288,7 @@ public class HandlePersonAction implements Serializable {
         };
     }
 
+*/
 
     public SortOrder getPersonFamilyOrder() {
         return personFamilyOrder;
@@ -1655,20 +1656,20 @@ public class HandlePersonAction implements Serializable {
         this.picture = picture;
     }
 
-    public void listener(FileUploadEvent event) throws Exception {
-        UploadedFile item = event.getUploadedFile();
-        BufferedImage sourceBufferedImage = ImageUtils.convertByteArrayToBufferedImage(item.getData());
-        float scaleRatio = ImageUtils.calculateScaleRatio(sourceBufferedImage.getWidth(), 200);//todo from properties
-        if (scaleRatio > 0 && scaleRatio < 1) {
-            try {
-                sourceBufferedImage = ImageUtils.scaleImage(sourceBufferedImage, scaleRatio);
-            } catch (IOException e) {
-                e.printStackTrace();
+/*    public void listener(FileUploadEvent event) throws Exception {
+        UploadedFile item =null*//*= event.getUploadedFile()*//*;
+//        BufferedImage sourceBufferedImage = ImageUtils.convertByteArrayToBufferedImage(item.getData());
+//        float scaleRatio = ImageUtils.calculateScaleRatio(sourceBufferedImage.getWidth(), 200);//todo from properties
+//        if (scaleRatio > 0 && scaleRatio < 1) {
+//            try {
+//                sourceBufferedImage = ImageUtils.scaleImage(sourceBufferedImage, scaleRatio);
+//            } catch (IOException e) {
+//                e.printStackTrace();
             }
         }
         setPicture(ImageUtils.imageToByteArray(sourceBufferedImage));
         havePicture = true;
-    }
+    }*/
 
     public long getTime() {
         return System.currentTimeMillis();

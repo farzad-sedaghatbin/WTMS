@@ -6,7 +6,7 @@ import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.wtms.web.model.entity.MenuType;
 import ir.university.toosi.wtms.web.model.entity.SystemConfiguration;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
+import org.primefaces.model.SortOrder;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -36,7 +36,7 @@ public class HandleSettingAction implements Serializable {
     private int page = 1;
     private DataModel<SystemConfiguration> systemConfigurationDataModel = null;
     private List<SystemConfiguration> systemConfigurationList = null;
-    private SortOrder descriptionOrder = SortOrder.unsorted;
+    private SortOrder descriptionOrder = SortOrder.UNSORTED;
 
     public String begin() {
         me.setActiveMenu(MenuType.SETTING);
@@ -107,10 +107,10 @@ public class HandleSettingAction implements Serializable {
     }
 
     public void sortByDescription() {
-        if (descriptionOrder.equals(SortOrder.ascending)) {
-            setDescriptionOrder(SortOrder.descending);
+        if (descriptionOrder.equals(SortOrder.ASCENDING)) {
+            setDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setDescriptionOrder(SortOrder.ascending);
+            setDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 

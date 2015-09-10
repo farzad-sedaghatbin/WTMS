@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.model.entity.*;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.event.DataScrollEvent;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+//import org.richfaces.event.DataScrollEvent;
+//
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -43,8 +43,8 @@ public class HandleLanguageAction implements Serializable {
     private String languageNameFilter;
     private String languageFilter;
     private String languageDescriptionFilter;
-    private SortOrder languageNameOrder = SortOrder.unsorted;
-    private SortOrder languageDescriptionOrder = SortOrder.unsorted;
+    private SortOrder languageNameOrder = SortOrder.UNSORTED;
+    private SortOrder languageDescriptionOrder = SortOrder.UNSORTED;
     private DataModel<Languages> languageses = null;
     private Languages currentLanguage = null;
     private boolean selectRow = false;
@@ -93,13 +93,13 @@ public class HandleLanguageAction implements Serializable {
         return "edit-language";
     }
 
-    public void scrollListener(DataScrollEvent dataScrollEvent) {
-        if (edit) {
-            edit = false;
-            save();
-        }
-
-    }
+//    public void scrollListener(DataScrollEvent dataScrollEvent) {
+//        if (edit) {
+//            edit = false;
+//            save();
+//        }
+//
+//    }
 
     public void editInPlace(ValueChangeEvent event) {
         edit = true;
@@ -192,47 +192,47 @@ public class HandleLanguageAction implements Serializable {
 
     }
 
-    public Filter<?> getLanguageNameFilterImpl() {
-        return new Filter<EditLanguageModel>() {
-            public boolean accept(EditLanguageModel languages) {
-                return languageNameFilter == null || languageNameFilter.length() == 0 || languages.getKey().toLowerCase().contains(languageNameFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getLanguageFilterImpl() {
-        return new Filter<Languages>() {
-            public boolean accept(Languages languages) {
-                return languageFilter == null || languageFilter.length() == 0 || languages.getName().toLowerCase().contains(languageFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getLanguageDescriptionFilterImpl() {
-        return new Filter<EditLanguageModel>() {
-            public boolean accept(EditLanguageModel languages) {
-                return languageDescriptionFilter == null || languageDescriptionFilter.length() == 0 || languages.getTitle().toLowerCase().contains(languageDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getLanguageNameFilterImpl() {
+//        return new Filter<EditLanguageModel>() {
+//            public boolean accept(EditLanguageModel languages) {
+//                return languageNameFilter == null || languageNameFilter.length() == 0 || languages.getKey().toLowerCase().contains(languageNameFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getLanguageFilterImpl() {
+//        return new Filter<Languages>() {
+//            public boolean accept(Languages languages) {
+//                return languageFilter == null || languageFilter.length() == 0 || languages.getName().toLowerCase().contains(languageFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getLanguageDescriptionFilterImpl() {
+//        return new Filter<EditLanguageModel>() {
+//            public boolean accept(EditLanguageModel languages) {
+//                return languageDescriptionFilter == null || languageDescriptionFilter.length() == 0 || languages.getTitle().toLowerCase().contains(languageDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByLanguageName() {
-        languageDescriptionOrder = SortOrder.unsorted;
+        languageDescriptionOrder = SortOrder.UNSORTED;
 
-        if (languageNameOrder.equals(SortOrder.ascending)) {
-            setLanguageNameOrder(SortOrder.descending);
+        if (languageNameOrder.equals(SortOrder.ASCENDING)) {
+            setLanguageNameOrder(SortOrder.DESCENDING);
         } else {
-            setLanguageNameOrder(SortOrder.ascending);
+            setLanguageNameOrder(SortOrder.ASCENDING);
         }
     }
 
     public void sortByLanguageDescription() {
-        languageNameOrder = SortOrder.unsorted;
+        languageNameOrder = SortOrder.UNSORTED;
 
-        if (languageDescriptionOrder.equals(SortOrder.ascending)) {
-            setLanguageDescriptionOrder(SortOrder.descending);
+        if (languageDescriptionOrder.equals(SortOrder.ASCENDING)) {
+            setLanguageDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setLanguageDescriptionOrder(SortOrder.ascending);
+            setLanguageDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 

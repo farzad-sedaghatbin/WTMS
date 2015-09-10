@@ -9,8 +9,8 @@ import ir.university.toosi.wtms.web.model.entity.zone.Camera;
 import ir.university.toosi.wtms.web.model.entity.zone.DeviceDataModel;
 import ir.university.toosi.wtms.web.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.ListDataModel;
@@ -33,9 +33,9 @@ public class HandleDeviceAction implements Serializable {
     private ListDataModel deviceDataModel = null;
     private List<BaseEntity> deviceList = null;
     private int page = 1;
-    private SortOrder ipOrder = SortOrder.unsorted;
-    private SortOrder nameOrder = SortOrder.unsorted;
-    private SortOrder descriptionOrder = SortOrder.unsorted;
+    private SortOrder ipOrder = SortOrder.UNSORTED;
+    private SortOrder nameOrder = SortOrder.UNSORTED;
+    private SortOrder descriptionOrder = SortOrder.UNSORTED;
     private String deviceNameFilter;
     private String deviceDescriptionFilter;
     private String deviceIPFilter;
@@ -119,40 +119,40 @@ public class HandleDeviceAction implements Serializable {
     }
 
     private SortOrder newSortOrder(SortOrder currentSortOrder) {
-        ipOrder = SortOrder.unsorted;
-        nameOrder = SortOrder.unsorted;
-        descriptionOrder = SortOrder.unsorted;
+        ipOrder = SortOrder.UNSORTED;
+        nameOrder = SortOrder.UNSORTED;
+        descriptionOrder = SortOrder.UNSORTED;
 
-        if (currentSortOrder.equals(SortOrder.descending)) {
-            return SortOrder.ascending;
+        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
+            return SortOrder.ASCENDING;
         } else {
-            return SortOrder.descending;
+            return SortOrder.DESCENDING;
         }
 
     }
-    public Filter<?> getDeviceIPFilterImpl() {
-        return new Filter<DeviceDataModel>() {
-            public boolean accept(DeviceDataModel device) {
-                return deviceIPFilter == null || deviceIPFilter.length() == 0 || device.getIp().startsWith(deviceIPFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getDeviceNameFilterImpl() {
-        return new Filter<DeviceDataModel>() {
-            public boolean accept(DeviceDataModel device) {
-                return deviceNameFilter == null || deviceNameFilter.length() == 0 || device.getName().toLowerCase().contains(deviceNameFilter.toLowerCase());
-            }
-        };
-    }
-
-    public Filter<?> getDeviceDescriptionFilterImpl() {
-        return new Filter<DeviceDataModel>() {
-            public boolean accept(DeviceDataModel device) {
-                return deviceDescriptionFilter == null || deviceDescriptionFilter.length() == 0 || device.getDescription().toLowerCase().contains(deviceDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getDeviceIPFilterImpl() {
+//        return new Filter<DeviceDataModel>() {
+//            public boolean accept(DeviceDataModel device) {
+//                return deviceIPFilter == null || deviceIPFilter.length() == 0 || device.getIp().startsWith(deviceIPFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getDeviceNameFilterImpl() {
+//        return new Filter<DeviceDataModel>() {
+//            public boolean accept(DeviceDataModel device) {
+//                return deviceNameFilter == null || deviceNameFilter.length() == 0 || device.getName().toLowerCase().contains(deviceNameFilter.toLowerCase());
+//            }
+//        };
+//    }
+//
+//    public Filter<?> getDeviceDescriptionFilterImpl() {
+//        return new Filter<DeviceDataModel>() {
+//            public boolean accept(DeviceDataModel device) {
+//                return deviceDescriptionFilter == null || deviceDescriptionFilter.length() == 0 || device.getDescription().toLowerCase().contains(deviceDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
     public UserManagementAction getMe() {
         return me;
     }

@@ -15,11 +15,11 @@ public enum GatewayStatus {
         switch (this) {
 
             case OPEN:
-                return "ÈÇÒ";
+                return "";
             case CLOSE:
-                return "ÈÓÊå";
+                return "";
             case NORMAL:
-                return "ÚÇÏ?";
+                return "";
         }
         return "NONE";
     }

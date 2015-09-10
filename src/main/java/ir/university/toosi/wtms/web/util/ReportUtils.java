@@ -566,7 +566,7 @@ public class ReportUtils<T extends BaseEntity> {
         Workbook currentWorkbook = null;
         try {
             currentWorkbook = new HSSFWorkbook();
-            Sheet sheet = currentWorkbook.createSheet("ê“«—‘");
+            Sheet sheet = currentWorkbook.createSheet("");
             sheet.autoSizeColumn(0);
 
             if (reportBase.equalsIgnoreCase("person")) {

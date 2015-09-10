@@ -12,8 +12,8 @@ import ir.university.toosi.wtms.web.model.entity.PermissionType;
 import ir.university.toosi.wtms.web.model.entity.usermanagement.Operation;
 import ir.university.toosi.wtms.web.model.entity.usermanagement.Role;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -68,7 +68,7 @@ public class HandleRoleAction implements Serializable {
     private boolean selectAll = false;
     private Set<Role> selectedRoles = new HashSet<>();
     private boolean selectRow = false;
-    private SortOrder roleDescriptionOrder = SortOrder.unsorted;
+    private SortOrder roleDescriptionOrder = SortOrder.UNSORTED;
 
     public String begin() {
         me.setActiveMenu(MenuType.USER);
@@ -372,20 +372,20 @@ public class HandleRoleAction implements Serializable {
     }
 
     public void sortByRoleDescription() {
-        if (roleDescriptionOrder.equals(SortOrder.ascending)) {
-            setRoleDescriptionOrder(SortOrder.descending);
+        if (roleDescriptionOrder.equals(SortOrder.ASCENDING)) {
+            setRoleDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setRoleDescriptionOrder(SortOrder.ascending);
+            setRoleDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 
-    public Filter<?> getRoleDescriptionFilterImpl() {
-        return new Filter<Role>() {
-            public boolean accept(Role role) {
-                return roleDescriptionFilter == null || roleDescriptionFilter.length() == 0 || role.getDescText().toLowerCase().contains(roleDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getRoleDescriptionFilterImpl() {
+//        return new Filter<Role>() {
+//            public boolean accept(Role role) {
+//                return roleDescriptionFilter == null || roleDescriptionFilter.length() == 0 || role.getDescText().toLowerCase().contains(roleDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void selectForEdit() {
         currentRole = roleList.getRowData();

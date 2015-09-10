@@ -15,8 +15,8 @@ import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.FacesUtil;
 import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.Mode;
-import org.richfaces.component.Positioning;
+//import org.richfaces.component.Mode;
+//import org.richfaces.component.Positioning;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -50,11 +50,11 @@ public class UserManagementAction implements Serializable {
     public static String SENTRY_COUNT = "10";
     public static final String INVALID_TRY = "invalid_try";
     public static final String usernameInSession = "username";
-    private Mode componentMode = Mode.ajax;
-    private Positioning componentPosition = Positioning.autoLeft;
-    private Positioning mainJointPoint = Positioning.autoRight;
-    private Positioning subJointPoint = Positioning.autoLeft;
-    private Positioning horizontalJointPoint = Positioning.topLeft;
+//    private Mode componentMode = Mode.ajax;
+//    private Positioning componentPosition = Positioning.autoLeft;
+//    private Positioning mainJointPoint = Positioning.autoRight;
+//    private Positioning subJointPoint = Positioning.autoLeft;
+//    private Positioning horizontalJointPoint = Positioning.topLeft;
     private String username;
     private String direction = "rtl";
     private String appositeDirection = "ltr";
@@ -374,37 +374,37 @@ public class UserManagementAction implements Serializable {
 
     }
 
-    public Mode getComponentMode() {
-        return componentMode;
-    }
-
-    public void setComponentMode(Mode componentMode) {
-        this.componentMode = componentMode;
-    }
-
-    public Positioning getComponentPosition() {
-        return componentPosition;
-    }
-
-    public void setComponentPosition(Positioning componentPosition) {
-        this.componentPosition = componentPosition;
-    }
-
-    public Positioning getMainJointPoint() {
-        return mainJointPoint;
-    }
-
-    public void setMainJointPoint(Positioning mainJointPoint) {
-        this.mainJointPoint = mainJointPoint;
-    }
-
-    public Positioning getSubJointPoint() {
-        return subJointPoint;
-    }
-
-    public void setSubJointPoint(Positioning subJointPoint) {
-        this.subJointPoint = subJointPoint;
-    }
+//    public Mode getComponentMode() {
+//        return componentMode;
+//    }
+//
+//    public void setComponentMode(Mode componentMode) {
+//        this.componentMode = componentMode;
+//    }
+//
+//    public Positioning getComponentPosition() {
+//        return componentPosition;
+//    }
+//
+//    public void setComponentPosition(Positioning componentPosition) {
+//        this.componentPosition = componentPosition;
+//    }
+//
+//    public Positioning getMainJointPoint() {
+//        return mainJointPoint;
+//    }
+//
+//    public void setMainJointPoint(Positioning mainJointPoint) {
+//        this.mainJointPoint = mainJointPoint;
+//    }
+//
+//    public Positioning getSubJointPoint() {
+//        return subJointPoint;
+//    }
+//
+//    public void setSubJointPoint(Positioning subJointPoint) {
+//        this.subJointPoint = subJointPoint;
+//    }
 
     public String getUsername() {
         return username;
@@ -438,13 +438,13 @@ public class UserManagementAction implements Serializable {
         this.generalHelper = generalHelper;
     }
 
-    public Positioning getHorizontalJointPoint() {
-        return horizontalJointPoint;
-    }
-
-    public void setHorizontalJointPoint(Positioning horizontalJointPoint) {
-        this.horizontalJointPoint = horizontalJointPoint;
-    }
+//    public Positioning getHorizontalJointPoint() {
+//        return horizontalJointPoint;
+//    }
+//
+//    public void setHorizontalJointPoint(Positioning horizontalJointPoint) {
+//        this.horizontalJointPoint = horizontalJointPoint;
+//    }
 
 
     public String getActorId() {

@@ -9,8 +9,8 @@ import ir.university.toosi.wtms.web.model.entity.MenuType;
 import ir.university.toosi.wtms.web.model.entity.WebServiceInfo;
 import ir.university.toosi.wtms.web.model.entity.calendar.DayType;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+//import org.primefaces.model.SortOrder;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
@@ -51,8 +51,8 @@ public class HandleDayTypeAction implements Serializable {
     private boolean selectRow = false;
     private String dayNameFilter;
     private String dayTypeDescriptionFilter;
-    private SortOrder dayNameOrder = SortOrder.unsorted;
-    private SortOrder dayTypeDescriptionOrder = SortOrder.unsorted;
+    private SortOrder dayNameOrder = SortOrder.UNSORTED;
+    private SortOrder dayTypeDescriptionOrder = SortOrder.UNSORTED;
 
 
     public String begin() {
@@ -183,42 +183,42 @@ public class HandleDayTypeAction implements Serializable {
 
     }
 
-    public Filter<?> getDayNameFilterImpl() {
-        return new Filter<DayType>() {
-            public boolean accept(DayType day) {
-                return dayNameFilter == null || dayNameFilter.length() == 0 || day.getTitle().toLowerCase().contains(dayNameFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getDayNameFilterImpl() {
+//        return new Filter<DayType>() {
+//            public boolean accept(DayType day) {
+//                return dayNameFilter == null || dayNameFilter.length() == 0 || day.getTitle().toLowerCase().contains(dayNameFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByDayName() {
-        dayTypeDescriptionOrder = SortOrder.unsorted;
+        dayTypeDescriptionOrder = SortOrder.UNSORTED;
 
-        if (dayNameOrder.equals(SortOrder.ascending)) {
-            setDayNameOrder(SortOrder.descending);
+        if (dayNameOrder.equals(SortOrder.ASCENDING)) {
+            setDayNameOrder(SortOrder.DESCENDING);
         } else {
-            setDayNameOrder(SortOrder.ascending);
+            setDayNameOrder(SortOrder.ASCENDING);
         }
     }
 
 
     public void sortByDayTypeDescription() {
-        dayNameOrder = SortOrder.unsorted;
+        dayNameOrder = SortOrder.UNSORTED;
 
-        if (dayTypeDescriptionOrder.equals(SortOrder.ascending)) {
-            setDayTypeDescriptionOrder(SortOrder.descending);
+        if (dayTypeDescriptionOrder.equals(SortOrder.ASCENDING)) {
+            setDayTypeDescriptionOrder(SortOrder.DESCENDING);
         } else {
-            setDayTypeDescriptionOrder(SortOrder.ascending);
+            setDayTypeDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 
-    public Filter<?> getDayTypeDescriptionFilterImpl() {
-        return new Filter<DayType>() {
-            public boolean accept(DayType dayType) {
-                return dayTypeDescriptionFilter == null || dayTypeDescriptionFilter.length() == 0 || dayType.getDescription().toLowerCase().contains(dayTypeDescriptionFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getDayTypeDescriptionFilterImpl() {
+//        return new Filter<DayType>() {
+//            public boolean accept(DayType dayType) {
+//                return dayTypeDescriptionFilter == null || dayTypeDescriptionFilter.length() == 0 || dayType.getDescription().toLowerCase().contains(dayTypeDescriptionFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void selectForEdit() {
         currentDayType = dayTypeList.getRowData();

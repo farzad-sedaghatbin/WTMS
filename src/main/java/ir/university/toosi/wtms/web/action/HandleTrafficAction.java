@@ -12,8 +12,8 @@ import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.Configuration;
 import ir.university.toosi.wtms.web.util.LangUtil;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
@@ -45,9 +45,9 @@ public class HandleTrafficAction implements Serializable {
     private AccessControlAction accessControlAction;
     TrafficLogDataModel trafficLog;
     private DataModel<TrafficLogDataModel> eventLogList = null;
-    private SortOrder eventLogOperationOrder = SortOrder.descending;
-    private SortOrder eventLogDateOrder = SortOrder.descending;
-    private SortOrder eventLogUsernameOrder = SortOrder.descending;
+    private SortOrder eventLogOperationOrder = SortOrder.DESCENDING;
+    private SortOrder eventLogDateOrder = SortOrder.DESCENDING;
+    private SortOrder eventLogUsernameOrder = SortOrder.DESCENDING;
     private String eventLogOperationFilter;
     private String eventLogDateFilter;
     private String eventLogUsernameFilter;
@@ -59,7 +59,7 @@ public class HandleTrafficAction implements Serializable {
     TrafficLogDataModel currentTrraficLog;
     private boolean selectRow = false;
 
-    private SortOrder gatewayNameOrder = SortOrder.unsorted;
+    private SortOrder gatewayNameOrder = SortOrder.UNSORTED;
     private String gatewayNameFilter;
 
     public String begin() {
@@ -153,6 +153,7 @@ public class HandleTrafficAction implements Serializable {
     }
 
 
+/*
     public Filter<?> getUserNameFilterImpl() {
         return new Filter<TrafficLogDataModel>() {
             public boolean accept(TrafficLogDataModel trafficLog) {
@@ -168,28 +169,29 @@ public class HandleTrafficAction implements Serializable {
             }
         };
     }
+*/
 
     public void sortByTrafficLogUsername() {
-        if (eventLogUsernameOrder.equals(SortOrder.ascending)) {
-            setTrafficLogUsernameOrder(SortOrder.descending);
+        if (eventLogUsernameOrder.equals(SortOrder.ASCENDING)) {
+            setTrafficLogUsernameOrder(SortOrder.DESCENDING);
         } else {
-            setTrafficLogUsernameOrder(SortOrder.ascending);
+            setTrafficLogUsernameOrder(SortOrder.ASCENDING);
         }
     }
 
-    public Filter<?> getGatewayeNameFilterImpl() {
+/*    public Filter<?> getGatewayeNameFilterImpl() {
         return new Filter<TrafficLogDataModel>() {
             public boolean accept(TrafficLogDataModel trafficLog) {
                 return gatewayNameFilter == null || gatewayNameFilter.length() == 0 || trafficLog.getGate().toLowerCase().contains(gatewayNameFilter.toLowerCase());
             }
         };
-    }
+    }*/
 
     public void sortByGatewayeName() {
-        if (gatewayNameOrder.equals(SortOrder.ascending)) {
-            setGatewayNameOrder(SortOrder.descending);
+        if (gatewayNameOrder.equals(SortOrder.ASCENDING)) {
+            setGatewayNameOrder(SortOrder.DESCENDING);
         } else {
-            setGatewayNameOrder(SortOrder.ascending);
+            setGatewayNameOrder(SortOrder.ASCENDING);
         }
     }
 

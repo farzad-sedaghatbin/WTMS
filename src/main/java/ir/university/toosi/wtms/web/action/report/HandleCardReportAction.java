@@ -1749,67 +1749,67 @@ public class HandleCardReportAction implements Serializable {
     }
 
     public SelectItem[] getItems() {
-        items[0] = new SelectItem("0", "«‰ Œ«»");
-        items[1] = new SelectItem("person", "‘Œ’");
-        items[2] = new SelectItem("gateway", "ê–—ê«Â");
-        items[3] = new SelectItem("zone", "‰«Õ?Â");
-        items[4] = new SelectItem("pdp", "Å? œ? Å?");
-//        items[5] = new SelectItem("card", "ò«— ");
-//        items[6] = new SelectItem("user", "—ÂêÌ—Ì ﬂ«—„‰œ");
-//        items[7] = new SelectItem("time", "“„«‰");
+        items[0] = new SelectItem("0", "");
+        items[1] = new SelectItem("person", "");
+        items[2] = new SelectItem("gateway", "—ê");
+        items[3] = new SelectItem("zone", "?");
+        items[4] = new SelectItem("pdp", "? ? ?");
+//        items[5] = new SelectItem("card", "");
+//        items[6] = new SelectItem("user", " ");
+//        items[7] = new SelectItem("time", "");
         return items;
     }
 
     public SelectItem[] getBooleanItems() {
-        booleanItems[0] = new SelectItem("true", "»·?");
-        booleanItems[1] = new SelectItem("false", "Œ?—");
+        booleanItems[0] = new SelectItem("true", "?");
+        booleanItems[1] = new SelectItem("false", "?");
         return booleanItems;
     }
 
     public SelectItem[] getReportTypeItems() {
-        reportTypeItems[0] = new SelectItem("static", "À«» ");
-        reportTypeItems[1] = new SelectItem("dynamic", "ÅÊ?«");
+        reportTypeItems[0] = new SelectItem("static", "");
+        reportTypeItems[1] = new SelectItem("dynamic", "?");
         return reportTypeItems;
     }
 
     public SelectItem[] getStaticReportItems() {
-        staticReportItems[0] = new SelectItem("0", "«‰ Œ«»");
-        staticReportItems[1] = new SelectItem("staticPerson", "‘Œ’");
-        staticReportItems[2] = new SelectItem("staticCard", "ò«— ");
-        staticReportItems[3] = new SelectItem("staticGateway", "Ê—Êœ?");
+        staticReportItems[0] = new SelectItem("0", "");
+        staticReportItems[1] = new SelectItem("staticPerson", "");
+        staticReportItems[2] = new SelectItem("staticCard", "");
+        staticReportItems[3] = new SelectItem("staticGateway", "?");
         return staticReportItems;
     }
 
     public SelectItem[] getStaticPersonReportItems() {
-        staticPersonReportItems[0] = new SelectItem("staticAllPerson", "Â„Â «‘Œ«’");
-        staticPersonReportItems[1] = new SelectItem("staticUnsuccessEntryPerson", "«‘Œ«’ »« Ê—Êœ ‰«„Ê›ﬁ");
-        staticPersonReportItems[2] = new SelectItem("staticHaveCardPerson", "œ«—«? ò«— ");
-        staticPersonReportItems[3] = new SelectItem("staticHaveNoCardPerson", "»œÊ‰ ò«— ");
-        staticPersonReportItems[4] = new SelectItem("staticDeletedPerson", "«‘Œ«’ Õ–› ‘œÂ");
+        staticPersonReportItems[0] = new SelectItem("staticAllPerson", " ");
+        staticPersonReportItems[1] = new SelectItem("staticUnsuccessEntryPerson", "   ");
+        staticPersonReportItems[2] = new SelectItem("staticHaveCardPerson", "? ");
+        staticPersonReportItems[3] = new SelectItem("staticHaveNoCardPerson", " ");
+        staticPersonReportItems[4] = new SelectItem("staticDeletedPerson", "  ");
         return staticPersonReportItems;
     }
 
     public SelectItem[] getStaticCardReportItems() {
-        staticCardReportItems[0] = new SelectItem("staticLostCard", "ò«—  Â«? ê„ ‘œÂ");
-        staticCardReportItems[1] = new SelectItem("staticAssignCard", "ò«—  Â«? «⁄ÿ« ‘œÂ");
-        staticCardReportItems[2] = new SelectItem("staticClosedCard", "ò«—  Â«? »«ÿ· ‘œÂ");
-        staticCardReportItems[3] = new SelectItem("staticOpenCard", "ò«—  Â«? Å?œ« ‘œÂ");
-        staticCardReportItems[4] = new SelectItem("staticStolenCard", "ò«—  Â«? »·« «” ›«œÂ");
-        staticCardReportItems[5] = new SelectItem("staticEntryInGateWayWithTimeCard", "ò«—  Â«? ⁄»Ê— ò—œÂ œ— »«“Â “„«‰");
-        staticCardReportItems[6] = new SelectItem("staticUnsuccessfullEntryCard", "ò«—  Â«? »«Ê—Êœ ‰«„Ê›ﬁ");
+        staticCardReportItems[0] = new SelectItem("staticLostCard", " ?  ");
+        staticCardReportItems[1] = new SelectItem("staticAssignCard", " ?  ");
+        staticCardReportItems[2] = new SelectItem("staticClosedCard", " ?  ");
+        staticCardReportItems[3] = new SelectItem("staticOpenCard", " ? ? ");
+        staticCardReportItems[4] = new SelectItem("staticStolenCard", " ?  ");
+        staticCardReportItems[5] = new SelectItem("staticEntryInGateWayWithTimeCard", " ?     ");
+        staticCardReportItems[6] = new SelectItem("staticUnsuccessfullEntryCard", " ?  ");
         return staticCardReportItems;
     }
 
     public SelectItem[] getStaticGatewayReportItems() {
-        staticGatewayReportItems[0] = new SelectItem("staticUnsuccessfullEnteredGateway", "Ê—ÊœÂ«? ‰«„Ê›ﬁ");
-        staticGatewayReportItems[1] = new SelectItem("staticEnteredPersonGateway", "«›—œ ⁄»Ê— ò—œÂ");
+        staticGatewayReportItems[0] = new SelectItem("staticUnsuccessfullEnteredGateway", "? ");
+        staticGatewayReportItems[1] = new SelectItem("staticEnteredPersonGateway", "  ");
         return staticGatewayReportItems;
     }
 
     public SelectItem[] getOperationItems() {
-        operationItems[0] = new SelectItem("and", "Ê");
-        operationItems[1] = new SelectItem("or", "?«");
-        operationItems[2] = new SelectItem("not", "€?— «“");
+        operationItems[0] = new SelectItem("and", "");
+        operationItems[1] = new SelectItem("or", "?");
+        operationItems[2] = new SelectItem("not", "? ");
         return operationItems;
     }
 

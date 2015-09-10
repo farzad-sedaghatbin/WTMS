@@ -8,8 +8,7 @@ import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.wtms.web.model.entity.EventLog;
 import ir.university.toosi.wtms.web.model.entity.MenuType;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.richfaces.component.SortOrder;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
@@ -36,11 +35,11 @@ public class HandleEventAction implements Serializable {
     @Inject
     private AccessControlAction accessControlAction;
     private DataModel<EventLog> eventLogList = null;
-    private SortOrder eventLogOperationOrder = SortOrder.descending;
-    private SortOrder eventLogDateOrder = SortOrder.descending;
-    private SortOrder eventLogUsernameOrder = SortOrder.descending;
-    private SortOrder eventLogObjectOrder = SortOrder.unsorted;
-    private SortOrder tableNameOrder = SortOrder.unsorted;
+    private SortOrder eventLogOperationOrder = SortOrder.DESCENDING;
+    private SortOrder eventLogDateOrder = SortOrder.DESCENDING;
+    private SortOrder eventLogUsernameOrder = SortOrder.DESCENDING;
+    private SortOrder eventLogObjectOrder = SortOrder.UNSORTED;
+    private SortOrder tableNameOrder = SortOrder.UNSORTED;
     private String eventLogOperationFilter;
     private String eventLogDateFilter;
     private String eventLogUsernameFilter;
@@ -77,61 +76,61 @@ public class HandleEventAction implements Serializable {
     public void sortByEventLogOperation() {
 
 
-        if (eventLogOperationOrder.equals(SortOrder.ascending)) {
-            setEventLogOperationOrder(SortOrder.descending);
+        if (eventLogOperationOrder.equals(SortOrder.ASCENDING)) {
+            setEventLogOperationOrder(SortOrder.DESCENDING);
         } else {
-            setEventLogOperationOrder(SortOrder.ascending);
+            setEventLogOperationOrder(SortOrder.ASCENDING);
         }
     }
 
-    public Filter<?> getEventLognameFilterImpl() {
-        return new Filter<EventLog>() {
-            public boolean accept(EventLog eventLog) {
-                return eventLogOperationFilter == null || eventLogOperationFilter.length() == 0 || eventLog.getOperation().getDescription().toLowerCase().contains(eventLogOperationFilter.toLowerCase());
-            }
-        };
-    }
+//    public Filter<?> getEventLognameFilterImpl() {
+//        return new Filter<EventLog>() {
+//            public boolean accept(EventLog eventLog) {
+//                return eventLogOperationFilter == null || eventLogOperationFilter.length() == 0 || eventLog.getOperation().getDescription().toLowerCase().contains(eventLogOperationFilter.toLowerCase());
+//            }
+//        };
+//    }
 
     public void sortByEventLogDate() {
-        if (eventLogDateOrder.equals(SortOrder.ascending)) {
-            setEventLogDateOrder(SortOrder.descending);
+        if (eventLogDateOrder.equals(SortOrder.ASCENDING)) {
+            setEventLogDateOrder(SortOrder.DESCENDING);
         } else {
-            setEventLogDateOrder(SortOrder.ascending);
+            setEventLogDateOrder(SortOrder.ASCENDING);
         }
     }
 
-    public Filter<?> getEventLogDateFilterImpl() {
-        return new Filter<EventLog>() {
-            public boolean accept(EventLog eventLog) {
-                return eventLogDateFilter == null || eventLogDateFilter.length() == 0 || eventLog.getDate().toLowerCase().contains(eventLogDateFilter.toLowerCase().replace("/", ""));
-            }
-        };
-    }
+//    public Filter<?> getEventLogDateFilterImpl() {
+//        return new Filter<EventLog>() {
+//            public boolean accept(EventLog eventLog) {
+//                return eventLogDateFilter == null || eventLogDateFilter.length() == 0 || eventLog.getDate().toLowerCase().contains(eventLogDateFilter.toLowerCase().replace("/", ""));
+//            }
+//        };
+//    }
 
     public void sortByEventLogUsername() {
 
 
-        if (eventLogUsernameOrder.equals(SortOrder.ascending)) {
-            setEventLogUsernameOrder(SortOrder.descending);
+        if (eventLogUsernameOrder.equals(SortOrder.ASCENDING)) {
+            setEventLogUsernameOrder(SortOrder.DESCENDING);
         } else {
-            setEventLogUsernameOrder(SortOrder.ascending);
+            setEventLogUsernameOrder(SortOrder.ASCENDING);
         }
     }
     public void sortByEventObject() {
 
 
-        if (eventLogObjectOrder.equals(SortOrder.ascending)) {
-            setEventLogObjectOrder(SortOrder.descending);
+        if (eventLogObjectOrder.equals(SortOrder.ASCENDING)) {
+            setEventLogObjectOrder(SortOrder.DESCENDING);
         } else {
-            setEventLogObjectOrder(SortOrder.ascending);
+            setEventLogObjectOrder(SortOrder.ASCENDING);
         }
     }    public void sortByTableName() {
 
 
-        if (tableNameOrder.equals(SortOrder.ascending)) {
-            setTableNameOrder(SortOrder.descending);
+        if (tableNameOrder.equals(SortOrder.ASCENDING)) {
+            setTableNameOrder(SortOrder.DESCENDING);
         } else {
-            setTableNameOrder(SortOrder.ascending);
+            setTableNameOrder(SortOrder.ASCENDING);
         }
     }
 
@@ -143,13 +142,13 @@ public class HandleEventAction implements Serializable {
         this.tableNameOrder = tableNameOrder;
     }
 
-    public Filter<?> getEventLogUsernameFilterImpl() {
-        return new Filter<EventLog>() {
-            public boolean accept(EventLog eventLog) {
-                return eventLog.getUsername() != null && (eventLogUsernameFilter == null || eventLogUsernameFilter.length() == 0 || eventLog.getUsername().toLowerCase().contains(eventLogUsernameFilter.toLowerCase()));
-            }
-        };
-    }
+//    public Filter<?> getEventLogUsernameFilterImpl() {
+//        return new Filter<EventLog>() {
+//            public boolean accept(EventLog eventLog) {
+//                return eventLog.getUsername() != null && (eventLogUsernameFilter == null || eventLogUsernameFilter.length() == 0 || eventLog.getUsername().toLowerCase().contains(eventLogUsernameFilter.toLowerCase()));
+//            }
+//        };
+//    }
 
     public void search() {
         List<EventLog> eventLogs = null;

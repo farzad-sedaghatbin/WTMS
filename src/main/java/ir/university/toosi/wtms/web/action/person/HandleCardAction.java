@@ -15,9 +15,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.richfaces.component.SortOrder;
-import org.richfaces.component.UIExtendedDataTable;
-import org.richfaces.model.Filter;
+import org.primefaces.model.SortOrder;
+
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -72,13 +71,13 @@ public class HandleCardAction implements Serializable {
     private Person currentPerson;
     private Long startTime;
 
-    private SortOrder cardNameOrder = SortOrder.unsorted;
-    private SortOrder cardCodeOrder = SortOrder.unsorted;
-    private SortOrder cardOwnerNameOrder = SortOrder.unsorted;
-    private SortOrder cardOwnerFamilyOrder = SortOrder.unsorted;
-    private SortOrder cardPersonnelNoOrder = SortOrder.unsorted;
-    private SortOrder startDateOrder = SortOrder.unsorted;
-    private SortOrder expirationDateOrder = SortOrder.unsorted;
+    private SortOrder cardNameOrder = SortOrder.UNSORTED;
+    private SortOrder cardCodeOrder = SortOrder.UNSORTED;
+    private SortOrder cardOwnerNameOrder = SortOrder.UNSORTED;
+    private SortOrder cardOwnerFamilyOrder = SortOrder.UNSORTED;
+    private SortOrder cardPersonnelNoOrder = SortOrder.UNSORTED;
+    private SortOrder startDateOrder = SortOrder.UNSORTED;
+    private SortOrder expirationDateOrder = SortOrder.UNSORTED;
 
     private String cardNameFilter;
     private String cardTypeCodeFilter;
@@ -301,7 +300,7 @@ public class HandleCardAction implements Serializable {
         titles.add(me.getValue("expirationDate"));
         titles.add(me.getValue("personnelCode"));
         Workbook currentWorkbook = new HSSFWorkbook();
-        Sheet sheet = currentWorkbook.createSheet("ê“«—‘");
+        Sheet sheet = currentWorkbook.createSheet("");
         sheet.autoSizeColumn(0);
 
         int rowCounter = 0;
@@ -561,7 +560,7 @@ public class HandleCardAction implements Serializable {
         cardOwnerNameFilter = "";
         cardPersonnelNoFilter = "";
         resetAllSortOrders();
-        cardOwnerFamilyOrder = SortOrder.ascending;
+        cardOwnerFamilyOrder = SortOrder.ASCENDING;
         enablePoll = false;
 
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPersonDataModel");
@@ -732,7 +731,7 @@ public class HandleCardAction implements Serializable {
         }
     }
 
-    public void selectionListener(AjaxBehaviorEvent event) {
+/*    public void selectionListener(AjaxBehaviorEvent event) {
         UIExtendedDataTable dataTable = (UIExtendedDataTable) event.getComponent();
         Object originalKey = dataTable.getRowKey();
         selectionItems.clear();
@@ -760,9 +759,9 @@ public class HandleCardAction implements Serializable {
                 return StringUtils.isEmpty(cardTypeCodeFilter) || card.getCardType().getCode().toLowerCase().contains(cardTypeCodeFilter.toLowerCase());
             }
         };
-    }
+    }*/
 
-    public Filter<?> getCardStatusCodeFilterImpl() {
+   /* public Filter<?> getCardStatusCodeFilterImpl() {
         return new Filter<Card>() {
             public boolean accept(Card card) {
                 return StringUtils.isEmpty(cardStatusCodeFilter) || card.getCardStatus().getCode().toLowerCase().contains(cardStatusCodeFilter.toLowerCase());
@@ -843,7 +842,7 @@ public class HandleCardAction implements Serializable {
             }
         };
     }
-
+*/
     public void sortByCardName() {
         cardNameOrder = newSortOrder(cardNameOrder);
     }
@@ -875,22 +874,22 @@ public class HandleCardAction implements Serializable {
     private SortOrder newSortOrder(SortOrder currentSortOrder) {
         resetAllSortOrders();
 
-        if (currentSortOrder.equals(SortOrder.descending)) {
-            return SortOrder.ascending;
+        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
+            return SortOrder.ASCENDING;
         } else {
-            return SortOrder.descending;
+            return SortOrder.DESCENDING;
         }
 
     }
 
     private void resetAllSortOrders() {
-        cardNameOrder = SortOrder.unsorted;
-        cardCodeOrder = SortOrder.unsorted;
-        cardOwnerNameOrder = SortOrder.unsorted;
-        cardOwnerFamilyOrder = SortOrder.unsorted;
-        cardPersonnelNoOrder = SortOrder.unsorted;
-        startDateOrder = SortOrder.unsorted;
-        expirationDateOrder = SortOrder.unsorted;
+        cardNameOrder = SortOrder.UNSORTED;
+        cardCodeOrder = SortOrder.UNSORTED;
+        cardOwnerNameOrder = SortOrder.UNSORTED;
+        cardOwnerFamilyOrder = SortOrder.UNSORTED;
+        cardPersonnelNoOrder = SortOrder.UNSORTED;
+        startDateOrder = SortOrder.UNSORTED;
+        expirationDateOrder = SortOrder.UNSORTED;
     }
 
     public void resetPage() {

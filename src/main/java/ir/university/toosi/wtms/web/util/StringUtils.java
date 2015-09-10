@@ -301,6 +301,10 @@ public class StringUtils {
         return s;
     }
 
+    public static boolean isEmpty(String value) {
+        return false;
+    }
+
 /*
     public static void main(String[] arg) {
         String ency = arg[0];

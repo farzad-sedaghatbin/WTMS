@@ -7,7 +7,7 @@ import ir.university.toosi.wtms.web.server.CardReport;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.richfaces.component.SortOrder;
+import org.primefaces.model.SortOrder;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -53,7 +53,7 @@ public class HandleEventReportAction implements Serializable{
         private Role currentRole = null;
         private String currentPage;
         private int page = 1;
-        private SortOrder roleDescriptionOrder = SortOrder.unsorted;
+        private SortOrder roleDescriptionOrder = SortOrder.UNSORTED;
         private String roleDescriptionFilter;
         private boolean selected;
         private boolean selectAll = false;

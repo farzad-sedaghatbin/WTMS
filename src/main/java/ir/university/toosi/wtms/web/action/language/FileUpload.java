@@ -1,6 +1,7 @@
 package ir.university.toosi.wtms.web.action.language;
 
-import org.richfaces.event.FileUploadEvent;
+
+import org.primefaces.event.FileUploadEvent;
 
 import javax.inject.Named;
 import java.io.Serializable;
