@@ -3,6 +3,7 @@ package ir.university.toosi.wtms.web.action.role;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.OperationServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.operation.HandleOperationAction;
 import ir.university.toosi.wtms.web.action.workgroup.HandleWorkGroupAction;
@@ -12,9 +13,11 @@ import ir.university.toosi.tms.model.entity.PermissionType;
 import ir.university.toosi.tms.model.entity.Operation;
 import ir.university.toosi.tms.model.entity.Role;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -43,7 +46,9 @@ public class HandleRoleAction implements Serializable {
     private HandleOperationAction handleOperationAction;
     @Inject
     private HandleWorkGroupAction handleWorkGroupAction;
-    private DataModel<Role> roleList = null;
+    @EJB
+    private OperationServiceImpl operationService;
+    private List<Role> roleList = null;
     private DataModel<Permission> zoneList = null;
     private DataModel<Permission> gateList = null;
     private DataModel<Permission> pdpList = null;
@@ -69,6 +74,7 @@ public class HandleRoleAction implements Serializable {
     private Set<Role> selectedRoles = new HashSet<>();
     private boolean selectRow = false;
     private SortOrder roleDescriptionOrder = SortOrder.UNSORTED;
+    private boolean disableFields;
 
     public String begin() {
         me.setActiveMenu(MenuType.USER);
@@ -76,42 +82,7 @@ public class HandleRoleAction implements Serializable {
         return "list-role";
     }
 
-    public void selectRoles(ValueChangeEvent event) {
-        currentRole = roleList.getRowData();
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            currentRole.setSelected(true);
-            selectedRoles.add(currentRole);
-        } else {
-            currentRole.setSelected(false);
-            selectedRoles.remove(currentRole);
-        }
-    }
-
-    public void changeRoles(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            roleEnabled = true;
-        } else
-            roleEnabled = false;
-    }
-
-    public void selectAllRole(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            for (Role role : roleList) {
-                role.setSelected(true);
-                selectedRoles.add(role);
-            }
-        } else {
-            for (Role role : roleList) {
-                role.setSelected(false);
-            }
-            selectedRoles.clear();
-        }
-    }
-
-    public DataModel<Role> getSelectionGrid() {
+    public List<Role> getSelectionGrid() {
         List<Role> roles = new ArrayList<>();
         refresh();
         return roleList;
@@ -127,7 +98,7 @@ public class HandleRoleAction implements Serializable {
             for (Role role : roles) {
                 role.setDescText(me.getValue(role.getDescription()));
             }
-            roleList = new ListDataModel<>(roles);
+            roleList = new ArrayList<>(roles);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -171,26 +142,11 @@ public class HandleRoleAction implements Serializable {
         roleDescriptionFilter = "";
     }
 
-    public void edit() {
-        setEditable("true");
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findRoleById");
-        try {
-            currentRole = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentRole.getId())), Role.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
+    public void view(){
         roleEnabled = currentRole.isEnabled();
         descText = me.getValue(currentRole.getDescription());
         name = currentRole.getName();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOperation");
-        List<Operation> operationList = null;
-        try {
-            operationList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Operation>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        List<Operation> operationList = operationService.getAllOperation();
         handleOperationAction.setSelectedOperations(new HashSet<Operation>());
         for (Operation operation : operationList) {
             operation.setDescription(me.getValue(operation.getDescription()));
@@ -205,6 +161,35 @@ public class HandleRoleAction implements Serializable {
         }
 
         handleOperationAction.setOperationList(new ListDataModel<>(operationList));
+    }
+
+    public void edit() {
+        setEditable("true");
+        roleEnabled = currentRole.isEnabled();
+        descText = me.getValue(currentRole.getDescription());
+        name = currentRole.getName();
+
+        List<Operation> operationsSource = new ArrayList<>();
+        List<Operation> operationsTarget = new ArrayList<>();
+
+        List<Operation> operationList = operationService.getAllOperation();
+        handleOperationAction.setSelectedOperations(new HashSet<Operation>());
+        for (Operation operation : operationList) {
+            operation.setDescription(me.getValue(operation.getDescription()));
+        }
+        for (Operation currentOperation : currentRole.getOperations()) {
+            for (Operation operation : operationList) {
+                if ((currentOperation.getId() == operation.getId())) {
+                    operation.setSelected(true);
+                    handleOperationAction.getSelectedOperations().add(operation);
+                    operationsTarget.add(operation);
+                } else {
+                    operationsSource.add(operation);
+                }
+            }
+        }
+        handleOperationAction.setOperationList(new ListDataModel<>(operationList));
+        handleOperationAction.setOperations(new DualListModel<Operation>(operationsSource,operationsTarget));
     }
 
     public void saveOrUpdate() {
@@ -388,9 +373,7 @@ public class HandleRoleAction implements Serializable {
 //    }
 
     public void selectForEdit() {
-        currentRole = roleList.getRowData();
         setSelectRow(true);
-
     }
 //
 //
@@ -470,30 +453,6 @@ public class HandleRoleAction implements Serializable {
 //        }
 //    }
 
-    public void selectPdp(ValueChangeEvent event) {
-        currentPermission = pdpList.getRowData();
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            currentPermission.setSelected(true);
-            sPermision.add(currentPermission);
-        } else {
-            sPermision.remove(currentPermission);
-            currentPermission.setSelected(false);
-
-/*
-            int i = 0;
-            for (Permission permission : selectedPermission) {
-
-                if (permission.getId() == currentPermission.getId()) {
-                    break;
-                }
-                i++;
-            }
-            selectedPermission.remove(i);
-*/
-        }
-    }
-
 //    public void selectAllGate(ValueChangeEvent event) {
 //        boolean temp = (Boolean) event.getNewValue();
 //        if (temp) {
@@ -532,11 +491,11 @@ public class HandleRoleAction implements Serializable {
         this.selectRow = selectRow;
     }
 
-    public DataModel<Role> getRoleList() {
+    public List<Role> getRoleList() {
         return roleList;
     }
 
-    public void setRoleList(DataModel<Role> roleList) {
+    public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
     }
 
@@ -740,5 +699,13 @@ public class HandleRoleAction implements Serializable {
 
     public void setOrganPage(int organPage) {
         this.organPage = organPage;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }

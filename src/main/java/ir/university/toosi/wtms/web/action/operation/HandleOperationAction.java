@@ -9,6 +9,7 @@ import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.Operation;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -51,6 +52,7 @@ public class HandleOperationAction implements Serializable {
     private boolean selected;
     private boolean selectAll;
     private Set<Operation> selectedOperations = new HashSet<>();
+    private DualListModel<Operation> operations;
 
     public String begin() {
         refresh();
@@ -382,5 +384,13 @@ public class HandleOperationAction implements Serializable {
 
     public void setSelectAll(boolean selectAll) {
         this.selectAll = selectAll;
+    }
+
+    public DualListModel<Operation> getOperations() {
+        return operations;
+    }
+
+    public void setOperations(DualListModel<Operation> operations) {
+        this.operations = operations;
     }
 }
