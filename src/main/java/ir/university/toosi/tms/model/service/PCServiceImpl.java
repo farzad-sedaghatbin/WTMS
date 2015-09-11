@@ -89,7 +89,7 @@ public class PCServiceImpl<T extends PC> {
         }
     }
 
-    public String deletePC(T entity) {
+    public void deletePC(T entity) {
         try {
             List<User> users = userService.findByPc(entity.getId());
             for (User user : users) {
@@ -106,9 +106,8 @@ public class PCServiceImpl<T extends PC> {
 
             EventLogManager.eventLog(eventLogService, null, BLookup.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             pcdao.delete(findById(String.valueOf(entity.getId())));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
         } catch (Exception e) {
-            return "FALSE";
+            e.printStackTrace();
         }
     }
 

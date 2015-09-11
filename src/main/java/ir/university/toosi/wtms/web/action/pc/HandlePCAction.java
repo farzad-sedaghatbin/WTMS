@@ -13,10 +13,12 @@ import org.primefaces.model.SortOrder;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -63,11 +65,27 @@ public class HandlePCAction implements Serializable {
     private SortOrder pcDescriptionOrder = SortOrder.UNSORTED;
 
 
-    public String begin() {
+    public void begin() {
 //        todo:solve this comment
 //        me.setActiveMenu(MenuType.USER);
         refresh();
-        return "list-pc";
+        redirect("/pc/pc.xhtml");
+    }
+
+    public void redirect(String pageName) {
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            if (facesContext.getExternalContext().getRequestParameterMap().get("cid") == null || facesContext.getExternalContext().getRequestParameterMap().get("cid").isEmpty()) {
+                facesContext.getExternalContext().redirect(facesContext.getExternalContext().getRequestContextPath() + pageName);
+            } else {
+                facesContext.getExternalContext().redirect(facesContext.getExternalContext().getRequestContextPath() + pageName + "?cid=" + facesContext.getExternalContext().getRequestParameterMap().get("cid"));
+            }
+        } catch (Exception e) {
+            String message = e.getMessage();
+            if (e instanceof NullPointerException) {
+                message = "Null Pointer Exception";
+            }
+        }
     }
 
 //    public void selectPCs(ValueChangeEvent event) {
@@ -99,9 +117,12 @@ public class HandlePCAction implements Serializable {
     private void refresh() {
         init();
         List<PC> pcs = pcService.getAllPCs();
-            for (PC pc : pcs) {
-                pc.getLocation().setTitleText(me.getValue(pc.getLocation().getCode()));
-            }
+//        todo:must be uncommented
+//            for (PC pc : pcs) {
+//                pc.getLocation().setTitleText(pc.getName());
+////                todo:the commented line is correct
+////                pc.getLocation().setTitleText(me.getValue(pc.getLocation().getCode()));
+//            }
             pcList = new ArrayList<>(pcs);
     }
 
@@ -114,7 +135,7 @@ public class HandlePCAction implements Serializable {
 
     public void doDelete() {
 
-        currentPC.setEffectorUser(me.getUsername());
+//        currentPC.setEffectorUser(me.getUsername());
         pcService.deletePC(currentPC);
         refresh();
         me.addInfoMessage("delete was successful");
@@ -150,6 +171,12 @@ public class HandlePCAction implements Serializable {
         pcLocation = currentPC.getLocation();
     }
 
+    public void view(){
+        pcName = currentPC.getName();
+        pcIP = currentPC.getIp();
+        pcLocation = currentPC.getLocation();
+    }
+
     public void saveOrUpdate() {
         if (!editable) {
             doAdd();
@@ -171,7 +198,7 @@ public class HandlePCAction implements Serializable {
             return;
         }
 
-        currentPC.setEffectorUser(me.getUsername());
+//        currentPC.setEffectorUser(me.getUsername());
         condition = pcService.editPC(currentPC);
             if (condition) {
                 refresh();
@@ -190,19 +217,19 @@ public class HandlePCAction implements Serializable {
         newPC.setIp(pcIP);
         newPC.setDeleted("0");
         newPC.setStatus("c");
-        newPC.setEffectorUser(me.getUsername());
+//        newPC.setEffectorUser(me.getUsername());
         newPC.setLocation(pcLocation);
-        boolean condition = pcService.existNotId(String.valueOf(currentPC.getId()));
+        boolean condition = pcService.existNotId(String.valueOf(pcIP));
             if (condition) {
                 me.addInfoMessage("pc.exist");
                 return;
             }
 
         PC insertedPC = null;
-        insertedPC = pcService.createPC(currentPC);
+        insertedPC = pcService.createPC(newPC);
         if (insertedPC != null) {
             refresh();
-            me.addInfoMessage("operation.occurred");
+//            me.addInfoMessage("operation.occurred");
             me.redirect("/pc/list-pc.htm");
         } else {
             me.addInfoMessage("operation.not.occurred");
