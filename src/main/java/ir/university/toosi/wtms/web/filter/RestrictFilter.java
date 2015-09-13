@@ -71,7 +71,7 @@ public class RestrictFilter implements Filter {
         response.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("username") == null) {
-            response.sendRedirect(request.getRequestURL().substring(0, request.getRequestURL().indexOf(Configuration.getProperty("app.name")) + Configuration.getProperty("app.name").length()) + "/login.htm");
+            response.sendRedirect(request.getContextPath() + "/login.xhtml");
         } else {
 //            User currentUser = generalHelper.getUserService().findByUsername(session.getAttribute("username").toString());
             User currentUser =  generalHelper.getUserService().findByUsername(session.getAttribute("username").toString());
