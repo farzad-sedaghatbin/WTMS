@@ -52,7 +52,7 @@ public class HandleWorkGroupAction implements Serializable {
     private String currentPage;
     private String selectedWorkgroup = "0";
     private String workGroupTitleFilter;
-    private DataModel<Role> roleSelectionGrid = null;
+    private List<Role> roleSelectionGrid = null;
     private WorkGroup selectedWorkGroup = new WorkGroup();
     private List<Role> lastSelected;
     private Set<WorkGroup> selectWorkGroups;
@@ -251,7 +251,7 @@ public class HandleWorkGroupAction implements Serializable {
             }
         }
 
-        handleRoleAction.setRoleList(new ListDataModel<>(roles));
+        handleRoleAction.setRoleList(roles);
     }
 
     public void doEdit() {
@@ -303,12 +303,12 @@ public class HandleWorkGroupAction implements Serializable {
     }
 
     public void workGroupChange(ValueChangeEvent event) {
-        handleRoleAction.setRoleList(new ListDataModel<>(new ArrayList<Role>()));
+        handleRoleAction.setRoleList(new ArrayList<Role>());
         String id = (String) event.getNewValue();
         if (!id.equalsIgnoreCase("0")) {
             WorkGroup workGroup = null;//me.getGeneralHelper().getWorkGroupService().findById(id);
             if (workGroup != null)
-                handleRoleAction.setRoleList(new ListDataModel<>(new ArrayList<>(workGroup.getRoles())));
+                handleRoleAction.setRoleList(new ArrayList<>(workGroup.getRoles()));
             selectedWorkGroup = workGroup;
         }
     }
@@ -451,11 +451,11 @@ public class HandleWorkGroupAction implements Serializable {
         this.workGroupTitleOrder = workGroupTitleOrder;
     }
 
-    public DataModel<Role> getRoleSelectionGrid() {
+    public List<Role> getRoleSelectionGrid() {
         return roleSelectionGrid;
     }
 
-    public void setRoleSelectionGrid(DataModel<Role> roleSelectionGrid) {
+    public void setRoleSelectionGrid(List<Role> roleSelectionGrid) {
         this.roleSelectionGrid = roleSelectionGrid;
     }
 

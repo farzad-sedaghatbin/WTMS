@@ -3,6 +3,7 @@ package ir.university.toosi.wtms.web.helper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.UserServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.Languages;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -12,6 +13,9 @@ import ir.university.toosi.tms.model.entity.zone.Zone;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import ir.university.toosi.wtms.web.util.Storage;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -38,6 +42,8 @@ public class GeneralHelper implements Serializable {
     @Inject
     private UserManagementAction me;
 
+    @EJB
+    private UserServiceImpl userService;
     private String userExtraField1;
     private String userExtraField2;
     private String userExtraField3;
@@ -58,8 +64,15 @@ public class GeneralHelper implements Serializable {
 
 
     public GeneralHelper() {
-        loadLanguage();
-        anonymous = getImage2Base64();
+        System.out.println("constractor");
+//        loadLanguage();
+//        anonymous = getImage2Base64();
+    }
+
+    @PostConstruct
+    public void dd(){
+        System.out.println("postcons");
+        System.out.println(me.getDirection());
     }
 
     public byte[] getImage2Base64() {
@@ -297,5 +310,13 @@ public class GeneralHelper implements Serializable {
 
     public void setAnonymous(byte[] anonymous) {
         this.anonymous = anonymous;
+    }
+
+    public UserServiceImpl getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserServiceImpl userService) {
+        this.userService = userService;
     }
 }

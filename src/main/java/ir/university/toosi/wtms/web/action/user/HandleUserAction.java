@@ -163,7 +163,7 @@ public class HandleUserAction implements Serializable {
         }
 
         userList = new ListDataModel<>(innerUserList);
-        handleRoleAction.setRoleList(new ListDataModel<>(new ArrayList<Role>()));
+        handleRoleAction.setRoleList(new ArrayList<Role>());
     }
 
     public void personChange(ValueChangeEvent event) {

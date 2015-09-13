@@ -68,6 +68,7 @@ public class HandlePCAction implements Serializable {
     public void begin() {
 //        todo:solve this comment
 //        me.setActiveMenu(MenuType.USER);
+        System.out.println(me.getDirection());
         refresh();
         redirect("/pc/pc.xhtml");
     }
@@ -212,6 +213,7 @@ public class HandlePCAction implements Serializable {
     }
 
     private void doAdd() {
+        System.out.println(me.getDirection());
         PC newPC = new PC();
         newPC.setName(pcName);
         newPC.setIp(pcIP);

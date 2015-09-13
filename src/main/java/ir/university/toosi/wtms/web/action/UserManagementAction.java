@@ -4,6 +4,7 @@ package ir.university.toosi.wtms.web.action;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.UserServiceImpl;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
@@ -18,6 +19,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 //import org.richfaces.component.Mode;
 //import org.richfaces.component.Positioning;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -46,6 +48,9 @@ public class UserManagementAction implements Serializable {
     private GeneralHelper generalHelper;
     @Inject
     private AccessControlAction accessControlAction;
+
+    @EJB
+    private UserServiceImpl userService;
 
     public static String SENTRY_COUNT = "10";
     public static final String INVALID_TRY = "invalid_try";
@@ -121,7 +126,6 @@ public class UserManagementAction implements Serializable {
     public String authenticate() {
         permissionHash = new Hashtable<>();
         try {
-            getGeneralHelper().getWebServiceInfo().setServiceName("/authenticate");
             HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             if ((username == null) || (username.isEmpty()) || (password == null) || (password.isEmpty())) {
                 addErrorMessage("invalid.login.username.password");
@@ -130,17 +134,13 @@ public class UserManagementAction implements Serializable {
             user = new User();
             user.setUsername(username);
             user.setPassword(password);
-            user = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(user)), User.class);
-            getGeneralHelper().getWebServiceInfo().setServiceName("/loadLanguage");
-            language = null;
-            language = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName(), selectedLanguage), new TypeReference<Hashtable<String, LanguageManagement>>() {
-            });
-            if (!generalHelper.getLastLanguages().isRtl()) {
-                direction = "ltr";
-                align = "left";
-                appositeAlign = "right";
-                appositeDirection = "rtl";
-            }
+            user =userService.authenticate(username,password);
+//            if (!generalHelper.getLastLanguages().isRtl()) {
+//                direction = "ltr";
+//                align = "left";
+//                appositeAlign = "right";
+//                appositeDirection = "rtl";
+//            }
 
 
             //getGeneralHelper().getUserService().authenticate(username, generalHelper.getEncryptUtil().encrypt(password));
@@ -188,31 +188,31 @@ public class UserManagementAction implements Serializable {
                 return "login";
             }
             accessControlAction.setWorkGroup(user.getWorkGroups());
-            getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOperation");
-            List<Operation> operationList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Operation>>() {
-            });
-            if (username.equalsIgnoreCase("admin")) {
-                for (Operation operation : operationList) {
-                    permissionHash.put(operation.getDescription(), Boolean.TRUE);
-
-                }
-            }
-            for (Operation operation : operationList) {
-                for (WorkGroup workGroup : user.getWorkGroups()) {
-                    for (Role role : workGroup.getRoles()) {
-                        for (Operation innerOperation : role.getOperations()) {
-                            if (innerOperation.getDescription().equalsIgnoreCase(operation.getDescription())) {
-                                permissionHash.put(operation.getDescription(), Boolean.TRUE);
-                            }
-                        }
-                    }
-                }
-                if (!permissionHash.containsKey(operation.getDescription()))
-                    permissionHash.put(operation.getDescription(), Boolean.FALSE);
-            }
+//            getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOperation");
+//            List<Operation> operationList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Operation>>() {
+//            });
+//            if (username.equalsIgnoreCase("admin")) {
+//                for (Operation operation : operationList) {
+//                    permissionHash.put(operation.getDescription(), Boolean.TRUE);
+//
+//                }
+//            }
+//            for (Operation operation : operationList) {
+//                for (WorkGroup workGroup : user.getWorkGroups()) {
+//                    for (Role role : workGroup.getRoles()) {
+//                        for (Operation innerOperation : role.getOperations()) {
+//                            if (innerOperation.getDescription().equalsIgnoreCase(operation.getDescription())) {
+//                                permissionHash.put(operation.getDescription(), Boolean.TRUE);
+//                            }
+//                        }
+//                    }
+//                }
+//                if (!permissionHash.containsKey(operation.getDescription()))
+//                    permissionHash.put(operation.getDescription(), Boolean.FALSE);
+//            }
 
             /************/
-            fillCalendar();
+//            fillCalendar();
             /*************/
             session.setAttribute(usernameInSession, this.username);
         } catch (Exception e) {
@@ -223,8 +223,8 @@ public class UserManagementAction implements Serializable {
             e.printStackTrace();
         }
 
-        fillSystemConfiguration();
-        initParameter();
+//        fillSystemConfiguration();
+//        initParameter();
         //generalHelper.initial();
         return "home";
 

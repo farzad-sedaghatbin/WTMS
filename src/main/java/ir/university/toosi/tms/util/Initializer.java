@@ -9,11 +9,13 @@ import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
+import ir.university.toosi.wtms.web.helper.GeneralHelper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
@@ -44,6 +46,8 @@ public class Initializer {
     private CameraServiceImpl cameraService;
     @EJB
     private PDPServiceImpl pdpService;
+//    @Inject
+//    private GeneralHelper generalHelper;
 
 
     public static Hashtable<Long, Hashtable<String, List<Rule>>> dateRuleHashTables = new Hashtable<>();
@@ -87,7 +91,9 @@ public class Initializer {
 
     @PostConstruct
     public void initial() {
-        new Thread(new ConsoleServerSocket(crossingService, trafficLogService, personService)).start();
+
+//        System.out.println(generalHelper.getWebServiceInfo().getServerUrl());
+//        new Thread(new ConsoleServerSocket(crossingService, trafficLogService, personService)).start();
         rulePackageService.fillRulePackageHashTable();
         SystemParameterManager.fillSystemConfiguration(systemConfigurationService);
         gatewaySpecialStateScheduler.stopService();
