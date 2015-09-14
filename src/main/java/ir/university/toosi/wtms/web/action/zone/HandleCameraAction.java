@@ -2,6 +2,7 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.zone.Camera;
@@ -11,6 +12,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -39,11 +41,13 @@ public class HandleCameraAction implements Serializable {
     private UserManagementAction me;
     @Inject
     private HandleGatewayAction handleGatewayAction;
+    @EJB
+    private CameraServiceImpl cameraService;
 
     private String editable = "false";
 
-    private DataModel<Camera> cameraList = null;
-    private DataModel<Gateway> gatewayGrid = null;
+    private List<Camera> cameraList = null;
+    private List<Gateway> gatewayGrid = null;
     private String cameraName;
     private Gateway gateway;
     private Camera newCamera = null;
@@ -69,7 +73,7 @@ public class HandleCameraAction implements Serializable {
     public void begin() {
 //        me.setActiveMenu(MenuType.HARDWARE);
         refresh();
-        //return "list-camera";
+        me.redirect("/zone/list-camera.xhtml");
     }
 
     public void selectCameras(ValueChangeEvent event) {
@@ -107,7 +111,7 @@ public class HandleCameraAction implements Serializable {
         selectedCameras.clear();
     }
 
-    public DataModel<Camera> getSelectionGrid() {
+    public List<Camera> getSelectionGrid() {
         List<Camera> cameras = new ArrayList<>();
         refresh();
         return cameraList;
@@ -115,16 +119,10 @@ public class HandleCameraAction implements Serializable {
 
     private void refresh() {
         init();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllCamera");
 
         handleGatewayAction.setSelectedGateways(new HashSet<Gateway>());
-        try {
-            List<Camera> cameras = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Camera>>() {
-            });
-            cameraList = new ListDataModel<>(cameras);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<Camera> cameras = cameraService.getAllCamera();
+        cameraList = cameras;
     }
 
     public void add() {
@@ -139,12 +137,12 @@ public class HandleCameraAction implements Serializable {
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPdpByCameraId");
         List<PDP> pdpList = null;
         try {
-            pdpList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(),String.valueOf(currentCamera.getId())), new TypeReference<List<PDP>>() {
+            pdpList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentCamera.getId())), new TypeReference<List<PDP>>() {
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(pdpList!=null && pdpList.size()>0){
+        if (pdpList != null && pdpList.size() > 0) {
             me.addInfoMessage("camera.pdp");
             me.redirect("/zone/list-camera.htm");
         }
@@ -239,7 +237,7 @@ public class HandleCameraAction implements Serializable {
                 }
             }
         }
-        handleGatewayAction.setGatewayList(new ListDataModel<>(gatewayList));
+        handleGatewayAction.setGatewayList(gatewayList);
     }
 
 
@@ -439,11 +437,6 @@ public class HandleCameraAction implements Serializable {
         }
     }
 
-    public void selectForEdit() {
-        currentCamera = cameraList.getRowData();
-        setSelectRow(true);
-    }
-
 
     public boolean isSelectRow() {
         return selectRow;
@@ -453,11 +446,11 @@ public class HandleCameraAction implements Serializable {
         this.selectRow = selectRow;
     }
 
-    public DataModel<Gateway> getGatewayGrid() {
+    public List<Gateway> getGatewayGrid() {
         return gatewayGrid;
     }
 
-    public void setGatewayGrid(DataModel<Gateway> gatewayGrid) {
+    public void setGatewayGrid(List<Gateway> gatewayGrid) {
         this.gatewayGrid = gatewayGrid;
     }
 
@@ -469,15 +462,13 @@ public class HandleCameraAction implements Serializable {
         this.me = me;
     }
 
-
-    public DataModel<Camera> getCameraList() {
+    public List<Camera> getCameraList() {
         return cameraList;
     }
 
-    public void setCameraList(DataModel<Camera> cameraList) {
+    public void setCameraList(List<Camera> cameraList) {
         this.cameraList = cameraList;
     }
-
 
     public Gateway getGateway() {
         return gateway;

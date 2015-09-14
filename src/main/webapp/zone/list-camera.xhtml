@@ -1,0 +1,95 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+<ui:define name="content">
+
+    <br/>
+    <h:form>
+  
+                        <p:dataTable id="cameraTable"
+                                        keepSaved="true"
+                                        value="#{handleCameraAction.cameraList}"
+                                        rowKeyVar="rowIndex"
+                                        noDataLabel="no_result_found"
+                                        sortMode="single"
+                                        var="camera"
+                                        rows="10"
+                                        style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                        rowClasses="ROW1,ROW2">
+
+                            <p:column sortBy="#{camera.name}"
+                                         sortOrder="#{handleCameraAction.cameraNameOrder}"
+                                        >
+                                <f:facet name="header">
+                                    <p:commandLink value="name" render="cameraTable"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     action="#{handleCameraAction.sortByCameraName}"/>
+                                    <br/>
+                                    <h:inputText value="#{handleCameraAction.cameraNameFilter}">
+                                        <p:ajax event="blur" render="cameraTable" execute="@this"
+                                                  limitRender="true"/>
+                                    </h:inputText>
+                                </f:facet>
+                                <p:commandLink id="editLink" value="#{camera.name}"
+                                                 render="operationArea"
+                                                 styleClass="withoutUnderlineLink"
+                                                 execute="@this"
+                                                 limitRender="true"
+                                                 action="#{handleCameraAction.selectForEdit}"/>
+                            </p:column>
+
+                            <p:column sortBy="#{camera.ip}"
+                                         sortOrder="#{handleCameraAction.ipOrder}">
+                                <f:facet name="header">
+                                    <p:commandLink value="ip"
+                                                     render="cameraTable"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     action="#{handleCameraAction.sortByIp}"/>
+                                    <br />
+                                    <h:inputText value="#{handleCameraAction.cameraIPFilter}">
+                                        <p:ajax event="blur" render="cameraTable" execute="@this"
+                                                  limitRender="true"/>
+                                    </h:inputText>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{camera.ip}"/>
+                            </p:column>
+
+                            <p:column sortBy="#{camera.description}"
+                                         sortOrder="#{handleCameraAction.descriptionOrder}">
+                                <f:facet name="header">
+                                    <p:commandLink value="description"
+                                                     render="cameraTable"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     action="#{handleCameraAction.sortByDescription}"/>
+                                    <br/>
+                                    <h:inputText value="#{handleCameraAction.cameraDescFilter}">
+                                        <p:ajax event="blur" render="cameraTable" execute="@this"
+                                                  limitRender="true"/>
+                                    </h:inputText>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{camera.description}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="enabled"/>
+                                </f:facet>
+                                <h:graphicImage
+                                        value="#{camera.enabled eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:dataScroller limitRender="true" execute="@this" render="cameraTable"
+                                                   page="#{handleCameraAction.page}"/>
+                            </f:facet>
+                        </p:dataTable>
+               
+    </h:form>
+</ui:define>
+</ui:composition>

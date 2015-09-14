@@ -2,6 +2,9 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
+import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
+import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -10,6 +13,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -35,12 +39,19 @@ public class HandlePDPAction implements Serializable {
     @Inject
     private HandlePersonAction handlePersonAction;
 
+    @EJB
+    private PDPServiceImpl pdpService;
+    @EJB
+    private CameraServiceImpl cameraService;
+    @EJB
+    private GatewayServiceImpl gatewayService;
+
     private String editable = "false";
 
-    private DataModel<PDP> pdpList = null;
+    private List<PDP> pdpList = null;
     private DataModel<DeviceDataModel> pdpListModel = null;
     private List<DeviceDataModel> listModel = null;
-    private DataModel<Gateway> gatewayGrid = null;
+    private List<Gateway> gatewayGrid = null;
     private String pdpName;
     private Gateway gateway;
     private PDP currentPdp = null;
@@ -73,10 +84,10 @@ public class HandlePDPAction implements Serializable {
     private String pdpIPFilter;
 
 
-    public String begin() {
+    public void begin() {
 //        me.setActiveMenu(MenuType.HARDWARE);
         refresh();
-        return "list-pdp";
+        me.redirect("/zone/list-pdp.xhtml");
     }
 
     public String beginDevice() {
@@ -85,7 +96,6 @@ public class HandlePDPAction implements Serializable {
     }
 
     public void selectPdps(ValueChangeEvent event) {
-        currentPdp = pdpList.getRowData();
         boolean temp = (Boolean) event.getNewValue();
         if (temp) {
             currentPdp.setSelected(true);
@@ -123,7 +133,7 @@ public class HandlePDPAction implements Serializable {
         }
     }
 
-    public DataModel<PDP> getSelectionGrid() {
+    public List<PDP> getSelectionGrid() {
         List<PDP> pdps = new ArrayList<>();
         refresh();
         return pdpList;
@@ -131,29 +141,22 @@ public class HandlePDPAction implements Serializable {
 
     private void refresh() {
         init();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPdp");
 
         handleGatewayAction.setSelectedGateways(new HashSet<Gateway>());
-        try {
-            List<PDP> pdps = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<PDP>>() {
-            });
+            List<PDP> pdps = pdpService.getAllPDPs();
             for (PDP pdp : pdps) {
                 pdp.setDescText(pdp.getDescription());
                 pdp.setNameText(pdp.getName());
             }
-            pdpList = new ListDataModel<>(pdps);
+            pdpList =pdps;
             for (PDP pdp : pdpList) {
                 pdp.setSelected(false);
             }
             selectedPdps = new HashSet<>();
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllGateway");
 
-            List<Gateway> gateways = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Gateway>>() {
-            });
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllCamera");
+            List<Gateway> gateways = gatewayService.getAllGateway();
 
-            List<Camera> cameras = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Camera>>() {
-            });
+            List<Camera> cameras = cameraService.getAllCamera();
             cameraItems = new SelectItem[cameras.size()];
             gatewayItems = new SelectItem[gateways.size()];
             int i = 0;
@@ -165,9 +168,6 @@ public class HandlePDPAction implements Serializable {
                 gatewayItems[i++] = new SelectItem(gateway1.getId(), gateway1.getName());
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void refreshDevice() {
@@ -543,11 +543,6 @@ public class HandlePDPAction implements Serializable {
     }
 
 
-    public void selectForEdit() {
-        currentPdp = pdpList.getRowData();
-        setSelectRow(true);
-    }
-
     public boolean isSelectRow() {
         return selectRow;
     }
@@ -572,13 +567,10 @@ public class HandlePDPAction implements Serializable {
         this.cameraId = cameraId;
     }
 
-    public DataModel<Gateway> getGatewayGrid() {
-        return gatewayGrid;
-    }
-
-    public void setGatewayGrid(DataModel<Gateway> gatewayGrid) {
+    public void setGatewayGrid(List<Gateway> gatewayGrid) {
         this.gatewayGrid = gatewayGrid;
     }
+
 
     public UserManagementAction getMe() {
         return me;
@@ -656,11 +648,11 @@ public class HandlePDPAction implements Serializable {
         this.ip = ip;
     }
 
-    public DataModel<PDP> getPdpList() {
+    public List<PDP> getPdpList() {
         return pdpList;
     }
 
-    public void setPdpList(DataModel<PDP> pdpList) {
+    public void setPdpList(List<PDP> pdpList) {
         this.pdpList = pdpList;
     }
 

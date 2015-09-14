@@ -1,0 +1,79 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+
+
+        <br/>
+        <h:form>
+
+            <p:dataTable id="gatewayTable"
+                            keepSaved="true"
+                            value="#{handleGatewayAction.gatewayList}"
+                            rowKeyVar="rowIndex"
+                            noDataLabel="p'no_result_foundp"
+                            sortMode="single"
+                            var="gateway"
+                            rows="10"
+
+                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                            rowClasses="ROW1,ROW2">
+
+                <p:column sortBy="#{gateway.name}"
+                             sortOrder="#{handleGatewayAction.gatewayNameOrder}">
+                    <f:facet name="header">
+                        <p:commandLink value="p'namep" render="gatewayTable"
+                                         execute="@this"
+                                         limitRender="true"
+                                         action="#{handleGatewayAction.sortByGatewayName}"/>
+                        <br/>
+                        <h:inputText value="#{handleGatewayAction.gatewayNameFilter}">
+                            <p:ajax event="blur" render="gatewayTable" execute="@this"
+                                      limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+                    <p:commandLink id="editLink" value="#{gateway.name}"
+                                     render="operationArea"
+                                     styleClass="withoutUnderlineLink"
+                                     execute="@this"
+                                     limitRender="true"/>
+                </p:column>
+                <p:column sortBy="#{gateway.description}"
+                             sortOrder="#{handleGatewayAction.gatewayDescriptionOrder}">
+                    <f:facet name="header">
+                        <p:commandLink value="p'descriptionp"
+                                         render="gatewayTable"
+                                         execute="@this"
+                                         limitRender="true"
+                                         action="#{handleGatewayAction.sortByGatewayDescription}"/>
+                        <br/>
+                        <h:inputText value="#{handleGatewayAction.gatewayDescriptionFilter}">
+                            <p:ajax event="blur" render="gatewayTable" execute="@this"
+                                      limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText escape="true" value="#{gateway.description}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="p'enablep"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{gateway.enabled eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"
+                            />
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this" render="gatewayTable"
+                                       page="#{handleGatewayAction.page}"/>
+                </f:facet>
+            </p:dataTable>
+              
+        </h:form>
+    </ui:define>
+</ui:composition>

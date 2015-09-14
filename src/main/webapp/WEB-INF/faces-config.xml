@@ -20,6 +20,11 @@
         <to-view-id>/login.xhtml</to-view-id>
         <redirect/>
     </navigation-case>
+    <navigation-case>
+        <from-outcome>list-camera</from-outcome>
+        <to-view-id>/zone/list-camera.xhtml</to-view-id>
+        <redirect/>
+    </navigation-case>
 </navigation-rule>
     <render-kit>
         <renderer>

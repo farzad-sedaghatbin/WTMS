@@ -1,0 +1,73 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+
+        <h:form>
+            <p:dataTable id="zoneTable"
+                            keepSaved="true"
+                            value="#{handleZoneAction.zoneList}"
+                            rowKeyVar="rowIndex"
+                            noDataLabel="no_result_found"
+                            sortMode="single"
+                            var="zone"
+                            rows="10"
+                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                            rowClasses="ROW1,ROW2">
+
+                <p:column sortBy="#{zone.name}"
+                             sortOrder="#{handleZoneAction.zoneNameOrder}">
+                    <f:facet name="header">
+                        <p:commandLink value="name" render="zoneTable"
+                                         execute="@this"
+                                         limitRender="true"
+                                         action="#{handleZoneAction.sortByZoneName}"/>
+                        <br/>
+                        <h:inputText value="#{handleZoneAction.zoneNameFilter}">
+                            <p:ajax event="blur" render="zoneTable" execute="@this"
+                                      limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+                    <p:commandLink id="editLink" value="#{zone.name}"
+                                     render="operationArea"
+                                     styleClass="withoutUnderlineLink"
+                                     execute="@this"
+                                     limitRender="true"
+                                     action="#{handleZoneAction.selectForEdit}"/>
+                </p:column>
+                <p:column sortBy="#{zone.description}"
+                             sortOrder="#{handleZoneAction.zoneDescriptionOrder}">
+                    <f:facet name="header">
+                        <p:commandLink value="description" render="zoneTable"
+                                         execute="@this"
+                                         limitRender="true"
+                                         action="#{handleZoneAction.sortByZoneDescription}"/>
+                        <br/>
+                        <h:inputText value="#{handleZoneAction.zoneDescriptionFilter}">
+                            <p:ajax event="blur" render="zoneTable" execute="@this"
+                                      limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText escape="true" value="#{zone.description}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="enabled"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{zone.enabled eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                </p:column>
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this" render="zoneTable"
+                                       page="#{handleZoneAction.page}"/>
+                </f:facet>
+            </p:dataTable>
+                          
+            
+        </h:form>
+    </ui:define>
+</ui:composition>

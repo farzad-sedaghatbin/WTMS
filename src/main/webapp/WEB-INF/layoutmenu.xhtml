@@ -15,6 +15,13 @@
             <p:menuitem id="rm_comment" value="comment" icon="icon-comment" action="#{handleCommentAction.begin}"/>
             <p:menuitem id="rm_pc" value="pc" icon="icon-computer" actionListener="#{handlePCAction.begin}"/>
             </p:submenu>
+
+            <p:submenu id="zone" label="zone" icon="icon-color_lens">
+            <p:menuitem id="rm_camera" value="camera" icon="icon-camera2"  actionListener="#{handleCameraAction.begin}" />
+            <p:menuitem id="rm_pdp" value="pdp" icon="icon-zone"  actionListener="#{handlePDPAction.begin}" />
+            <p:menuitem id="rm_zone" value="zone" icon="icon-control"  actionListener="#{handleZoneAction.begin}" />
+            <p:menuitem id="rm_gate" value="gateway" icon="icon-gate"  actionListener="#{handleGatewayAction.begin}" />
+            </p:submenu>
         </pm:menu>
         </h:form>
 

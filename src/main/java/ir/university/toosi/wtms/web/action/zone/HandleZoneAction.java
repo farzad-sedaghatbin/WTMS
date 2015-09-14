@@ -2,6 +2,7 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.zone.ZoneServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
@@ -12,6 +13,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -40,6 +42,11 @@ public class HandleZoneAction implements Serializable {
     private UserManagementAction me;
     @Inject
     private HandleGatewayAction handleGatewayAction;
+
+    @EJB
+    private ZoneServiceImpl zoneService;
+
+
     private String editable = "false";
     private DataModel<Zone> zoneList = null;
     private String zoneName;
@@ -66,10 +73,10 @@ public class HandleZoneAction implements Serializable {
     private SortOrder zoneDescriptionOrder = SortOrder.UNSORTED;
 
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.ZONE);
         refresh();
-        return "list-zone";
+        me.redirect("/zone/list-zone.xhtml");
     }
 
     public String beginTree() {
@@ -120,19 +127,12 @@ public class HandleZoneAction implements Serializable {
 
     private void refresh() {
         init();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllZone");
-
-        try {
-            List<Zone> zones = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Zone>>() {
-            });
+            List<Zone> zones = zoneService.getAllZone();
             for (Zone zone : zones) {
                 zone.setDescText(zone.getDescription());
                 zone.setEnabled(zone.isEnabled());
             }
             zoneList = new ListDataModel<>(zones);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void add() {
@@ -197,7 +197,7 @@ public class HandleZoneAction implements Serializable {
 
             }
         }
-        handleGatewayAction.setGatewayList(new ListDataModel<>(handleGatewayAction.getGateways()));
+        handleGatewayAction.setGatewayList(handleGatewayAction.getGateways());
         handleGatewayAction.setSelectedGateways(selectedList);
     }
 

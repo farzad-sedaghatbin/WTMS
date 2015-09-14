@@ -2,6 +2,8 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
+import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
 import ir.university.toosi.tms.model.entity.GatewayPerson;
@@ -17,6 +19,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -39,6 +42,14 @@ public class HandleGatewayAction implements Serializable {
     private HandleCameraAction handleCameraAction;
     @Inject
     private HandlePersonAction handlePersonAction;
+
+    @EJB
+    private GatewayServiceImpl gatewayService;
+
+    @EJB
+    private PersonServiceImpl personService;
+
+
     private List<Gateway> gateways;
     private List<Gateway> preRequestGateways;
     private List<Long> preRequestGatewayIds;
@@ -48,7 +59,7 @@ public class HandleGatewayAction implements Serializable {
     private List<Person> unSelectedPersons = new ArrayList<>();
     private List<Person> newSelectedPersons = new ArrayList<>();
 
-    private DataModel<Gateway> gatewayList = null;
+    private List<Gateway> gatewayList = null;
     private DataModel<Gateway> preRequier = null;
     private DataModel<Camera> cameras = null;
     private String editable = "false";
@@ -95,14 +106,12 @@ public class HandleGatewayAction implements Serializable {
     private SortOrder gatewayDescriptionOrder = SortOrder.UNSORTED;
 
 
-    public String begin() {
-        me.setActiveMenu(MenuType.ZONE);
+    public void begin() {
         refresh();
-        return "list-gateway";
+        me.redirect("/zone/list-gateway.xhtml");
     }
 
     public void selectGateWays(ValueChangeEvent event) {
-        currentGetway = gatewayList.getRowData();
         boolean temp = (Boolean) event.getNewValue();
         if (temp) {
             currentGetway.setSelected(true);
@@ -248,31 +257,23 @@ public class HandleGatewayAction implements Serializable {
         }
     }
 
-    public DataModel<Gateway> getSelectionGrid() {
+    public List<Gateway> getSelectionGrid() {
         gateways = new ArrayList<>();
         refresh();
         return gatewayList;
     }
 
     public void refresh() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllGateway");
-        try {
-            gateways = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Gateway>>() {
 
-            });
-            for (Gateway gateway : gateways) {
-                gateway.setSelected(false);
+        gateways = gatewayService.getAllGateway();
+        for (Gateway gateway : gateways) {
+            gateway.setSelected(false);
 //                gateway.setDescription(me.getValue(gateway.getDescription()));
 //                gateway.setName(gatewayName);
 //                gateway.setEnabled(gatewayEnabled);
-            }
-            gatewayList = new ListDataModel<>(gateways);
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPersonDataModel");
-            persons = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Person>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        gatewayList = gateways;
+        persons = personService.getAllPersonModel();
     }
 
     public void add() {
@@ -283,11 +284,11 @@ public class HandleGatewayAction implements Serializable {
     }
 
     public void doDelete() {
-if(currentGetway.getZone()!=null){
-    refresh();
-    me.addInfoMessage("gateway.zone");
-    me.redirect("/zone/list-gateway.htm");
-}
+        if (currentGetway.getZone() != null) {
+            refresh();
+            me.addInfoMessage("gateway.zone");
+            me.redirect("/zone/list-gateway.htm");
+        }
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteGateway");
         try {
             String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentGetway)), String.class);
@@ -705,12 +706,6 @@ if(currentGetway.getZone()!=null){
         gatewaySpecialStateList = new ListDataModel<>(gatewaySpecialStates);
     }
 
-    public void selectForEdit() {
-        currentGetway = gatewayList.getRowData();
-        setSelectRow(true);
-
-    }
-
     public void specialStatusInitialize() {
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/specialStatusInitialize");
         try {
@@ -781,11 +776,11 @@ if(currentGetway.getZone()!=null){
         this.handleCameraAction = handleCameraAction;
     }
 
-    public DataModel<Gateway> getGatewayList() {
+    public List<Gateway> getGatewayList() {
         return gatewayList;
     }
 
-    public void setGatewayList(ListDataModel<Gateway> gatewayList) {
+    public void setGatewayList(List<Gateway> gatewayList) {
         this.gatewayList = gatewayList;
     }
 
@@ -976,9 +971,6 @@ if(currentGetway.getZone()!=null){
         this.selectedPersons = selectedPersons;
     }
 
-    public void setGatewayList(DataModel<Gateway> gatewayList) {
-        this.gatewayList = gatewayList;
-    }
 
     public List<GatewaySpecialState> getGatewaySpecialStates() {
         return gatewaySpecialStates;
