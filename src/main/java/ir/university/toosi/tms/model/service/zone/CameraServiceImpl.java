@@ -48,7 +48,7 @@ public class CameraServiceImpl<T extends Camera> {
         }
     }
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) cameraDAO.findById(id);
         } catch (Exception e) {
@@ -82,7 +82,7 @@ public class CameraServiceImpl<T extends Camera> {
                 gateway.getCameras().addAll(cameras);
                 gatewayService.editGateway(gateway);
             }
-            List<PDP> pdps = pdpService.findByCameraId(String.valueOf(entity.getId()));
+            List<PDP> pdps = pdpService.findByCameraId(entity.getId());
             for (PDP pdp : pdps) {
                 if (pdp.getCamera().getId() == entity.getId()) {
                     pdp.setCamera(null);
@@ -113,7 +113,7 @@ public class CameraServiceImpl<T extends Camera> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Camera.class.getSimpleName(), EventLogType.EDIT, entity.getEffectorUser());
 
-            Camera oldCamera = findById(String.valueOf(entity.getId()));
+            Camera oldCamera = findById(entity.getId());
             Camera newCamera = new Camera();
             newCamera.setStatus("o," + entity.getEffectorUser());
             newCamera.setName(oldCamera.getName());

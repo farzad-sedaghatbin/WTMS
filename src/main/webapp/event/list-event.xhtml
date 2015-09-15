@@ -1,0 +1,118 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+
+        <h:form id="eventList">
+
+
+            <p:dataTable id="eventTable" value="#{handleEventAction.eventLogList}"
+                         keepSaved="true"
+                         noDataLabel="no_result_found"
+                         sortMode="single"
+                         var="event"
+                         rows="10"
+                         style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                         rowClasses="ROW1,ROW2">
+                <p:column
+                        sortBy="#{event.operation}"
+                        sortOrder="#{handleEventAction.eventLogOperationOrder}">
+                    <f:facet name="header">
+                        <h:commandLink
+                                id="eventLink"
+                                value="operation" render="eventTable"
+                                execute="@this"
+                                limitRender="true"
+                                action="#{handleEventAction.sortByEventLogOperation}"/>
+                        <br/>
+                        <h:inputText
+                                value="#{handleEventAction.eventLogOperationFilter}">
+                            <p:ajax event="blur" render="eventTable" execute="@this"
+                                    limitRender="true" onbeforesubmit="resetPage()"/>
+                        </h:inputText>
+                    </f:facet>
+                    <p:commandLink id="editLink" value="#{event.operation}"
+                                   render="operationArea"
+                                   styleClass="withoutUnderlineLink"
+                                   execute="@this"
+                                   limitRender="true"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header"
+                             sortBy="#{event.objectId}"
+                             sortOrder="#{handleEventAction.eventLogUsernameOrder}">
+                        <h:outputText escape="true" value="objectId"/>
+                    </f:facet>
+                    <h:outputText escape="true" value="#{event.objectId}"/>
+                </p:column>
+                <p:column sortBy="#{event.tableName}"
+                          sortOrder="#{handleEventAction.tableNameOrder}">>
+                    <f:facet name="header">
+
+                        <h:outputText escape="true" value="tableName"/>
+                    </f:facet>
+                    <h:outputText escape="true" value="#{event.tableName}"/>
+                </p:column>
+                <p:column
+                        sortBy="#{event.username}"
+                        sortOrder="#{handleEventAction.eventLogUsernameOrder}">
+                    <f:facet name="header">
+                        <h:commandLink
+                                id="eventUsernameLink"
+                                value="username" render="eventTable"
+                                execute="@this"
+                                limitRender="true"
+                                action="#{handleEventAction.sortByEventLogUsername}"/>
+                        <br/>
+                        <h:inputText
+                                onkeypress="sortByEnter(event,'eventList:eventTable:eventUsernameLink')"
+                                value="#{handleEventAction.eventLogUsernameFilter}">
+                            <p:ajax event="blur" render="eventTable" execute="@this"
+                                    limitRender="true" onbeforesubmit="resetPage()"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText escape="true" value="#{event.username}"/>
+                </p:column>
+                <p:column
+                        sortBy="#{event.date}"
+                        sortOrder="#{handleEventAction.eventLogDateOrder}">
+
+                    <f:facet name="header">
+                        <h:commandLink
+                                id="eventDateLink"
+                                value="date" render="eventTable"
+                                execute="@this"
+                                limitRender="true"
+                                action="#{handleEventAction.sortByEventLogDate}"/>
+                        <br/>
+                        <h:inputText value="#{handleEventAction.eventLogDateFilter}"
+                                     id="eventLogDateFilter" style="display: none">
+                            <p:ajax event="change" render="eventTable, dateFilterScript"
+                                    execute="@this"
+                                    limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+
+                    <h:outputText escape="true" value="#{event.date}" converter="dateConverter"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="time"/>
+                    </f:facet>
+                    <h:outputText escape="true" value="#{event.time}"/>
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this" render="eventTable"
+                                    page="#{handleEventAction.page}"/>
+                </f:facet>
+            </p:dataTable>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

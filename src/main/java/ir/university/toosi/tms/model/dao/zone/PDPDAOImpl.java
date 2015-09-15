@@ -46,10 +46,10 @@ public class PDPDAOImpl extends BaseDAOImpl<PDP> {
         }
     }
 
-    public List<PDP> findByCameraId(String id) {
+    public List<PDP> findByCameraId(long id) {
         try {
             return (List<PDP>) em.createNamedQuery("PDP.findByCameraId")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getResultList();
         } catch (Exception e) {
             return null;

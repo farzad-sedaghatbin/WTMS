@@ -2,6 +2,7 @@ package ir.university.toosi.wtms.web.action.map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.MapServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.zone.HandleGatewayAction;
 import ir.university.toosi.tms.model.entity.Map;
@@ -12,6 +13,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -35,9 +37,12 @@ public class HandleMapAction implements Serializable {
     @Inject
     private HandleGatewayAction handleGatewayAction;
 
+    @EJB
+    private MapServiceImpl mapService;
+
     private String editable = "false";
 
-    private DataModel<Map> mapList = null;
+    private List<Map> mapList = null;
     private DataModel<DeviceDataModel> mapListModel = null;
     private List<DeviceDataModel> listModel = null;
     private DataModel<Gateway> gatewayGrid = null;
@@ -72,10 +77,9 @@ public class HandleMapAction implements Serializable {
     private String mapDescriptionFilter;
 
 
-    public String begin() {
-        me.setActiveMenu(MenuType.MAP);
+    public void begin() {
         refresh();
-        return "list-map";
+        me.redirect("/map/list-map.xhtml");
     }
 
 
@@ -88,7 +92,7 @@ public class HandleMapAction implements Serializable {
     }
 
 
-    public DataModel<Map> getSelectionGrid() {
+    public List<Map> getSelectionGrid() {
         List<Map> maps = new ArrayList<>();
         refresh();
         return mapList;
@@ -96,18 +100,10 @@ public class HandleMapAction implements Serializable {
 
     private void refresh() {
         init();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllMap");
 
         handleGatewayAction.setSelectedGateways(new HashSet<Gateway>());
-        try {
-            List<Map> maps = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Map>>() {
-            });
-            mapList = new ListDataModel<>(maps);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            List<Map> maps =mapService.getAllMap();
+            mapList = maps;
     }
 
 
@@ -239,10 +235,6 @@ public class HandleMapAction implements Serializable {
         }
     }
 
-    public void selectForEdit() {
-        currentMap = mapList.getRowData();
-        setSelectRow(true);
-    }
 
     public boolean isSelectRow() {
         return selectRow;
@@ -352,11 +344,19 @@ public class HandleMapAction implements Serializable {
         this.ip = ip;
     }
 
-    public DataModel<Map> getMapList() {
+    public MapServiceImpl getMapService() {
+        return mapService;
+    }
+
+    public void setMapService(MapServiceImpl mapService) {
+        this.mapService = mapService;
+    }
+
+    public List<Map> getMapList() {
         return mapList;
     }
 
-    public void setMapList(DataModel<Map> mapList) {
+    public void setMapList(List<Map> mapList) {
         this.mapList = mapList;
     }
 

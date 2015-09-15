@@ -1,0 +1,72 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+<ui:define name="content">
+
+                        <p:dataTable id="dayTypeTable"
+                                        keepSaved="true"
+                                        value="#{handleDayTypeAction.dayTypeList}"
+                                        rowKeyVar="rowIndex"
+                                        noDataLabel="no_result_found"
+                                        sortMode="single"
+                                        var="dayType"
+                                        rows="10"
+                                        style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                        rowClasses="ROW1,ROW2">
+
+                            <p:column sortBy="#{dayType.title}"
+                                         sortOrder="#{handleDayTypeAction.dayNameOrder}">
+                                <f:facet name="header">
+                                    <p:commandLink value="title" render="dayTypeTable"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     action="#{handleDayTypeAction.sortByDayName}"/>
+                                    <br/>
+                                    <h:inputText value="#{handleDayTypeAction.dayNameFilter}">
+                                        <p:ajax event="blur" render="dayTypeTable" execute="@this"
+                                                  limitRender="true"/>
+                                    </h:inputText>
+                                </f:facet>
+                                <p:commandLink id="editLink" value="#{dayType.title}"
+                                                 render="operationArea"
+                                                 styleClass="withoutUnderlineLink"
+                                                 execute="@this"
+                                                 converter="persianConverter"
+                                                 limitRender="true"
+                                                 action="#{handleDayTypeAction.selectForEdit}"/>
+                            </p:column>
+
+                            <p:column style="background-color: #{dayType.color};">
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="#{'رنگ'}"/>
+                                </f:facet>
+                                <h:outputText escape="true"/>
+                            </p:column>
+                            <p:column sortBy="#{dayType.description}"
+                                         sortOrder="#{handleDayTypeAction.dayTypeDescriptionOrder}">
+                                <f:facet name="header">
+                                    <p:commandLink value="description" render="dayTypeTable"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     action="#{handleDayTypeAction.sortByDayTypeDescription}"/>
+                                    <br/>
+                                    <h:inputText value="#{handleDayTypeAction.dayTypeDescriptionFilter}">
+                                        <p:ajax event="blur" render="dayTypeTable" execute="@this"
+                                                  limitRender="true"/>
+                                    </h:inputText>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{dayType.description}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:dataScroller limitRender="true" execute="@this" render="dayTypeTable"
+                                                   page="#{handleDayTypeAction.page}"/>
+                            </f:facet>
+                        </p:dataTable>
+
+</ui:define>
+</ui:composition>
