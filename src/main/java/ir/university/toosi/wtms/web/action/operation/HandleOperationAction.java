@@ -1,22 +1,22 @@
 package ir.university.toosi.wtms.web.action.operation;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
-import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.Operation;
+import ir.university.toosi.tms.model.service.OperationServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
+import ir.university.toosi.wtms.web.action.UserManagementAction;
+import ir.university.toosi.wtms.web.converter.OperationConverter;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
-
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.event.ValueChangeEvent;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -37,8 +37,8 @@ public class HandleOperationAction implements Serializable {
 
     @Inject
     private UserManagementAction me;
-    @Inject
-    private HandleRoleAction handleRoleAction;
+    @EJB
+    private OperationServiceImpl operationService;
     private DataModel<Operation> operationList = null;
     private String editable = "false";
     private String operationName;
@@ -59,40 +59,21 @@ public class HandleOperationAction implements Serializable {
         return "list-operation";
     }
 
-    public void selectOperations(ValueChangeEvent event) {
-        currentOperation = operationList.getRowData();
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            currentOperation.setSelected(true);
-            selectedOperations.add(currentOperation);
+
+    public void onTransfer(TransferEvent event) {
+        if (event.isAdd()) {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(true);
+                selectedOperations.add((Operation) item);
+            }
         } else {
-            currentOperation.setSelected(false);
-            selectedOperations.remove(currentOperation);
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(false);
+                selectedOperations.remove(item);
+            }
         }
     }
 
-    public void changeOperations(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            operationEnabled = true;
-        } else
-            operationEnabled = false;
-    }
-
-    public void selectAllOperation(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            for (Operation operation : operationList) {
-                operation.setSelected(true);
-                selectedOperations.add(operation);
-            }
-        } else {
-            for (Operation operation : operationList) {
-                operation.setSelected(false);
-            }
-            selectedOperations.clear();
-        }
-    }
 
     public DataModel<Operation> getSelectionGrid() {
         List<Operation> operations = new ArrayList<>();
@@ -102,19 +83,11 @@ public class HandleOperationAction implements Serializable {
 
     public void refresh() {
         page = 1;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOperation");
-        try {
-            List<Operation> operations = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Operation>>() {
-
-            });
-            for (Operation operation : operations) {
-                operation.setSelected(false);
-                operation.setDescription(me.getValue(operation.getDescription()));
-            }
-            operationList = new ListDataModel<>(operations);
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<Operation> operations = operationService.getAllOperation();
+        for (Operation operation : operations) {
+            operation.setDescription(me.getValue(operation.getDescription()));
         }
+        this.operations = new DualListModel(operations, new ArrayList());
     }
 
     public void add() {
@@ -125,19 +98,13 @@ public class HandleOperationAction implements Serializable {
 
     public void doDelete() {
         currentOperation = operationList.getRowData();
-
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteOperation");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentOperation)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/operation/list-operation.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        String condition = operationService.deleteOperation(currentOperation);
+        if (condition.equalsIgnoreCase("true")) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/operation/list-operation.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
         }
     }
 
@@ -258,6 +225,14 @@ public class HandleOperationAction implements Serializable {
         }
     }
 
+    public Operation findForConverter(String value) {
+        return operationService.findById(value);
+    }
+
+    public OperationConverter getConverter() {
+        return new OperationConverter();
+    }
+
 /*    public Filter<?> getOperationDescriptionFilterImpl() {
         return new Filter<Operation>() {
             public boolean accept(Operation operation) {
@@ -346,14 +321,6 @@ public class HandleOperationAction implements Serializable {
         this.me = me;
     }
 
-    public HandleRoleAction getHandleRoleAction() {
-        return handleRoleAction;
-    }
-
-    public void setHandleRoleAction(HandleRoleAction handleRoleAction) {
-        this.handleRoleAction = handleRoleAction;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -387,6 +354,9 @@ public class HandleOperationAction implements Serializable {
     }
 
     public DualListModel<Operation> getOperations() {
+        if (operations == null) {
+            operations = new DualListModel<>();
+        }
         return operations;
     }
 

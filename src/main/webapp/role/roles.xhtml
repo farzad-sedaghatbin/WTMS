@@ -7,17 +7,17 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <p:contextMenu for="pcs">
-                <p:menuitem value="View" update="pcDetail" icon="ui-icon-search" oncomplete="PF('pcDialog').show()"
+            <p:contextMenu for="roles">
+                <p:menuitem value="View" update="roleDetail" icon="ui-icon-search" oncomplete="PF('roleDialog').show()"
                             actionListener="#{handleRoleAction.view}"/>
-                <p:menuitem value="Edit" update="pcDetail" icon="ui-icon-search" oncomplete="PF('pcDialog').show()"
+                <p:menuitem value="Edit" update="roleDetail" icon="ui-icon-search" oncomplete="PF('roleDialog').show()"
                             actionListener="#{handleRoleAction.edit}"/>
-                <p:menuitem value="Delete" update="pcs" icon="ui-icon-close"
+                <p:menuitem value="Delete" update="roles" icon="ui-icon-close"
                             actionListener="#{handleRoleAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="pcDetail" actionListener="#{handlePCAction.add}"
-                             styleClass="ui-priority-primary" onclick="PF('pcDialog').show()"/>
+            <p:commandButton value="Add" id="add" update="roleDetail" actionListener="#{handleRoleAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('roleDialog').show()"/>
 
             <p:dataTable id="roles" var="role" value="#{handleRoleAction.roleList}" rowKey="#{role.id}"
                          selection="#{handleRoleAction.currentRole}" selectionMode="single">
@@ -32,47 +32,74 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="PC Info" widgetVar="roleDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="Role Info" widgetVar="roleDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="roleDetail" style="text-align:center;">
-                    <p:panelGrid columns="2" columnClasses="label,value">
-                        <f:facet name="header">
-                            <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
-                        </f:facet>
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                    </f:facet>
+                    <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                        <tr>
+                            <td>
+                                <h:outputText value="name:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleRoleAction.disableFields}"
+                                             value="#{handleRoleAction.name}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="description:"/>
+                            </td>
+                            <td>
+                                <p:inputTextarea readonly="#{handleRoleAction.disableFields}"
+                                                 value="#{handleRoleAction.descText}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="enable:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox readonly="#{handleRoleAction.disableFields}"
+                                                         value="#{handleRoleAction.roleEnabled}"
+                                                         valueChangeListener="#{handleRoleAction.changeRoles}"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                        <tr>
+                            <td>
+                                <p:pickList id="operationPickList" value="#{handleOperationAction.operations}"
+                                            var="operation"
+                                            effect="bounce"
+                                            itemValue="#{operation}" itemLabel="#{operation.description}"
+                                            showSourceControls="true"
+                                            showTargetControls="true" showCheckbox="true" responsive="true"
+                                            showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+                                            converter="#{handleOperationAction.converter}"
+                                            disabled="#{handleRoleAction.disableFields}">
+                                    <f:facet name="sourceCaption">Source</f:facet>
+                                    <f:facet name="targetCaption">Target</f:facet>
 
-                        <h:outputText value="name:"/>
-                        <p:inputText readonly="#{handlePCAction.disableFields}" value="#{handlePCAction.pcName}"/>
+                                    <p:ajax event="transfer" listener="#{handleOperationAction.onTransfer}"/>
 
-                        <h:outputText value="Year"/>
-                        <p:inputText readonly="#{handlePCAction.disableFields}" value="#{handlePCAction.pcIP}"/>
-
-                        <p:pickList id="PojoPickList" value="#{pickListView.themes}" var="theme" effect="bounce"
-                                    itemValue="#{theme}" itemLabel="#{theme.displayName}" showSourceControls="true"
-                                    showTargetControls="true" showCheckbox="true" responsive="true"
-                                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
-                                    converter="theme">
-                            <f:facet name="sourceCaption">Available</f:facet>
-                            <f:facet name="targetCaption">Starting</f:facet>
-
-                            <p:ajax event="transfer" listener="#{pickListView.onTransfer}" update="msg"/>
-                            <p:ajax event="select" listener="#{pickListView.onSelect}" update="msg"/>
-                            <p:ajax event="unselect" listener="#{pickListView.onUnselect}" update="msg"/>
-                            <p:ajax event="reorder" listener="#{pickListView.onReorder}" update="msg"/>
-
-                            <p:column style="width:10%">
-                                <h:outputText styleClass="ui-theme ui-theme-#{theme.name}"/>
-                            </p:column>
-
-                            <p:column style="width:90%;">
-                                <h:outputText value="#{theme.displayName}"/>
-                            </p:column>
-                        </p:pickList>
-
-                        <p:commandButton value="Submit" id="edit" update="pcs"
-                                         actionListener="#{handlePCAction.saveOrUpdate}"
-                                         oncomplete="PF('pcDialog').hide()" styleClass="ui-priority-primary"
-                                         rendered="#{not handlePCAction.disableFields}"/>
-                    </p:panelGrid>
+                                    <p:column style="width:90%;">
+                                        <h:outputText value="#{operation.description}"/>
+                                    </p:column>
+                                </p:pickList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:commandButton value="Submit" id="edit" update="roles"
+                                                 actionListener="#{handleRoleAction.saveOrUpdate}"
+                                                 oncomplete="PF('roleDialog').hide()" styleClass="ui-priority-primary"
+                                                 rendered="#{not handleRoleAction.disableFields}"/>
+                            </td>
+                        </tr>
+                    </table>
                 </p:outputPanel>
             </p:dialog>
         </h:form>

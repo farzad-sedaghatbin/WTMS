@@ -115,17 +115,17 @@ public class GeneralHelper implements Serializable {
 
     public void initme() {
 //        me.setActiveMenu(MenuType.HARDWARE);
-        if (lastLanguages == null) {
-            loadLanguage();
-        }
-        me.setLanguages(lastLanguages);
-        me.setSelectedLanguage(lastLanguages.getName());
-        try {
-            me.setLanguage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        fillExtraField();
+//        if (lastLanguages == null) {
+//            loadLanguage();
+//        }
+//        me.setLanguages(lastLanguages);
+//        me.setSelectedLanguage(lastLanguages.getName());
+//        try {
+//            me.setLanguage();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        fillExtraField();
     }
 
     private void fillExtraField() {

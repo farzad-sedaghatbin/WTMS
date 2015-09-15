@@ -19,6 +19,7 @@ import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 //import org.apache.commons.lang.StringUtils;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -116,6 +117,8 @@ public class HandleUserAction implements Serializable {
     private SortOrder roleDescriptionOrder = SortOrder.UNSORTED;
     private SortOrder personNameOrder = SortOrder.UNSORTED;
     private SortOrder personLastNameOrder = SortOrder.UNSORTED;
+
+    private boolean disableFields;
 
     public String begin() {
         me.setActiveMenu(MenuType.USER);
@@ -366,6 +369,7 @@ public class HandleUserAction implements Serializable {
 
     public void edit() {
         setEditable("true");
+        setDisableFields(false);
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/findUserById");
         try {
             currentUser = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentUser.getId())), User.class);
@@ -376,6 +380,9 @@ public class HandleUserAction implements Serializable {
         lastname = currentUser.getLastname();
         username = currentUser.getUsername();
         enabled = currentUser.getEnable().equalsIgnoreCase("true") ? true : false;
+
+        List<WorkGroup> sourceWorkgroups = new ArrayList<>();
+        List<WorkGroup> targetWorkgroups = new ArrayList<>();
 
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllWorkGroup");
         List<WorkGroup> workGroups = null;
@@ -395,12 +402,15 @@ public class HandleUserAction implements Serializable {
                     workGroup.setSelected(true);
                     workGroup.setDescription(me.getValue(currentWorkGroup.getDescription()));
                     handleWorkGroupAction.getSelectWorkGroups().add(workGroup);
+                    targetWorkgroups.add(workGroup);
+                } else {
+                    sourceWorkgroups.add(workGroup);
                 }
             }
         }
 
         handleWorkGroupAction.setWorkGroupList(new ListDataModel<>(workGroups));
-
+        handleWorkGroupAction.setWorkgroups(new DualListModel<WorkGroup>(sourceWorkgroups,targetWorkgroups));
 
     }
 
@@ -1074,5 +1084,13 @@ public class HandleUserAction implements Serializable {
 
     public void setPersonLastNameFilter(String personLastNameFilter) {
         this.personLastNameFilter = personLastNameFilter;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }

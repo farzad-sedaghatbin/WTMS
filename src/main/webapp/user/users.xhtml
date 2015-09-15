@@ -1,0 +1,183 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="users">
+                <p:menuitem value="View" update="userDetail" icon="ui-icon-search" oncomplete="PF('userDialog').show()"
+                            actionListener="#{handleUserAction.edit}"/>
+                <p:menuitem value="Delete" update="users" icon="ui-icon-close"
+                            actionListener="#{handleUserAction.doDelete}"/>
+            </p:contextMenu>
+
+            <p:commandButton value="Add" id="add" update="userDetail" actionListener="#{handleRoleAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('userDialog').show()"/>
+
+            <p:dataTable id="users" var="user" value="#{handleUserAction.userList}" rowKey="#{user.id}"
+                         selection="#{handleUserAction.currentUser}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
+                </f:facet>
+                <p:column headerText="username">
+                    <h:outputText value="#{user.username}"/>
+                </p:column>
+                <p:column headerText="first name">
+                    <h:outputText value="#{user.firstname}"/>
+                </p:column>
+                <p:column headerText="last name">
+                    <h:outputText value="#{user.lastname}"/>
+                </p:column>
+                <p:column headerText="ip">
+                    <p:graphicImage value="#{user.enable ? '/images/s_true.png' : '/images/s_false.png'}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p:dialog header="User Info" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="userDetail" style="text-align:center;">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                    </f:facet>
+                    <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                        <tr>
+                            <td>
+                                <h:outputText value="First Name:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleUserAction.disableFields}"
+                                             value="#{handleUserAction.firstname}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="description:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleUserAction.disableFields}"
+                                                 value="#{handleUserAction.lastname}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Username:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleUserAction.disableFields}"
+                                                 value="#{handleUserAction.username}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Password:"/>
+                            </td>
+                            <td>
+                                <p:password readonly="#{handleUserAction.disableFields}"
+                                                 value="#{handleUserAction.password}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Re Password:"/>
+                            </td>
+                            <td>
+                                <p:password readonly="#{handleUserAction.disableFields}"
+                                                 value="#{handleUserAction.rePassword}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Extra Field1:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleUserAction.disableFields}"
+                                                 value="#{handleUserAction.extraField1}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Extra Field2:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleUserAction.disableFields}"
+                                                 value="#{handleUserAction.extraField2}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Extra Field3:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleUserAction.disableFields}"
+                                                 value="#{handleUserAction.extraField3}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Extra Field4:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleUserAction.disableFields}"
+                                                 value="#{handleUserAction.extraField4}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="Enabled:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleUserAction.disableFields}"
+                                                 value="#{handleUserAction.enabled}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="enable:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox readonly="#{handleRoleAction.disableFields}"
+                                                         value="#{handleRoleAction.roleEnabled}"
+                                                         valueChangeListener="#{handleRoleAction.changeRoles}"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                        <tr>
+                            <td>
+                                <p:pickList id="workgroupPickList" value="#{handleWorkGroupAction.workgroups}"
+                                            var="workgroup"
+                                            effect="bounce"
+                                            itemValue="#{workgroup}" itemLabel="#{workgroup.description}"
+                                            showSourceControls="true"
+                                            showTargetControls="true" showCheckbox="true" responsive="true"
+                                            showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+                                            disabled="#{handleRoleAction.disableFields}">
+                                    <f:facet name="sourceCaption">Source</f:facet>
+                                    <f:facet name="targetCaption">Target</f:facet>
+
+                                    <p:ajax event="transfer" listener="#{handleWorkGroupAction.onTransfer}"/>
+
+                                    <p:column style="width:90%;">
+                                        <h:outputText value="#{workgroup.description}"/>
+                                    </p:column>
+                                </p:pickList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:commandButton value="Submit" id="edit" update="roles"
+                                                 actionListener="#{handleUserAction.saveOrUpdate}"
+                                                 oncomplete="PF('roleDialog').hide()" styleClass="ui-priority-primary"
+                                                 rendered="#{not handleUserAction.disableFields}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

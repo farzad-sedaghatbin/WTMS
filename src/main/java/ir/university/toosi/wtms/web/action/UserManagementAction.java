@@ -156,7 +156,7 @@ public class UserManagementAction implements Serializable {
                     //getGeneralHelper().getUserService().editUser(user);
                 }
                 session.setAttribute(INVALID_TRY, invalidTry);
-                addErrorMessage("invalid.login");
+//                addErrorMessage("invalid.login");
                 return "login";
             }
             /*else if ((user.getEnable().equalsIgnoreCase("false")) || (user.getWorkGroups().getEnabled().equalsIgnoreCase("false"))) {
@@ -368,8 +368,8 @@ public class UserManagementAction implements Serializable {
         if (language == null) {
             getGeneralHelper().initme();
         }
-        if (language.containsKey(key))
-            return language.get(key).getTitle();
+//        if (language.containsKey(key))
+//            return language.get(key).getTitle();
         return key + "_NOT_DEF";
 
     }

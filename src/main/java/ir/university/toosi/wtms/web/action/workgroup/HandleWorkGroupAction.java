@@ -3,6 +3,7 @@ package ir.university.toosi.wtms.web.action.workgroup;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.Operation;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.wtms.web.action.user.HandleUserAction;
@@ -10,6 +11,8 @@ import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.Role;
 import ir.university.toosi.tms.model.entity.WorkGroup;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.event.TransferEvent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -65,6 +68,7 @@ public class HandleWorkGroupAction implements Serializable {
     private SortOrder titleOrder = SortOrder.UNSORTED;
     private SortOrder workGroupTitleOrder = SortOrder.UNSORTED;
     private SortOrder workGroupDescriptionOrder = SortOrder.UNSORTED;
+    private DualListModel<WorkGroup> workgroups;
 
     public String begin() {
         me.setActiveMenu(MenuType.USER);
@@ -96,6 +100,7 @@ public class HandleWorkGroupAction implements Serializable {
                 workGroup.setDescText(me.getValue(workGroup.getDescription()));
             }
             workGroupList = new ListDataModel<>(workGroups);
+            workgroups = new DualListModel<>(workGroups,new ArrayList<WorkGroup>());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -212,6 +217,20 @@ public class HandleWorkGroupAction implements Serializable {
             me.addInfoMessage("operation.not.occurred");
         }
 
+    }
+
+    public void onTransfer(TransferEvent event) {
+        if (event.isAdd()) {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(true);
+                selectWorkGroups.add((WorkGroup) item);
+            }
+        } else {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(false);
+                selectWorkGroups.remove(item);
+            }
+        }
     }
 
     public void edit(String currentPage) {
@@ -579,5 +598,13 @@ public class HandleWorkGroupAction implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public DualListModel<WorkGroup> getWorkgroups() {
+        return workgroups;
+    }
+
+    public void setWorkgroups(DualListModel<WorkGroup> workgroups) {
+        this.workgroups = workgroups;
     }
 }

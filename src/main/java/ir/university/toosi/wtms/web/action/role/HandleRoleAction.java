@@ -3,22 +3,20 @@ package ir.university.toosi.wtms.web.action.role;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.model.service.OperationServiceImpl;
+import ir.university.toosi.tms.model.service.RoleServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.operation.HandleOperationAction;
 import ir.university.toosi.wtms.web.action.workgroup.HandleWorkGroupAction;
-import ir.university.toosi.tms.model.entity.MenuType;
-import ir.university.toosi.tms.model.entity.Permission;
-import ir.university.toosi.tms.model.entity.PermissionType;
-import ir.university.toosi.tms.model.entity.Operation;
-import ir.university.toosi.tms.model.entity.Role;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
-
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -48,6 +46,8 @@ public class HandleRoleAction implements Serializable {
     private HandleWorkGroupAction handleWorkGroupAction;
     @EJB
     private OperationServiceImpl operationService;
+    @EJB
+    private RoleServiceImpl roleService;
     private List<Role> roleList = null;
     private DataModel<Permission> zoneList = null;
     private DataModel<Permission> gateList = null;
@@ -90,41 +90,29 @@ public class HandleRoleAction implements Serializable {
 
     private void refresh() {
         init();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRole");
         handleOperationAction.setSelectedOperations(new HashSet<Operation>());
-        try {
-            List<Role> roles = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Role>>() {
-            });
-            for (Role role : roles) {
-                role.setDescText(me.getValue(role.getDescription()));
-            }
-            roleList = new ArrayList<>(roles);
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<Role> roles = roleService.getAllRole();
+        for (Role role : roles) {
+            role.setDescText(me.getValue(role.getDescription()));
         }
+        roleList = new ArrayList<>(roles);
     }
 
     public void add() {
         init();
         handleOperationAction.refresh();
         setEditable("false");
-
+        setDisableFields(false);
     }
 
 
     public void doDelete() {
 
         currentRole.setEffectorUser(me.getUsername());
-
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteRole");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentRole)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/role/list-role.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        roleService.deleteRole(currentRole);
+        refresh();
+        me.addInfoMessage("role was deleted successfully");
+        me.redirect("/role/list-role.htm");
     }
 
     public void init() {
@@ -142,28 +130,7 @@ public class HandleRoleAction implements Serializable {
         roleDescriptionFilter = "";
     }
 
-    public void view(){
-        roleEnabled = currentRole.isEnabled();
-        descText = me.getValue(currentRole.getDescription());
-        name = currentRole.getName();
-        List<Operation> operationList = operationService.getAllOperation();
-        handleOperationAction.setSelectedOperations(new HashSet<Operation>());
-        for (Operation operation : operationList) {
-            operation.setDescription(me.getValue(operation.getDescription()));
-        }
-        for (Operation currentOperation : currentRole.getOperations()) {
-            for (Operation operation : operationList) {
-                if ((currentOperation.getId() == operation.getId())) {
-                    operation.setSelected(true);
-                    handleOperationAction.getSelectedOperations().add(operation);
-                }
-            }
-        }
-
-        handleOperationAction.setOperationList(new ListDataModel<>(operationList));
-    }
-
-    public void edit() {
+    public void view() {
         setEditable("true");
         roleEnabled = currentRole.isEnabled();
         descText = me.getValue(currentRole.getDescription());
@@ -189,7 +156,45 @@ public class HandleRoleAction implements Serializable {
             }
         }
         handleOperationAction.setOperationList(new ListDataModel<>(operationList));
-        handleOperationAction.setOperations(new DualListModel<Operation>(operationsSource,operationsTarget));
+        handleOperationAction.setOperations(new DualListModel<Operation>(operationsSource, operationsTarget));
+    }
+
+    public void edit() {
+        setEditable("true");
+        setDisableFields(false);
+        roleEnabled = currentRole.isEnabled();
+        descText = me.getValue(currentRole.getDescription());
+        name = currentRole.getName();
+
+        List<Operation> operationsSource = new ArrayList<>();
+        List<Operation> operationsTarget = new ArrayList<>();
+
+        List<Operation> operationList = operationService.getAllOperation();
+        handleOperationAction.setSelectedOperations(new HashSet<Operation>());
+        for (Operation operation : operationList) {
+            operation.setDescription(me.getValue(operation.getDescription()));
+        }
+        for (Operation currentOperation : currentRole.getOperations()) {
+            for (Operation operation : operationList) {
+                if ((currentOperation.getId() == operation.getId())) {
+                    operation.setSelected(true);
+                    handleOperationAction.getSelectedOperations().add(operation);
+                    operationsTarget.add(operation);
+                } else {
+                    operationsSource.add(operation);
+                }
+            }
+        }
+        handleOperationAction.setOperationList(new ListDataModel<>(operationList));
+        handleOperationAction.setOperations(new DualListModel<Operation>(operationsSource, operationsTarget));
+    }
+
+    public void changeRoles(ValueChangeEvent event) {
+        boolean temp = (Boolean) event.getNewValue();
+        if (temp) {
+            roleEnabled = true;
+        } else
+            roleEnabled = false;
     }
 
     public void saveOrUpdate() {
@@ -207,20 +212,19 @@ public class HandleRoleAction implements Serializable {
         currentRole.setOperations(handleOperationAction.getSelectedOperations());
         currentRole.setEffectorUser(me.getUsername());
         currentRole.setCurrentLang(me.getLanguages());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editRole");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentRole)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+        boolean condition = roleService.editRole(currentRole);
+        if (condition) {
+            try {
                 me.setLanguage();
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/role/list-role.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/role/list-role.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
@@ -248,14 +252,7 @@ public class HandleRoleAction implements Serializable {
         }*/
 
         newRole.setOperations(selectedOperations);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRole");
-        Role insertedRole = null;
-        try {
-            insertedRole = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newRole)), Role.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        Role insertedRole = roleService.createRole(newRole);
         if (insertedRole != null) {
 
             try {
@@ -268,99 +265,6 @@ public class HandleRoleAction implements Serializable {
             me.redirect("/role/list-role.htm");
         } else {
             me.addInfoMessage("operation.not.occurred");
-        }
-    }
-
-    public void assignPermission() {
-        currentPermission = new Permission();
-        sPermision.clear();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findByPermissionType");
-        try {
-            currentPermission.setPermissionType(PermissionType.ZONE);
-            zoneList = new ListDataModel<>((List<Permission>) new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPermission)), new TypeReference<List<Permission>>() {
-            }));
-            currentPermission.setPermissionType(PermissionType.GATEWAY);
-            gateList = new ListDataModel<>((List<Permission>) new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPermission)), new TypeReference<List<Permission>>() {
-            }));
-            currentPermission.setPermissionType(PermissionType.PDP);
-            pdpList = new ListDataModel<>((List<Permission>) new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPermission)), new TypeReference<List<Permission>>() {
-            }));
-            currentPermission.setPermissionType(PermissionType.ORGAN);
-            organList = new ListDataModel<>((List<Permission>) new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPermission)), new TypeReference<List<Permission>>() {
-            }));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for (Permission permissions : currentRole.getPermissions()) {
-            switch (permissions.getPermissionType()) {
-                case ORGAN:
-                    for (Permission permission1 : organList) {
-                        if (permission1.getId() == permissions.getId()) {
-                            permission1.setSelected(true);
-//                            sPermision.add(permission1);
-                            break;
-                        }
-                    }
-                    break;
-                case ZONE:
-                    for (Permission permission1 : zoneList) {
-                        if (permission1.getId() == permissions.getId()) {
-                            permission1.setSelected(true);
-//                            sPermision.add(permission1);
-                            break;
-                        }
-                    }
-                    break;
-                case PDP:
-                    for (Permission permission1 : pdpList) {
-                        if (permission1.getId() == permissions.getId()) {
-                            permission1.setSelected(true);
-//                            selectedPermission.add(permission1);
-                            sPermision.add(permission1);
-                            break;
-                        }
-                    }
-                    break;
-                case GATEWAY:
-                    for (Permission permission1 : gateList) {
-                        if (permission1.getId() == permissions.getId()) {
-                            permission1.setSelected(true);
-//                            sPermision.add(permission1);
-                            break;
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-        }
-    }
-
-    public void doAssignPermission() {
-        currentRole.setPermissions(sPermision);
-        currentRole.setCurrentLang(me.getLanguages());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editRole");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentRole)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/role/list-role.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void sortByRoleDescription() {
-        if (roleDescriptionOrder.equals(SortOrder.ASCENDING)) {
-            setRoleDescriptionOrder(SortOrder.DESCENDING);
-        } else {
-            setRoleDescriptionOrder(SortOrder.ASCENDING);
         }
     }
 
