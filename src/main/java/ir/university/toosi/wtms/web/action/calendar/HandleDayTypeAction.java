@@ -3,6 +3,7 @@ package ir.university.toosi.wtms.web.action.calendar;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.calendar.DayTypeServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -12,6 +13,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 //import org.primefaces.model.SortOrder;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -37,7 +39,10 @@ public class HandleDayTypeAction implements Serializable {
     private UserManagementAction me;
     @Inject
     private HandleRoleAction handleRoleAction;
-    private DataModel<DayType> dayTypeList = null;
+
+    @EJB
+    private DayTypeServiceImpl dayTypeService;
+    private List<DayType> dayTypeList = null;
     private String editable = "false";
     private String title;
     private boolean dayTypeEnabled;
@@ -62,7 +67,7 @@ public class HandleDayTypeAction implements Serializable {
     }
 
 
-    public DataModel<DayType> getSelectionGrid() {
+    public List<DayType> getSelectionGrid() {
         List<DayType> dayTypes = new ArrayList<>();
         refresh();
         return dayTypeList;
@@ -70,15 +75,7 @@ public class HandleDayTypeAction implements Serializable {
 
     private void refresh() {
         init();
-        WebServiceInfo dayTypeService = new WebServiceInfo();
-        dayTypeService.setServiceName("/getAllDayType");
-        try {
-            List<DayType> dayTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(dayTypeService.getServerUrl(), dayTypeService.getServiceName()), new TypeReference<List<DayType>>() {
-            });
-            dayTypeList = new ListDataModel<>(dayTypes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<DayType> dayTypeList = dayTypeService.getAllDayType();
     }
 
     public void add() {
@@ -107,8 +104,8 @@ public class HandleDayTypeAction implements Serializable {
         description = "";
         page = 1;
         currentDayType = null;
-        dayNameFilter="";
-        dayTypeDescriptionFilter="";
+        dayNameFilter = "";
+        dayTypeDescriptionFilter = "";
         setSelectRow(false);
     }
 
@@ -221,7 +218,6 @@ public class HandleDayTypeAction implements Serializable {
 //    }
 
     public void selectForEdit() {
-        currentDayType = dayTypeList.getRowData();
         setSelectRow(true);
 
     }
@@ -234,11 +230,11 @@ public class HandleDayTypeAction implements Serializable {
         this.selectRow = selectRow;
     }
 
-    public DataModel<DayType> getDayTypeList() {
+    public List<DayType> getDayTypeList() {
         return dayTypeList;
     }
 
-    public void setDayTypeList(DataModel<DayType> dayTypeList) {
+    public void setDayTypeList(List<DayType> dayTypeList) {
         this.dayTypeList = dayTypeList;
     }
 
@@ -324,13 +320,6 @@ public class HandleDayTypeAction implements Serializable {
         this.page = page;
     }
 
-    public DataModel<DayType> getPcList() {
-        return dayTypeList;
-    }
-
-    public void setPcList(DataModel<DayType> dayTypeList) {
-        this.dayTypeList = dayTypeList;
-    }
 
     public String getTitle() {
         return title;
@@ -338,38 +327,6 @@ public class HandleDayTypeAction implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public boolean isPcEnabled() {
-        return dayTypeEnabled;
-    }
-
-    public void setPcEnabled(boolean dayTypeEnabled) {
-        this.dayTypeEnabled = dayTypeEnabled;
-    }
-
-    public DayType getCurrentDayType() {
-        return currentDayType;
-    }
-
-    public void setCurrentDayType(DayType currentDayType) {
-        this.currentDayType = currentDayType;
-    }
-
-    public SortOrder getPcDescriptionOrder() {
-        return dayTypeDescriptionOrder;
-    }
-
-    public void setPcDescriptionOrder(SortOrder dayTypeDescriptionOrder) {
-        this.dayTypeDescriptionOrder = dayTypeDescriptionOrder;
-    }
-
-    public String getPcDescriptionFilter() {
-        return dayTypeDescriptionFilter;
-    }
-
-    public void setPcDescriptionFilter(String dayTypeDescriptionFilter) {
-        this.dayTypeDescriptionFilter = dayTypeDescriptionFilter;
     }
 
     public boolean isSelected() {

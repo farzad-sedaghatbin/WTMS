@@ -1,0 +1,66 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+
+<h:form>
+        <p:dataTable id="calendarTable"
+                     keepSaved="true"
+                     value="#{handleCalendarAction.calendarList}"
+                     rowKeyVar="rowIndex"
+                     noDataLabel="no_result_found"
+                     sortMode="single"
+                     var="calendar"
+                     rows="10"
+                     style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                     rowClasses="ROW1,ROW2">
+
+            <p:column sortBy="#{calendar.name}"
+                      sortOrder="#{handleCalendarAction.calendarNameOrder}">
+                <f:facet name="header">
+                    <p:commandLink value="name" render="calendarTable"
+                                   execute="@this"
+                                   limitRender="true"
+                                   action="#{handleCalendarAction.sortByCalendarName}"/>
+                    <br/>
+                    <h:inputText converter="persianConverter" value="#{handleCalendarAction.calendarNameFilter}">
+                        <p:ajax event="blur" render="calendarTable" execute="@this"
+                                limitRender="true"/>
+                    </h:inputText>
+                </f:facet>
+                <p:commandLink id="editLink" value="#{calendar.name}"
+                               render="operationArea"
+                               styleClass="withoutUnderlineLink"
+                               execute="@this"
+                               limitRender="true"
+                               action="#{handleCalendarAction.selectForEdit}"/>
+            </p:column>
+            <p:column sortBy="#{calendar.description}"
+                      sortOrder="#{handleCalendarAction.calendarDescriptionOrder}">
+                <f:facet name="header">
+                    <p:commandLink value="description" render="calendarTable"
+                                   execute="@this"
+                                   limitRender="true"
+                                   action="#{handleCalendarAction.sortByCalendarDescription}"/>
+                    <br/>
+                    <h:inputText value="#{handleCalendarAction.calendarDescriptionFilter}">
+                        <p:ajax event="blur" render="calendarTable" execute="@this"
+                                limitRender="true"/>
+                    </h:inputText>
+                </f:facet>
+                <h:outputText escape="true" value="#{calendar.description}"/>
+            </p:column>
+            <f:facet name="footer">
+                <p:dataScroller limitRender="true" execute="@this" render="calendarTable"
+                                page="#{handleCalendarAction.page}"/>
+            </f:facet>
+        </p:dataTable>
+                    
+    </h:form>
+</ui:define>
+        </ui:composition>

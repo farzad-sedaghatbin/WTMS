@@ -2,6 +2,7 @@ package ir.university.toosi.wtms.web.action.person;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.BLookup;
@@ -19,6 +20,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -46,7 +48,10 @@ public class HandleCardAction implements Serializable {
     @Inject
     private UserManagementAction me;
 
-    private DataModel<Card> cardList;
+    @EJB
+    private CardServiceImpl cardService;
+
+    private List<Card> cardList;
     private String cardData;
     private Long personId;
     private Card card;
@@ -500,22 +505,14 @@ public class HandleCardAction implements Serializable {
         startDateFilter = "";
         expirationDateFilter = "";
         setPage(1);
-        WebServiceInfo cardService = new WebServiceInfo();
-        try {
             notSelectedCard = new ArrayList<>();
-            cardService.setServiceName("/getAllActiveCard");
-            allCard = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(cardService.getServerUrl(), cardService.getServiceName()), new TypeReference<List<Card>>() {
-            });
+            cardList = cardService.getAllActiveCard();
             for (Card card : allCard) {
                 notSelectedCard.add(card);
                 if (card.getCardType() != null)
                     card.getCardType().setTitleText(me.getValue(card.getCardType().getTitle()));
                 card.getCardStatus().setTitleText(me.getValue(card.getCardStatus().getTitle()));
             }
-            cardList = new ListDataModel<>(allCard);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void refreshInvis() {
@@ -536,20 +533,11 @@ public class HandleCardAction implements Serializable {
         setCurrentCard(null);
         setSelectRow(false);
         setPage(1);
-        WebServiceInfo cardService = new WebServiceInfo();
-        try {
-            List<Card> cards;
-            cardService.setServiceName("/getAllInvisibleCard");
-            cards = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(cardService.getServerUrl(), cardService.getServiceName()), new TypeReference<List<Card>>() {
-            });
-            for (Card card : cards) {
+            cardList =cardService.getAllInvisible();
+            for (Card card : cardList) {
                 card.getCardType().setTitleText(me.getValue(card.getCardType().getTitle()));
                 card.getCardStatus().setTitleText(me.getValue(card.getCardStatus().getTitle()));
             }
-            cardList = new ListDataModel<>(cards);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void refreshAssignCardToPersonList() {
@@ -578,16 +566,15 @@ public class HandleCardAction implements Serializable {
     }
 
     public void selectForEdit() {
-        setCurrentCard(getCardList().getRowData());
         setSelectRow(true);
 
     }
 
-    public DataModel<Card> getCardList() {
+    public List<Card> getCardList() {
         return cardList;
     }
 
-    public void setCardList(DataModel<Card> cardList) {
+    public void setCardList(List<Card> cardList) {
         this.cardList = cardList;
     }
 

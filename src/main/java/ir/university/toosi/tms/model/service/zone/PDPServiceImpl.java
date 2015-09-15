@@ -103,7 +103,7 @@ public class PDPServiceImpl<T extends PDP> {
         }
     }
 
-    public List<T> findByCameraId(String id) {
+    public List<T> findByCameraId(long id) {
         try {
             return (List<T>) PDPdao.findByCameraId(id);
         } catch (Exception e) {

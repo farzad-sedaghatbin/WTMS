@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.calendar.CalendarServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -18,6 +19,7 @@ import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -43,7 +45,10 @@ public class HandleCalendarAction implements Serializable {
     private UserManagementAction me;
     @Inject
     private HandleRoleAction handleRoleAction;
-    private DataModel<Calendar> calendarList = null;
+
+    @EJB
+    private CalendarServiceImpl calendarService;
+    private List<Calendar> calendarList = null;
     private String editable = "false";
     private String name;
     private boolean calendarDefault;
@@ -70,7 +75,7 @@ public class HandleCalendarAction implements Serializable {
     }
 
 
-    public DataModel<Calendar> getSelectionGrid() {
+    public List<Calendar> getSelectionGrid() {
         List<Calendar> calendars = new ArrayList<>();
         refresh();
         return calendarList;
@@ -78,15 +83,7 @@ public class HandleCalendarAction implements Serializable {
 
     private void refresh() {
         init();
-        WebServiceInfo calendarService = new WebServiceInfo();
-        calendarService.setServiceName("/getAllCalendar");
-        try {
-            List<Calendar> calendars = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(calendarService.getServerUrl(), calendarService.getServiceName()), new TypeReference<List<Calendar>>() {
-            });
-            calendarList = new ListDataModel<>(calendars);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<Calendar> calendarList = calendarService.getAllCalendar();
     }
 
     public void add() {
@@ -469,7 +466,6 @@ public class HandleCalendarAction implements Serializable {
 //    }
 
     public void selectForEdit() {
-        currentCalendar = calendarList.getRowData();
         setSelectRow(true);
 
     }
@@ -482,11 +478,11 @@ public class HandleCalendarAction implements Serializable {
         this.selectRow = selectRow;
     }
 
-    public DataModel<Calendar> getCalendarList() {
+    public List<Calendar> getCalendarList() {
         return calendarList;
     }
 
-    public void setCalendarList(DataModel<Calendar> calendarList) {
+    public void setCalendarList(List<Calendar> calendarList) {
         this.calendarList = calendarList;
     }
 
@@ -557,53 +553,6 @@ public class HandleCalendarAction implements Serializable {
         this.page = page;
     }
 
-    public DataModel<Calendar> getPcList() {
-        return calendarList;
-    }
-
-    public void setPcList(DataModel<Calendar> calendarList) {
-        this.calendarList = calendarList;
-    }
-
-    public String getTitle() {
-        return name;
-    }
-
-    public void setTitle(String name) {
-        this.name = name;
-    }
-
-    public boolean isPcEnabled() {
-        return calendarDefault;
-    }
-
-    public void setPcEnabled(boolean calendarDefault) {
-        this.calendarDefault = calendarDefault;
-    }
-
-    public Calendar getCurrentCalendar() {
-        return currentCalendar;
-    }
-
-    public void setCurrentCalendar(Calendar currentCalendar) {
-        this.currentCalendar = currentCalendar;
-    }
-
-    public SortOrder getPcDescriptionOrder() {
-        return calendarDescriptionOrder;
-    }
-
-    public void setPcDescriptionOrder(SortOrder calendarDescriptionOrder) {
-        this.calendarDescriptionOrder = calendarDescriptionOrder;
-    }
-
-    public String getPcDescriptionFilter() {
-        return calendarDescriptionFilter;
-    }
-
-    public void setPcDescriptionFilter(String calendarDescriptionFilter) {
-        this.calendarDescriptionFilter = calendarDescriptionFilter;
-    }
 
     public boolean isSelected() {
         return selected;

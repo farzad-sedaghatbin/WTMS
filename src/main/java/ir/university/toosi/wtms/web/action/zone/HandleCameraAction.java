@@ -3,6 +3,8 @@ package ir.university.toosi.wtms.web.action.zone;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
+import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
+import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.zone.Camera;
@@ -43,6 +45,12 @@ public class HandleCameraAction implements Serializable {
     private HandleGatewayAction handleGatewayAction;
     @EJB
     private CameraServiceImpl cameraService;
+
+    @EJB
+    private PDPServiceImpl pdpService;
+
+    @EJB
+    private GatewayServiceImpl gatewayService;
 
     private String editable = "false";
 
@@ -134,27 +142,15 @@ public class HandleCameraAction implements Serializable {
     public void doDelete() {
         currentCamera.setEffectorUser(me.getUsername());
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPdpByCameraId");
         List<PDP> pdpList = null;
-        try {
-            pdpList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentCamera.getId())), new TypeReference<List<PDP>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        pdpList = pdpService.findByCameraId(currentCamera.getId());
         if (pdpList != null && pdpList.size() > 0) {
             me.addInfoMessage("camera.pdp");
             me.redirect("/zone/list-camera.htm");
         }
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllGateway");
         List<Gateway> gatewayList = null;
-        try {
-            gatewayList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Gateway>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gatewayList = gatewayService.getAllGateway();
         boolean flag = false;
         Camera removableCamera = null;
         for (Gateway gateway1 : gatewayList) {
@@ -168,22 +164,12 @@ public class HandleCameraAction implements Serializable {
                 flag = false;
                 gateway1.getCameras().remove(removableCamera);
             }
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-            try {
-                String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gateway1)), String.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            boolean condition = gatewayService.editGateway(gateway1);
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteCamera");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentCamera)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/zone/list-camera.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = cameraService.deleteCamera(currentCamera);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/zone/list-camera.htm");
     }
 
 
@@ -210,20 +196,9 @@ public class HandleCameraAction implements Serializable {
         descText = currentCamera.getDescription();
         cameraName = currentCamera.getName();
         frames = String.valueOf(currentCamera.getFrames());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCameraById");
-        try {
-            currentCamera = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentCamera.getId())), Camera.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllGateway");
+        currentCamera = cameraService.findById(currentCamera.getId());
         List<Gateway> gatewayList = null;
-        try {
-            gatewayList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Gateway>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gatewayList = gatewayService.getAllGateway();
         handleGatewayAction.setSelectedGateways(new HashSet<Gateway>());
         for (Gateway gateway : gatewayList) {
             gateway.setDescription(me.getValue(gateway.getDescription()));
@@ -257,25 +232,14 @@ public class HandleCameraAction implements Serializable {
         currentCamera.setIp(ip);
         currentCamera.setEnabled(cameraEnabled);
         currentCamera.setFrames(Long.valueOf(frames));
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/existCamera");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentCamera)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+        boolean condition = cameraService.exist(currentCamera.getIp(), currentCamera.getId());
+        if (condition) {
 
-                me.addInfoMessage("camera.exist");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            me.addInfoMessage("camera.exist");
+            return;
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllGateway");
         List<Gateway> gatewayList = null;
-        try {
-            gatewayList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Gateway>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gatewayList = gatewayService.getAllGateway();
         boolean flag = false;
         Camera removableCamera = null;
         for (Gateway gateway1 : gatewayList) {
@@ -289,41 +253,27 @@ public class HandleCameraAction implements Serializable {
                 flag = false;
                 gateway1.getCameras().remove(removableCamera);
             }
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-            try {
-                String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gateway1)), String.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            condition = gatewayService.editGateway(gateway1);
         }
         for (Gateway gateway1 : handleGatewayAction.getSelectedGateways()) {
             for (Gateway gateway2 : gatewayList) {
                 if (gateway1.getId() == gateway2.getId()) {
                     gateway2.getCameras().add(currentCamera);
-                    me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-                    try {
-                        String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gateway2)), String.class);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    condition = gatewayService.editGateway(gateway2);
                 }
             }
         }
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editCamera");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentCamera)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/zone/list-camera.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        condition = cameraService.editCamera(currentCamera);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/zone/list-camera.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
+
     }
 
 
@@ -339,16 +289,12 @@ public class HandleCameraAction implements Serializable {
         newCamera.setFrames(Long.valueOf(frames));
 
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/CameraexistNotId");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newCamera)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+            boolean condition =cameraService.existNotId(currentCamera.getIp());
+            if (condition) {
 
                 me.addInfoMessage("camera.exist");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         Set<Gateway> selecteGateway = new HashSet<>();
         for (Gateway gateway : handleGatewayAction.getSelectedGateways()) {
@@ -363,23 +309,13 @@ public class HandleCameraAction implements Serializable {
             return;
         }
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createCamera");
         Camera insertedCamera = null;
-        try {
-            insertedCamera = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newCamera)), Camera.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            insertedCamera = cameraService.createCamera(insertedCamera);
 
         if (insertedCamera != null) {
             for (Gateway gateway1 : selecteGateway) {
                 gateway1.getCameras().add(insertedCamera);
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-                try {
-                    new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gateway1));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+              gatewayService.editGateway(gateway1);
             }
             refresh();
             me.addInfoMessage("operation.occurred");

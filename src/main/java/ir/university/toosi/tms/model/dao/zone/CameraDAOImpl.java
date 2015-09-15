@@ -46,10 +46,10 @@ public class CameraDAOImpl extends BaseDAOImpl<Camera> {
             return false;
         }
     }
-    public Camera findById(String id) {
+    public Camera findById(long id) {
         try {
             return (Camera) em.createNamedQuery("Camera.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

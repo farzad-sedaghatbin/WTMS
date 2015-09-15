@@ -2,6 +2,7 @@ package ir.university.toosi.wtms.web.action.event;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.EventLogServiceImpl;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
@@ -10,6 +11,7 @@ import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -34,7 +36,10 @@ public class HandleEventAction implements Serializable {
     private GeneralHelper generalHelper;
     @Inject
     private AccessControlAction accessControlAction;
-    private DataModel<EventLog> eventLogList = null;
+
+    @EJB
+    private EventLogServiceImpl logService;
+    private List<EventLog> eventLogList = null;
     private SortOrder eventLogOperationOrder = SortOrder.DESCENDING;
     private SortOrder eventLogDateOrder = SortOrder.DESCENDING;
     private SortOrder eventLogUsernameOrder = SortOrder.DESCENDING;
@@ -69,7 +74,7 @@ public class HandleEventAction implements Serializable {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-        eventLogList = new ListDataModel<>(innerEventLogList);
+        eventLogList = innerEventLogList;
     }
 
 
@@ -116,6 +121,7 @@ public class HandleEventAction implements Serializable {
             setEventLogUsernameOrder(SortOrder.ASCENDING);
         }
     }
+
     public void sortByEventObject() {
 
 
@@ -124,7 +130,9 @@ public class HandleEventAction implements Serializable {
         } else {
             setEventLogObjectOrder(SortOrder.ASCENDING);
         }
-    }    public void sortByTableName() {
+    }
+
+    public void sortByTableName() {
 
 
         if (tableNameOrder.equals(SortOrder.ASCENDING)) {
@@ -151,41 +159,15 @@ public class HandleEventAction implements Serializable {
 //    }
 
     public void search() {
-        List<EventLog> eventLogs = null;
         if (fromDate != null && toDate != null && !fromDate.equalsIgnoreCase("") && !toDate.equalsIgnoreCase("")) {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findEventInDuration");
-            try {
-                eventLogs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), fromDate + "#" + toDate), new TypeReference<List<EventLog>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            eventLogList = logService.findEventInDuration(fromDate, toDate);
         } else if (fromDate != null && !fromDate.equalsIgnoreCase("")) {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findEventAfterDate");
-            try {
-                eventLogs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), fromDate), new TypeReference<List<EventLog>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            eventLogList = logService.findEventAfterDate(fromDate);
         } else if (toDate != null && !toDate.equalsIgnoreCase("")) {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findEventBeforeDate");
-            try {
-                eventLogs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), toDate), new TypeReference<List<EventLog>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            eventLogList = logService.findEventBeforeDate(toDate);
         } else {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllEventLog");
-            try {
-                eventLogs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<EventLog>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            eventLogList = logService.getAllEventLog();
         }
-        eventLogList = new ListDataModel<>(eventLogs);
     }
 
     public void resetPage() {
@@ -208,11 +190,11 @@ public class HandleEventAction implements Serializable {
         this.fromDate = fromDate;
     }
 
-    public DataModel<EventLog> getEventLogList() {
+    public List<EventLog> getEventLogList() {
         return eventLogList;
     }
 
-    public void setEventLogList(DataModel<EventLog> eventLogList) {
+    public void setEventLogList(List<EventLog> eventLogList) {
         this.eventLogList = eventLogList;
     }
 
