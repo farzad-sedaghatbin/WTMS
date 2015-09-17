@@ -50,7 +50,7 @@ public class UserServiceImpl<T extends User> {
     }
 
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) userDAO.findById(id);
         } catch (Exception e) {
@@ -159,7 +159,7 @@ public class UserServiceImpl<T extends User> {
             entity.getWorkGroups().clear();
             editUser(entity);
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), User.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
-            userDAO.delete(findById(String.valueOf(entity.getId())));
+            userDAO.delete(findById(entity.getId()));
 
             return new ObjectMapper().writeValueAsString("operation.occurred");
         } catch (Exception e) {

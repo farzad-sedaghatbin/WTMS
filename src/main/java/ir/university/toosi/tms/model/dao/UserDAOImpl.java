@@ -43,10 +43,10 @@ public class UserDAOImpl extends BaseDAOImpl<User> {
         }
     }
 
-    public User findById(String id) {
+    public User findById(long id) {
         try {
             return (User) em.createNamedQuery("User.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

@@ -2,6 +2,10 @@ package ir.university.toosi.wtms.web.action.user;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.PCServiceImpl;
+import ir.university.toosi.tms.model.service.UserServiceImpl;
+import ir.university.toosi.tms.model.service.WorkGroupServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
@@ -23,6 +27,7 @@ import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -57,9 +62,18 @@ public class HandleUserAction implements Serializable {
     @Inject
     private HandlePersonAction handlePersonAction;
 
-    private DataModel<User> userList = null;
-    private DataModel<Role> roleList = null;
-    private DataModel<Role> workGroupRoleList = null;
+    @EJB
+    private UserServiceImpl userService;
+    @EJB
+    private PersonServiceImpl personService;
+    @EJB
+    private PCServiceImpl pcService;
+    @EJB
+    private WorkGroupServiceImpl workGroupService;
+
+    private List<User> userList = null;
+    private List<Role> roleList = null;
+    private List<Role> workGroupRoleList = null;
     private User currentUser = null;
     private User newUser = null;
     private String nationalCode;
@@ -83,8 +97,8 @@ public class HandleUserAction implements Serializable {
     private String rePassword;
     private String chatFirstName = "";
     private String chatLastName = "";
-    private DataModel<PC> pcList;
-    private DataModel<Person> personList;
+    private List<PC> pcList;
+    private List<Person> personList;
     private PC currentPC;
     private Person currentPerson;
     private String searchOrganizationName;
@@ -156,16 +170,8 @@ public class HandleUserAction implements Serializable {
 
     private void refresh() {
         init();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllUser");
-        List<User> innerUserList = null;
-        try {
-            innerUserList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<User>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        userList = userService.getAllUser();
 
-        userList = new ListDataModel<>(innerUserList);
         handleRoleAction.setRoleList(new ArrayList<Role>());
     }
 
@@ -179,7 +185,7 @@ public class HandleUserAction implements Serializable {
     }
 
     public void selectPCs(ValueChangeEvent event) {
-        currentPC = pcList.getRowData();
+//        currentPC = pcList.getRowData();
         boolean temp = (Boolean) event.getNewValue();
         if (temp) {
             currentPC.setSelected(true);
@@ -207,7 +213,7 @@ public class HandleUserAction implements Serializable {
 
 
     public void doDelete() {
-        if(currentUser.getWorkGroups() !=null && currentUser.getWorkGroups().size()>0){
+        if (currentUser.getWorkGroups() != null && currentUser.getWorkGroups().size() > 0) {
             me.addInfoMessage("user.has.role");
             me.redirect("/user/list-user.htm");
         }
@@ -218,15 +224,11 @@ public class HandleUserAction implements Serializable {
         String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         currentUser.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteUser");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentUser)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/user/list-user.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = userService.deleteUser(currentUser);
+
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/user/list-user.htm");
     }
 
     public void add() {
@@ -237,41 +239,29 @@ public class HandleUserAction implements Serializable {
     public void assignPC() {
         selectedPCs = new HashSet<>();
         selectAll = false;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPC");
-        try {
-            List<PC> pcs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<PC>>() {
-            });
-            for (PC pc : pcs) {
-                for (PC pc1 : currentUser.getPcs()) {
-                    if (pc1.getId() == pc.getId())
-                        pc.setSelected(true);
-                    selectedPCs.add(pc);
-                }
+
+        pcList = pcService.getAllPCs();
+        for (PC pc : pcList) {
+            for (PC pc1 : currentUser.getPcs()) {
+                if (pc1.getId() == pc.getId())
+                    pc.setSelected(true);
+                selectedPCs.add(pc);
             }
-            pcList = new ListDataModel<>(pcs);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
     public void associatePCs() {
         currentUser.setPcs(selectedPCs);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editUser");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentUser)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                selectedPCs = new HashSet<>();
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/user/list-user.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = userService.editUser(currentUser);
+        if (condition) {
+            selectedPCs = new HashSet<>();
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/user/list-user.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
-
     }
 
     public void assignPerson() {
@@ -279,39 +269,27 @@ public class HandleUserAction implements Serializable {
         handlePersonAction.setPersonFamilyOrder(SortOrder.ASCENDING);
         handlePersonAction.setPersonnameFilter("");
         handlePersonAction.setPersonFamilyFilter("");
-        personPage=1;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPersonDataModel");
-        List<Person> innerPersonList = null;
-        try {
-            innerPersonList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Person>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        personPage = 1;
 
-        personList = new ListDataModel<>(innerPersonList);
+        personList = personService.getAllPersonModel();
     }
 
     public void associatePerson() {
-        currentPerson = personList.getRowData();
+//        currentPerson = personList.getRowData();
         currentUser.setPerson(currentPerson);
         currentUser.setFirstname("");
         currentUser.setLastname("");
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editUser");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentUser)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/user/list-user.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = userService.editUser(currentUser);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/user/list-user.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
+
 
     }
 
@@ -325,15 +303,10 @@ public class HandleUserAction implements Serializable {
         newUser.setEnable(enabled == true ? "true" : "false");
         newUser.setStatus("c");
         newUser.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/existUser");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newUser)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = userService.exist(username);
+        if (condition) {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
 
 
@@ -349,13 +322,8 @@ public class HandleUserAction implements Serializable {
             return;
         }
         newUser.setWorkGroups(selectedWorkGroup);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createUser");
         User user = null;
-        try {
-            user = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newUser)), User.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        user = userService.createUser(newUser);
 
         if (user != null) {
             refresh();
@@ -370,12 +338,7 @@ public class HandleUserAction implements Serializable {
     public void edit() {
         setEditable("true");
         setDisableFields(false);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findUserById");
-        try {
-            currentUser = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentUser.getId())), User.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        currentUser = userService.findById(currentUser.getId());
         firstname = currentUser.getFirstname();
         lastname = currentUser.getLastname();
         username = currentUser.getUsername();
@@ -384,14 +347,8 @@ public class HandleUserAction implements Serializable {
         List<WorkGroup> sourceWorkgroups = new ArrayList<>();
         List<WorkGroup> targetWorkgroups = new ArrayList<>();
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllWorkGroup");
         List<WorkGroup> workGroups = null;
-        try {
-            workGroups = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<WorkGroup>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        workGroups = workGroupService.getAllWorkGroup();
         handleWorkGroupAction.setSelectWorkGroups(new HashSet<WorkGroup>());
         for (WorkGroup workGroup : workGroups) {
             workGroup.setDescText(me.getValue(workGroup.getDescription()));
@@ -410,7 +367,7 @@ public class HandleUserAction implements Serializable {
         }
 
         handleWorkGroupAction.setWorkGroupList(new ListDataModel<>(workGroups));
-        handleWorkGroupAction.setWorkgroups(new DualListModel<WorkGroup>(sourceWorkgroups,targetWorkgroups));
+        handleWorkGroupAction.setWorkgroups(new DualListModel<WorkGroup>(sourceWorkgroups, targetWorkgroups));
 
     }
 
@@ -426,22 +383,17 @@ public class HandleUserAction implements Serializable {
         currentUser.setLastname(lastname);
         currentUser.setWorkGroups(handleWorkGroupAction.getSelectWorkGroups());
         currentUser.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editUser");
-        if(firstname.trim().length() > 0 || lastname.trim().length() > 0 )
+        if (firstname.trim().length() > 0 || lastname.trim().length() > 0)
             currentUser.setPerson(null);
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentUser)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                handleWorkGroupAction.setSelectWorkGroups(new HashSet<WorkGroup>());
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/user/list-user.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = userService.editUser(currentUser);
+        if (condition) {
+            handleWorkGroupAction.setSelectWorkGroups(new HashSet<WorkGroup>());
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/user/list-user.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
@@ -525,7 +477,7 @@ public class HandleUserAction implements Serializable {
         }
     }
 
-//    @AssertTrue
+    //    @AssertTrue
     public boolean isPasswordsEquals() {
         if (!rePassword.equals(newPassword)) {
             me.addInfoMessage(" Different passwords entered!");
@@ -536,12 +488,10 @@ public class HandleUserAction implements Serializable {
 
     public void storeNewPassword() {
         me.addInfoMessage("success");
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editUser");
         currentUser = me.getUser();
         currentUser.setPassword(newPassword);
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentUser)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+            boolean condition =userService.editUser(currentUser);
+            if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
                 me.redirect("/user/list-user.htm");
@@ -549,13 +499,10 @@ public class HandleUserAction implements Serializable {
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void selectForEdit() {
-        currentUser = userList.getRowData();
+//        currentUser = userList.getRowData();
         setSelectRow(true);
 
     }
@@ -568,13 +515,6 @@ public class HandleUserAction implements Serializable {
         this.selectRow = selectRow;
     }
 
-    public DataModel<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(DataModel<User> userList) {
-        this.userList = userList;
-    }
 
     public User getCurrentUser() {
         return currentUser;
@@ -737,14 +677,6 @@ public class HandleUserAction implements Serializable {
         this.enabled = enabled;
     }
 
-    public DataModel<Role> getRoleList() {
-        return roleList;
-    }
-
-    public void setRoleList(DataModel<Role> roleList) {
-        this.roleList = roleList;
-    }
-
     public void userEnable(ValueChangeEvent event) {
         boolean status = (Boolean) event.getNewValue();
         if (!status) {
@@ -787,14 +719,6 @@ public class HandleUserAction implements Serializable {
 
     public void setPage(int page) {
         this.page = page;
-    }
-
-    public DataModel<Role> getWorkGroupRoleList() {
-        return workGroupRoleList;
-    }
-
-    public void setWorkGroupRoleList(DataModel<Role> workGroupRoleList) {
-        this.workGroupRoleList = workGroupRoleList;
     }
 
     public SelectItem[] getPersonItem() {
@@ -870,21 +794,6 @@ public class HandleUserAction implements Serializable {
         this.extraField4 = extraField4;
     }
 
-    public DataModel<PC> getPcList() {
-        return pcList;
-    }
-
-    public void setPcList(DataModel<PC> pcList) {
-        this.pcList = pcList;
-    }
-
-    public DataModel<Person> getPersonList() {
-        return personList;
-    }
-
-    public void setPersonList(DataModel<Person> personList) {
-        this.personList = personList;
-    }
 
     public PC getCurrentPC() {
         return currentPC;
