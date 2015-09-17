@@ -232,11 +232,6 @@ public class HandleRoleAction implements Serializable {
         currentRole.setCurrentLang(me.getLanguages());
         boolean condition = roleService.editRole(currentRole);
         if (condition) {
-            try {
-                me.setLanguage();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/role/list-role.htm");
@@ -273,11 +268,6 @@ public class HandleRoleAction implements Serializable {
         Role insertedRole = roleService.createRole(newRole);
         if (insertedRole != null) {
 
-            try {
-                me.setLanguage();
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/role/list-role.htm");

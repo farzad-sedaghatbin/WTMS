@@ -109,11 +109,8 @@ public class HandleRuleAction implements Serializable {
         endSecond = "0";
         fillDayTypeCombo();
         fillDataModel();
-        try {
-            me.fillCalendar();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        me.fillCalendar();
         calendarItems = me.calendarItem;
         currentRulePackage = null;
         setSelectRow(false);

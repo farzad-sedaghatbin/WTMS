@@ -161,11 +161,6 @@ public class HandleBLookupAction implements Serializable {
         }
 
         if (insertedBLookup != null) {
-            try {
-                me.setLanguage();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/lookup/list-blookup.htm");

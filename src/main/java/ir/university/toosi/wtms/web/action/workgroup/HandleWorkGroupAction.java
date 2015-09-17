@@ -95,18 +95,18 @@ public class HandleWorkGroupAction implements Serializable {
         page = 1;
         currentWorkGroup = null;
         setSelectRow(false);
-        titleFilter="";
-        workGroupDescriptionFilter="";
-        workGroupTitleFilter="";
+        titleFilter = "";
+        workGroupDescriptionFilter = "";
+        workGroupTitleFilter = "";
     }
 
     public void refresh() {
         init();
-        workGroupList =workGroupService.getAllWorkGroup();
-            for (WorkGroup workGroup : workGroupList) {
-                workGroup.setDescText(me.getValue(workGroup.getDescription()));
-            }
-            workgroups = new DualListModel<>(workGroupList,new ArrayList<WorkGroup>());
+        workGroupList = workGroupService.getAllWorkGroup();
+        for (WorkGroup workGroup : workGroupList) {
+            workGroup.setDescText(me.getValue(workGroup.getDescription()));
+        }
+        workgroups = new DualListModel<>(workGroupList, new ArrayList<WorkGroup>());
     }
 
     public void fillGrid() {
@@ -122,10 +122,10 @@ public class HandleWorkGroupAction implements Serializable {
 
     public void doDelete() {
         currentWorkGroup.setEffectorUser(me.getUsername());
-            String condition =workGroupService.deleteWorkGroup(currentWorkGroup);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/workgroup/list-workgroup.htm");
+        String condition = workGroupService.deleteWorkGroup(currentWorkGroup);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/workgroup/list-workgroup.htm");
 
 
     }
@@ -156,7 +156,7 @@ public class HandleWorkGroupAction implements Serializable {
         }
 
         handleRoleAction.setCurrentPage(currentPage);
-        handleRoleAction.setRoles(new DualListModel<Role>(roleSelectionGrid,new ArrayList<Role>()));
+        handleRoleAction.setRoles(new DualListModel<Role>(roleSelectionGrid, new ArrayList<Role>()));
     }
 
     public void doAdd() {
@@ -196,14 +196,10 @@ public class HandleWorkGroupAction implements Serializable {
 
         newWorkgroup.setRoles(selectedRole);
         WorkGroup insertedWorkGroup = null;
-            insertedWorkGroup = workGroupService.createWorkGroup(newWorkgroup);
+        insertedWorkGroup = workGroupService.createWorkGroup(newWorkgroup);
 
         if (insertedWorkGroup != null) {
-            try {
-                me.setLanguage();
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/workgroup/list-workgroup.htm");
@@ -228,18 +224,17 @@ public class HandleWorkGroupAction implements Serializable {
     }
 
 
-
     public void edit(String currentPage) {
         setEditable("true");
         setDisableFields(false);
-            currentWorkGroup =workGroupService.findById(currentWorkGroup.getId());  //To change body of catch statement use File | Settings | File Templates.
+        currentWorkGroup = workGroupService.findById(currentWorkGroup.getId());  //To change body of catch statement use File | Settings | File Templates.
 
         workGroupEnabled = Boolean.valueOf(currentWorkGroup.getEnabled());
         descText = me.getValue(currentWorkGroup.getDescription());
         status = currentWorkGroup.getEnabled();
         name = currentWorkGroup.getName();
         List<Role> roles = null;
-            roles = roleService.getAllRole();
+        roles = roleService.getAllRole();
         for (Role role : roles) {
             role.setDescText(me.getValue(role.getDescription()));
         }
@@ -263,7 +258,7 @@ public class HandleWorkGroupAction implements Serializable {
         }
 
         handleRoleAction.setRoleList(roles);
-        handleRoleAction.setRoles(new DualListModel<Role>(sourceRoles,targetRoles));
+        handleRoleAction.setRoles(new DualListModel<Role>(sourceRoles, targetRoles));
     }
 
     public void doEdit() {
@@ -273,21 +268,16 @@ public class HandleWorkGroupAction implements Serializable {
         currentWorkGroup.setEffectorUser(me.getUsername());
         currentWorkGroup.setCurrentLang(me.getLanguages());
         currentWorkGroup.setName(name);
-        try {
-            boolean condition = workGroupService.editWorkGroup(currentWorkGroup);
-            if (condition) {
-                handleRoleAction.setSelectedRoles(new HashSet<Role>());
-                me.setLanguage();
-                refresh();
-                handleRoleAction.setSelectedRoles(new HashSet<Role>());
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/workgroup/list-workgroup.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = workGroupService.editWorkGroup(currentWorkGroup);
+        if (condition) {
+            handleRoleAction.setSelectedRoles(new HashSet<Role>());
+            refresh();
+            handleRoleAction.setSelectedRoles(new HashSet<Role>());
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/workgroup/list-workgroup.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
 
     }
@@ -593,7 +583,7 @@ public class HandleWorkGroupAction implements Serializable {
     }
 
     public DualListModel<WorkGroup> getWorkgroups() {
-        if (workgroups == null){
+        if (workgroups == null) {
             workgroups = new DualListModel<>();
         }
         return workgroups;

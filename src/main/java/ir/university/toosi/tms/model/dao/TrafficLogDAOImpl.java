@@ -19,10 +19,10 @@ import java.util.List;
 
 public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
 
-    public TrafficLog findById(String id) {
+    public TrafficLog findById(long id) {
         try {
             return (TrafficLog) em.createNamedQuery("TrafficLog.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

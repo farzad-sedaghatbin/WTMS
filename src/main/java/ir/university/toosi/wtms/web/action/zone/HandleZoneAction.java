@@ -259,11 +259,6 @@ public class HandleZoneAction implements Serializable {
 
         if (insertedZone != null) {
 //
-            try {
-                me.setLanguage();
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/zone/list-zone.htm");

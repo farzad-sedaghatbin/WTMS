@@ -61,7 +61,7 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
     }
 
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) TrafficLogDAO.findById(id);
         } catch (Exception e) {

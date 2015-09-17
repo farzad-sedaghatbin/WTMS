@@ -4,7 +4,9 @@ package ir.university.toosi.wtms.web.action;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.SystemConfigurationServiceImpl;
 import ir.university.toosi.tms.model.service.UserServiceImpl;
+import ir.university.toosi.tms.model.service.calendar.CalendarServiceImpl;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
@@ -51,6 +53,10 @@ public class UserManagementAction implements Serializable {
 
     @EJB
     private UserServiceImpl userService;
+    @EJB
+    private SystemConfigurationServiceImpl configurationService;
+    @EJB
+    private CalendarServiceImpl calendarService;
 
     public static String SENTRY_COUNT = "10";
     public static final String INVALID_TRY = "invalid_try";
@@ -106,15 +112,7 @@ public class UserManagementAction implements Serializable {
     }
 
     public void initParameter() {
-        getGeneralHelper().getWebServiceInfo().setServiceName("/getSystemConfiguration");
-        try {
-            SENTRY_COUNT = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(SystemParameterType.SENTRY_COUNT)), String.class);
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            SENTRY_COUNT = configurationService.findByParameter(SystemParameterType.SENTRY_COUNT).getValue();
 
     }
 
@@ -230,76 +228,21 @@ public class UserManagementAction implements Serializable {
 
     }
 
-    public void authenticate(String username, HttpServletRequest request, HttpServletResponse response) {
-        permissionHash = new Hashtable<>();
-        try {
-            getGeneralHelper().getWebServiceInfo().setServiceName("/findUserByUserName");
-            FacesContext facesContext = FacesUtil.getFacesContext(request, response);
-            HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
-            user = new User();
-            user = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName(), username), User.class);
-            accessControlAction.setWorkGroup(user.getWorkGroups());
-            getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOperation");
-            List<Operation> operationList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Operation>>() {
-            });
-            if (username.equalsIgnoreCase("admin")) {
-                for (Operation operation : operationList) {
-                    permissionHash.put(operation.getDescription(), Boolean.TRUE);
-
-                }
-            }
-            for (Operation operation : operationList) {
-                for (WorkGroup workGroup : user.getWorkGroups()) {
-                    for (Role role : workGroup.getRoles()) {
-                        for (Operation innerOperation : role.getOperations()) {
-                            if (innerOperation.getDescription().equalsIgnoreCase(operation.getDescription())) {
-                                permissionHash.put(operation.getDescription(), Boolean.TRUE);
-                            }
-                        }
-                    }
-                }
-                if (!permissionHash.containsKey(operation.getDescription()))
-                    permissionHash.put(operation.getDescription(), Boolean.FALSE);
-            }
-
-            /************/
-            fillCalendar();
-            /*************/
-            session.setAttribute(usernameInSession, username);
-        } catch (Exception e) {
-            String message = e.getMessage();
-            if (e instanceof NullPointerException) {
-                message = "Null Pointer Exception";
-            }
-            e.printStackTrace();
-        }
-
-        fillSystemConfiguration();
-        initParameter();
-    }
 
     public void fillSystemConfiguration() {
-        getGeneralHelper().getWebServiceInfo().setServiceName("/getAllConfiguration");
-        try {
-            List<SystemConfiguration> systemConfigurations = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<SystemConfiguration>>() {
-            });
+            List<SystemConfiguration> systemConfigurations = configurationService.getAllConfiguration();
             for (SystemConfiguration systemConfiguration : systemConfigurations) {
                 systemParameter.put(systemConfiguration.getParameter(), systemConfiguration.getValue());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public String goHome() {
         return "home";
     }
 
-    public void fillCalendar() throws IOException {
+    public void fillCalendar() {
         /************/
-        getGeneralHelper().getWebServiceInfo().setServiceName("/getAllCalendar");
-        calendars = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Calendar>>() {
-        });
+        calendars = calendarService.getAllCalendar();
 
         calendarItem = new SelectItem[calendars.size()];
         int i = 0;
@@ -572,11 +515,7 @@ public class UserManagementAction implements Serializable {
         return language;
     }
 
-    public void setLanguage() throws IOException {
-        getGeneralHelper().getWebServiceInfo().setServiceName("/loadLanguage");
-        language = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName(), selectedLanguage), new TypeReference<Hashtable<String, LanguageManagement>>() {
-        });
-    }
+
 
     public String getDirection() {
         return direction;

@@ -4,6 +4,7 @@ package ir.university.toosi.wtms.web.action;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -16,6 +17,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -44,8 +46,11 @@ public class HandleTrafficAction implements Serializable {
     private GeneralHelper generalHelper;
     @Inject
     private AccessControlAction accessControlAction;
+
+    @EJB
+    private TrafficLogServiceImpl trafficLogService;
     TrafficLogDataModel trafficLog;
-    private DataModel<TrafficLogDataModel> eventLogList = null;
+    private List<TrafficLogDataModel> eventLogList = null;
     private SortOrder eventLogOperationOrder = SortOrder.DESCENDING;
     private SortOrder eventLogDateOrder = SortOrder.DESCENDING;
     private SortOrder eventLogUsernameOrder = SortOrder.DESCENDING;
@@ -66,14 +71,7 @@ public class HandleTrafficAction implements Serializable {
     public String begin() {
         me.setActiveMenu(MenuType.REPORT);
         refresh();
-//        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllTrafficLog");
-//        List<TrafficLog> innerTrafficLogList = null;
-//        try {
-//            innerTrafficLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<TrafficLog>>() {
-//            });
-//        } catch (IOException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
+//
         fromDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
         toDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
         search();
@@ -83,19 +81,9 @@ public class HandleTrafficAction implements Serializable {
     }
 
 
-    public void handle() {
-        trafficLog = getTrafficLogList().getRowData();
-    }
-
     public void search() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findTrafficInDuration");
         List<TrafficLog> innerTrafficLogList = null;
-        try {
-            innerTrafficLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), fromDate + "#" + toDate), new TypeReference<List<TrafficLog>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        innerTrafficLogList = trafficLogService.findTrafficInDuration(fromDate, toDate);
         List<TrafficLogDataModel> logDataModels = new ArrayList<>();
         TrafficLogDataModel dataModel;
         for (TrafficLog log : innerTrafficLogList) {
@@ -110,9 +98,8 @@ public class HandleTrafficAction implements Serializable {
             dataModel.setId(log.getId());
             dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
             logDataModels.add(dataModel);
-
         }
-        eventLogList = new ListDataModel<>(Lists.reverse(logDataModels));
+        eventLogList = Lists.reverse(logDataModels);
         dateFilter = "";
     }
 
@@ -128,29 +115,7 @@ public class HandleTrafficAction implements Serializable {
         index = 0;
         page = 1;
         selectRow = false;
-//        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllTrafficLog");
-//        List<TrafficLog> innerTrafficLogList = null;
-//        try {
-//            innerTrafficLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<TrafficLog>>() {
-//            });
-//        } catch (IOException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
-//        List<TrafficLogDataModel> logDataModels = new ArrayList<>();
-//        TrafficLogDataModel dataModel;
-//        for (TrafficLog log : innerTrafficLogList) {
-//            dataModel = new TrafficLogDataModel();
-//            dataModel.setVideo(log.getVideo());
-//            dataModel.setTime(log.getTime());
-//            dataModel.setDate(log.getDate());
-//            dataModel.setExit(log.isExit());
-//            dataModel.setGate(log.getGateway().getName());
-//            dataModel.setPictures(log.getPictures());
-//            dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
-//            logDataModels.add(dataModel);
 //
-//        }
-//        eventLogList = new ListDataModel<>(logDataModels);
     }
 
 
@@ -197,14 +162,6 @@ public class HandleTrafficAction implements Serializable {
     }
 
 
-    public DataModel<TrafficLogDataModel> getTrafficLogList() {
-        return eventLogList;
-    }
-
-    public void setTrafficLogList(DataModel<TrafficLogDataModel> eventLogList) {
-        this.eventLogList = eventLogList;
-    }
-
     public SortOrder getTrafficLogOperationOrder() {
         return eventLogOperationOrder;
     }
@@ -222,21 +179,16 @@ public class HandleTrafficAction implements Serializable {
     }
 
     public void selectForEdit() {
-        index=0;
-        currentTrraficLog = eventLogList.getRowData();
+        index = 0;
+//        currentTrraficLog = eventLogList.getRowData();
         setSelectRow(true);
     }
 
     public void paint(OutputStream stream, Object object) {
         Long traffic = (Long) object;
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findTrafficLogById");
         TrafficLog trafficLog1 = null;
-        try {
-            trafficLog1 = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(traffic)), TrafficLog.class);
-        } catch (IOException e) {
-            System.out.println("---");
-        }
+        trafficLog1 = trafficLogService.findById(traffic);
         if (trafficLog1 != null) {
             String address = trafficLog1.getPictures();
             if (address == null)
@@ -252,6 +204,7 @@ public class HandleTrafficAction implements Serializable {
 
         }
     }
+
     public void painter(OutputStream stream, Object object) throws IOException {
         if (currentTrraficLog != null) {
             String address = currentTrraficLog.getPictures();
@@ -263,8 +216,8 @@ public class HandleTrafficAction implements Serializable {
                 stream.flush();
                 stream.close();
             } catch (IOException e) {
-                index=0;
-                painter(stream,object);
+                index = 0;
+                painter(stream, object);
                 return;
             }
 
@@ -354,11 +307,12 @@ public class HandleTrafficAction implements Serializable {
         this.trafficLog = trafficLog;
     }
 
-    public DataModel<TrafficLogDataModel> getEventLogList() {
+
+    public List<TrafficLogDataModel> getEventLogList() {
         return eventLogList;
     }
 
-    public void setEventLogList(DataModel<TrafficLogDataModel> eventLogList) {
+    public void setEventLogList(List<TrafficLogDataModel> eventLogList) {
         this.eventLogList = eventLogList;
     }
 

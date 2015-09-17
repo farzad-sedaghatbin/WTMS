@@ -131,7 +131,6 @@ public class HandleDayTypeAction implements Serializable {
     }
 
     private void doEdit() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editDayType");
         currentDayType.setDescription(description);
         currentDayType.setColor(color);
         currentDayType.setTitle(title);

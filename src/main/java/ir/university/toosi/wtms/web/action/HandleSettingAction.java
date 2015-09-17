@@ -73,7 +73,6 @@ public class HandleSettingAction implements Serializable {
             SystemConfiguration systemConfiguration = (SystemConfiguration) iterator.next();
             if (systemConfiguration.getType().equalsIgnoreCase("boolean"))
                 continue;
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editSystemConfiguration");
             boolean condition = configurationService.editConfiguration(systemConfiguration);
             if (!condition) {
                 me.addInfoMessage("operation.not.occurred");
@@ -81,7 +80,6 @@ public class HandleSettingAction implements Serializable {
             }
         }
         for (SystemConfiguration systemConfiguration : systemConfigurationList) {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editSystemConfiguration");
             boolean condition = configurationService.editConfiguration(systemConfiguration);
             if (!condition) {
                 me.addInfoMessage("operation.not.occurred");

@@ -7,7 +7,6 @@ import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.calendar.HandleCalendarAction;
 import ir.university.toosi.wtms.web.action.calendar.HandleDayTypeAction;
 import ir.university.toosi.wtms.web.action.event.HandleEventAction;
-import ir.university.toosi.wtms.web.action.language.HandleLanguageAction;
 import ir.university.toosi.wtms.web.action.lookup.HandleLookupAction;
 import ir.university.toosi.wtms.web.action.map.HandleMapAction;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
@@ -40,8 +39,6 @@ public class MenuHandlerServlet extends HttpServlet {
     private HandleCameraAction handleCameraAction;
     @Inject
     private HandleCardAction handleCardAction;
-    @Inject
-    private HandleLanguageAction handleLanguageAction;
     @Inject
     private HandlePersonAction handlePersonAction;
     @Inject
@@ -106,10 +103,7 @@ public class MenuHandlerServlet extends HttpServlet {
         } else if (request.getParameter("id").equalsIgnoreCase("person")) {
             handlePersonAction.begin();
             request.getRequestDispatcher("/person/list-person.htm").forward(request, response);
-        } else if (request.getParameter("id").equalsIgnoreCase("language")) {
-            handleLanguageAction.begin();
-            request.getRequestDispatcher("/language/list-language.htm").forward(request, response);
-        } else if (request.getParameter("id").equalsIgnoreCase("sentry")) {
+        }  else if (request.getParameter("id").equalsIgnoreCase("sentry")) {
             handleMonitoringAction.beginSentry();
             request.getRequestDispatcher("/monitoring/sentry-monitor.htm").forward(request, response);
         } else if (request.getParameter("id").equalsIgnoreCase("pdp")) {

@@ -65,14 +65,8 @@ public class HandleEventAction implements Serializable {
         eventLogOperationFilter = "";
         eventLogDateFilter = "";
         eventLogUsernameFilter = "";
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllEventLog");
         List<EventLog> innerEventLogList = null;
-        try {
-            innerEventLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<EventLog>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+            innerEventLogList = logService.getAllEventLog();
 
         eventLogList = innerEventLogList;
     }

@@ -26,7 +26,6 @@ public class TMSServlet extends HttpServlet {
 
         String user = request.getParameter("user");
 
-        me.authenticate(user, (HttpServletRequest) request, (HttpServletResponse) response);
 
         request.getRequestDispatcher("/home.htm").forward(request, response);
 
