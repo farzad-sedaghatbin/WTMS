@@ -35,8 +35,8 @@
                     <f:facet name="header">
                         <h:outputText value="value"/>
                     </f:facet>
-                    <p:inplaceInput rendered="#{setting.type eq 'String'}"
-                                    disabled="#{not me.hasPermission('EDIT_SETTING"
+                    <p:inplace rendered="#{setting.type eq 'String'}"
+                                    disabled="#{not me.hasPermission('EDIT_SETTING')}"
                                     value="#{setting.value}"/>
                     <h:selectBooleanCheckbox rendered="#{setting.type eq 'Boolean'}"
                                              value="#{setting.value}"

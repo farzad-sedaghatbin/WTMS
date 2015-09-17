@@ -12,6 +12,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import ir.university.toosi.wtms.web.util.ReportUtils;
 import ir.university.toosi.wtms.web.util.Storage;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -39,7 +40,8 @@ public class HandleCardReportAction implements Serializable {
 
 
     @Inject
-    private UserManagementAction me;
+//    @EJB
+//    private ReprtSe
     private String type;
     private String kind;
     private String reportType;
@@ -195,10 +197,10 @@ public class HandleCardReportAction implements Serializable {
         System.out.println(reportType);
     }
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.REPORT);
         init();
-        return "list-report";
+        me.redirect("/report/list-report.xhtml");
     }
 
     public void saveQueryBegin() {
@@ -213,7 +215,7 @@ public class HandleCardReportAction implements Serializable {
             e.printStackTrace();
         }
         querieList = new ListDataModel<>(innerQueryList);
-        me.redirect("/report/list-saved-query.htm");
+        me.redirect("/report/list-saved-query.xhtml");
     }
 
 

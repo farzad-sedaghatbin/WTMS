@@ -43,10 +43,10 @@ public class HandleSettingAction implements Serializable {
     private List<SystemConfiguration> systemConfigurationList = null;
     private SortOrder descriptionOrder = SortOrder.UNSORTED;
 
-    public String begin() {
+    public void begin() {
 //        me.setActiveMenu(MenuType.SETTING);
         refresh();
-        return "system-setting";
+        me.redirect("/setting/system-setting.xhtml");
     }
 
     public void changeSetting(ValueChangeEvent event) {

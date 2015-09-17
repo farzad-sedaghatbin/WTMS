@@ -49,9 +49,9 @@ public class HandleDeviceAction implements Serializable {
     private String deviceDescriptionFilter;
     private String deviceIPFilter;
 
-    public String beginDevice() {
+    public void beginDevice() {
         refreshDevice();
-        return "/device";
+        me.redirect("/monitoring/device-monitoring.xhtml");
     }
 
 
