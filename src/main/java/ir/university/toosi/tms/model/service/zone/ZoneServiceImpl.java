@@ -36,7 +36,7 @@ public class ZoneServiceImpl<T extends Zone> {
     private PermissionServiceImpl permissionService;
 
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) ZoneDAO.findById(id);
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public class ZoneServiceImpl<T extends Zone> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Zone.class.getSimpleName(), EventLogType.EDIT, entity.getEffectorUser());
 
-            Zone oldZone = findById(String.valueOf(entity.getId()));
+            Zone oldZone = findById(entity.getId());
             if (entity.getRulePackage() != null) {
                 if ((oldZone.getRulePackage() == null) || oldZone.getRulePackage().getId() != entity.getRulePackage().getId()) {
                     List<Gateway> gateways = gatewayService.findByZoneAndRulePackage(String.valueOf(entity.getId()), String.valueOf(entity.getRulePackage().getId()));

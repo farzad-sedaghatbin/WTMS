@@ -2,6 +2,8 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
+import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.ZoneServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -45,12 +47,16 @@ public class HandleZoneAction implements Serializable {
 
     @EJB
     private ZoneServiceImpl zoneService;
+    @EJB
+    private GatewayServiceImpl gatewayService;
+    @EJB
+    private RulePackageServiceImpl rulePackageService;
 
 
     private String editable = "false";
     private DataModel<Zone> zoneList = null;
     private String zoneName;
-    private Zone currentZone ;
+    private Zone currentZone;
     private Zone newZone = null;
     private int page = 1;
     private Set<Zone> selectedZones = new HashSet<>();
@@ -65,7 +71,7 @@ public class HandleZoneAction implements Serializable {
     private String calendarName;
     private boolean antiPassBack, allowExit, allowExitGadget;
     private boolean selectRow = false;
-    private DataModel<RulePackage> rulePackageList = null;
+    private List<RulePackage> rulePackageList = null;
     private String zoneNameFilter;
     private String zoneDescriptionFilter;
     private List<HardwareTree> rootZones;
@@ -127,12 +133,12 @@ public class HandleZoneAction implements Serializable {
 
     private void refresh() {
         init();
-            List<Zone> zones = zoneService.getAllZone();
-            for (Zone zone : zones) {
-                zone.setDescText(zone.getDescription());
-                zone.setEnabled(zone.isEnabled());
-            }
-            zoneList = new ListDataModel<>(zones);
+        List<Zone> zones = zoneService.getAllZone();
+        for (Zone zone : zones) {
+            zone.setDescText(zone.getDescription());
+            zone.setEnabled(zone.isEnabled());
+        }
+        zoneList = new ListDataModel<>(zones);
     }
 
     public void add() {
@@ -144,17 +150,11 @@ public class HandleZoneAction implements Serializable {
     public void doDelete() {
         currentZone.setEffectorUser(me.getUsername());
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteZone");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentZone)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/zone/list-zone.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = zoneService.deleteZone(currentZone);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/zone/list-zone.htm");
     }
-
 
     public void init() {
         zoneName = "";
@@ -163,8 +163,8 @@ public class HandleZoneAction implements Serializable {
         selectAll = false;
         zoneEnabled = false;
         currentZone = null;
-        zoneDescriptionFilter="";
-        zoneNameFilter="";
+        zoneDescriptionFilter = "";
+        zoneNameFilter = "";
         setSelectRow(false);
     }
 
@@ -176,17 +176,9 @@ public class HandleZoneAction implements Serializable {
         zoneName = currentZone.getName();
         truePassControl = currentZone.isTruePass();
         List<Gateway> gatewayList = null;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findZoneById");
-        try {
-            currentZone = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentZone.getId())), Zone.class);
+        currentZone = zoneService.findById(currentZone.getId());
 
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findGatewayByZone");
-
-            gatewayList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentZone)), new TypeReference<List<Gateway>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gatewayList = gatewayService.findByZone(currentZone);
         Set<Gateway> selectedList = new HashSet<>();
         for (Gateway gateway : handleGatewayAction.getGateways()) {
             for (Gateway gateway1 : gatewayList) {
@@ -217,39 +209,29 @@ public class HandleZoneAction implements Serializable {
         currentZone.setName(zoneName);
         currentZone.setEnabled(zoneEnabled);
         currentZone.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editZone");
         List<Gateway> gatewayList = null;
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentZone)), String.class);
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findZoneById");
-            currentZone = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentZone.getId())), Zone.class);
+        zoneService.editZone(currentZone);
+        currentZone = zoneService.findById(currentZone.getId());
 
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findGatewayByZone");
+        gatewayList = gatewayService.findByZone(currentZone);
 
-            gatewayList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentZone)), new TypeReference<List<Gateway>>() {
-            });
+        for (Gateway gateway : gatewayList) {
+            gateway.setZone(null);
+            gatewayService.editGateway(gateway);
+        }
+        boolean condition = false;
+        for (Gateway gateway : handleGatewayAction.getSelectedGateways()) {
+            gateway.setZone(currentZone);
+            condition = gatewayService.editGateway(gateway);
+        }
 
-            for (Gateway gateway : gatewayList) {
-                gateway.setZone(null);
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-                new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gateway)), String.class);
-            }
-            for (Gateway gateway : handleGatewayAction.getSelectedGateways()) {
-                gateway.setZone(currentZone);
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-                new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gateway)), String.class);
-            }
-
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/zone/list-zone.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/zone/list-zone.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
@@ -264,53 +246,19 @@ public class HandleZoneAction implements Serializable {
         newZone.setEffectorUser(me.getUsername());
         newZone.setStatus("c");
         ////???????????????
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createZone");
         Zone insertedZone = null;
-        try {
-            insertedZone = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newZone)), Zone.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        insertedZone = zoneService.createZone(newZone);
         Set<Gateway> list = handleGatewayAction.getSelectedGateways();
         for (Gateway gateway : list) {
-            if(gateway.getZone()==null) {
+            if (gateway.getZone() == null) {
                 gateway.setZone(insertedZone);
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-                try {
-                    String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gateway)), String.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                boolean condition = gatewayService.editGateway(gateway);
             }
         }
 
 
         if (insertedZone != null) {
-//            LanguageManagement languageManagement = new LanguageManagement();
-//            languageManagement.setTitle(newZone.getDescription());
-//            languageManagement.setType(me.getLanguages());
-//            try {
 //
-//                me.getGeneralHelper().getWebServiceInfo().setServiceName("/languageManagementMaximumId");
-//                long id = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(languageManagement)), Long.class);
-//                languageManagement.setId(id);
-//
-//                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createLanguageManagement");
-//                languageManagement = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(languageManagement)), LanguageManagement.class);
-//
-//                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createLanguageKeyManagement");
-//                me.getGeneralHelper().getWebServiceInfo().setServiceName("/languageKeyManagementMaximumId");
-//                id = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(languageManagement)), Long.class);
-//                languageManagement.setId(id);
-//                LanguageKeyManagement languageKeyManagement = new LanguageKeyManagement();
-//                languageKeyManagement.setDescriptionKey("Role" + id);
-//                Set list = new HashSet();
-//                list.add(languageManagement);
-//                languageKeyManagement.setLanguageManagements(list);
-//                languageKeyManagement = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(languageKeyManagement)), LanguageKeyManagement.class);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
             try {
                 me.setLanguage();
             } catch (IOException e) {
@@ -325,12 +273,7 @@ public class HandleZoneAction implements Serializable {
     }
 
     public void assignRule() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findZoneById");
-        try {
-            currentZone = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentZone.getId())), Zone.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        currentZone = zoneService.findById(currentZone.getId());
         selectedRulePackage = currentZone.getRulePackage();
         if (selectedRulePackage != null) {
             rulePackageName = selectedRulePackage.getName();
@@ -349,36 +292,22 @@ public class HandleZoneAction implements Serializable {
             allowExitGadget = false;
         }
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRulePackage");
-        List<RulePackage> rulePackages = null;
-        try {
-            rulePackages = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<RulePackage>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        rulePackageList = new ListDataModel<>(rulePackages);
+        rulePackageList = rulePackageService.getAllRulePackage();
     }
 
 
     public void doAssignRule() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editZone");
         currentZone.setEffectorUser(me.getUsername());
         currentZone.setRulePackage(selectedRulePackage);
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentZone)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/zone/list-zone.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = zoneService.editZone(currentZone);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/zone/list-zone.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
-
     }
 //
 //    public Filter<?> getZoneNameFilterImpl() {
@@ -418,7 +347,7 @@ public class HandleZoneAction implements Serializable {
     }
 
     public void selectNewRuleForZone() {
-        selectedRulePackage = rulePackageList.getRowData();
+//        selectedRulePackage = rulePackageList.getRowData();
         rulePackageName = selectedRulePackage.getName();
         if (selectedRulePackage.getCalendar() != null)
             calendarName = selectedRulePackage.getCalendar().getName();
@@ -451,14 +380,8 @@ public class HandleZoneAction implements Serializable {
     }
 
     public List<HardwareTree> getRootZones() {
-            try {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllZone");
-                List<Zone> zones = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Zone>>() {
-                });
+        List<Zone> zones = zoneService.getAllZone();
 //                rootZones = Zone.prepareHierarchy(zones, me);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         return rootZones;
     }
 
@@ -602,12 +525,16 @@ public class HandleZoneAction implements Serializable {
         this.allowExitGadget = allowExitGadget;
     }
 
-    public DataModel<RulePackage> getRulePackageList() {
+    public List<RulePackage> getRulePackageList() {
         return rulePackageList;
     }
 
-    public void setRulePackageList(DataModel<RulePackage> rulePackageList) {
+    public void setRulePackageList(List<RulePackage> rulePackageList) {
         this.rulePackageList = rulePackageList;
+    }
+
+    public void setRootZones(List<HardwareTree> rootZones) {
+        this.rootZones = rootZones;
     }
 
     public boolean isSelectRow() {

@@ -139,7 +139,7 @@ public class PDPServiceImpl<T extends PDP> {
     public String deletePDP(T entity) {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), BLookup.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
-            PDPdao.delete(findById(String.valueOf(entity.getId())));
+            PDPdao.delete(findById(entity.getId()));
             return new ObjectMapper().writeValueAsString("operation.occurred");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -161,7 +161,7 @@ public class PDPServiceImpl<T extends PDP> {
 
     public boolean editPDP(T entity) {
         try {
-            PDP old = findById(String.valueOf(entity.getId()));
+            PDP old = findById(entity.getId());
             PDP newPDP = new PDP();
 
             newPDP.setName(old.getName());

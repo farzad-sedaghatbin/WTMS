@@ -19,10 +19,10 @@ import java.util.List;
 public class ZoneDAOImpl extends BaseDAOImpl<Zone> {
 
 
-    public Zone findById(String id) {
+    public Zone findById(long id) {
         try {
             return (Zone) em.createNamedQuery("Zone.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id",id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;
