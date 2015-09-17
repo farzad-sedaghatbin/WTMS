@@ -58,6 +58,7 @@ public class HandleDayTypeAction implements Serializable {
     private String dayTypeDescriptionFilter;
     private SortOrder dayNameOrder = SortOrder.UNSORTED;
     private SortOrder dayTypeDescriptionOrder = SortOrder.UNSORTED;
+    private boolean disableFields;
 
 
     public String begin() {
@@ -89,7 +90,7 @@ public class HandleDayTypeAction implements Serializable {
             String condition =dayTypeService.deleteDayType(currentDayType);
             refresh();
             me.addInfoMessage(condition);
-            me.redirect("/calendar/list-day.htm");
+            me.redirect("/day/days.xhtml");
     }
 
     public void init() {
@@ -106,6 +107,15 @@ public class HandleDayTypeAction implements Serializable {
 
     public void edit() {
         setEditable("true");
+        setDisableFields(false);
+            currentDayType =dayTypeService.findById(currentDayType.getId());
+        title = currentDayType.getTitle();
+        color = currentDayType.getColor();
+        description = currentDayType.getDescription();
+    }
+
+    public void view() {
+        setDisableFields(true);
             currentDayType =dayTypeService.findById(currentDayType.getId());
         title = currentDayType.getTitle();
         color = currentDayType.getColor();
@@ -130,7 +140,7 @@ public class HandleDayTypeAction implements Serializable {
             if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
-                me.redirect("/calendar/list-day.htm");
+                me.redirect("/day/days.xhtml");
             } else {
                 me.addInfoMessage("operation.not.occurred");
                 return;
@@ -154,7 +164,7 @@ public class HandleDayTypeAction implements Serializable {
         if (insertedDayType != null) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/calendar/list-day.htm");
+            me.redirect("/day/days.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
@@ -348,5 +358,21 @@ public class HandleDayTypeAction implements Serializable {
 
     public void setDayNameFilter(String dayNameFilter) {
         this.dayNameFilter = dayNameFilter;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
+    }
+
+    public DayType getCurrentDayType() {
+        return currentDayType;
+    }
+
+    public void setCurrentDayType(DayType currentDayType) {
+        this.currentDayType = currentDayType;
     }
 }

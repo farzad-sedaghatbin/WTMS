@@ -1,95 +1,127 @@
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
-<ui:define name="content">
 
-    <br/>
-    <h:form>
-  
-                        <p:dataTable id="cameraTable"
-                                        keepSaved="true"
-                                        value="#{handleCameraAction.cameraList}"
-                                        rowKeyVar="rowIndex"
-                                        noDataLabel="no_result_found"
-                                        sortMode="single"
-                                        var="camera"
-                                        rows="10"
-                                        style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                        rowClasses="ROW1,ROW2">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="cameras">
+                <p:menuitem value="View" update="cameraDetail" icon="ui-icon-search"
+                            oncomplete="PF('cameraDialog').show()" actionListener="#{handleCameraAction.view}"/>
+                <p:menuitem value="Edit" update="cameraDetail" icon="ui-icon-search"
+                            oncomplete="PF('cameraDialog').show()" actionListener="#{handleCameraAction.edit}"/>
+                <p:menuitem value="Delete" update="cameras" icon="ui-icon-close"
+                            actionListener="#{handleCameraAction.doDelete}"/>
+            </p:contextMenu>
 
-                            <p:column sortBy="#{camera.name}"
-                                         sortOrder="#{handleCameraAction.cameraNameOrder}"
-                                        >
-                                <f:facet name="header">
-                                    <p:commandLink value="name" render="cameraTable"
-                                                     execute="@this"
-                                                     limitRender="true"
-                                                     action="#{handleCameraAction.sortByCameraName}"/>
-                                    <br/>
-                                    <h:inputText value="#{handleCameraAction.cameraNameFilter}">
-                                        <p:ajax event="blur" render="cameraTable" execute="@this"
-                                                  limitRender="true"/>
-                                    </h:inputText>
-                                </f:facet>
-                                <p:commandLink id="editLink" value="#{camera.name}"
-                                                 render="operationArea"
-                                                 styleClass="withoutUnderlineLink"
-                                                 execute="@this"
-                                                 limitRender="true"
-                                                 action="#{handleCameraAction.selectForEdit}"/>
-                            </p:column>
+            <p:commandButton value="Add" id="add" update="cameraDetail" actionListener="#{handleCameraAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('cameraDialog').show()"/>
 
-                            <p:column sortBy="#{camera.ip}"
-                                         sortOrder="#{handleCameraAction.ipOrder}">
-                                <f:facet name="header">
-                                    <p:commandLink value="ip"
-                                                     render="cameraTable"
-                                                     execute="@this"
-                                                     limitRender="true"
-                                                     action="#{handleCameraAction.sortByIp}"/>
-                                    <br />
-                                    <h:inputText value="#{handleCameraAction.cameraIPFilter}">
-                                        <p:ajax event="blur" render="cameraTable" execute="@this"
-                                                  limitRender="true"/>
-                                    </h:inputText>
-                                </f:facet>
-                                <h:outputText escape="true" value="#{camera.ip}"/>
-                            </p:column>
+            <p:dataTable id="cameras" var="currentCamera" value="#{handleCameraAction.cameraList}"
+                         rowKey="#{currentCamera.id}"
+                         selection="#{handleCameraAction.currentCamera}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
+                </f:facet>
+                <p:column headerText="name">
+                    <h:outputText value="#{currentCamera.name}"/>
+                </p:column>
+                <p:column headerText="ip">
+                    <h:outputText value="#{currentCamera.ip}"/>
+                </p:column>
+                <p:column headerText="description">
+                    <h:outputText value="#{currentCamera.description}"/>
+                </p:column>
+            </p:dataTable>
 
-                            <p:column sortBy="#{camera.description}"
-                                         sortOrder="#{handleCameraAction.descriptionOrder}">
-                                <f:facet name="header">
-                                    <p:commandLink value="description"
-                                                     render="cameraTable"
-                                                     execute="@this"
-                                                     limitRender="true"
-                                                     action="#{handleCameraAction.sortByDescription}"/>
-                                    <br/>
-                                    <h:inputText value="#{handleCameraAction.cameraDescFilter}">
-                                        <p:ajax event="blur" render="cameraTable" execute="@this"
-                                                  limitRender="true"/>
-                                    </h:inputText>
-                                </f:facet>
-                                <h:outputText escape="true" value="#{camera.description}"/>
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText escape="true" value="enabled"/>
-                                </f:facet>
-                                <h:graphicImage
-                                        value="#{camera.enabled eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                            </p:column>
-                            <f:facet name="footer">
-                                <p:dataScroller limitRender="true" execute="@this" render="cameraTable"
-                                                   page="#{handleCameraAction.page}"/>
-                            </f:facet>
-                        </p:dataTable>
-               
-    </h:form>
-</ui:define>
+            <p:dialog header="Camera Info" widgetVar="cameraDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="cameraDetail" style="text-align:center;">
+                        <f:facet name="header">
+                            <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                        </f:facet>
+                        <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                            <tr>
+                                <td>
+                                    <h:outputText value="name:"/>
+                                </td>
+                                <td>
+                                    <p:inputText readonly="#{handleCameraAction.disableFields}"
+                                                 value="#{handleCameraAction.cameraName}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="name:"/>
+                                </td>
+                                <td>
+                                    <p:inputText readonly="#{handleCameraAction.disableFields}"
+                                                 value="#{handleCameraAction.ip}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="name:"/>
+                                </td>
+                                <td>
+                                    <p:inputTextarea readonly="#{handleCameraAction.disableFields}"
+                                                     value="#{handleCameraAction.descText}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="frame:"/>
+                                </td>
+                                <td>
+                                    <p:spinner readonly="#{handleCameraAction.disableFields}"
+                                               value="#{handleCameraAction.frames}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="enabled:"/>
+                                </td>
+                                <td>
+                                    <p:selectBooleanCheckbox readonly="#{handleCameraAction.disableFields}"
+                                                             value="#{handleCameraAction.cameraEnabled}"
+                                                             valueChangeListener="#{handleCameraAction.changeCameras}"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                            <tr>
+                                <td>
+                                    <p:pickList id="cameraPickList" value="#{handleGatewayAction.gatewayDualList}"
+                                                var="camera"
+                                                effect="bounce"
+                                                itemValue="#{camera}" itemLabel="#{camera.description}"
+                                                showSourceControls="true"
+                                                showTargetControls="true" showCheckbox="true" responsive="true"
+                                                showSourceFilter="true" showTargetFilter="true"
+                                                filterMatchMode="contains"
+                                                disabled="#{handleCameraAction.disableFields}">
+                                        <f:facet name="sourceCaption">Source</f:facet>
+                                        <f:facet name="targetCaption">Target</f:facet>
+
+                                        <p:ajax event="transfer" listener="#{handleGatewayAction.onTransfer}"/>
+
+                                        <p:column style="width:90%;">
+                                            <h:outputText value="#{camera.description}"/>
+                                        </p:column>
+                                    </p:pickList>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p:commandButton value="Submit" id="edit" update="cameras"
+                                         actionListener="#{handleCameraAction.saveOrUpdate}"
+                                         oncomplete="PF('cameraDialog').hide()" styleClass="ui-priority-primary"
+                                         rendered="#{not handleCameraAction.disableFields}"/>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
 </ui:composition>

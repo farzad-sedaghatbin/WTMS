@@ -11,6 +11,7 @@ import ir.university.toosi.tms.model.entity.zone.Camera;
 import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -76,6 +77,7 @@ public class HandleCameraAction implements Serializable {
     private SortOrder cameraNameOrder = SortOrder.UNSORTED;
     private SortOrder ipOrder = SortOrder.UNSORTED;
     private SortOrder descriptionOrder = SortOrder.UNSORTED;
+    private boolean disableFields;
 
 
     public void begin() {
@@ -136,6 +138,7 @@ public class HandleCameraAction implements Serializable {
     public void add() {
         init();
         gatewayGrid = handleGatewayAction.getSelectionGrid();
+        handleGatewayAction.setGatewayDualList(new DualListModel<Gateway>(gatewayGrid,new ArrayList<Gateway>()));
         setEditable("false");
     }
 
@@ -188,9 +191,10 @@ public class HandleCameraAction implements Serializable {
         setSelectRow(false);
     }
 
-    public void edit() {
+    public void view() {
 
-        setEditable("true");
+        setEditable("false");
+        setDisableFields(true);
         cameraEnabled = currentCamera.isEnabled();
         ip = currentCamera.getIp();
         descText = currentCamera.getDescription();
@@ -203,16 +207,61 @@ public class HandleCameraAction implements Serializable {
         for (Gateway gateway : gatewayList) {
             gateway.setDescription(me.getValue(gateway.getDescription()));
         }
+
+        List<Gateway> sourceGateways = new ArrayList<>();
+        List<Gateway> targetGateways = new ArrayList<>();
+
         for (Gateway gateway : gatewayList) {
             for (Camera camera : gateway.getCameras()) {
 
                 if ((camera.getId() == currentCamera.getId())) {
                     gateway.setSelected(true);
                     handleGatewayAction.getSelectedGateways().add(gateway);
+                    targetGateways.add(gateway);
+                } else {
+                    sourceGateways.add(gateway);
                 }
             }
         }
         handleGatewayAction.setGatewayList(gatewayList);
+        handleGatewayAction.setGatewayDualList(new DualListModel<Gateway>(sourceGateways,targetGateways));
+    }
+
+
+    public void edit() {
+
+        setEditable("true");
+        setDisableFields(false);
+        cameraEnabled = currentCamera.isEnabled();
+        ip = currentCamera.getIp();
+        descText = currentCamera.getDescription();
+        cameraName = currentCamera.getName();
+        frames = String.valueOf(currentCamera.getFrames());
+        currentCamera = cameraService.findById(currentCamera.getId());
+        List<Gateway> gatewayList = null;
+        gatewayList = gatewayService.getAllGateway();
+        handleGatewayAction.setSelectedGateways(new HashSet<Gateway>());
+        for (Gateway gateway : gatewayList) {
+            gateway.setDescription(me.getValue(gateway.getDescription()));
+        }
+
+        List<Gateway> sourceGateways = new ArrayList<>();
+        List<Gateway> targetGateways = new ArrayList<>();
+
+        for (Gateway gateway : gatewayList) {
+            for (Camera camera : gateway.getCameras()) {
+
+                if ((camera.getId() == currentCamera.getId())) {
+                    gateway.setSelected(true);
+                    handleGatewayAction.getSelectedGateways().add(gateway);
+                    targetGateways.add(gateway);
+                } else {
+                    sourceGateways.add(gateway);
+                }
+            }
+        }
+        handleGatewayAction.setGatewayList(gatewayList);
+        handleGatewayAction.setGatewayDualList(new DualListModel<Gateway>(sourceGateways,targetGateways));
     }
 
 
@@ -575,5 +624,13 @@ public class HandleCameraAction implements Serializable {
 
     public void setCameraDescFilter(String cameraDescFilter) {
         this.cameraDescFilter = cameraDescFilter;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }
