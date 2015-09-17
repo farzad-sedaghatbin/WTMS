@@ -2,12 +2,14 @@ package ir.university.toosi.wtms.web.action;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.SystemConfigurationServiceImpl;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.SystemConfiguration;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -33,8 +35,11 @@ public class HandleSettingAction implements Serializable {
     private UserManagementAction me;
     @Inject
     private GeneralHelper generalHelper;
+
+    @EJB
+    private SystemConfigurationServiceImpl configurationService;
     private int page = 1;
-    private DataModel<SystemConfiguration> systemConfigurationDataModel = null;
+    private List<SystemConfiguration> systemConfigurationDataModel = null;
     private List<SystemConfiguration> systemConfigurationList = null;
     private SortOrder descriptionOrder = SortOrder.UNSORTED;
 
@@ -45,7 +50,7 @@ public class HandleSettingAction implements Serializable {
     }
 
     public void changeSetting(ValueChangeEvent event) {
-        SystemConfiguration systemConfiguration = systemConfigurationDataModel.getRowData();
+        SystemConfiguration systemConfiguration = null /*systemConfigurationDataModel.getRowData()*/;
         boolean temp = (Boolean) event.getNewValue();
         if (temp) {
             systemConfiguration.setValue("True");
@@ -57,16 +62,7 @@ public class HandleSettingAction implements Serializable {
 
 
     private void refresh() {
-        List<SystemConfiguration> systemConfigurations;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllConfiguration");
-        try {
-            systemConfigurations = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<SystemConfiguration>>() {
-            });
-            systemConfigurationDataModel = new ListDataModel<>(systemConfigurations);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        page = 1;
+        systemConfigurationDataModel = configurationService.getAllConfiguration();
         systemConfigurationList = new ArrayList<>();
 
     }
@@ -78,26 +74,18 @@ public class HandleSettingAction implements Serializable {
             if (systemConfiguration.getType().equalsIgnoreCase("boolean"))
                 continue;
             me.getGeneralHelper().getWebServiceInfo().setServiceName("/editSystemConfiguration");
-            try {
-                String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(systemConfiguration)), String.class);
-                if (!condition.equalsIgnoreCase("true")) {
-                    me.addInfoMessage("operation.not.occurred");
-                    return;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            boolean condition = configurationService.editConfiguration(systemConfiguration);
+            if (!condition) {
+                me.addInfoMessage("operation.not.occurred");
+                return;
             }
         }
         for (SystemConfiguration systemConfiguration : systemConfigurationList) {
             me.getGeneralHelper().getWebServiceInfo().setServiceName("/editSystemConfiguration");
-            try {
-                String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(systemConfiguration)), String.class);
-                if (!condition.equalsIgnoreCase("true")) {
-                    me.addInfoMessage("operation.not.occurred");
-                    return;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            boolean condition = configurationService.editConfiguration(systemConfiguration);
+            if (!condition) {
+                me.addInfoMessage("operation.not.occurred");
+                return;
             }
             me.fillSystemConfiguration();
         }
@@ -130,11 +118,19 @@ public class HandleSettingAction implements Serializable {
         this.page = page;
     }
 
-    public DataModel<SystemConfiguration> getSystemConfigurationDataModel() {
+    public List<SystemConfiguration> getSystemConfigurationList() {
+        return systemConfigurationList;
+    }
+
+    public void setSystemConfigurationList(List<SystemConfiguration> systemConfigurationList) {
+        this.systemConfigurationList = systemConfigurationList;
+    }
+
+    public List<SystemConfiguration> getSystemConfigurationDataModel() {
         return systemConfigurationDataModel;
     }
 
-    public void setSystemConfigurationDataModel(DataModel<SystemConfiguration> systemConfigurationDataModel) {
+    public void setSystemConfigurationDataModel(List<SystemConfiguration> systemConfigurationDataModel) {
         this.systemConfigurationDataModel = systemConfigurationDataModel;
     }
 

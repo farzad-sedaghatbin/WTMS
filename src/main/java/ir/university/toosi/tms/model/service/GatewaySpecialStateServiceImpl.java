@@ -29,7 +29,7 @@ public class GatewaySpecialStateServiceImpl<T extends GatewaySpecialState> {
     @EJB
     private EventLogServiceImpl eventLogService;
 
-    public List<T> findByGatewayId(String id) {
+    public List<T> findByGatewayId(long id) {
         try {
             return (List<T>) gatewaySpecialStateDAO.findByGatewayId(id);
         } catch (Exception e) {

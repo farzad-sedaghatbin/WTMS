@@ -43,7 +43,7 @@ public class GatewayServiceImpl<T extends Gateway> {
     private EventLogServiceImpl eventLogService;
 
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             Gateway gateway = GatewayDAO.findById(id);
             gateway.setPreRequestGateways(new ArrayList<Long>());
@@ -149,7 +149,7 @@ public class GatewayServiceImpl<T extends Gateway> {
             for (Long preGatewayId : entity.getPreRequestGateways()) {
                 PreRequestGateway preRequestGateway = new PreRequestGateway();
                 preRequestGateway.setGateway(t);
-                preRequestGateway.setPreGateway(GatewayDAO.findById(String.valueOf(preGatewayId)));
+                preRequestGateway.setPreGateway(GatewayDAO.findById(preGatewayId));
                 preRequestGatewayService.createGateway(preRequestGateway);
             }
             EventLogManager.eventLog(eventLogService, String.valueOf(t.getId()), GatewayPerson.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
@@ -163,7 +163,7 @@ public class GatewayServiceImpl<T extends Gateway> {
 
     public boolean editGateway(T entity) {
         try {
-            Gateway old = findById(String.valueOf(entity.getId()));
+            Gateway old = findById(entity.getId());
             Gateway newGateway = new Gateway();
             newGateway.setRulePackage(old.getRulePackage());
             newGateway.setDescription(old.getDescription());
@@ -183,7 +183,7 @@ public class GatewayServiceImpl<T extends Gateway> {
             for (Long preGatewayId : entity.getPreRequestGateways()) {
                 PreRequestGateway preRequestGateway = new PreRequestGateway();
                 preRequestGateway.setGateway(entity);
-                preRequestGateway.setPreGateway(GatewayDAO.findById(String.valueOf(preGatewayId)));
+                preRequestGateway.setPreGateway(GatewayDAO.findById(preGatewayId));
                 preRequestGatewayService.createGateway(preRequestGateway);
             }
             GatewayDAO.update(entity);

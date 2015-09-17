@@ -4,6 +4,8 @@ package ir.university.toosi.wtms.web.action.workgroup;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.entity.Operation;
+import ir.university.toosi.tms.model.service.RoleServiceImpl;
+import ir.university.toosi.tms.model.service.WorkGroupServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.wtms.web.action.user.HandleUserAction;
@@ -16,6 +18,7 @@ import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -44,7 +47,13 @@ public class HandleWorkGroupAction implements Serializable {
     private HandleRoleAction handleRoleAction;
     @Inject
     private HandleUserAction handleUserAction;
-    private DataModel<WorkGroup> workGroupList = null;
+
+    @EJB
+    private WorkGroupServiceImpl workGroupService;
+
+    @EJB
+    private RoleServiceImpl roleService;
+    private List<WorkGroup> workGroupList = null;
     private WorkGroup currentWorkGroup = null;
     private String editable = "false";
     private String description;
@@ -93,18 +102,11 @@ public class HandleWorkGroupAction implements Serializable {
 
     public void refresh() {
         init();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllWorkGroup");
-        try {
-            workGroups = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<WorkGroup>>() {
-            });
-            for (WorkGroup workGroup : workGroups) {
+        workGroupList =workGroupService.getAllWorkGroup();
+            for (WorkGroup workGroup : workGroupList) {
                 workGroup.setDescText(me.getValue(workGroup.getDescription()));
             }
-            workGroupList = new ListDataModel<>(workGroups);
-            workgroups = new DualListModel<>(workGroups,new ArrayList<WorkGroup>());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            workgroups = new DualListModel<>(workGroupList,new ArrayList<WorkGroup>());
     }
 
     public void fillGrid() {
@@ -114,21 +116,16 @@ public class HandleWorkGroupAction implements Serializable {
                     workGroup.setSelected(true);
             }
         }
-        workGroupList = new ListDataModel<>(workGroups);
+        workGroupList = workGroups;
     }
 
 
     public void doDelete() {
         currentWorkGroup.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteWorkGroup");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentWorkGroup)), String.class);
+            String condition =workGroupService.deleteWorkGroup(currentWorkGroup);
             refresh();
             me.addInfoMessage(condition);
             me.redirect("/workgroup/list-workgroup.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
 
     }
@@ -198,13 +195,8 @@ public class HandleWorkGroupAction implements Serializable {
         }
 
         newWorkgroup.setRoles(selectedRole);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createWorkGroup");
         WorkGroup insertedWorkGroup = null;
-        try {
-            insertedWorkGroup = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newWorkgroup)), WorkGroup.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            insertedWorkGroup = workGroupService.createWorkGroup(newWorkgroup);
 
         if (insertedWorkGroup != null) {
             try {
@@ -240,25 +232,14 @@ public class HandleWorkGroupAction implements Serializable {
     public void edit(String currentPage) {
         setEditable("true");
         setDisableFields(false);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findWorkGroupById");
-        try {
-            currentWorkGroup = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentWorkGroup.getId())), WorkGroup.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+            currentWorkGroup =workGroupService.findById(currentWorkGroup.getId());  //To change body of catch statement use File | Settings | File Templates.
 
         workGroupEnabled = Boolean.valueOf(currentWorkGroup.getEnabled());
         descText = me.getValue(currentWorkGroup.getDescription());
         status = currentWorkGroup.getEnabled();
         name = currentWorkGroup.getName();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRole");
         List<Role> roles = null;
-        try {
-            roles = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Role>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+            roles = roleService.getAllRole();
         for (Role role : roles) {
             role.setDescText(me.getValue(role.getDescription()));
         }
@@ -292,10 +273,9 @@ public class HandleWorkGroupAction implements Serializable {
         currentWorkGroup.setEffectorUser(me.getUsername());
         currentWorkGroup.setCurrentLang(me.getLanguages());
         currentWorkGroup.setName(name);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editWorkGroup");
         try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentWorkGroup)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+            boolean condition = workGroupService.editWorkGroup(currentWorkGroup);
+            if (condition) {
                 handleRoleAction.setSelectedRoles(new HashSet<Role>());
                 me.setLanguage();
                 refresh();
@@ -322,7 +302,7 @@ public class HandleWorkGroupAction implements Serializable {
     }
 
     public void selectWorkGroups(ValueChangeEvent event) {
-        currentWorkGroup = workGroupList.getRowData();
+//        currentWorkGroup = workGroupList.getRowData();
         boolean temp = (Boolean) event.getNewValue();
         if (temp) {
             currentWorkGroup.setSelected(true);
@@ -362,7 +342,7 @@ public class HandleWorkGroupAction implements Serializable {
 //    }
 
     public void selectForEdit() {
-        currentWorkGroup = workGroupList.getRowData();
+//        currentWorkGroup = workGroupList.getRowData();
         setSelectRow(true);
 
     }
@@ -425,11 +405,11 @@ public class HandleWorkGroupAction implements Serializable {
         this.handleUserAction = handleUserAction;
     }
 
-    public DataModel<WorkGroup> getWorkGroupList() {
+    public List<WorkGroup> getWorkGroupList() {
         return workGroupList;
     }
 
-    public void setWorkGroupList(DataModel<WorkGroup> workGroupList) {
+    public void setWorkGroupList(List<WorkGroup> workGroupList) {
         this.workGroupList = workGroupList;
     }
 

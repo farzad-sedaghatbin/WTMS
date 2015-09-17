@@ -1,0 +1,116 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+
+        <h:form>
+
+            <p:dataTable id="trafficLogTable" value="#{handleTrafficAction.trafficLogList}"
+                            keepSaved="true"
+                            noDataLabel="pno_result_found"
+                            sortMode="single"
+                            var="trafficLog"
+                            rows="10"
+                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                            rowClasses="ROW1,ROW2">
+
+                <p:column sortBy="#{trafficLog.name}"
+                             sortOrder="#{handleTrafficAction.trafficLogUsernameOrder}">
+                    <f:facet name="header">
+                        <p:commandLink value="pname" render="trafficLogTable"
+                                         execute="@this"
+                                         limitRender="true"
+                                         action="#{handleTrafficAction.sortByTrafficLogUsername}"/>
+                        <br/>
+                        <h:inputText value="#{handleTrafficAction.trafficLogUsernameFilter}">
+                            <p:ajax event="blur" render="trafficLogTable" execute="@this"
+                                      limitRender="true" oncomplete="resetPage()"/>
+                        </h:inputText>
+                    </f:facet>
+
+                    <h:outputText value="#{trafficLog.name}"/>
+                </p:column>
+
+                <p:column sortBy="#{trafficLog.gate}"
+                             sortOrder="#{handleTrafficAction.gatewayNameOrder}">
+                    <f:facet name="header">
+                        <p:commandLink value="pgateway" render="trafficLogTable"
+                                         execute="@this"
+                                         limitRender="true"
+                                         action="#{handleTrafficAction.sortByGatewayeName}"/>
+                        <br/>
+                        <h:inputText value="#{handleTrafficAction.gatewayNameFilter}">
+                            <p:ajax event="blur" render="trafficLogTable" execute="@this"
+                                      limitRender="true" oncomplete="resetPage()"/>
+                        </h:inputText>
+                    </f:facet>
+                    <p:commandLink id="editLink" value="#{trafficLog.gate}"
+                                     render="picturePanelId"
+                                     action="#{handleTrafficAction.selectForEdit}"
+                                     oncomplete="#{p:component('picturePannel.show();"
+                                     styleClass="withoutUnderlineLink"
+                                     execute="@this"
+                                     limitRender="true"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="pstatus"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="ptime"/>
+                    </f:facet>
+                    <h:outputText value="#{trafficLog.time}"/>
+                </p:column>
+
+                <p:column width="200">
+                    <f:facet name="header">
+                        <h:outputText value="pdate"/>
+                        <br/>
+                        <h:inputText value="#{handleTrafficAction.dateFilter}"
+                                     id="traficLogDateFilter" style="display: none">
+                            <p:ajax event="change" render="trafficLogTable, dateFilterScript"
+                                      execute="@this"
+                                      limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText value="#{trafficLog.date}" converter="dateConverter"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="ptype"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{trafficLog.exit eq 'true' ? '/images/s_default.png':'/images/s_go.png'}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <p:commandLink value="ppicture"/>
+                    </f:facet>
+
+                    <!--<p:mediaOutput element="img" mimeType="image/png"-->
+                                     <!--value="#{trafficLog.id}"-->
+                                     <!--createContent="#{handleTrafficAction.paint}"-->
+                                     <!--cacheable="false" session="true"-->
+                                     <!--styleClass="personPicture"/>-->
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this" render="trafficLogTable"
+                                       page="#{handleTrafficAction.page}"/>
+                </f:facet>
+            </p:dataTable>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

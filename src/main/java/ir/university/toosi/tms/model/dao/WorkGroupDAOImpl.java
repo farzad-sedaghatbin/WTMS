@@ -18,7 +18,7 @@ import java.util.List;
 public class WorkGroupDAOImpl extends BaseDAOImpl<WorkGroup> {
 
 
-    public WorkGroup findById(String id) {
+    public WorkGroup findById(long id) {
         try {
             return (WorkGroup) em.createNamedQuery("Workgroup.findById")
                     .setParameter("id", Long.valueOf(id))

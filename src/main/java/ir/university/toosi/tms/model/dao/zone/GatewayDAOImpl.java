@@ -22,10 +22,10 @@ import java.util.List;
 public class GatewayDAOImpl extends BaseDAOImpl<Gateway> {
 
 
-    public Gateway findById(String id) {
+    public Gateway findById(long id) {
         try {
             return (Gateway) em.createNamedQuery("Gateway.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

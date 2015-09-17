@@ -20,10 +20,10 @@ import java.util.List;
 public class PreRequestGatewayDAOImpl extends BaseDAOImpl<PreRequestGateway> {
 
 
-    public PreRequestGateway findById(String id) {
+    public PreRequestGateway findById(long id) {
         try {
             return (PreRequestGateway) em.createNamedQuery("PreRequestGateway.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

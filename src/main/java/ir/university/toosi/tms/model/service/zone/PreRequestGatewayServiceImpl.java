@@ -27,7 +27,7 @@ public class PreRequestGatewayServiceImpl<T extends PreRequestGateway> {
     private EventLogServiceImpl eventLogService;
 
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) preRequestGatewayDAO.findById(id);
         } catch (Exception e) {

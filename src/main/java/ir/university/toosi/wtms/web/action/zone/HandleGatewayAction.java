@@ -2,8 +2,14 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.GatewayPersonServiceImpl;
+import ir.university.toosi.tms.model.service.GatewaySpecialStateScheduler;
+import ir.university.toosi.tms.model.service.GatewaySpecialStateServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
+import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
+import ir.university.toosi.tms.model.service.zone.PreRequestGatewayServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
 import ir.university.toosi.tms.model.entity.GatewayPerson;
@@ -45,10 +51,20 @@ public class HandleGatewayAction implements Serializable {
 
     @EJB
     private GatewayServiceImpl gatewayService;
-
+    @EJB
+    private GatewaySpecialStateServiceImpl specialStateService;
+    @EJB
+    private GatewayPersonServiceImpl gatewayPersonService;
+    @EJB
+    private PreRequestGatewayServiceImpl preRequestGatewayService;
     @EJB
     private PersonServiceImpl personService;
-
+    @EJB
+    private CameraServiceImpl cameraService;
+    @EJB
+    private RulePackageServiceImpl rulePackageService;
+    @EJB
+    private GatewaySpecialStateScheduler gatewaySpecialStateScheduler;
 
     private List<Gateway> gateways;
     private List<Gateway> preRequestGateways;
@@ -60,8 +76,8 @@ public class HandleGatewayAction implements Serializable {
     private List<Person> newSelectedPersons = new ArrayList<>();
 
     private List<Gateway> gatewayList = null;
-    private DataModel<Gateway> preRequier = null;
-    private DataModel<Camera> cameras = null;
+    private List<Gateway> preRequier = null;
+    private List<Camera> cameras = null;
     private String editable = "false";
     private String gatewayName;
     private boolean passBackControl;
@@ -87,9 +103,9 @@ public class HandleGatewayAction implements Serializable {
     private String calendarName;
     private boolean antiPassBack, allowExit, allowExitGadget;
     private boolean selectRow = false;
-    private DataModel<RulePackage> rulePackageList = null;
+    private List<RulePackage> rulePackageList = null;
     private List<GatewaySpecialState> gatewaySpecialStates = new ArrayList<>();
-    private DataModel<GatewaySpecialState> gatewaySpecialStateList = null;
+    private List<GatewaySpecialState> gatewaySpecialStateList = null;
     private GatewaySpecialState currentGatewaySpecialStatus = null;
     private String statusHour;
     private String statusMinute;
@@ -99,11 +115,12 @@ public class HandleGatewayAction implements Serializable {
     private String statusStateName;
     private SelectItem[] gatewayStatusItem;
     private Hashtable<String, GatewayStatus> statusHashtable = new Hashtable<>();
-    private DataModel<Person> notAssignPersonList = new ListDataModel<>();
+    private List<Person> notAssignPersonList = new ArrayList<>();
     private String gatewayNameFilter;
     private String gatewayDescriptionFilter;
     private SortOrder gatewayNameOrder = SortOrder.UNSORTED;
     private SortOrder gatewayDescriptionOrder = SortOrder.UNSORTED;
+    private Gateway thisGateway;
 
 
     public void begin() {
@@ -184,7 +201,7 @@ public class HandleGatewayAction implements Serializable {
     }
 
     public void selectPreRequest(ValueChangeEvent event) {
-        currentPreGateway = preRequier.getRowData();
+//        currentPreGateway = preRequier.getRowData();
         boolean temp = (Boolean) event.getNewValue();
         if (temp) {
             currentPreGateway.setSelected(true);
@@ -223,7 +240,7 @@ public class HandleGatewayAction implements Serializable {
     }
 
     public void selectPerson(ValueChangeEvent event) {
-        Person person = notAssignPersonList.getRowData();
+        Person person = null/*notAssignPersonList.getRowData()*/;
         boolean temp = (Boolean) event.getNewValue();
         if (temp) {
             person.setSelected(true);
@@ -243,7 +260,7 @@ public class HandleGatewayAction implements Serializable {
     }
 
     public void selectCamera(ValueChangeEvent event) {
-        Camera cam = cameras.getRowData();
+        Camera cam = null /*cameras.getRowData()*/;
         boolean temp = (Boolean) event.getNewValue();
         if (temp) {
             cam.setSelected(true);
@@ -278,7 +295,7 @@ public class HandleGatewayAction implements Serializable {
 
     public void add() {
         init();
-        preRequier = new ListDataModel<>(new ArrayList<>(gateways));
+        preRequier = gateways;
         setEditable("false");
 
     }
@@ -289,15 +306,10 @@ public class HandleGatewayAction implements Serializable {
             me.addInfoMessage("gateway.zone");
             me.redirect("/zone/list-gateway.htm");
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteGateway");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentGetway)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/zone/list-gateway.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = gatewayService.deleteGateway(currentGetway);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/zone/list-gateway.htm");
     }
 
     public void init() {
@@ -330,13 +342,8 @@ public class HandleGatewayAction implements Serializable {
         preRequestGatewayIds = currentGetway.getPreRequestGateways();
         preRequestGateways = new ArrayList<>();
         for (Long preRequestGatewayId : preRequestGatewayIds) {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPreGatewayById");
             PreRequestGateway preGateway = new PreRequestGateway();
-            try {
-                preGateway = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(preRequestGatewayId)), PreRequestGateway.class);
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            preGateway = preRequestGatewayService.findById(preRequestGatewayId);
             preRequestGateways.add(preGateway.getPreGateway());
         }
         Gateway removed = null;
@@ -350,13 +357,8 @@ public class HandleGatewayAction implements Serializable {
             }
         }
         list.remove(removed);
-        preRequier = new ListDataModel<>(list);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findGatewayById");
-        try {
-            currentGetway = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentGetway.getId())), Gateway.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        preRequier = list;
+        currentGetway = gatewayService.findById(currentGetway.getId());
 
     }
 
@@ -374,19 +376,14 @@ public class HandleGatewayAction implements Serializable {
         currentGetway.setEnabled(gatewayEnabled);
         currentGetway.setEffectorUser(me.getUsername());
         currentGetway.setPreRequestGateways(preRequestGatewayIds);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentGetway)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/zone/list-gateway.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = gatewayService.editGateway(currentGetway);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/zone/list-gateway.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
 
     }
@@ -401,45 +398,12 @@ public class HandleGatewayAction implements Serializable {
         newGateway.setCurrentLang(me.getLanguages());
         newGateway.setEffectorUser(me.getUsername());
         newGateway.setPreRequestGateways(preRequestGatewayIds);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createGateway");
         Gateway insertedGateway = null;
-        try {
-            insertedGateway = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newGateway)), Gateway.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        insertedGateway = gatewayService.createGateway(newGateway);
 
         if (insertedGateway != null) {
 //            LanguageManagement languageManagement = new LanguageManagement();
-//            languageManagement.setTitle(newGateway.getDescription());
-//            languageManagement.setType(me.getLanguages());
-//            try {
 //
-//                me.getGeneralHelper().getWebServiceInfo().setServiceName("/languageManagementMaximumId");
-//                long id = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(languageManagement)), Long.class);
-//                languageManagement.setId(id);
-//
-//                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createLanguageManagement");
-//                languageManagement = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(languageManagement)), LanguageManagement.class);
-//
-//                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createLanguageKeyManagement");
-//                me.getGeneralHelper().getWebServiceInfo().setServiceName("/languageKeyManagementMaximumId");
-//                id = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(languageManagement)), Long.class);
-//                languageManagement.setId(id);
-//                LanguageKeyManagement languageKeyManagement = new LanguageKeyManagement();
-//                languageKeyManagement.setDescriptionKey("Role" + id);
-//                Set list = new HashSet();
-//                list.add(languageManagement);
-//                languageKeyManagement.setLanguageManagements(list);
-//                languageKeyManagement = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(languageKeyManagement)), LanguageKeyManagement.class);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                me.setLanguage();
-//            } catch (IOException e) {
-//                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//            }
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/zone/list-gateway.htm");
@@ -467,12 +431,7 @@ public class HandleGatewayAction implements Serializable {
 
 
     public void assignRule() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findGatewayById");
-        try {
-            currentGetway = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentGetway.getId())), Gateway.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        currentGetway = gatewayService.findById(currentGetway.getId());  //To change body of catch statement use File | Settings | File Templates.
         selectedRulePackage = currentGetway.getRulePackage();
         if (selectedRulePackage != null) {
             rulePackageName = selectedRulePackage.getName();
@@ -491,41 +450,28 @@ public class HandleGatewayAction implements Serializable {
             allowExitGadget = false;
         }
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRulePackage");
-        List<RulePackage> rulePackages = null;
-        try {
-            rulePackages = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<RulePackage>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        rulePackageList = new ListDataModel<>(rulePackages);
+        rulePackageList = rulePackageService.getAllRulePackage();
     }
 
 
     public void doAssignRule() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
         currentGetway.setEffectorUser(me.getUsername());
         currentGetway.setDeleted("0");
         currentGetway.setRulePackage(selectedRulePackage);
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentGetway)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/zone/list-gateway.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = gatewayService.editGateway(currentGetway);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/zone/list-gateway.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
 
     }
 
     public void selectNewRuleForGateway() {
-        selectedRulePackage = rulePackageList.getRowData();
+//        selectedRulePackage = rulePackageList.getRowData();
         rulePackageName = selectedRulePackage.getName();
         if (selectedRulePackage.getCalendar() != null)
             calendarName = selectedRulePackage.getCalendar().getName();
@@ -540,16 +486,10 @@ public class HandleGatewayAction implements Serializable {
     public void assignPerson() {
         handlePersonAction.init();
         personPage = 1;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findGatewayPersonByGatewayId");
         List<GatewayPerson> gatewayPersons = null;
-        try {
-            gatewayPersons = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentGetway.getId())), new TypeReference<List<GatewayPerson>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gatewayPersons = gatewayPersonService.findByGatewayId(currentGetway.getId());
         selectedPersons.clear();
-        notAssignPersonList = new ListDataModel(persons);
+        notAssignPersonList = persons;
         for (GatewayPerson gatewayPerson : gatewayPersons) {
             for (Person person : notAssignPersonList) {
                 if (gatewayPerson.getPerson().getId() == person.getId()) {
@@ -565,32 +505,22 @@ public class HandleGatewayAction implements Serializable {
 
     public void doAssignPerson() throws IOException {
 
-        try {
-            for (Person gatewayPerson : unSelectedPersons) {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteGatewayPerson");
-                new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(gatewayPerson.getId()) + "#" + selectGetway.getId()), String.class);
-            }
-            GatewayPerson gatewayPerson = null;
-            for (Person selectedPerson : newSelectedPersons) {
-                gatewayPerson = new GatewayPerson();
-                gatewayPerson.setPerson(selectedPerson);
-                gatewayPerson.setGateway(selectGetway);
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createGatewayPerson");
-                new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gatewayPerson)), GatewayPerson.class);
-            }
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/fillRulePackageHashTable");
-            new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(1));
-            refresh();
-            me.addInfoMessage("operation.occurred");
-            me.redirect("/zone/list-gateway.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-            me.addInfoMessage("operation.not.occurred");
-            return;
+        for (Person gatewayPerson : unSelectedPersons) {
+            gatewayPersonService.deleteGatewayPerson(gatewayPerson.getId(), selectGetway.getId());
         }
+        GatewayPerson gatewayPerson = null;
+        for (Person selectedPerson : newSelectedPersons) {
+            gatewayPerson = new GatewayPerson();
+            gatewayPerson.setPerson(selectedPerson);
+            gatewayPerson.setGateway(selectGetway);
+            gatewayPersonService.createGatewayPerson(gatewayPerson);
+        }
+        rulePackageService.fillRulePackageHashTable();
+        refresh();
+        me.addInfoMessage("operation.occurred");
+        me.redirect("/zone/list-gateway.htm");
     }
 
-    Gateway thisGateway = null;
 
     public void assignSpecialStatus() {
         statusSecond = "0";
@@ -606,15 +536,8 @@ public class HandleGatewayAction implements Serializable {
             gatewayStatusItem[i] = new SelectItem(gatewayStatus.name(), gatewayStatus.getDescription());
             i++;
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findGatewaySpecialStateByGatewayId");
-        try {
-            gatewaySpecialStates = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentGetway.getId())), new TypeReference<List<GatewaySpecialState>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gatewaySpecialStateList = specialStateService.findByGatewayId(currentGetway.getId());
         thisGateway = currentGetway;
-        gatewaySpecialStateList = new ListDataModel<>(gatewaySpecialStates);
     }
 
     public void doAssignSpecialStatus() throws IOException {
@@ -634,20 +557,15 @@ public class HandleGatewayAction implements Serializable {
             me.addInfoMessage("conflict");
             return;
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createGatewaySpecialState");
         GatewaySpecialState insertedGatewaySpecialState = null;
-        try {
-            insertedGatewaySpecialState = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newGatewaySpecialState)), GatewaySpecialState.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        insertedGatewaySpecialState = specialStateService.createGatewaySpecialState(newGatewaySpecialState);
         if (insertedGatewaySpecialState != null) {
             statusSecond = "0";
             statusMinute = "0";
             statusHour = "0";
             statusDate = "";
             gatewaySpecialStates.add(insertedGatewaySpecialState);
-            gatewaySpecialStateList = new ListDataModel<>(gatewaySpecialStates);
+            gatewaySpecialStateList = gatewaySpecialStates;
         }
     }
 
@@ -695,24 +613,15 @@ public class HandleGatewayAction implements Serializable {
 
 
     public void removeSpecialStatus() {
-        currentGatewaySpecialStatus = gatewaySpecialStateList.getRowData();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteGatewaySpecialStatus");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentGatewaySpecialStatus)), String.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        currentGatewaySpecialStatus = gatewaySpecialStateList.getRowData();
+        String condition = specialStateService.deleteGatewaySpecialState(currentGatewaySpecialStatus);
         gatewaySpecialStates.remove(currentGatewaySpecialStatus);
-        gatewaySpecialStateList = new ListDataModel<>(gatewaySpecialStates);
+        gatewaySpecialStateList = gatewaySpecialStates;
     }
 
     public void specialStatusInitialize() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/specialStatusInitialize");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), String.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gatewaySpecialStateScheduler.stopService();
+        gatewaySpecialStateScheduler.startService();
     }
 
 //    public Filter<?> getGatewayNameFilterImpl() {
@@ -947,13 +856,7 @@ public class HandleGatewayAction implements Serializable {
         this.allowExitGadget = allowExitGadget;
     }
 
-    public DataModel<RulePackage> getRulePackageList() {
-        return rulePackageList;
-    }
 
-    public void setRulePackageList(DataModel<RulePackage> rulePackageList) {
-        this.rulePackageList = rulePackageList;
-    }
 
     public List<Person> getPersons() {
         return persons;
@@ -980,13 +883,6 @@ public class HandleGatewayAction implements Serializable {
         this.gatewaySpecialStates = gatewaySpecialStates;
     }
 
-    public DataModel<GatewaySpecialState> getGatewaySpecialStateList() {
-        return gatewaySpecialStateList;
-    }
-
-    public void setGatewaySpecialStateList(DataModel<GatewaySpecialState> gatewaySpecialStateList) {
-        this.gatewaySpecialStateList = gatewaySpecialStateList;
-    }
 
     public GatewaySpecialState getCurrentGatewaySpecialStatus() {
         return currentGatewaySpecialStatus;
@@ -1092,14 +988,6 @@ public class HandleGatewayAction implements Serializable {
         this.selectAllPerson = selectAllPerson;
     }
 
-    public DataModel<Person> getNotAssignPersonList() {
-        return notAssignPersonList;
-    }
-
-    public void setNotAssignPersonList(DataModel<Person> notAssignPersonList) {
-        this.notAssignPersonList = notAssignPersonList;
-    }
-
     public SortOrder getGatewayNameOrder() {
         return gatewayNameOrder;
     }
@@ -1172,25 +1060,7 @@ public class HandleGatewayAction implements Serializable {
         this.selectedCamera = selectedCamera;
     }
 
-    public DataModel<Camera> getCameras() {
-        if (cameras == null || cameras.getRowCount() == 0) {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllCamera");
 
-            try {
-                List<Camera> camerasLis = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Camera>>() {
-                });
-                cameras = new ListDataModel<>(camerasLis);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return cameras;
-    }
-
-    public void setCameras(DataModel<Camera> cameras) {
-        this.cameras = cameras;
-    }
 
     public List<Long> getPreRequestGatewayIds() {
         return preRequestGatewayIds;
@@ -1216,11 +1086,59 @@ public class HandleGatewayAction implements Serializable {
         this.personPage = personPage;
     }
 
-    public DataModel<Gateway> getPreRequier() {
+    public List<Person> getUnSelectedPersons() {
+        return unSelectedPersons;
+    }
+
+    public void setUnSelectedPersons(List<Person> unSelectedPersons) {
+        this.unSelectedPersons = unSelectedPersons;
+    }
+
+    public List<Person> getNewSelectedPersons() {
+        return newSelectedPersons;
+    }
+
+    public void setNewSelectedPersons(List<Person> newSelectedPersons) {
+        this.newSelectedPersons = newSelectedPersons;
+    }
+
+    public List<Gateway> getPreRequier() {
         return preRequier;
     }
 
-    public void setPreRequier(DataModel<Gateway> preRequier) {
+    public void setPreRequier(List<Gateway> preRequier) {
         this.preRequier = preRequier;
+    }
+
+    public List<Camera> getCameras() {
+        return cameras;
+    }
+
+    public void setCameras(List<Camera> cameras) {
+        this.cameras = cameras;
+    }
+
+    public List<RulePackage> getRulePackageList() {
+        return rulePackageList;
+    }
+
+    public void setRulePackageList(List<RulePackage> rulePackageList) {
+        this.rulePackageList = rulePackageList;
+    }
+
+    public List<GatewaySpecialState> getGatewaySpecialStateList() {
+        return gatewaySpecialStateList;
+    }
+
+    public void setGatewaySpecialStateList(List<GatewaySpecialState> gatewaySpecialStateList) {
+        this.gatewaySpecialStateList = gatewaySpecialStateList;
+    }
+
+    public List<Person> getNotAssignPersonList() {
+        return notAssignPersonList;
+    }
+
+    public void setNotAssignPersonList(List<Person> notAssignPersonList) {
+        this.notAssignPersonList = notAssignPersonList;
     }
 }

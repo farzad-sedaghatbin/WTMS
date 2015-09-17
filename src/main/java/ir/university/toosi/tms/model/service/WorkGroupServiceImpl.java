@@ -38,7 +38,7 @@ public class WorkGroupServiceImpl<T extends WorkGroup> {
     @EJB
     private LanguageKeyManagementServiceImpl languageKeyManagementService;
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) workGroupDAO.findById(id);
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class WorkGroupServiceImpl<T extends WorkGroup> {
             entity.getRoles().clear();
             editWorkGroup(entity);
             EventLogManager.eventLog(eventLogService, null, WorkGroup.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
-            workGroupDAO.delete(findById(String.valueOf(entity.getId())));
+            workGroupDAO.delete(findById(entity.getId()));
             return new ObjectMapper().writeValueAsString("operation.occurred");
         } catch (Exception e) {
             return "FALSE";

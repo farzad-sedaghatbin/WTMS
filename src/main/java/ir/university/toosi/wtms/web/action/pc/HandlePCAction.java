@@ -145,12 +145,6 @@ public class HandlePCAction implements Serializable {
     public void edit() {
         setEditable(true);
         setDisableFields(false);
-//        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPCById");
-//        try {
-//            currentPC = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPC.getId())), PC.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
         pcName = currentPC.getName();
         pcIP = currentPC.getIp();
         pcLocation = currentPC.getLocation();

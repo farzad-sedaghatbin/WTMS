@@ -33,7 +33,7 @@ public class GatewayPersonServiceImpl<T extends GatewayPerson> {
     @EJB
     private GatewayServiceImpl gatewayService;
 
-    public List<T> findByPersonId(String id) {
+    public List<T> findByPersonId(long id) {
         try {
             return (List<T>) gatewayPersonDAO.findByPersonId(id);
         } catch (Exception e) {
@@ -41,14 +41,14 @@ public class GatewayPersonServiceImpl<T extends GatewayPerson> {
         }
     }
 
-    public List<T> findByGatewayId(String id) {
+    public List<T> findByGatewayId(long id) {
         try {
             return (List<T>) gatewayPersonDAO.findByGatewayId(id);
         } catch (Exception e) {
             return null;
         }
     }
-    public List<Person> findPersonByGatewayId(String id) {
+    public List<Person> findPersonByGatewayId(long id) {
         try {
             return (List<Person>) gatewayPersonDAO.findPersonByGatewayId(id);
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class GatewayPersonServiceImpl<T extends GatewayPerson> {
         }
     }
 
-    public T findByPersonIdAndGatewayId(String personId, String gatewayId) {
+    public T findByPersonIdAndGatewayId(long personId, long gatewayId) {
         try {
             return (T) gatewayPersonDAO.findByPersonIdAndGatewayId(personId, gatewayId);
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class GatewayPersonServiceImpl<T extends GatewayPerson> {
     }
 
 
-    public String deleteGatewayPerson(String personID,String gatewayID) {
+    public String deleteGatewayPerson(long personID,long gatewayID) {
         try {
 //            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), GatewayPerson.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             gatewayPersonDAO.delete(findByPersonIdAndGatewayId(personID, gatewayID));
@@ -89,7 +89,7 @@ public class GatewayPersonServiceImpl<T extends GatewayPerson> {
     public T createGatewayPerson(T entity) {
         try {
             entity.setPerson(personService.findById(String.valueOf(entity.getPerson().getId())));
-            entity.setGateway(gatewayService.findById(String.valueOf(entity.getGateway().getId())));
+            entity.setGateway(gatewayService.findById(entity.getGateway().getId()));
             T t = (T) gatewayPersonDAO.create(entity);
             EventLogManager.eventLog(eventLogService, String.valueOf(t.getId()), GatewayPerson.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
             return t;

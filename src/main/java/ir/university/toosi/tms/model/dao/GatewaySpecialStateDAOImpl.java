@@ -16,10 +16,10 @@ import java.util.List;
 @LocalBean
 public class GatewaySpecialStateDAOImpl extends BaseDAOImpl<GatewaySpecialState> {
 
-    public List<GatewaySpecialState> findByGatewayId(String id) {
+    public List<GatewaySpecialState> findByGatewayId(long id) {
         try {
             return (List<GatewaySpecialState>) em.createNamedQuery("GatewaySpecialState.findByGatewayId")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getResultList();
         } catch (Exception e) {
             return null;

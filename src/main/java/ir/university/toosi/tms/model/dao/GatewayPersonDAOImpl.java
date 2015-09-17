@@ -17,39 +17,39 @@ import java.util.List;
 @LocalBean
 public class GatewayPersonDAOImpl extends BaseDAOImpl<GatewayPerson> {
 
-    public List<GatewayPerson> findByGatewayId(String id) {
+    public List<GatewayPerson> findByGatewayId(long id) {
         try {
             return (List<GatewayPerson>) em.createNamedQuery("GatewayPerson.findByGatewayId")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getResultList();
         } catch (Exception e) {
             return null;
         }
-    }    public List<Person> findPersonByGatewayId(String id) {
+    }    public List<Person> findPersonByGatewayId(long id) {
         try {
             return (List<Person>) em.createNamedQuery("GatewayPerson.findPersonByGatewayId")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id",id)
                     .getResultList();
         } catch (Exception e) {
             return null;
         }
     }
 
-    public List<GatewayPerson> findByPersonId(String id) {
+    public List<GatewayPerson> findByPersonId(long id) {
         try {
             return (List<GatewayPerson>) em.createNamedQuery("GatewayPerson.findByPersonId")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getResultList();
         } catch (Exception e) {
             return null;
         }
     }
 
-    public GatewayPerson findByPersonIdAndGatewayId(String personId, String gatewayId) {
+    public GatewayPerson findByPersonIdAndGatewayId(long personId, long gatewayId) {
         try {
             return (GatewayPerson) em.createNamedQuery("GatewayPerson.findByPersonIdAndGatewayId")
-                    .setParameter("personId", Long.valueOf(personId))
-                    .setParameter("gatewayId", Long.valueOf(gatewayId))
+                    .setParameter("personId", personId)
+                    .setParameter("gatewayId", gatewayId)
                     .getSingleResult();
         } catch (Exception e) {
             return null;
