@@ -70,11 +70,11 @@ public class HandleRuleExceptionAction implements Serializable {
     private boolean disableFields;
 
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.CALENDAR);
 
         refresh();
-        return "list-exception-rule";
+        me.redirect("/exception/exceptions.xhtml");
     }
 
     private void refresh() {
@@ -118,7 +118,7 @@ public class HandleRuleExceptionAction implements Serializable {
         String condition = ruleExceptionService.deleteRuleException(currentRuleException);
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/business-rules/list-exception-rule.htm");
+        me.redirect("/exception/exceptions.xhtml");
 
     }
 
@@ -241,9 +241,9 @@ public class HandleRuleExceptionAction implements Serializable {
               rulePackageService.fillRulePackageHashTable();
                 refresh();
                 me.addInfoMessage("operation.occurred");
-                me.redirect("/business-rules/list-exception-rule.htm");
+                me.redirect("/exception/exceptions.xhtml");
             } else {
-                me.redirect("/business-rules/list-exception-rule.htm");
+                me.redirect("/exception/exceptions.xhtml");
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }
@@ -302,9 +302,9 @@ public class HandleRuleExceptionAction implements Serializable {
                 refresh();
                rulePackageService.fillRulePackageHashTable();
                 me.addInfoMessage("operation.occurred");
-                me.redirect("/business-rules/list-exception-rule.htm");
+                me.redirect("/exception/exceptions.xhtml");
             } else {
-                me.redirect("/business-rules/list-exception-rule.htm");
+                me.redirect("/exception/exceptions.xhtml");
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }

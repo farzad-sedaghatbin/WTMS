@@ -1,0 +1,143 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="pdps">
+                <p:menuitem value="View" update="pdpDetail" icon="ui-icon-search" oncomplete="PF('pdpDialog').show()"
+                            actionListener="#{handlePDPAction.view}"/>
+                <p:menuitem value="Edit" update="pdpDetail" icon="ui-icon-search" oncomplete="PF('pdpDialog').show()"
+                            actionListener="#{handlePDPAction.edit}"/>
+                <p:menuitem value="Delete" update="pdps" icon="ui-icon-close"
+                            actionListener="#{handlePDPAction.doDelete}"/>
+            </p:contextMenu>
+
+            <p:commandButton value="Add" id="add" update="pdpDetail" actionListener="#{handlePDPAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('pdpDialog').show()"/>
+
+            <p:dataTable id="pdps" var="currentPdp" value="#{handlePDPAction.pdpList}" rowKey="#{currentPdp.id}"
+                         selection="#{handlePDPAction.currentPdp}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
+                </f:facet>
+                <p:column headerText="name">
+                    <h:outputText value="#{currentPdp.name}"/>
+                </p:column>
+                <p:column headerText="description">
+                    <h:outputText value="#{currentPdp.description}"/>
+                </p:column>
+                <p:column headerText="ip">
+                    <h:outputText value="#{currentPdp.ip}"/>
+                </p:column>
+                <p:column headerText="enabeld">
+                    <p:graphicImage value="#{currentPdp.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
+                </p:column>
+                <p:column headerText="type">
+                    <h:outputText value="#{currentPdp.entrance ? 'entrance' : 'exit'}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p:dialog header="PDP Info" widgetVar="pdpDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="pdpDetail" style="text-align:center;">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                    </f:facet>
+                    <table>
+                        <tr>
+                            <td>
+                                <h:outputText value="name:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handlePDPAction.disableFields}"
+                                             value="#{handlePDPAction.pdpName}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="description:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handlePDPAction.disableFields}"
+                                             value="#{handlePDPAction.descText}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="ip:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handlePDPAction.disableFields}" value="#{handlePDPAction.ip}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="camera:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu disabled="#{handlePDPAction.disableFields}"
+                                                 value="#{handlePDPAction.cameraId}">
+                                    <f:selectItems value="#{handlePDPAction.cameraItems}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="gateway:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu disabled="#{handlePDPAction.disableFields}"
+                                                 value="#{handlePDPAction.gatewayId}">
+                                    <f:selectItems value="#{handlePDPAction.gatewayItems}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="enabled:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handlePDPAction.pdpEnabled}"
+                                                         valueChangeListener="#{handlePDPAction.changePdps}"
+                                                         disabled="#{handlePDPAction.disableFields}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="online:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handlePDPAction.online}"
+                                                         valueChangeListener="#{handlePDPAction.changeOnline}"
+                                                         disabled="#{handlePDPAction.disableFields}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:selectOneRadio id="oneDirection"
+                                                  value="#{handlePDPAction.entrance}">
+                                    <f:selectItem itemLabel="entrance" itemValue='true'/>
+                                    <f:selectItem itemLabel="exit" itemValue='false'/>
+                                    <f:selectItem itemLabel="entranceAndExit" itemValue='false' itemDisabled="true"/>
+                                </p:selectOneRadio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:commandButton value="Submit" id="edit" update="pdps"
+                                                 actionListener="#{handlePDPAction.saveOrUpdate}"
+                                                 oncomplete="PF('pdpDialog').hide()" styleClass="ui-priority-primary"
+                                                 rendered="#{not handlePDPAction.disableFields}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

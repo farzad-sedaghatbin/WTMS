@@ -1,9 +1,6 @@
 package ir.university.toosi.wtms.web.action.zone;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.entity.*;
-import ir.university.toosi.tms.model.entity.objectValue.init.Gate;
 import ir.university.toosi.tms.model.service.GatewayPersonServiceImpl;
 import ir.university.toosi.tms.model.service.GatewaySpecialStateScheduler;
 import ir.university.toosi.tms.model.service.GatewaySpecialStateServiceImpl;
@@ -19,7 +16,6 @@ import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.tms.model.entity.zone.Camera;
 import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.tms.model.entity.zone.PreRequestGateway;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
@@ -28,8 +24,6 @@ import org.primefaces.model.SortOrder;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -122,11 +116,14 @@ public class HandleGatewayAction implements Serializable {
     private SortOrder gatewayDescriptionOrder = SortOrder.UNSORTED;
     private DualListModel<Gateway> gatewayDualList;
     private Gateway thisGateway;
+    private DualListModel<Gateway> gatewayDuals;
+    private boolean disableFields;
+    private DualListModel<Gateway> gatewayDualsForZone;
 
 
     public void begin() {
         refresh();
-        me.redirect("/zone/list-gateway.xhtml");
+        me.redirect("/gateway/gateways.xhtml");
     }
 
     public void selectGateWays(ValueChangeEvent event) {
@@ -297,20 +294,21 @@ public class HandleGatewayAction implements Serializable {
     public void add() {
         init();
         preRequier = gateways;
+        gatewayDuals = new DualListModel<>(gatewayService.getAllGateway(),new ArrayList<Gateway>());
         setEditable("false");
-
+        setDisableFields(false);
     }
 
     public void doDelete() {
         if (currentGetway.getZone() != null) {
             refresh();
             me.addInfoMessage("gateway.zone");
-            me.redirect("/zone/list-gateway.htm");
+            me.redirect("/gateway/gateways.xhtml");
         }
         String condition = gatewayService.deleteGateway(currentGetway);
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/zone/list-gateway.htm");
+        me.redirect("/gateway/gateways.xhtml");
     }
 
     public void init() {
@@ -335,8 +333,9 @@ public class HandleGatewayAction implements Serializable {
 
     }
 
-    public void edit() {
+    public void view() {
         setEditable("true");
+        setDisableFields(true);
         gatewayEnabled = currentGetway.isEnabled();
         description = currentGetway.getDescription();
         gatewayName = currentGetway.getName();
@@ -349,17 +348,64 @@ public class HandleGatewayAction implements Serializable {
         }
         Gateway removed = null;
         ArrayList<Gateway> list = new ArrayList<>(gateways);
+
+        List<Gateway> sourceGateways = new ArrayList<>();
+        List<Gateway> targetGateways = new ArrayList<>();
+
         for (Gateway gateway : list) {
             if (gateway.getId() == currentGetway.getId())
                 removed = gateway;
             for (Gateway innerGateway : preRequestGateways) {
-                if (gateway.getId() == innerGateway.getId())
+                if (gateway.getId() == innerGateway.getId()) {
                     gateway.setSelected(true);
+                    targetGateways.add(gateway);
+                } else {
+                    sourceGateways.add(gateway);
+                }
             }
         }
         list.remove(removed);
         preRequier = list;
         currentGetway = gatewayService.findById(currentGetway.getId());
+        gatewayDuals = new DualListModel<>(sourceGateways,targetGateways);
+
+    }
+
+    public void edit() {
+        setEditable("true");
+        setDisableFields(false);
+        gatewayEnabled = currentGetway.isEnabled();
+        description = currentGetway.getDescription();
+        gatewayName = currentGetway.getName();
+        preRequestGatewayIds = currentGetway.getPreRequestGateways();
+        preRequestGateways = new ArrayList<>();
+        for (Long preRequestGatewayId : preRequestGatewayIds) {
+            PreRequestGateway preGateway = new PreRequestGateway();
+            preGateway = preRequestGatewayService.findById(preRequestGatewayId);
+            preRequestGateways.add(preGateway.getPreGateway());
+        }
+        Gateway removed = null;
+        ArrayList<Gateway> list = new ArrayList<>(gateways);
+
+        List<Gateway> sourceGateways = new ArrayList<>();
+        List<Gateway> targetGateways = new ArrayList<>();
+
+        for (Gateway gateway : list) {
+            if (gateway.getId() == currentGetway.getId())
+                removed = gateway;
+            for (Gateway innerGateway : preRequestGateways) {
+                if (gateway.getId() == innerGateway.getId()) {
+                    gateway.setSelected(true);
+                    targetGateways.add(gateway);
+                } else {
+                    sourceGateways.add(gateway);
+                }
+            }
+        }
+        list.remove(removed);
+        preRequier = list;
+        currentGetway = gatewayService.findById(currentGetway.getId());
+        gatewayDuals = new DualListModel<>(sourceGateways,targetGateways);
 
     }
 
@@ -381,7 +427,7 @@ public class HandleGatewayAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/zone/list-gateway.htm");
+            me.redirect("/gateway/gateways.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -407,7 +453,7 @@ public class HandleGatewayAction implements Serializable {
 //
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/zone/list-gateway.htm");
+            me.redirect("/gateway/gateways.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
@@ -463,7 +509,7 @@ public class HandleGatewayAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/zone/list-gateway.htm");
+            me.redirect("/gateway/gateways.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -518,6 +564,20 @@ public class HandleGatewayAction implements Serializable {
         }
     }
 
+    public void onTransferForPreRequire(TransferEvent event) {
+        if (event.isAdd()) {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(true);
+                preRequestGatewayIds.add(((Gateway) item).getId());
+            }
+        } else {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(false);
+                preRequestGatewayIds.remove(((Gateway)item).getId());
+            }
+        }
+    }
+
     public void doAssignPerson() throws IOException {
 
         for (Person gatewayPerson : unSelectedPersons) {
@@ -533,7 +593,7 @@ public class HandleGatewayAction implements Serializable {
         rulePackageService.fillRulePackageHashTable();
         refresh();
         me.addInfoMessage("operation.occurred");
-        me.redirect("/zone/list-gateway.htm");
+        me.redirect("/gateway/gateways.xhtml");
     }
 
 
@@ -1165,5 +1225,33 @@ public class HandleGatewayAction implements Serializable {
 
     public void setGatewayDualList(DualListModel<Gateway> gatewayDualList) {
         this.gatewayDualList = gatewayDualList;
+    }
+
+    public DualListModel<Gateway> getGatewayDuals() {
+        if (gatewayDuals == null)
+            gatewayDuals = new DualListModel<>();
+        return gatewayDuals;
+    }
+
+    public void setGatewayDuals(DualListModel<Gateway> gatewayDuals) {
+        this.gatewayDuals = gatewayDuals;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
+    }
+
+    public DualListModel<Gateway> getGatewayDualsForZone() {
+        if (gatewayDualsForZone == null)
+            gatewayDualsForZone = new DualListModel<>();
+        return gatewayDualsForZone;
+    }
+
+    public void setGatewayDualsForZone(DualListModel<Gateway> gatewayDualsForZone) {
+        this.gatewayDualsForZone = gatewayDualsForZone;
     }
 }

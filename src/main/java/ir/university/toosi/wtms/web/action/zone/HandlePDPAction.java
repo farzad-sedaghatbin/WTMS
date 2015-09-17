@@ -86,12 +86,13 @@ public class HandlePDPAction implements Serializable {
     private String pdpNameFilter;
     private String pdpDescriptionFilter;
     private String pdpIPFilter;
+    private boolean disableFields;
 
 
     public void begin() {
 //        me.setActiveMenu(MenuType.HARDWARE);
         refresh();
-        me.redirect("/zone/list-pdp.xhtml");
+        me.redirect("/pdp/pdps.xhtml");
     }
 
     public String beginDevice() {
@@ -119,6 +120,14 @@ public class HandlePDPAction implements Serializable {
             pdpEnabled = true;
         } else
             pdpEnabled = false;
+    }
+
+    public void changeOnline(ValueChangeEvent event) {
+        boolean temp = (Boolean) event.getNewValue();
+        if (temp) {
+            online = true;
+        } else
+            online = false;
     }
 
 
@@ -218,6 +227,8 @@ public class HandlePDPAction implements Serializable {
         init();
         gatewayGrid = handleGatewayAction.getSelectionGrid();
         setEditable("false");
+        setDisableFields(false);
+        refresh();
     }
 
     public void synch() {
@@ -284,7 +295,7 @@ public class HandlePDPAction implements Serializable {
         String condition = pdpService.deletePDP(currentPdp);
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/zone/list-pdp.htm");
+        me.redirect("/pdp/pdps.xhtml");
 
     }
 
@@ -312,6 +323,23 @@ public class HandlePDPAction implements Serializable {
 
     public void edit() {
         setEditable("true");
+        setDisableFields(false);
+        pdpEnabled = currentPdp.isEnabled();
+        ip = currentPdp.getIp();
+        descText = currentPdp.getDescText();
+        pdpName = currentPdp.getNameText();
+        currentPdp = pdpService.findById(currentPdp.getId());
+        if (currentPdp.getCamera() != null)
+            cameraId = String.valueOf(currentPdp.getCamera().getId());
+        gatewayId = String.valueOf(currentPdp.getGateway().getId());
+        selectedPdp = currentPdp;
+        entrance = currentPdp.isEntrance();
+        refresh();
+    }
+
+    public void view() {
+        setEditable("true");
+        setDisableFields(true);
         pdpEnabled = currentPdp.isEnabled();
         ip = currentPdp.getIp();
         descText = currentPdp.getDescText();
@@ -362,7 +390,7 @@ public class HandlePDPAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/zone/list-pdp.htm");
+            me.redirect("/pdp/pdps.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -403,7 +431,7 @@ public class HandlePDPAction implements Serializable {
         if (insertedPdp != null) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/zone/list-pdp.htm");
+            me.redirect("/pdp/pdps.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
@@ -763,6 +791,14 @@ public class HandlePDPAction implements Serializable {
 
     public void setPdpIPFilter(String pdpIPFilter) {
         this.pdpIPFilter = pdpIPFilter;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }
 

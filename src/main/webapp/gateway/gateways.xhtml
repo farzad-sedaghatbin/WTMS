@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="gateways">
+                <p:menuitem value="View" update="gatewayDetail" icon="ui-icon-search"
+                            oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.view}"/>
+                <p:menuitem value="Edit" update="gatewayDetail" icon="ui-icon-search"
+                            oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.edit}"/>
+                <p:menuitem value="Delete" update="gateways" icon="ui-icon-close"
+                            actionListener="#{handleGatewayAction.doDelete}"/>
+            </p:contextMenu>
+
+            <p:commandButton value="Add" id="add" update="gatewayDetail" actionListener="#{handleGatewayAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('gatewayDialog').show()"/>
+
+            <p:dataTable id="gateways" var="currentGateway" value="#{handleGatewayAction.gatewayList}"
+                         rowKey="#{currentGateway.id}"
+                         selection="#{handleGatewayAction.currentGetway}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
+                </f:facet>
+                <p:column headerText="name">
+                    <h:outputText value="#{currentGateway.name}"/>
+                </p:column>
+                <p:column headerText="description">
+                    <h:outputText value="#{currentGateway.description}"/>
+                </p:column>
+                <p:column headerText="enabled">
+                    <p:graphicImage value="#{currentGateway.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p:dialog header="Description Info" widgetVar="gatewayDialog" modal="true" showEffect="fade"
+                      hideEffect="fade" resizable="false">
+                <p:outputPanel id="gatewayDetail" style="text-align:center;">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                    </f:facet>
+                    <table>
+                        <tr>
+                            <td>
+                                <h:outputText value="name:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleGatewayAction.disableFields}"
+                                             value="#{handleGatewayAction.gatewayName}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="description:"/>
+                            </td>
+                            <td>
+                                <p:inputTextarea readonly="#{handleGatewayAction.disableFields}"
+                                                 value="#{handleGatewayAction.description}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="enabled:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handleGatewayAction.gatewayEnabled}"
+                                                         valueChangeListener="#{handleGatewayAction.changeGateways}"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td>
+                                <p:pickList id="gatewayPickList" value="#{handleGatewayAction.gatewayDuals}"
+                                            var="gateway"
+                                            effect="bounce"
+                                            itemValue="#{gateway}" itemLabel="#{gateway.name}"
+                                            showSourceControls="true"
+                                            showTargetControls="true" showCheckbox="true" responsive="true"
+                                            showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+                                            disabled="#{handleGatewayAction.disableFields}">
+                                    <f:facet name="sourceCaption">Source</f:facet>
+                                    <f:facet name="targetCaption">Target</f:facet>
+
+                                    <p:ajax event="transfer" listener="#{handleGatewayAction.onTransferForPreRequire}"/>
+
+                                    <p:column style="width:90%;">
+                                        <h:outputText value="#{gateway.name}"/>
+                                    </p:column>
+                                    <p:column style="width:90%;">
+                                        <h:outputText value="#{gateway.description}"/>
+                                    </p:column>
+                                    <p:column style="width:90%;">
+                                        <h:outputText value="#{gateway.cameraName}"/>
+                                    </p:column>
+                                    <p:column style="width:90%;">
+                                        <p:graphicImage
+                                                value="#{gateway.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
+                                    </p:column>
+                                </p:pickList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:commandButton value="Submit" id="edit" update="gateways"
+                                                 actionListener="#{handleGatewayAction.saveOrUpdate}"
+                                                 oncomplete="PF('gatewayDialog').hide()"
+                                                 styleClass="ui-priority-primary"
+                                                 rendered="#{not handleGatewayAction.disableFields}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

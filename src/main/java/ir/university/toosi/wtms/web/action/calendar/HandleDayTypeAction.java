@@ -61,10 +61,10 @@ public class HandleDayTypeAction implements Serializable {
     private boolean disableFields;
 
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.CALENDAR);
         refresh();
-        return "list-dayType";
+        me.redirect("/day/days.xhtml");
     }
 
 

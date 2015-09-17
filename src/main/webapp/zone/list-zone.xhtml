@@ -1,73 +1,118 @@
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
+
     <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="zones">
+                <p:menuitem value="View" update="zoneDetail" icon="ui-icon-search"
+                            oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.view}"/>
+                <p:menuitem value="Edit" update="zoneDetail" icon="ui-icon-search"
+                            oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.edit}"/>
+                <p:menuitem value="Delete" update="zones" icon="ui-icon-close"
+                            actionListener="#{handleZoneAction.doDelete}"/>
+            </p:contextMenu>
 
-        <h:form>
-            <p:dataTable id="zoneTable"
-                            keepSaved="true"
-                            value="#{handleZoneAction.zoneList}"
-                            rowKeyVar="rowIndex"
-                            noDataLabel="no_result_found"
-                            sortMode="single"
-                            var="zone"
-                            rows="10"
-                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                            rowClasses="ROW1,ROW2">
+            <p:commandButton value="Add" id="add" update="zoneDetail" actionListener="#{handleZoneAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('zoneDialog').show()"/>
 
-                <p:column sortBy="#{zone.name}"
-                             sortOrder="#{handleZoneAction.zoneNameOrder}">
-                    <f:facet name="header">
-                        <p:commandLink value="name" render="zoneTable"
-                                         execute="@this"
-                                         limitRender="true"
-                                         action="#{handleZoneAction.sortByZoneName}"/>
-                        <br/>
-                        <h:inputText value="#{handleZoneAction.zoneNameFilter}">
-                            <p:ajax event="blur" render="zoneTable" execute="@this"
-                                      limitRender="true"/>
-                        </h:inputText>
-                    </f:facet>
-                    <p:commandLink id="editLink" value="#{zone.name}"
-                                     render="operationArea"
-                                     styleClass="withoutUnderlineLink"
-                                     execute="@this"
-                                     limitRender="true"
-                                     action="#{handleZoneAction.selectForEdit}"/>
-                </p:column>
-                <p:column sortBy="#{zone.description}"
-                             sortOrder="#{handleZoneAction.zoneDescriptionOrder}">
-                    <f:facet name="header">
-                        <p:commandLink value="description" render="zoneTable"
-                                         execute="@this"
-                                         limitRender="true"
-                                         action="#{handleZoneAction.sortByZoneDescription}"/>
-                        <br/>
-                        <h:inputText value="#{handleZoneAction.zoneDescriptionFilter}">
-                            <p:ajax event="blur" render="zoneTable" execute="@this"
-                                      limitRender="true"/>
-                        </h:inputText>
-                    </f:facet>
-                    <h:outputText escape="true" value="#{zone.description}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText escape="true" value="enabled"/>
-                    </f:facet>
-                    <h:graphicImage
-                            value="#{zone.enabled eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                </p:column>
-                <f:facet name="footer">
-                    <p:dataScroller limitRender="true" execute="@this" render="zoneTable"
-                                       page="#{handleZoneAction.page}"/>
+            <p:dataTable id="zones" var="currentZone" value="#{handleZoneAction.zoneList}"
+                         rowKey="#{currentZone.id}"
+                         selection="#{handleZoneAction.currentZone}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
                 </f:facet>
+                <p:column headerText="name">
+                    <h:outputText value="#{currentZone.name}"/>
+                </p:column>
+                <p:column headerText="description">
+                    <h:outputText value="#{currentZone.description}"/>
+                </p:column>
+                <p:column headerText="enabled">
+                    <p:graphicImage value="#{currentZone.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
+                </p:column>
             </p:dataTable>
-                          
-            
+
+            <p:dialog header="Zone Info" widgetVar="zoneDialog" modal="true" showEffect="fade"
+                      hideEffect="fade" resizable="false">
+                <p:outputPanel id="zoneDetail" style="text-align:center;">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                    </f:facet>
+                    <table>
+                        <tr>
+                            <td>
+                                <h:outputText value="name:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleZoneAction.disableFields}"
+                                             value="#{handleZoneAction.zoneName}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="description:"/>
+                            </td>
+                            <td>
+                                <p:inputTextarea readonly="#{handleZoneAction.disableFields}"
+                                                 value="#{handleZoneAction.descText}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="true pass:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handleZoneAction.truePassControl}" disabled="#{handleZoneAction.disableFields}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="enabled:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handleZoneAction.zoneEnabled}" disabled="#{handleZoneAction.disableFields}" valueChangeListener="#{handleZoneAction.changeZones}"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td>
+                                <p:pickList id="gatewayPickList" value="#{handleGatewayAction.gatewayDualsForZone}"
+                                            var="gateway"
+                                            effect="bounce"
+                                            itemValue="#{gateway}" itemLabel="#{gateway.name}"
+                                            showSourceControls="true"
+                                            showTargetControls="true" showCheckbox="true" responsive="true"
+                                            showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+                                            disabled="#{handleZoneAction.disableFields}">
+                                    <f:facet name="sourceCaption">Source</f:facet>
+                                    <f:facet name="targetCaption">Target</f:facet>
+
+                                    <p:ajax event="transfer" listener="#{handleZoneAction.onTransfer}"/>
+
+                                    <p:column style="width:90%;">
+                                        <h:outputText value="#{gateway.name}"/>
+                                    </p:column>
+                                </p:pickList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:commandButton value="Submit" id="edit" update="zones"
+                                                 actionListener="#{handleZoneAction.saveOrUpdate}"
+                                                 oncomplete="PF('zoneDialog').hide()"
+                                                 styleClass="ui-priority-primary"
+                                                 rendered="#{not handleZoneAction.disableFields}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </p:dialog>
         </h:form>
     </ui:define>
+
 </ui:composition>
