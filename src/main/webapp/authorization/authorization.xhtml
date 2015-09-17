@@ -9,8 +9,7 @@
     <ui:define name="content">
 
         <h:form>
-            <p:menuitem value="accept" icon="icon-done" oncomplete="PF('pcDialog').show()"
-                        actionListener="#{handleCommentAction.accept}"/>
+            <p:menuitem value="accept" icon="icon-done" actionListener="#{handleCommentAction.accept}"/>
             <p:menuitem value="refuse" icon="icon-delete2" actionListener="#{handleCommentAction.refuse}"/>
 
             <p:dataTable id="commentTable"

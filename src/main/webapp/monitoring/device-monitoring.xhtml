@@ -1,0 +1,83 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:form>
+
+
+            <p:dataTable id="deviceTable"
+                         keepSaved="true"
+                         value="#{handleDeviceAction.listModel}"
+                         rowKeyVar="rowIndex"
+                         noDataLabel="no_result_found"
+                         sortMode="single"
+                         var="device"
+                         rows="10">
+
+                <p:column sortBy="#{device.name}">
+                    <f:facet name="header">
+                        <p:commandLink value="name"
+                                       render="deviceTable"
+                                       execute="@this"
+                                       limitRender="true"
+                                       action="#{handleDeviceAction.sortByName}"/>
+                        <br/>
+                        <h:inputText value="#{handleDeviceAction.deviceNameFilter}">
+                            <p:ajax event="blur" render="deviceTable" execute="@this"
+                                    limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText id="editLink" value="#{device.name}"/>
+                </p:column>
+
+                <p:column sortBy="#{device.description}">
+                    <f:facet name="header">
+                        <p:commandLink value="description"
+                                       render="deviceTable"
+                                       execute="@this"
+                                       limitRender="true"
+                                       action="#{handleDeviceAction.sortByDescription}"/>
+                        <br/>
+                        <h:inputText value="#{handleDeviceAction.deviceDescriptionFilter}">
+                            <p:ajax event="blur" render="deviceTable" execute="@this"
+                                    limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText value="#{device.description}"/>
+                </p:column>
+                <p:column sortBy="#{device.ip}">
+                    <f:facet name="header">
+                        <p:commandLink value="ip"
+                                       render="deviceTable"
+                                       execute="@this"
+                                       limitRender="true"
+                                       action="#{handleDeviceAction.sortByIp}"/>
+                        <br/>
+                        <h:inputText value="#{handleDeviceAction.deviceIPFilter}">
+                            <p:ajax event="blur" render="deviceTable" execute="@this"
+                                    limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+                    <h:outputText value="#{device.ip}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="status"/>
+                    </f:facet>
+                    <h:outputLabel rendered="#{device.enabled eq 'true'}" styleClass="icon-done" />
+                    <h:outputLabel rendered="#{device.enabled eq 'false'}" styleClass="icon-delete2" />
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this" render="deviceTable"
+                                    page="#{handleDeviceAction.page}"/>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

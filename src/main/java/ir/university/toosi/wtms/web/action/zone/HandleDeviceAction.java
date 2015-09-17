@@ -2,6 +2,9 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.PCServiceImpl;
+import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
+import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.BaseEntity;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -12,6 +15,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
@@ -27,10 +31,15 @@ import java.util.List;
 public class HandleDeviceAction implements Serializable {
     @Inject
     private UserManagementAction me;
+    @EJB
+    private PDPServiceImpl pdpService;
+    @EJB
+    private CameraServiceImpl cameraService;
+    @EJB
+    private PCServiceImpl pcService;
 
     private String editable = "false";
     private List<DeviceDataModel> listModel;
-    private ListDataModel deviceDataModel = null;
     private List<BaseEntity> deviceList = null;
     private int page = 1;
     private SortOrder ipOrder = SortOrder.UNSORTED;
@@ -41,20 +50,16 @@ public class HandleDeviceAction implements Serializable {
     private String deviceIPFilter;
 
     public String beginDevice() {
-//        me.setActiveMenu(MenuType.HARDWARE);
         refreshDevice();
-        return "pdp-monitor";
+        return "/device";
     }
 
 
     private void refreshDevice() {
 //        init();
         page = 1;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPdp");
 
-        try {
-            List<PDP> pdps = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<PDP>>() {
-            });
+            List<PDP> pdps = pdpService.getAllPDPs();
             DeviceDataModel pdpDataModel;
             listModel = new ArrayList<>();
             for (PDP pdp : pdps) {
@@ -65,10 +70,8 @@ public class HandleDeviceAction implements Serializable {
                 pdpDataModel.setDescription(pdp.getDescription());
                 listModel.add(pdpDataModel);
             }
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllCamera");
 
-            List<Camera> cameras = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Camera>>() {
-            });
+            List<Camera> cameras =cameraService.getAllCamera();
             for (Camera camera : cameras) {
                 pdpDataModel = new DeviceDataModel();
                 pdpDataModel.setName(camera.getName());
@@ -77,9 +80,8 @@ public class HandleDeviceAction implements Serializable {
                 pdpDataModel.setDescription(camera.getDescription());
                 listModel.add(pdpDataModel);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+
         ping();
         deviceDescriptionFilter = "";
         deviceIPFilter = "";
@@ -87,12 +89,11 @@ public class HandleDeviceAction implements Serializable {
     }
 
     public void ping() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/ping");
         for (DeviceDataModel pdpDataModel : listModel) {
 
             try {
-                String status = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(pdpDataModel.getIp())), String.class);
-                if ("true".equalsIgnoreCase(status))
+                boolean status = pdpService.ping(pdpDataModel.getIp());
+                if (status)
                     pdpDataModel.setEnabled(true);
                 else
                     pdpDataModel.setEnabled(false);
@@ -101,7 +102,6 @@ public class HandleDeviceAction implements Serializable {
                 e.printStackTrace();
             }
 
-            deviceDataModel = new ListDataModel<>(listModel);
 
         }
     }
@@ -175,14 +175,6 @@ public class HandleDeviceAction implements Serializable {
 
     public void setListModel(List<DeviceDataModel> listModel) {
         this.listModel = listModel;
-    }
-
-    public ListDataModel getDeviceDataModel() {
-        return deviceDataModel;
-    }
-
-    public void setDeviceDataModel(ListDataModel deviceDataModel) {
-        this.deviceDataModel = deviceDataModel;
     }
 
     public List<BaseEntity> getDeviceList() {
