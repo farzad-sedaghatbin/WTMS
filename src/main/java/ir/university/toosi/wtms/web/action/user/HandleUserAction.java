@@ -366,7 +366,7 @@ public class HandleUserAction implements Serializable {
             }
         }
 
-        handleWorkGroupAction.setWorkGroupList(new ListDataModel<>(workGroups));
+        handleWorkGroupAction.setWorkGroupList(workGroups);
         handleWorkGroupAction.setWorkgroups(new DualListModel<WorkGroup>(sourceWorkgroups, targetWorkgroups));
 
     }

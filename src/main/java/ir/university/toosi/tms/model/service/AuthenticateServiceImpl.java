@@ -43,12 +43,12 @@ public class AuthenticateServiceImpl {
     private PreRequestGatewayServiceImpl preRequestGatewayService;
 
     public boolean authenticate(Gateway gateway, Object[] person, Boolean exit, Card card, boolean finger) throws IOException {
-        return !(gateway.getRulePackage() == null || person[1] == null) && checkPersonGateway(String.valueOf(person[0]), gateway) && (finger || !cardCheck(card)) && isAllowed(gateway.getRulePackage().getId()) && isAllowed(((long) person[1]), exit, ((long) person[0])) && isAllowedPersonForGate(gateway.getRulePackage(), exit, ((long) person[0]), gateway);
+        return !(gateway.getRulePackage() == null || person[1] == null) && checkPersonGateway((Long) person[0], gateway) && (finger || !cardCheck(card)) && isAllowed(gateway.getRulePackage().getId()) && isAllowed(((long) person[1]), exit, ((long) person[0])) && isAllowedPersonForGate(gateway.getRulePackage(), exit, ((long) person[0]), gateway);
     }
 
 
-    private boolean checkPersonGateway(String person, Gateway gateway) {
-        GatewayPerson gatewayPersons = gatewayPersonService.findByPersonIdAndGatewayId(person, String.valueOf(gateway.getId()));
+    private boolean checkPersonGateway(long person, Gateway gateway) {
+        GatewayPerson gatewayPersons = gatewayPersonService.findByPersonIdAndGatewayId(person, gateway.getId());
         if (gatewayPersons != null)
             return true;
         System.out.println("checkPersonGateway9");
@@ -191,7 +191,7 @@ public class AuthenticateServiceImpl {
             boolean flag = false;
             for (Long preGateway : preRequestGatewayIds) {
 
-                if (lastTrafficLog.getGateway().getId() == preRequestGatewayService.findById(preGateway.toString()).getPreGateway().getId()) {
+                if (lastTrafficLog.getGateway().getId() == preRequestGatewayService.findById(preGateway).getPreGateway().getId()) {
                     flag = true;
                     break;
                 }

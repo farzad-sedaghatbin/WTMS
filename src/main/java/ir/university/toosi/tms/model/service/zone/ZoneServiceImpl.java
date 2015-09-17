@@ -100,7 +100,7 @@ public class ZoneServiceImpl<T extends Zone> {
                 if ((oldZone.getRulePackage() == null) || oldZone.getRulePackage().getId() != entity.getRulePackage().getId()) {
                     List<Gateway> gateways = gatewayService.findByZoneAndRulePackage(String.valueOf(entity.getId()), String.valueOf(entity.getRulePackage().getId()));
                     for (Gateway gateway : gateways) {
-                        gateway=gatewayService.findById(String.valueOf(gateway.getId()));
+                        gateway=gatewayService.findById(gateway.getId());
                         gateway.setRulePackage(entity.getRulePackage());
                         gatewayService.editGateway(gateway);
                     }

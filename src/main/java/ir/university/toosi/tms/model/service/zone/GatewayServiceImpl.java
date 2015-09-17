@@ -118,11 +118,11 @@ public class GatewayServiceImpl<T extends Gateway> {
             if (pdp != null && pdp.size() != 0)
                 return new ObjectMapper().writeValueAsString("REL_GATEWAY_PDP");
 
-            List<GatewaySpecialState> gatewaySpecialStates = gatewaySpecialStateService.findByGatewayId(String.valueOf(entity.getId()));
+            List<GatewaySpecialState> gatewaySpecialStates = gatewaySpecialStateService.findByGatewayId(entity.getId());
             for (GatewaySpecialState gatewaySpecialState : gatewaySpecialStates) {
                 gatewaySpecialStateService.deleteGatewaySpecialState(gatewaySpecialState);
             }
-            List<GatewayPerson> gatewayPersons = gatewayPersonService.findByGatewayId(String.valueOf(entity.getId()));
+            List<GatewayPerson> gatewayPersons = gatewayPersonService.findByGatewayId(entity.getId());
             for (GatewayPerson gatewayPerson : gatewayPersons) {
                 gatewayPersonService.deleteGatewayPerson(gatewayPerson);
             }

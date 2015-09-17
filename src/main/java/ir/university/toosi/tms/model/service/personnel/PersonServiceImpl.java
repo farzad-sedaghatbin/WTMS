@@ -196,7 +196,7 @@ public class PersonServiceImpl<T extends Person> {
             Job job = jobService.findByPersonId(String.valueOf(entity.getId()));
             jobService.deleteJob(job);
 
-            List<GatewayPerson> gatewayPersons = gatewayPersonService.findByPersonId(String.valueOf(entity.getId()));
+            List<GatewayPerson> gatewayPersons = gatewayPersonService.findByPersonId(entity.getId());
             for (GatewayPerson gatewayPerson : gatewayPersons) {
                 gatewayPersonService.deleteGatewayPerson(gatewayPerson);
             }

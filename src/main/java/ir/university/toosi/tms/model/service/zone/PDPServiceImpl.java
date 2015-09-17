@@ -365,7 +365,7 @@ public class PDPServiceImpl<T extends PDP> {
 
                     if (pdpSync.isPicture()) {
 
-                        List<Person> persons = gatewayPersonService.findPersonByGatewayId(String.valueOf(gateway.getId()));
+                        List<Person> persons = gatewayPersonService.findPersonByGatewayId(gateway.getId());
                         for (Person person : persons) {
                             if (person.getPicture() != null) {
                                 path = Files.createFile(Paths.get(Configuration.getProperty("gate.dir") + gateway.getId() + File.separator + person.getPersonOtherId() + ".bmp"));
