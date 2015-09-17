@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="days">
+                <p:menuitem value="View" update="dayDetail" icon="ui-icon-search" oncomplete="PF('dayDialog').show()" actionListener="#{handleDayTypeAction.view}"/>
+                <p:menuitem value="Edit" update="dayDetail" icon="ui-icon-search" oncomplete="PF('dayDialog').show()" actionListener="#{handleDayTypeAction.edit}"/>
+                <p:menuitem value="Delete" update="days" icon="ui-icon-close" actionListener="#{handleDayTypeAction.doDelete}"/>
+            </p:contextMenu>
+
+            <p:commandButton value="Add" id="add" update="dayDetail" actionListener="#{handleDayTypeAction.add}" styleClass="ui-priority-primary" onclick="PF('dayDialog').show()"/>
+
+            <p:dataTable id="days" var="currentDay" value="#{handleDayTypeAction.dayTypeList}" rowKey="#{currentDay.id}"
+                         selection="#{handleDayTypeAction.currentDayType}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
+                </f:facet>
+                <p:column headerText="title">
+                    <h:outputText value="#{currentDay.title}" />
+                </p:column>
+                <p:column headerText="color">
+                    <h:outputText value="#{currentDay.color}" />
+                </p:column>
+                <p:column headerText="description">
+                    <h:outputText value="#{currentDay.description}" />
+                </p:column>
+            </p:dataTable>
+
+            <p:dialog header="Day Info" widgetVar="dayDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="dayDetail" style="text-align:center;">
+                    <p:panelGrid  columns="2" columnClasses="label,value">
+                        <f:facet name="header">
+                            <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                        </f:facet>
+
+                        <h:outputText value="Title:" />
+                        <p:inputText readonly="#{handleDayTypeAction.disableFields}" value="#{handleDayTypeAction.title}"/>
+
+                        <h:outputText value="Color:" />
+                        <p:colorPicker readonly="#{handleDayTypeAction.disableFields}" value="#{handleDayTypeAction.color}"/>
+
+                        <h:outputText value="Description:" />
+                        <p:inputTextarea readonly="#{handleDayTypeAction.disableFields}" value="#{handleDayTypeAction.description}"/>
+
+                        <p:commandButton value="Submit" id="edit" update="days" actionListener="#{handleDayTypeAction.saveOrUpdate}" oncomplete="PF('dayDialog').hide()" styleClass="ui-priority-primary" rendered="#{not handleDayTypeAction.disableFields}"/>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

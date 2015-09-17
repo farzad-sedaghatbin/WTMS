@@ -10,6 +10,8 @@ import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.rule.RuleException;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.event.TransferEvent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -37,7 +39,7 @@ public class HandleRuleExceptionAction implements Serializable {
     private RulePackageServiceImpl rulePackageService;
     @EJB
     private RuleExceptionServiceImpl ruleExceptionService;
-    private List<RulePackage> rulePackageList = null;
+    private DualListModel<RulePackage> rulePackageList;
     private List<RuleException> ruleExceptionList = null;
     private int page = 1;
     private int pageInPopup = 1;
@@ -57,7 +59,6 @@ public class HandleRuleExceptionAction implements Serializable {
     private String endSecond;
     private String editable = "false";
     private List<RulePackage> rulePackages = new ArrayList<>();
-    private List<RulePackage> selectedRulePackage = new ArrayList<>();
     private List<RuleException> ruleExceptions = new ArrayList<>();
     private RuleException currentRuleException;
     private boolean selected;
@@ -66,6 +67,7 @@ public class HandleRuleExceptionAction implements Serializable {
     private boolean ruleDeny = false;
     private SortOrder exceptionNameOrder = SortOrder.UNSORTED;
     private String exceptionNameFilter;
+    private boolean disableFields;
 
 
     public String begin() {
@@ -99,7 +101,6 @@ public class HandleRuleExceptionAction implements Serializable {
         endSecond = "";
         selectAll = false;
         currentRuleException = null;
-        selectedRulePackage = new ArrayList<>();
         setSelectRow(false);
         fillDataModel();
         exceptionNameFilter = "";
@@ -121,23 +122,76 @@ public class HandleRuleExceptionAction implements Serializable {
 
     }
 
-    public void edit() {
+    public void view() {
+        setDisableFields(true);
         rulePackages = rulePackageService.getAllRulePackage();
 
-        selectedRulePackage = new ArrayList<>();
+
+        List<RulePackage> sourceRulePackages = new ArrayList<>();
+        List<RulePackage> targetRulePackages = new ArrayList<>();
+
         for (RulePackage rulePackage : rulePackages) {
             for (RulePackage rulePackage1 : currentRuleException.getRulePackage()) {
 
                 if (rulePackage.getId() == rulePackage1.getId()) {
                     rulePackage.setSelected(true);
-                    selectedRulePackage.add(rulePackage);
+                    targetRulePackages.add(rulePackage);
                     break;
-                } else
+                } else {
                     rulePackage.setSelected(false);
+                    sourceRulePackages.add(rulePackage);
+                }
 
             }
         }
-        rulePackageList = rulePackages;
+        rulePackageList = new DualListModel<>(sourceRulePackages,targetRulePackages);
+        fromDate = currentRuleException.getFromDate();
+        toDate = currentRuleException.getToDate();
+        ruleStartTime = currentRuleException.getStartTime();
+        String[] start = ruleStartTime.split(":");
+        if (start.length == 3) {
+            startHour = start[0];
+            startMinute = start[1];
+            startSecond = start[2];
+        }
+        ruleEndTime = currentRuleException.getEndTime();
+        String[] end = ruleEndTime.split(":");
+        if (end.length == 3) {
+            endHour = end[0];
+            endMinute = end[1];
+            endSecond = end[2];
+        }
+
+        ruleEntranceCount = currentRuleException.getEntranceCount();
+        ruleExitCount = currentRuleException.getExitCount();
+        name = currentRuleException.getName();
+        ruleDeny = currentRuleException.isDeny();
+        editable = "true";
+    }
+
+    public void edit() {
+        setDisableFields(false);
+        rulePackages = rulePackageService.getAllRulePackage();
+
+
+        List<RulePackage> sourceRulePackages = new ArrayList<>();
+        List<RulePackage> targetRulePackages = new ArrayList<>();
+
+        for (RulePackage rulePackage : rulePackages) {
+            for (RulePackage rulePackage1 : currentRuleException.getRulePackage()) {
+
+                if (rulePackage.getId() == rulePackage1.getId()) {
+                    rulePackage.setSelected(true);
+                    targetRulePackages.add(rulePackage);
+                    break;
+                } else {
+                    rulePackage.setSelected(false);
+                    sourceRulePackages.add(rulePackage);
+                }
+
+            }
+        }
+        rulePackageList = new DualListModel<>(sourceRulePackages,targetRulePackages);
         fromDate = currentRuleException.getFromDate();
         toDate = currentRuleException.getToDate();
         ruleStartTime = currentRuleException.getStartTime();
@@ -180,7 +234,7 @@ public class HandleRuleExceptionAction implements Serializable {
             me.addInfoMessage("conflict");
             return;
         }
-        currentRuleException.getRulePackage().addAll(selectedRulePackage);
+        currentRuleException.getRulePackage().addAll(rulePackageList.getTarget());
         currentRuleException.setDeny(ruleDeny);
             boolean condition = ruleExceptionService.editPureRuleException(currentRuleException);
             if (condition) {
@@ -197,40 +251,26 @@ public class HandleRuleExceptionAction implements Serializable {
 
 
     public void add() {
+        setDisableFields(false);
         name = "";
         init();
         editable = "false";
-        rulePackageList = rulePackageService.getAllRulePackage();
+        rulePackageList = new DualListModel<>(rulePackageService.getAllRulePackage(),new ArrayList());
     }
 //
 //
 
-    public void selectAllRulePackage(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            for (RulePackage rulePackage : rulePackages) {
-                rulePackage.setSelected(true);
-                selectedRulePackage.add(rulePackage);
-            }
-        } else {
-            for (RulePackage rulePackage : rulePackages) {
-                rulePackage.setSelected(false);
-            }
-            selectedRulePackage.clear();
-        }
-    }
-
-    public void selectRulePackage(ValueChangeEvent event) {
+    public void onTransfer(TransferEvent event) {
         RulePackage rulePackage = null /*rulePackageList.getRowData()*/;
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
+        if (event.isAdd()) {
             rulePackage.setSelected(true);
-            selectedRulePackage.add(rulePackage);
+            rulePackageList.getTarget().add(rulePackage);
         } else {
             rulePackage.setSelected(false);
-            for (RulePackage rulePackage1 : selectedRulePackage) {
+            for (RulePackage rulePackage1 : rulePackageList.getTarget()) {
                 if (rulePackage1.getId() == rulePackage.getId()) {
-                    selectedRulePackage.remove(rulePackage1);
+                    rulePackageList.getTarget().remove(rulePackage1);
+                    rulePackageList.getSource().add(rulePackage1);
                     break;
                 }
             }
@@ -249,7 +289,7 @@ public class HandleRuleExceptionAction implements Serializable {
         ruleException.setStartTime(ruleStartTime);
         ruleException.setExitCount(ruleExitCount);
         ruleException.setEntranceCount(ruleEntranceCount);
-        ruleException.setRulePackage(selectedRulePackage);
+        ruleException.setRulePackage(rulePackageList.getTarget());
         if (!feasibleDate(ruleException) || !feasibleTime(ruleException)) {
             me.addInfoMessage("conflict");
             return;
@@ -538,11 +578,13 @@ public class HandleRuleExceptionAction implements Serializable {
         this.exceptionNameFilter = exceptionNameFilter;
     }
 
-    public List<RulePackage> getRulePackageList() {
+    public DualListModel<RulePackage> getRulePackageList() {
+        if (rulePackageList == null)
+            rulePackageList = new DualListModel<>();
         return rulePackageList;
     }
 
-    public void setRulePackageList(List<RulePackage> rulePackageList) {
+    public void setRulePackageList(DualListModel<RulePackage> rulePackageList) {
         this.rulePackageList = rulePackageList;
     }
 
@@ -570,19 +612,19 @@ public class HandleRuleExceptionAction implements Serializable {
         this.rulePackages = rulePackages;
     }
 
-    public List<RulePackage> getSelectedRulePackage() {
-        return selectedRulePackage;
-    }
-
-    public void setSelectedRulePackage(List<RulePackage> selectedRulePackage) {
-        this.selectedRulePackage = selectedRulePackage;
-    }
-
     public List<RuleException> getRuleExceptions() {
         return ruleExceptions;
     }
 
     public void setRuleExceptions(List<RuleException> ruleExceptions) {
         this.ruleExceptions = ruleExceptions;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }

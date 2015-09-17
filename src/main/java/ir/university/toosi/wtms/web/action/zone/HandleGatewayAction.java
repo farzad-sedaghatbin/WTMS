@@ -2,6 +2,8 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.*;
+import ir.university.toosi.tms.model.entity.objectValue.init.Gate;
 import ir.university.toosi.tms.model.service.GatewayPersonServiceImpl;
 import ir.university.toosi.tms.model.service.GatewaySpecialStateScheduler;
 import ir.university.toosi.tms.model.service.GatewaySpecialStateServiceImpl;
@@ -12,16 +14,14 @@ import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PreRequestGatewayServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
-import ir.university.toosi.tms.model.entity.GatewayPerson;
-import ir.university.toosi.tms.model.entity.GatewaySpecialState;
-import ir.university.toosi.tms.model.entity.GatewayStatus;
-import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.tms.model.entity.zone.Camera;
 import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.tms.model.entity.zone.PreRequestGateway;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.event.TransferEvent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -120,6 +120,7 @@ public class HandleGatewayAction implements Serializable {
     private String gatewayDescriptionFilter;
     private SortOrder gatewayNameOrder = SortOrder.UNSORTED;
     private SortOrder gatewayDescriptionOrder = SortOrder.UNSORTED;
+    private DualListModel<Gateway> gatewayDualList;
     private Gateway thisGateway;
 
 
@@ -501,6 +502,20 @@ public class HandleGatewayAction implements Serializable {
 
         }
         selectGetway = currentGetway;
+    }
+
+    public void onTransfer(TransferEvent event) {
+        if (event.isAdd()) {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(true);
+                selectedGateways.add((Gateway) item);
+            }
+        } else {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(false);
+                selectedGateways.remove(item);
+            }
+        }
     }
 
     public void doAssignPerson() throws IOException {
@@ -1140,5 +1155,15 @@ public class HandleGatewayAction implements Serializable {
 
     public void setNotAssignPersonList(List<Person> notAssignPersonList) {
         this.notAssignPersonList = notAssignPersonList;
+    }
+
+    public DualListModel<Gateway> getGatewayDualList() {
+        if(gatewayDualList == null)
+            gatewayDualList = new DualListModel<>();
+        return gatewayDualList;
+    }
+
+    public void setGatewayDualList(DualListModel<Gateway> gatewayDualList) {
+        this.gatewayDualList = gatewayDualList;
     }
 }
