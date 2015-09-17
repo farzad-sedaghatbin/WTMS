@@ -20,10 +20,10 @@ import java.util.List;
 public class PersonDAOImpl extends BaseDAOImpl<Person> {
 
 
-    public Person findById(String id) {
+    public Person findById(long id) {
         try {
             return (Person) em.createNamedQuery("Person.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

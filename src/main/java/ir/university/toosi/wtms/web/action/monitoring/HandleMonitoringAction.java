@@ -5,6 +5,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.CommentServiceImpl;
+import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
+import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
+import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
 import ir.university.toosi.wtms.web.action.HandleCommentAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
@@ -23,6 +28,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 //import org.richfaces.cdi.push.Push;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.faces.model.DataModel;
@@ -55,6 +61,17 @@ public class HandleMonitoringAction implements Serializable {
 //    @Push(topic = CDI_PUSH_TOPIC)
     private Event<SentryDataModel> pushEvent;
 
+    @EJB
+    private PersonServiceImpl personService;
+    @EJB
+    private GatewayServiceImpl gatewayService;
+    @EJB
+    private PDPServiceImpl pdpService;
+    @EJB
+    private CommentServiceImpl commentService;
+    @EJB
+    private TrafficLogServiceImpl logService;
+
     private static final String CDI_PUSH_TOPIC = "pushCdi";
     private String message;
     private String width;
@@ -63,14 +80,14 @@ public class HandleMonitoringAction implements Serializable {
     private boolean personAndTime;
     private int personPage;
     private int page;
-    private DataModel<TrafficLog> eventLogList = null;
-    private DataModel<List<DataModel<SentryDataModel>>> trafficLogs = null;
+    private List<TrafficLog> eventLogList = null;
+    private List<List<DataModel<SentryDataModel>>> trafficLogs = null;
     private SentryDataModel currentSentryDataModel;
     private TrafficLog currentTrafficLog;
     private boolean validForComment;
 
 
-    private DataModel<Person> personList = null;
+    private List<Person> personList = null;
     private SelectItem[] gatewayItems;
     private String gatewayId;
     private String startTime;
@@ -82,7 +99,7 @@ public class HandleMonitoringAction implements Serializable {
     private String endMinute;
     private String endSecond;
     private Hashtable<Long, LinkedList<SentryDataModel>> sentries = new Hashtable<>();
-    private List<DataModel<SentryDataModel>> trafficLogsbygate = new ArrayList<>();
+    private List<List<SentryDataModel>> trafficLogsbygate = new ArrayList<>();
     private long sentryCount;
 
     @PostConstruct
@@ -116,9 +133,9 @@ public class HandleMonitoringAction implements Serializable {
             dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
             sentryDataModels.addFirst(dataModel);
             sentries.put(log.getPdp().getId(), sentryDataModels);
-            trafficLogsbygate=new ArrayList<>() ;
+            trafficLogsbygate = new ArrayList<>();
             for (Queue<SentryDataModel> dataModels : sentries.values()) {
-                trafficLogsbygate.add(new ListDataModel<>(new ArrayList<>(dataModels)));
+                trafficLogsbygate.add(new ArrayList<>(dataModels));
             }
 
             pushEvent.fire(dataModel);
@@ -129,8 +146,7 @@ public class HandleMonitoringAction implements Serializable {
 
     public void forceOpen(DataModel<SentryDataModel> gate) {
         String logId = String.valueOf(gate.iterator().next().getId());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/forceOpen");
-        new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), logId);
+        gatewayService.forceOpen(logService.findById(Long.parseLong(logId)).getPdp().getIp());
 
 
     }
@@ -152,41 +168,35 @@ public class HandleMonitoringAction implements Serializable {
             }
         }
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPdpbyIDs");
-        try {
-            List<PDP> pdps = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(pdpID)), new TypeReference<List<PDP>>() {
-
-            });
-            for (PDP pdp : pdps) {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/findTrafficByPDP");
-                List<TrafficLog> traffic = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(pdp.getId())), new TypeReference<List<TrafficLog>>() {
-                });
-                SentryDataModel dataModel;
-                trafficLogList = new LinkedList<SentryDataModel>() {
-                    @Override
-                    public boolean add(SentryDataModel sentryDataModel) {
-                        if (size() == sentryCount)
-                            remove();
-                        return super.add(sentryDataModel);
-                    }
-                };
-                sentries.put(pdp.getId(), trafficLogList);
-                for (TrafficLog log : traffic) {
-                    dataModel = new SentryDataModel();
-                    dataModel.setVideo(log.getVideo());
-                    dataModel.setTime(log.getTime());
-                    dataModel.setDate(log.getDate());
-                    dataModel.setExit(log.isExit());
-                    dataModel.setValid(log.isValid());
-                    dataModel.setGate(log.getGateway().getName());
-                    dataModel.setPersonId(log.getPerson().getId());
-                    dataModel.setId(log.getId());
-                    dataModel.setPdpName(log.getPdp().getName());
-                    dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
-                    trafficLogList.add(dataModel);
+        List<PDP> pdps = pdpService.getAllPdpbyIDs(pdpID);
+        for (PDP pdp : pdps) {
+            List<TrafficLog> traffic = logService.findByPDP(pdp.getId(), CalendarUtil.getDate(new Date()));
+            SentryDataModel dataModel;
+            trafficLogList = new LinkedList<SentryDataModel>() {
+                @Override
+                public boolean add(SentryDataModel sentryDataModel) {
+                    if (size() == sentryCount)
+                        remove();
+                    return super.add(sentryDataModel);
                 }
-                trafficLogsbygate.add(new ListDataModel<>((new ArrayList<>(trafficLogList))));
+            };
+            sentries.put(pdp.getId(), trafficLogList);
+            for (TrafficLog log : traffic) {
+                dataModel = new SentryDataModel();
+                dataModel.setVideo(log.getVideo());
+                dataModel.setTime(log.getTime());
+                dataModel.setDate(log.getDate());
+                dataModel.setExit(log.isExit());
+                dataModel.setValid(log.isValid());
+                dataModel.setGate(log.getGateway().getName());
+                dataModel.setPersonId(log.getPerson().getId());
+                dataModel.setId(log.getId());
+                dataModel.setPdpName(log.getPdp().getName());
+                dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
+                trafficLogList.add(dataModel);
             }
+            trafficLogsbygate.add((new ArrayList<>(trafficLogList)));
+        }
 //                else{
 //                    notAccess.add(gateway);
 //                }
@@ -196,15 +206,7 @@ public class HandleMonitoringAction implements Serializable {
 //            gateways.remove(notAccess);
 //            trafficLogs = new ListDataModel<List<DataModel<SentryDataModel>>>(trafficLogsbygate);
 
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public String begin() {
@@ -226,29 +228,14 @@ public class HandleMonitoringAction implements Serializable {
         person = true;
         personAndGate = false;
         personAndTime = false;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPersonDataModel");
-        List<Person> innerPersonList = null;
-        try {
-            innerPersonList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Person>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        personList = new ListDataModel<>(innerPersonList);
-
+        personList = personService.getAllPersonModel();
 
     }
 
     public void selectForComment(SentryDataModel sentryDataModel) {
         handleCommentAction.setMessage("");
         currentSentryDataModel = sentryDataModel;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findTrafficLogById");
-        try {
-            currentTrafficLog = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentSentryDataModel.getId())), TrafficLog.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        currentTrafficLog = logService.findById(currentSentryDataModel.getId());
 
         validForComment = true;
         long logMin = time2Minute(currentTrafficLog.getTime());
@@ -257,25 +244,15 @@ public class HandleMonitoringAction implements Serializable {
             validForComment = false;
 
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findByTrafficLog");
-        try {
-            Comment comment = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentTrafficLog.getId())), Comment.class);
-            handleCommentAction.setMessage(comment.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Comment comment = commentService.findByTrafficLog(currentSentryDataModel.getId());
+        handleCommentAction.setMessage(comment.getMessage());
     }
 
     public void paint(OutputStream stream, Object object) throws IOException, URISyntaxException {
         Long personId = (Long) object;
         Person person = null;
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonById");
-        try {
-            person = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(personId)), Person.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        person = personService.findById(personId);
         if (person.getPicture() != null)
             stream.write(person.getPicture());
         else
@@ -288,17 +265,9 @@ public class HandleMonitoringAction implements Serializable {
     }
 
     public void dotrackByPerson() {
-        Person currentPerson = personList.getRowData();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findTrafficLogByPersonId");
-        List<TrafficLog> innerTrafficLogList = null;
-        try {
-            innerTrafficLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPerson.getId())), new TypeReference<List<TrafficLog>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        Person currentPerson = null/*personList.getRowData()*/;
+        eventLogList = logService.findByPerson(currentPerson.getId(), CalendarUtil.getDate(new Date()));
         init();
-        eventLogList = new ListDataModel<>(innerTrafficLogList);
         me.redirect("/monitoring/monitor-log.htm");
     }
 
@@ -310,25 +279,14 @@ public class HandleMonitoringAction implements Serializable {
         personAndGate = true;
         personAndTime = false;
         personPage = 1;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPersonDataModel");
-        List<Person> innerPersonList = null;
-        try {
-            innerPersonList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Person>>() {
-            });
+        personList = personService.getAllPersonModel();
 
-            personList = new ListDataModel<>(innerPersonList);
 
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllGateway");
-
-            List<Gateway> gateways = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Gateway>>() {
-            });
-            gatewayItems = new SelectItem[gateways.size()];
-            int i = 0;
-            for (Gateway gateway1 : gateways) {
-                gatewayItems[i++] = new SelectItem(gateway1.getId(), gateway1.getName());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<Gateway> gateways = gatewayService.getAllGateway();
+        gatewayItems = new SelectItem[gateways.size()];
+        int i = 0;
+        for (Gateway gateway1 : gateways) {
+            gatewayItems[i++] = new SelectItem(gateway1.getId(), gateway1.getName());
         }
         gatewayId = gatewayItems[0].getValue().toString();
 
@@ -337,16 +295,9 @@ public class HandleMonitoringAction implements Serializable {
     public void dotrackByPersonAndGate() {
         List<TrafficLog> innerTrafficLogList = null;
         handlePersonAction.init();
-        try {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findByPersonAndGate");
-            String ids = String.valueOf(personList.getRowData().getId()) + "#" + gatewayId;
-            innerTrafficLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), ids), new TypeReference<List<TrafficLog>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        String ids = String.valueOf(null/*personList.getRowData().getId()*/) + "#" + gatewayId;
+        eventLogList = logService.findByPersonAndGate(null, Long.valueOf(gatewayId), CalendarUtil.getDate(new Date()));
         init();
-        eventLogList = new ListDataModel<>(innerTrafficLogList);
         me.redirect("/monitoring/monitor-log.htm");
     }
 
@@ -365,16 +316,8 @@ public class HandleMonitoringAction implements Serializable {
         endHour = "0";
         endMinute = "0";
         endSecond = "0";
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPersonDataModel");
         List<Person> innerPersonList = null;
-        try {
-            innerPersonList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Person>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        personList = new ListDataModel<>(innerPersonList);
+        personList = personService.getAllPersonModel();
     }
 
     public void dotrackByPersonAndTime() {
@@ -389,19 +332,12 @@ public class HandleMonitoringAction implements Serializable {
             return;
         }
 
-        String data = personList.getRowData().getId() + "#" + startTime + "#" + endTime;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findByPersonLocationInDuration");
+        String data = /*personList.getRowData().getId()*/null + "#" + startTime + "#" + endTime;
         List<TrafficLog> innerTrafficLogList = null;
-        try {
-            innerTrafficLogList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), data), new TypeReference<List<TrafficLog>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+            eventLogList = logService.findByPersonLocationInDuration(null, startTime, endTime, CalendarUtil.getDate(new Date()));
 
-        eventLogList = new ListDataModel<>(innerTrafficLogList);
-        me.redirect("/monitoring/monitor-log.htm");
-    }
+            me.redirect("/monitoring/monitor-log.htm");
+        }
 
 
     private void refresh() {
@@ -497,21 +433,6 @@ public class HandleMonitoringAction implements Serializable {
         this.personAndTime = personAndTime;
     }
 
-    public DataModel<TrafficLog> getEventLogList() {
-        return eventLogList;
-    }
-
-    public void setEventLogList(DataModel<TrafficLog> eventLogList) {
-        this.eventLogList = eventLogList;
-    }
-
-    public DataModel<Person> getPersonList() {
-        return personList;
-    }
-
-    public void setPersonList(DataModel<Person> personList) {
-        this.personList = personList;
-    }
 
     public int getPersonPage() {
         return personPage;
@@ -609,21 +530,6 @@ public class HandleMonitoringAction implements Serializable {
         this.endSecond = endSecond;
     }
 
-    public DataModel<List<DataModel<SentryDataModel>>> getTrafficLogs() {
-        return trafficLogs;
-    }
-
-    public void setTrafficLogs(DataModel<List<DataModel<SentryDataModel>>> trafficLogs) {
-        this.trafficLogs = trafficLogs;
-    }
-
-    public List<DataModel<SentryDataModel>> getTrafficLogsbygate() {
-        return trafficLogsbygate;
-    }
-
-    public void setTrafficLogsbygate(List<DataModel<SentryDataModel>> trafficLogsbygate) {
-        this.trafficLogsbygate = trafficLogsbygate;
-    }
 
     public long getSentryCount() {
         return sentryCount;

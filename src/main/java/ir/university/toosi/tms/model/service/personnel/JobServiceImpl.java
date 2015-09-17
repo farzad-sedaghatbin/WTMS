@@ -63,7 +63,7 @@ public class JobServiceImpl<T extends Job> {
 
     public T createJob(T entity) {
         try {
-            Person person = personService.findById(String.valueOf(entity.getPerson().getId()));
+            Person person = personService.findById(entity.getPerson().getId());
             entity.setPerson(person);
             return (T) jobDAO.create(entity);
         } catch (Exception e) {

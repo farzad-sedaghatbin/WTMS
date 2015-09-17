@@ -41,7 +41,7 @@ public class PersonServiceImpl<T extends Person> {
     @EJB
     private GatewayPersonServiceImpl gatewayPersonService;
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) personDAO.findById(id);
         } catch (Exception e) {
@@ -201,7 +201,7 @@ public class PersonServiceImpl<T extends Person> {
                 gatewayPersonService.deleteGatewayPerson(gatewayPerson);
             }
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Person.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
-            personDAO.delete(findById(String.valueOf(entity.getId())));
+            personDAO.delete(findById(entity.getId()));
             return new ObjectMapper().writeValueAsString("operation.occurred");
         } catch (Exception e) {
             e.printStackTrace();
@@ -223,7 +223,7 @@ public class PersonServiceImpl<T extends Person> {
 
     public boolean editPerson(T entity) {
         try {
-            Person old = findById(String.valueOf(entity.getId()));
+            Person old = findById(entity.getId());
             Person newPerson = new Person();
             newPerson.setFinger(old.getFinger());
             newPerson.setRulePackage(old.getRulePackage());

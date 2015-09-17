@@ -88,7 +88,7 @@ public class GatewayPersonServiceImpl<T extends GatewayPerson> {
 
     public T createGatewayPerson(T entity) {
         try {
-            entity.setPerson(personService.findById(String.valueOf(entity.getPerson().getId())));
+            entity.setPerson(personService.findById(entity.getPerson().getId()));
             entity.setGateway(gatewayService.findById(entity.getGateway().getId()));
             T t = (T) gatewayPersonDAO.create(entity);
             EventLogManager.eventLog(eventLogService, String.valueOf(t.getId()), GatewayPerson.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
