@@ -12,7 +12,6 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import ir.university.toosi.wtms.web.util.ReportUtils;
 import ir.university.toosi.wtms.web.util.Storage;
 
-import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -40,8 +39,7 @@ public class HandleCardReportAction implements Serializable {
 
 
     @Inject
-//    @EJB
-//    private ReprtSe
+    private UserManagementAction me;
     private String type;
     private String kind;
     private String reportType;
