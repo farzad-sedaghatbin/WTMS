@@ -120,10 +120,10 @@ public class HandleUserAction implements Serializable {
 
     private boolean disableFields;
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.USER);
         refresh();
-        return "list-user";
+        me.redirect("/user/users.xhtml");
     }
 
     public void init() {

@@ -69,11 +69,12 @@ public class HandleWorkGroupAction implements Serializable {
     private SortOrder workGroupTitleOrder = SortOrder.UNSORTED;
     private SortOrder workGroupDescriptionOrder = SortOrder.UNSORTED;
     private DualListModel<WorkGroup> workgroups;
+    private boolean disableFields;
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.USER);
         refresh();
-        return "list-workgroup";
+        me.redirect("/workgroup/workgroups.xhtml");
     }
 
     public void init() {
@@ -158,6 +159,7 @@ public class HandleWorkGroupAction implements Serializable {
         }
 
         handleRoleAction.setCurrentPage(currentPage);
+        handleRoleAction.setRoles(new DualListModel<Role>(roleSelectionGrid,new ArrayList<Role>()));
     }
 
     public void doAdd() {
@@ -233,8 +235,11 @@ public class HandleWorkGroupAction implements Serializable {
         }
     }
 
+
+
     public void edit(String currentPage) {
         setEditable("true");
+        setDisableFields(false);
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/findWorkGroupById");
         try {
             currentWorkGroup = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentWorkGroup.getId())), WorkGroup.class);
@@ -261,16 +266,23 @@ public class HandleWorkGroupAction implements Serializable {
         for (Role role : roles) {
             role.setDescription((me.getValue(role.getDescription())));
         }
+        List<Role> sourceRoles = new ArrayList<>();
+        List<Role> targetRoles = new ArrayList<>();
+
         for (Role currentRole : currentWorkGroup.getRoles()) {
             for (Role role : roles) {
                 if ((currentRole.getId() == role.getId())) {
                     role.setSelected(true);
                     handleRoleAction.getSelectedRoles().add(role);
+                    sourceRoles.add(role);
+                } else {
+                    targetRoles.add(role);
                 }
             }
         }
 
         handleRoleAction.setRoleList(roles);
+        handleRoleAction.setRoles(new DualListModel<Role>(sourceRoles,targetRoles));
     }
 
     public void doEdit() {
@@ -601,10 +613,21 @@ public class HandleWorkGroupAction implements Serializable {
     }
 
     public DualListModel<WorkGroup> getWorkgroups() {
+        if (workgroups == null){
+            workgroups = new DualListModel<>();
+        }
         return workgroups;
     }
 
     public void setWorkgroups(DualListModel<WorkGroup> workgroups) {
         this.workgroups = workgroups;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }

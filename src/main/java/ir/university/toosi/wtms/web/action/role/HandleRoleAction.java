@@ -10,6 +10,7 @@ import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.operation.HandleOperationAction;
 import ir.university.toosi.wtms.web.action.workgroup.HandleWorkGroupAction;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
@@ -75,11 +76,12 @@ public class HandleRoleAction implements Serializable {
     private boolean selectRow = false;
     private SortOrder roleDescriptionOrder = SortOrder.UNSORTED;
     private boolean disableFields;
+    private DualListModel<Role> roles;
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.USER);
         refresh();
-        return "list-role";
+        me.redirect("/role/roles.xhtml");
     }
 
     public List<Role> getSelectionGrid() {
@@ -157,6 +159,22 @@ public class HandleRoleAction implements Serializable {
         }
         handleOperationAction.setOperationList(new ListDataModel<>(operationList));
         handleOperationAction.setOperations(new DualListModel<Operation>(operationsSource, operationsTarget));
+    }
+
+    public void onTransfer(TransferEvent event) {
+        if (event.isAdd()) {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(true);
+                getSelectionGrid().add((Role) item);
+                selectedRoles.add((Role) item);
+            }
+        } else {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(false);
+                getSelectionGrid().remove(item);
+                selectedRoles.remove(item);
+            }
+        }
     }
 
     public void edit() {
@@ -611,5 +629,16 @@ public class HandleRoleAction implements Serializable {
 
     public void setDisableFields(boolean disableFields) {
         this.disableFields = disableFields;
+    }
+
+    public DualListModel<Role> getRoles() {
+        if (roles == null){
+            roles = new DualListModel<>();
+        }
+        return roles;
+    }
+
+    public void setRoles(DualListModel<Role> roles) {
+        this.roles = roles;
     }
 }

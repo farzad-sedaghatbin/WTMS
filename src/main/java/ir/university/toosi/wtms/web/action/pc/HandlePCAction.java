@@ -70,23 +70,7 @@ public class HandlePCAction implements Serializable {
 //        me.setActiveMenu(MenuType.USER);
         System.out.println(me.getDirection());
         refresh();
-        redirect("/pc/pc.xhtml");
-    }
-
-    public void redirect(String pageName) {
-        try {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            if (facesContext.getExternalContext().getRequestParameterMap().get("cid") == null || facesContext.getExternalContext().getRequestParameterMap().get("cid").isEmpty()) {
-                facesContext.getExternalContext().redirect(facesContext.getExternalContext().getRequestContextPath() + pageName);
-            } else {
-                facesContext.getExternalContext().redirect(facesContext.getExternalContext().getRequestContextPath() + pageName + "?cid=" + facesContext.getExternalContext().getRequestParameterMap().get("cid"));
-            }
-        } catch (Exception e) {
-            String message = e.getMessage();
-            if (e instanceof NullPointerException) {
-                message = "Null Pointer Exception";
-            }
-        }
+        me.redirect("/pc/pc.xhtml");
     }
 
 //    public void selectPCs(ValueChangeEvent event) {
