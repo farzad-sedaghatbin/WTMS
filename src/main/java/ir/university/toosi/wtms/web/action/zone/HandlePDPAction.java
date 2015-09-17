@@ -2,6 +2,7 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
@@ -45,6 +46,9 @@ public class HandlePDPAction implements Serializable {
     private CameraServiceImpl cameraService;
     @EJB
     private GatewayServiceImpl gatewayService;
+    @EJB
+    private RulePackageServiceImpl rulePackageService;
+
 
     private String editable = "false";
 
@@ -143,67 +147,60 @@ public class HandlePDPAction implements Serializable {
         init();
 
         handleGatewayAction.setSelectedGateways(new HashSet<Gateway>());
-            List<PDP> pdps = pdpService.getAllPDPs();
-            for (PDP pdp : pdps) {
-                pdp.setDescText(pdp.getDescription());
-                pdp.setNameText(pdp.getName());
-            }
-            pdpList =pdps;
-            for (PDP pdp : pdpList) {
-                pdp.setSelected(false);
-            }
-            selectedPdps = new HashSet<>();
+        List<PDP> pdps = pdpService.getAllPDPs();
+        for (PDP pdp : pdps) {
+            pdp.setDescText(pdp.getDescription());
+            pdp.setNameText(pdp.getName());
+        }
+        pdpList = pdps;
+        for (PDP pdp : pdpList) {
+            pdp.setSelected(false);
+        }
+        selectedPdps = new HashSet<>();
 
-            List<Gateway> gateways = gatewayService.getAllGateway();
+        List<Gateway> gateways = gatewayService.getAllGateway();
 
-            List<Camera> cameras = cameraService.getAllCamera();
-            cameraItems = new SelectItem[cameras.size()];
-            gatewayItems = new SelectItem[gateways.size()];
-            int i = 0;
-            for (Camera camera : cameras) {
-                cameraItems[i++] = new SelectItem(camera.getId(), camera.getName());
-            }
-            i = 0;
-            for (Gateway gateway1 : gateways) {
-                gatewayItems[i++] = new SelectItem(gateway1.getId(), gateway1.getName());
-            }
+        List<Camera> cameras = cameraService.getAllCamera();
+        cameraItems = new SelectItem[cameras.size()];
+        gatewayItems = new SelectItem[gateways.size()];
+        int i = 0;
+        for (Camera camera : cameras) {
+            cameraItems[i++] = new SelectItem(camera.getId(), camera.getName());
+        }
+        i = 0;
+        for (Gateway gateway1 : gateways) {
+            gatewayItems[i++] = new SelectItem(gateway1.getId(), gateway1.getName());
+        }
 
     }
 
     private void refreshDevice() {
 //        init();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPdp");
 
         handleGatewayAction.setSelectedGateways(new HashSet<Gateway>());
-        try {
-            List<PDP> pdps = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<PDP>>() {
-            });
-            DeviceDataModel pdpDataModel = new DeviceDataModel();
-            listModel = new ArrayList<>();
-            for (PDP pdp : pdps) {
-                pdpDataModel = new DeviceDataModel();
-                pdpDataModel.setName(pdp.getName());
-                pdpDataModel.setEnabled(pdp.isEnabled());
-                pdpDataModel.setIp(pdp.getIp());
-                pdpDataModel.setDescription(pdp.getDescription());
-                listModel.add(pdpDataModel);
-            }
-            pdpListModel = new ListDataModel<>(listModel);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<PDP> pdps = pdpService.getAllPDPs();
+        DeviceDataModel pdpDataModel = new DeviceDataModel();
+        listModel = new ArrayList<>();
+        for (PDP pdp : pdps) {
+            pdpDataModel = new DeviceDataModel();
+            pdpDataModel.setName(pdp.getName());
+            pdpDataModel.setEnabled(pdp.isEnabled());
+            pdpDataModel.setIp(pdp.getIp());
+            pdpDataModel.setDescription(pdp.getDescription());
+            listModel.add(pdpDataModel);
         }
+        pdpListModel = new ListDataModel<>(listModel);
+
+
         ping();
     }
 
     public void ping() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/ping");
         for (DeviceDataModel pdpDataModel : listModel) {
 
             try {
-                String status = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(pdpDataModel.getIp())), String.class);
-                if ("true".equalsIgnoreCase(status))
+                boolean status = pdpService.ping(pdpDataModel.getIp());
+                if (status)
                     pdpDataModel.setEnabled(true);
                 else
                     pdpDataModel.setEnabled(false);
@@ -243,19 +240,9 @@ public class HandlePDPAction implements Serializable {
             pdpSync.setPdpList(selectedPdps);
             pdpSync.setPicture(pictures);
             pdpSync.setSchedule(schedule);
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/synchronizePdp");
-            try {
-                String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(pdpSync)), String.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            pdpService.synchronizePdp(pdpSync);
         } else {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/getFinger");
-            try {
-                String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(selectedPdps)), String.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            pdpService.fingerPrint(selectedPdps);
         }
         me.redirect("/home.htm");
     }
@@ -266,35 +253,19 @@ public class HandlePDPAction implements Serializable {
         pdpSync.setPdpList(selectedPdps);
         pdpSync.setPicture(pictures);
         pdpSync.setPerson(handlePersonAction.getCurrentPerson());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/synchronizeOnePdp");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(pdpSync)), String.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        pdpService.synchronizeOnePdp(pdpSync);
         me.redirect("/person/list-person.htm");
     }
 
     public void ruleInitialize() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/ruleInitialize");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), String.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        rulePackageService.fillRulePackageHashTable();
     }
 
     public void doDelete() {
 
         currentPdp.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllGateway");
         List<Gateway> gatewayList = null;
-        try {
-            gatewayList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Gateway>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gatewayList = gatewayService.getAllGateway();
         boolean flag = false;
         PDP removablePdp = null;
 //        for (Gateway gateway1 : gatewayList) {
@@ -308,22 +279,13 @@ public class HandlePDPAction implements Serializable {
 //                flag = false;
 //                gateway1.getCameras().remove(removableCamera);
 //            }
-//            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-//            try {
-//                String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gateway1)), String.class);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+//
 //        }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deletePdp");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPdp)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/zone/list-pdp.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = pdpService.deletePDP(currentPdp);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/zone/list-pdp.htm");
+
     }
 
 
@@ -354,12 +316,7 @@ public class HandlePDPAction implements Serializable {
         ip = currentPdp.getIp();
         descText = currentPdp.getDescText();
         pdpName = currentPdp.getNameText();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPdpById");
-        try {
-            currentPdp = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPdp.getId())), PDP.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        currentPdp = pdpService.findById(currentPdp.getId());
         if (currentPdp.getCamera() != null)
             cameraId = String.valueOf(currentPdp.getCamera().getId());
         gatewayId = String.valueOf(currentPdp.getGateway().getId());
@@ -385,46 +342,32 @@ public class HandlePDPAction implements Serializable {
         selectedPdp.setEnabled(pdpEnabled);
         selectedPdp.setEntrance(entrance);
         selectedPdp.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findGatewayById");
         Gateway gateway = null;
         Camera camera = null;
-        try {
-            gateway = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), gatewayId), Gateway.class);
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCameraById");
-            if (cameraId != null && !cameraId.equalsIgnoreCase("") )
-                camera = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), cameraId), Camera.class);
+        gateway = gatewayService.findById(Long.parseLong(gatewayId));
+        if (cameraId != null && !cameraId.equalsIgnoreCase(""))
+            camera = cameraService.findById(Long.parseLong(cameraId));
 
-        } catch (IOException e) {
-        }
         boolean flag = false;
         selectedPdp.setGateway(gateway);
         selectedPdp.setCamera(camera);
         selectedPdp.setOnline(online);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/existPDP");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(selectedPdp)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+        boolean condition = pdpService.exist(selectedPdp.getIp(), selectedPdp.getId());
+        if (condition) {
 
-                me.addInfoMessage("pdp.exist");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            me.addInfoMessage("pdp.exist");
+            return;
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editPdp");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(selectedPdp)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/zone/list-pdp.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        condition = pdpService.editPDP(selectedPdp);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/zone/list-pdp.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
+
     }
 
 
@@ -439,51 +382,25 @@ public class HandlePDPAction implements Serializable {
         newPdp.setOnline(online);
         newPdp.setEntrance(entrance);
         newPdp.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findGatewayById");
         Gateway gateway = null;
         Camera camera = null;
-        try {
-            gateway = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), gatewayId), Gateway.class);
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCameraById");
-            if (cameraId != null && !cameraId.equalsIgnoreCase("") )
-                camera = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), cameraId), Camera.class);
+        gateway = gatewayService.findById(Long.parseLong(gatewayId));
+        if (cameraId != null && !cameraId.equalsIgnoreCase(""))
+            camera = cameraService.findById(Long.parseLong(cameraId));
 
 
-
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
         boolean flag = false;
         newPdp.setGateway(gateway);
         newPdp.setCamera(camera);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/PDPexistNotId");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newPdp)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+        boolean condition = pdpService.existNotId(newPdp.getIp());
+        if (condition) {
 
-                me.addInfoMessage("pdp.exist");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            me.addInfoMessage("pdp.exist");
+            return;
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createPdp");
         PDP insertedPdp = null;
-        try {
-            insertedPdp = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newPdp)), PDP.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        insertedPdp = pdpService.createPDP(newPdp);
         if (insertedPdp != null) {
-//            for (Gateway gateway1 : selecteGateway) {
-//                gateway1.getCameras().add(insertedPdp);
-//                me.getGeneralHelper().getWebServiceInfo().setServiceName("/editGateway");
-//                try {
-//                    gateway1 = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(gateway1)), Gateway.class);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/zone/list-pdp.htm");

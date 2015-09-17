@@ -18,10 +18,10 @@ import java.util.List;
 
 public class PDPDAOImpl extends BaseDAOImpl<PDP> {
 
-    public PDP findById(String id) {
+    public PDP findById(long id) {
         try {
             return (PDP) em.createNamedQuery("PDP.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;
