@@ -2,6 +2,9 @@ package ir.university.toosi.wtms.web.action.rule;//**
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.calendar.DayTypeServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
@@ -14,6 +17,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -35,8 +39,15 @@ public class HandleRuleAction implements Serializable {
     private GeneralHelper generalHelper;
     @Inject
     private AccessControlAction accessControlAction;
-    private DataModel<RulePackage> rulePackageList = null;
-    private DataModel<Rule> ruleListTemp = null;
+    @EJB
+    private RuleServiceImpl ruleService;
+    @EJB
+    private DayTypeServiceImpl dayTypeService;
+    @EJB
+    private RulePackageServiceImpl rulePackageService;
+
+    private List<RulePackage> rulePackageList = null;
+    private List<Rule> ruleListTemp = null;
     private int page = 1;
     private String name;
     private String calendar;
@@ -106,31 +117,18 @@ public class HandleRuleAction implements Serializable {
         calendarItems = me.calendarItem;
         currentRulePackage = null;
         setSelectRow(false);
-        ruleNameFilter="";
+        ruleNameFilter = "";
 
     }
 
     private void fillDataModel() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRulePackage");
-        try {
-            rulePackages = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<RulePackage>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        rulePackageList = new ListDataModel<RulePackage>(rulePackages);
+        rulePackageList = rulePackageService.getAllRulePackage();
     }
 
     private void fillDayTypeCombo() {
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllDayType");
-        ArrayList<DayType> dayTypes = null;
-        try {
-            dayTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<DayType>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        List<DayType> dayTypes = null;
+        dayTypes = dayTypeService.getAllDayType();
 
         dayTypeItems = new SelectItem[dayTypes.size()];
         int i = 0;
@@ -146,27 +144,17 @@ public class HandleRuleAction implements Serializable {
 
         currentRulePackage.setStatus("o," + me.getUsername());
         currentRulePackage.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteRulePackage");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentRulePackage)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/business-rules/list-rule.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = rulePackageService.deleteRulePackage(currentRulePackage);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/business-rules/list-rule.htm");
     }
 
     public void edit() {
         ruleArrayList = new ArrayList<>();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getRulesByRulePackage");
-        try {
-            ruleArrayList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentRulePackage.getId())), new TypeReference<List<Rule>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        ruleListTemp = new ListDataModel<>(ruleArrayList);
+
+        ruleListTemp = ruleService.getByRulePackageId(currentRulePackage.getId());
+
         name = currentRulePackage.getName();
         ruleAllowExitGadget = currentRulePackage.isAllowExitGadget();
         ruleAniPassBack = currentRulePackage.isAniPassBack();
@@ -189,27 +177,20 @@ public class HandleRuleAction implements Serializable {
 //        currentRulePackage.setRules(new HashSet<Rule>());
 //        currentRulePackage.getRules().addAll(ruleArrayList);
         selectedRulePackage.setCalendar(me.calendarHashtable.get(selectedCalendarIdTemp));
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editRulePackage");
 
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(selectedRulePackage)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/fillRulePackageHashTable");
-                new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf("2"));
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRule");
-                for (Rule rule : ruleArrayList) {
-                    rule.setRulePackage(selectedRulePackage);
-                    new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(rule)), Rule.class);
-                }
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/business-rules/list-rule.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
+        boolean condition = rulePackageService.editRulePackage(selectedRulePackage);
+        if (condition) {
+            rulePackageService.fillRulePackageHashTable();
+            for (Rule rule : ruleArrayList) {
+                rule.setRulePackage(selectedRulePackage);
+                ruleService.createRule(rule);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/business-rules/list-rule.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
@@ -220,14 +201,14 @@ public class HandleRuleAction implements Serializable {
         init();
         selectedCalendar = null;
         addNewRuleFlag = false;
-        ruleListTemp = new ListDataModel<>(ruleArrayList);
+        ruleListTemp = ruleArrayList;
         editable = "false";
     }
 
     public void remove() {
-        currentRule = ruleListTemp.getRowData();
+//        currentRule = ruleListTemp.getRowData();
         ruleArrayList.remove(currentRule);
-        ruleListTemp = new ListDataModel<>(ruleArrayList);
+        ruleListTemp = ruleArrayList;
     }
 
     public void addNewRule() {
@@ -252,7 +233,7 @@ public class HandleRuleAction implements Serializable {
         rule.setDeny(ruleDeny);
         if (feasible(rule)) {
             ruleArrayList.add(rule);
-            ruleListTemp = new ListDataModel<>(ruleArrayList);
+            ruleListTemp = ruleArrayList;
             addNewRuleFlag = false;
         } else me.addInfoMessage("conflict");
     }
@@ -267,7 +248,7 @@ public class HandleRuleAction implements Serializable {
                 return false;
 
             for (Rule rule1 : ruleArrayList) {
-                if (rule1.getDayType().getId() != rule.getDayType().getId()|| !rule1.isDeny() )
+                if (rule1.getDayType().getId() != rule.getDayType().getId() || !rule1.isDeny())
                     continue;
                 if (startTime < time2long(rule1.getStartTime()) && endTime < time2long(rule1.getStartTime()))
                     flag = true;
@@ -283,7 +264,7 @@ public class HandleRuleAction implements Serializable {
             return false;
 
         for (Rule rule1 : ruleArrayList) {
-            if (rule1.getDayType().getId() != rule.getDayType().getId()|| rule1.isDeny() )
+            if (rule1.getDayType().getId() != rule.getDayType().getId() || rule1.isDeny())
                 continue;
             if (startTime < time2long(rule1.getStartTime()) && endTime < time2long(rule1.getStartTime()))
                 flag = true;
@@ -314,27 +295,20 @@ public class HandleRuleAction implements Serializable {
         rulePackage.setAllowExit(ruleAllowExit);
         rulePackage.setAniPassBack(ruleAniPassBack);
         rulePackage.setAllowExitGadget(ruleAllowExitGadget);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRulePackage");
         RulePackage addedRulePackage = null;
-        try {
-            addedRulePackage = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(rulePackage)), RulePackage.class);
-            if (addedRulePackage != null) {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRule");
-                for (Rule rule : ruleArrayList) {
-                    rule.setRulePackage(addedRulePackage);
-                    new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(rule)), Rule.class);
-                }
-                refresh();
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/fillRulePackageHashTable");
-                new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(1));
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/business-rules/list-rule.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
+        addedRulePackage = rulePackageService.createRulePackage(rulePackage);
+        if (addedRulePackage != null) {
+            for (Rule rule : ruleArrayList) {
+                rule.setRulePackage(addedRulePackage);
+                ruleService.createRule(rule);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            refresh();
+            rulePackageService.fillRulePackageHashTable();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/business-rules/list-rule.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
@@ -365,7 +339,7 @@ public class HandleRuleAction implements Serializable {
 
 
     public void selectForEdit() {
-        currentRulePackage = rulePackageList.getRowData();
+//        currentRulePackage = rulePackageList.getRowData();
         setSelectRow(true);
 
     }
@@ -378,13 +352,6 @@ public class HandleRuleAction implements Serializable {
         this.selectRow = selectRow;
     }
 
-    public DataModel<RulePackage> getRulePackageList() {
-        return rulePackageList;
-    }
-
-    public void setRulePackageList(DataModel<RulePackage> rulePackageList) {
-        this.rulePackageList = rulePackageList;
-    }
 
     public int getPage() {
         currentRulePackage = null;
@@ -466,14 +433,6 @@ public class HandleRuleAction implements Serializable {
 
     public void setSelectedCalendar(Calendar selectedCalendar) {
         this.selectedCalendar = selectedCalendar;
-    }
-
-    public DataModel<Rule> getRuleListTemp() {
-        return ruleListTemp;
-    }
-
-    public void setRuleListTemp(DataModel<Rule> ruleListTemp) {
-        this.ruleListTemp = ruleListTemp;
     }
 
     public boolean isAddNewRuleFlag() {
@@ -674,5 +633,33 @@ public class HandleRuleAction implements Serializable {
 
     public void setRuleNameFilter(String ruleNameFilter) {
         this.ruleNameFilter = ruleNameFilter;
+    }
+
+    public List<RulePackage> getRulePackageList() {
+        return rulePackageList;
+    }
+
+    public void setRulePackageList(List<RulePackage> rulePackageList) {
+        this.rulePackageList = rulePackageList;
+    }
+
+    public List<Rule> getRuleListTemp() {
+        return ruleListTemp;
+    }
+
+    public void setRuleListTemp(List<Rule> ruleListTemp) {
+        this.ruleListTemp = ruleListTemp;
+    }
+
+    public Boolean isRuleDeny() {
+        return ruleDeny;
+    }
+
+    public RulePackage getSelectedRulePackage() {
+        return selectedRulePackage;
+    }
+
+    public void setSelectedRulePackage(RulePackage selectedRulePackage) {
+        this.selectedRulePackage = selectedRulePackage;
     }
 }

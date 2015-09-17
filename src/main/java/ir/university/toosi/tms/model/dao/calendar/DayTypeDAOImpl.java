@@ -17,10 +17,10 @@ import javax.ejb.Stateless;
 
 public class DayTypeDAOImpl extends BaseDAOImpl<DayType> {
 
-    public DayType findById(String id) {
+    public DayType findById(long id) {
         try {
             return (DayType) em.createNamedQuery("DayType.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id",id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

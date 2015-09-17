@@ -86,15 +86,10 @@ public class HandleDayTypeAction implements Serializable {
 
     public void doDelete() {
         currentDayType.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteDayType");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentDayType)), String.class);
+            String condition =dayTypeService.deleteDayType(currentDayType);
             refresh();
             me.addInfoMessage(condition);
             me.redirect("/calendar/list-day.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void init() {
@@ -111,12 +106,7 @@ public class HandleDayTypeAction implements Serializable {
 
     public void edit() {
         setEditable("true");
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findDayTypeById");
-        try {
-            currentDayType = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentDayType.getId())), DayType.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            currentDayType =dayTypeService.findById(currentDayType.getId());
         title = currentDayType.getTitle();
         color = currentDayType.getColor();
         description = currentDayType.getDescription();
@@ -136,9 +126,8 @@ public class HandleDayTypeAction implements Serializable {
         currentDayType.setColor(color);
         currentDayType.setTitle(title);
         currentDayType.setEffectorUser(me.getUsername());
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentDayType)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+            boolean condition =dayTypeService.editDayType(currentDayType);
+            if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
                 me.redirect("/calendar/list-day.htm");
@@ -146,9 +135,6 @@ public class HandleDayTypeAction implements Serializable {
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -162,13 +148,8 @@ public class HandleDayTypeAction implements Serializable {
         newDayType.setEffectorUser(me.getUsername());
 
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createDayType");
         DayType insertedDayType = null;
-        try {
-            insertedDayType = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newDayType)), DayType.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            insertedDayType = dayTypeService.createDayType(newDayType);
 
         if (insertedDayType != null) {
             refresh();

@@ -2,6 +2,8 @@ package ir.university.toosi.wtms.web.action.rule;//**
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.rule.RuleExceptionServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -11,6 +13,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -29,8 +32,13 @@ public class HandleRuleExceptionAction implements Serializable {
     private UserManagementAction me;
     @Inject
     private GeneralHelper generalHelper;
-    private DataModel<RulePackage> rulePackageList = null;
-    private DataModel<RuleException> ruleExceptionList = null;
+
+    @EJB
+    private RulePackageServiceImpl rulePackageService;
+    @EJB
+    private RuleExceptionServiceImpl ruleExceptionService;
+    private List<RulePackage> rulePackageList = null;
+    private List<RuleException> ruleExceptionList = null;
     private int page = 1;
     private int pageInPopup = 1;
     private String name;
@@ -48,9 +56,9 @@ public class HandleRuleExceptionAction implements Serializable {
     private String endMinute;
     private String endSecond;
     private String editable = "false";
-    private ArrayList<RulePackage> rulePackages = new ArrayList<>();
-    private ArrayList<RulePackage> selectedRulePackage = new ArrayList<>();
-    private ArrayList<RuleException> ruleExceptions = new ArrayList<>();
+    private List<RulePackage> rulePackages = new ArrayList<>();
+    private List<RulePackage> selectedRulePackage = new ArrayList<>();
+    private List<RuleException> ruleExceptions = new ArrayList<>();
     private RuleException currentRuleException;
     private boolean selected;
     private boolean selectAll;
@@ -98,40 +106,23 @@ public class HandleRuleExceptionAction implements Serializable {
     }
 
     private void fillDataModel() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRuleException");
-        try {
-            ruleExceptions = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<RuleException>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        ruleExceptionList = new ListDataModel<RuleException>(ruleExceptions);
+
+        ruleExceptionList = ruleExceptionService.getAllRuleException();
     }
 
     public void doDelete() {
 
         currentRuleException.setStatus("o," + me.getUsername());
         currentRuleException.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteRuleException");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentRuleException)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/business-rules/list-exception-rule.htm");
+        String condition = ruleExceptionService.deleteRuleException(currentRuleException);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/business-rules/list-exception-rule.htm");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void edit() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRulePackage");
-        try {
-            rulePackages = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<RulePackage>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        rulePackages = rulePackageService.getAllRulePackage();
 
         selectedRulePackage = new ArrayList<>();
         for (RulePackage rulePackage : rulePackages) {
@@ -146,7 +137,7 @@ public class HandleRuleExceptionAction implements Serializable {
 
             }
         }
-        rulePackageList = new ListDataModel<>(rulePackages);
+        rulePackageList = rulePackages;
         fromDate = currentRuleException.getFromDate();
         toDate = currentRuleException.getToDate();
         ruleStartTime = currentRuleException.getStartTime();
@@ -184,24 +175,16 @@ public class HandleRuleExceptionAction implements Serializable {
         currentRuleException.setEntranceCount(ruleEntranceCount);
 
         currentRuleException.setRulePackage(new ArrayList<RulePackage>());
-//        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editRuleException");
-//        try {
-//            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentRuleException)), String.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
         if (!feasibleDate(currentRuleException) || !feasibleTime(currentRuleException)) {
             me.addInfoMessage("conflict");
             return;
         }
         currentRuleException.getRulePackage().addAll(selectedRulePackage);
         currentRuleException.setDeny(ruleDeny);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editPureRuleException");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentRuleException)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/fillRulePackageHashTable");
-                new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(1));
+            boolean condition = ruleExceptionService.editPureRuleException(currentRuleException);
+            if (condition) {
+              rulePackageService.fillRulePackageHashTable();
                 refresh();
                 me.addInfoMessage("operation.occurred");
                 me.redirect("/business-rules/list-exception-rule.htm");
@@ -210,9 +193,6 @@ public class HandleRuleExceptionAction implements Serializable {
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -220,15 +200,7 @@ public class HandleRuleExceptionAction implements Serializable {
         name = "";
         init();
         editable = "false";
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRulePackage");
-        try {
-            rulePackages = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<RulePackage>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        rulePackageList = new ListDataModel<>(rulePackages);
+        rulePackageList = rulePackageService.getAllRulePackage();
     }
 //
 //
@@ -249,7 +221,7 @@ public class HandleRuleExceptionAction implements Serializable {
     }
 
     public void selectRulePackage(ValueChangeEvent event) {
-        RulePackage rulePackage = rulePackageList.getRowData();
+        RulePackage rulePackage = null /*rulePackageList.getRowData()*/;
         boolean temp = (Boolean) event.getNewValue();
         if (temp) {
             rulePackage.setSelected(true);
@@ -283,15 +255,12 @@ public class HandleRuleExceptionAction implements Serializable {
             return;
         }
         ruleException.setDeny(ruleDeny);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRuleException");
         RuleException addedRulePackage = null;
-        try {
-            addedRulePackage = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(ruleException)), RuleException.class);
+            addedRulePackage =ruleExceptionService.createRuleException(ruleException);
             if (addedRulePackage != null) {
 
                 refresh();
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/fillRulePackageHashTable");
-                new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(1));
+               rulePackageService.fillRulePackageHashTable();
                 me.addInfoMessage("operation.occurred");
                 me.redirect("/business-rules/list-exception-rule.htm");
             } else {
@@ -299,9 +268,6 @@ public class HandleRuleExceptionAction implements Serializable {
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void saveOrUpdate() {
@@ -359,7 +325,7 @@ public class HandleRuleExceptionAction implements Serializable {
     }
 
     public void selectForEdit() {
-        currentRuleException = ruleExceptionList.getRowData();
+//        currentRuleException = ruleExceptionList.getRowData();
         setSelectRow(true);
 
     }
@@ -462,9 +428,6 @@ public class HandleRuleExceptionAction implements Serializable {
         this.editable = editable;
     }
 
-    public ArrayList<RulePackage> getRulePackages() {
-        return rulePackages;
-    }
 
     public void setRulePackages(ArrayList<RulePackage> rulePackages) {
         this.rulePackages = rulePackages;
@@ -478,46 +441,6 @@ public class HandleRuleExceptionAction implements Serializable {
         this.currentRuleException = currentRuleException;
     }
 
-    public DataModel<RuleException> getRuleExceptionList() {
-        return ruleExceptionList;
-    }
-
-    public void setRuleExceptionList(DataModel<RuleException> ruleExceptionList) {
-        this.ruleExceptionList = ruleExceptionList;
-    }
-
-    public ArrayList<RuleException> getRuleExceptions() {
-        return ruleExceptions;
-    }
-
-    public void setRuleExceptions(ArrayList<RuleException> ruleExceptions) {
-        this.ruleExceptions = ruleExceptions;
-    }
-
-    public String getRulePackageId() {
-        return rulePackageId;
-    }
-
-    public void setRulePackageId(String rulePackageId) {
-        this.rulePackageId = rulePackageId;
-    }
-
-    public DataModel<RulePackage> getRulePackageList() {
-        return rulePackageList;
-    }
-
-
-    public void setRulePackageList(DataModel<RulePackage> rulePackageList) {
-        this.rulePackageList = rulePackageList;
-    }
-
-    public ArrayList<RulePackage> getSelectedRulePackage() {
-        return selectedRulePackage;
-    }
-
-    public void setSelectedRulePackage(ArrayList<RulePackage> selectedRulePackage) {
-        this.selectedRulePackage = selectedRulePackage;
-    }
 
     public boolean isSelected() {
         return selected;
@@ -613,5 +536,53 @@ public class HandleRuleExceptionAction implements Serializable {
 
     public void setExceptionNameFilter(String exceptionNameFilter) {
         this.exceptionNameFilter = exceptionNameFilter;
+    }
+
+    public List<RulePackage> getRulePackageList() {
+        return rulePackageList;
+    }
+
+    public void setRulePackageList(List<RulePackage> rulePackageList) {
+        this.rulePackageList = rulePackageList;
+    }
+
+    public List<RuleException> getRuleExceptionList() {
+        return ruleExceptionList;
+    }
+
+    public void setRuleExceptionList(List<RuleException> ruleExceptionList) {
+        this.ruleExceptionList = ruleExceptionList;
+    }
+
+    public String getRulePackageId() {
+        return rulePackageId;
+    }
+
+    public void setRulePackageId(String rulePackageId) {
+        this.rulePackageId = rulePackageId;
+    }
+
+    public List<RulePackage> getRulePackages() {
+        return rulePackages;
+    }
+
+    public void setRulePackages(List<RulePackage> rulePackages) {
+        this.rulePackages = rulePackages;
+    }
+
+    public List<RulePackage> getSelectedRulePackage() {
+        return selectedRulePackage;
+    }
+
+    public void setSelectedRulePackage(List<RulePackage> selectedRulePackage) {
+        this.selectedRulePackage = selectedRulePackage;
+    }
+
+    public List<RuleException> getRuleExceptions() {
+        return ruleExceptions;
+    }
+
+    public void setRuleExceptions(List<RuleException> ruleExceptions) {
+        this.ruleExceptions = ruleExceptions;
     }
 }

@@ -38,7 +38,7 @@ public class DayTypeServiceImpl<T extends DayType> {
     private RuleServiceImpl ruleService;
 
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) dayTypeDAO.findById(id);
         } catch (Exception e) {
@@ -121,7 +121,7 @@ public class DayTypeServiceImpl<T extends DayType> {
 
     public boolean editDayType(T entity) {
         try {
-            DayType oldDayType = dayTypeDAO.findById(String.valueOf(entity.getId()));
+            DayType oldDayType = dayTypeDAO.findById(entity.getId());
             DayType newDayType = new DayType();
             newDayType.setStatus("o," + entity.getEffectorUser());
             newDayType.setId(getMaximumId());
