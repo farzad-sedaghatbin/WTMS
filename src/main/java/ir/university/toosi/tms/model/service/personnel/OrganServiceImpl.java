@@ -39,7 +39,7 @@ public class OrganServiceImpl<T extends Organ> {
     private PermissionServiceImpl permissionService;
 
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) organDAO.findById(id);
         } catch (Exception e) {
@@ -118,7 +118,7 @@ public class OrganServiceImpl<T extends Organ> {
 
     public boolean editOrgan(T entity) {
         try {
-            Organ oldOrgan = findById(String.valueOf(entity.getId()));
+            Organ oldOrgan = findById(entity.getId());
             if (entity.isInheritance()) {
                 if (entity.getRulePackage() != null) {
                     List<Person> persons = personService.findByOrgan(oldOrgan.getId());

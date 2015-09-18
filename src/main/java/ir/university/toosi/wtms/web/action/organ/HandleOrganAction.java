@@ -3,12 +3,15 @@ package ir.university.toosi.wtms.web.action.organ;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.calendar.DayTypeServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.OrganServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.tms.model.entity.BLookup;
 import ir.university.toosi.tms.model.entity.Lookup;
-import ir.university.toosi.tms.model.entity.MenuType;
-import ir.university.toosi.tms.model.entity.WebServiceInfo;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
 import ir.university.toosi.tms.model.entity.calendar.DayType;
 import ir.university.toosi.tms.model.entity.personnel.Organ;
@@ -19,6 +22,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -40,10 +44,20 @@ import java.util.*;
 public class HandleOrganAction implements Serializable {
     @Inject
     private UserManagementAction me;
+    @EJB
+    private OrganServiceImpl organService;
+    @EJB
+    private PersonServiceImpl personService;
+    @EJB
+    private RulePackageServiceImpl rulePackageService;
+    @EJB
+    private RuleServiceImpl ruleService;
+    @EJB
+    private DayTypeServiceImpl dayTypeService;
     @Inject
     private HandleRoleAction handleRoleAction;
-    private DataModel<Organ> organList = null;
-    private DataModel<Person> personList = null;
+    private List<Organ> organList = null;
+    private List<Person> personList = null;
     private Organ parentOrgan = null;
     private String editable = "false";
     private String organName;
@@ -61,7 +75,7 @@ public class HandleOrganAction implements Serializable {
     private String rulePackageName;
     private String calendarName;
     private boolean antiPassBack, allowExit, allowExitGadget;
-    private DataModel<RulePackage> rulePackageList = null;
+    private List<RulePackage> rulePackageList = null;
     private List<Organ> rootOrgans;
     private boolean inheritance;
     private String name;
@@ -71,7 +85,7 @@ public class HandleOrganAction implements Serializable {
     private boolean ruleAllowExit = false;
     private boolean ruleAllowExitGadget = false;
     private boolean selectRow = false;
-    private DataModel<Rule> ruleListTemp = null;
+    private List<Rule> ruleListTemp = null;
     private Calendar selectedCalendar;
     private DayType ruleDayType;
     private String selectedCalendarIdTemp;
@@ -110,28 +124,18 @@ public class HandleOrganAction implements Serializable {
         return "list-organ";
     }
 
-    public DataModel<Organ> getSelectionGrid() {
+    public List<Organ> getSelectionGrid() {
         refresh();
         return organList;
     }
 
     private void refresh() {
         init();
-        WebServiceInfo organService = new WebServiceInfo();
-        try {
-            List<Organ> organs;
-            if (parentOrgan != null) {
-                organService.setServiceName("/getAllActiveOrganByParent");
-                organs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(organService.getServerUrl(), organService.getServiceName(), String.valueOf(parentOrgan.getId())), new TypeReference<List<Organ>>() {
-                });
-            } else {
-                organService.setServiceName("/getAllActiveOrgan");
-                organs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(organService.getServerUrl(), organService.getServiceName()), new TypeReference<List<Organ>>() {
-                });
-            }
-            organList = new ListDataModel<>(organs);
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<Organ> organs;
+        if (parentOrgan != null) {
+            organList = organService.getAllActiveOrganByParent(parentOrgan.getId());
+        } else {
+            organList = organService.getAllActiveOrgan();
         }
         calendarItems = me.calendarItem;
         page = 1;
@@ -140,14 +144,8 @@ public class HandleOrganAction implements Serializable {
 
     private void fillDayTypeCombo() {
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllDayType");
-        ArrayList<DayType> dayTypes = null;
-        try {
-            dayTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<DayType>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        List<DayType> dayTypes = null;
+        dayTypes = dayTypeService.getAllDayType();
 
         dayTypeItems = new SelectItem[dayTypes.size()];
         int i = 0;
@@ -166,15 +164,10 @@ public class HandleOrganAction implements Serializable {
 
     public void doDelete() {
         currentOrgan.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteOrgan");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentOrgan)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/organ/list-organ.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = organService.deleteOrgan(currentOrgan);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/organ/list-organ.htm");
     }
 
     public void init() {
@@ -197,42 +190,24 @@ public class HandleOrganAction implements Serializable {
         if (id.equals(-1l)) {
             parentOrgan = null;
         } else {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findOrganById");
-            try {
-                parentOrgan = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(id)), Organ.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            parentOrgan = organService.findById(id);
         }
         refresh();
     }
 
     public void changeParentOrgan() {
-        parentOrgan = organList.getRowData();
+//        parentOrgan = organList.getRowData();
         refresh();
     }
 
     public void listPerson() {
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonByOrganId");
-        try {
-            personList = new ListDataModel<>((List<Person>) new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentOrgan.getId())), new TypeReference<List<Person>>() {
-            }));
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-
+        personList = personService.findByOrgan(currentOrgan.getId());
     }
 
     public void edit() {
         setEditable("true");
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findOrganById");
-        try {
-            currentOrgan = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentOrgan.getId())), Organ.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        currentOrgan = organService.findById(currentOrgan.getId());
         organName = currentOrgan.getName();
         organTitle = currentOrgan.getTitle();
         organCode = currentOrgan.getCode();
@@ -248,7 +223,6 @@ public class HandleOrganAction implements Serializable {
     }
 
     private void doEdit() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editOrgan");
         currentOrgan.setOrganType(getOrganType());
         currentOrgan.setCode(organCode);
         currentOrgan.setTitle(organTitle);
@@ -260,18 +234,14 @@ public class HandleOrganAction implements Serializable {
         } else {
             currentOrgan.setParentOrgan(null);
         }
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentOrgan)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/organ/list-organ.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = organService.editOrgan(currentOrgan);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/organ/list-organ.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
 
     }
@@ -297,26 +267,16 @@ public class HandleOrganAction implements Serializable {
         newOrgan.setStatus("c");
         newOrgan.setEffectorUser(me.getUsername());
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/existOrgan");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newOrgan)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+        boolean condition = organService.existOrgan(newOrgan);
+        if (condition) {
 
-                me.addInfoMessage("organ.exist");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            me.addInfoMessage("organ.exist");
+            return;
         }
 
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createOrgan");
         Organ insertedOrgan = null;
-        try {
-            insertedOrgan = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newOrgan)), Organ.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        insertedOrgan = organService.createOrgan(newOrgan);
 
         if (insertedOrgan != null) {
             refresh();
@@ -330,12 +290,7 @@ public class HandleOrganAction implements Serializable {
 
 
     public void assignRule() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findOrganById");
-        try {
-            currentOrgan = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentOrgan.getId())), Organ.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        currentOrgan = organService.findById(currentOrgan.getId());
         selectedRulePackage = currentOrgan.getRulePackage();
         if (selectedRulePackage != null) {
             rulePackageName = selectedRulePackage.getName();
@@ -354,40 +309,28 @@ public class HandleOrganAction implements Serializable {
             allowExitGadget = false;
         }
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRulePackage");
         List<RulePackage> rulePackages = null;
-        try {
-            rulePackages = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<RulePackage>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        rulePackageList = new ListDataModel<>(rulePackages);
+        rulePackageList = rulePackageService.getAllRulePackage();
     }
 
 
     public void doAssignRule() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editOrgan");
         currentOrgan.setEffectorUser(me.getUsername());
         currentOrgan.setRulePackage(selectedRulePackage);
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentOrgan)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/organ/list-organ.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = organService.editOrgan(currentOrgan);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/organ/list-organ.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
 
     }
 
     public void selectNewRuleForOrgan() {
-        selectedRulePackage = rulePackageList.getRowData();
+//        selectedRulePackage = rulePackageList.getRowData();
         rulePackageName = selectedRulePackage.getName();
         if (selectedRulePackage.getCalendar() != null)
             calendarName = selectedRulePackage.getCalendar().getName();
@@ -399,12 +342,7 @@ public class HandleOrganAction implements Serializable {
     }
 
     public void editRule() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findOrganById");
-        try {
-            currentOrgan = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentOrgan.getId())), Organ.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        currentOrgan = organService.findById(currentOrgan.getId());
         if (currentOrgan.getRulePackage() == null) {
             refresh();
             me.addErrorMessage("has.not.rulePackage");
@@ -418,14 +356,8 @@ public class HandleOrganAction implements Serializable {
 
     public void editOrganRule(RulePackage rulePackage) {
         ruleArrayList = new ArrayList<>();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getRulesByRulePackage");
-        try {
-            ruleArrayList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(rulePackage.getId())), new TypeReference<List<Rule>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        ruleListTemp = new ListDataModel<>(ruleArrayList);
+        ruleListTemp = ruleService.getByRulePackageId(rulePackage.getId());
+        ruleListTemp = ruleArrayList;
         name = rulePackage.getName();
         ruleAllowExitGadget = rulePackage.isAllowExitGadget();
         ruleAniPassBack = rulePackage.isAniPassBack();
@@ -436,9 +368,9 @@ public class HandleOrganAction implements Serializable {
     }
 
     public void remove() {
-        currentRule = ruleListTemp.getRowData();
+//        currentRule = ruleListTemp.getRowData();
         ruleArrayList.remove(currentRule);
-        ruleListTemp = new ListDataModel<>(ruleArrayList);
+        ruleListTemp = ruleArrayList;
     }
 
     public void addNewRule() {
@@ -463,7 +395,7 @@ public class HandleOrganAction implements Serializable {
         rule.setDeny(ruleDeny);
         if (feasible(rule)) {
             ruleArrayList.add(rule);
-            ruleListTemp = new ListDataModel<>(ruleArrayList);
+            ruleListTemp = ruleArrayList;
             addNewRuleFlag = false;
         } else me.addInfoMessage("conflict");
     }
@@ -511,39 +443,28 @@ public class HandleOrganAction implements Serializable {
         newRulePackage.setAniPassBack(ruleAniPassBack);
         newRulePackage.setAllowExitGadget(ruleAllowExitGadget);
         newRulePackage.setCalendar(me.calendarHashtable.get(selectedCalendarIdTemp));
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRulePackage");
 
         RulePackage addedRulePackage = null;
-        try {
-            addedRulePackage = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newRulePackage)), RulePackage.class);
-            if (addedRulePackage != null) {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRule");
-                for (Rule rule : ruleArrayList) {
-                    rule.setRulePackage(addedRulePackage);
-                    new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(rule)), Rule.class);
-                }
+        addedRulePackage = rulePackageService.createRulePackage(newRulePackage);
+        if (addedRulePackage != null) {
+            for (Rule rule : ruleArrayList) {
+                rule.setRulePackage(addedRulePackage);
+                ruleService.createRule(rule);
+            }
 
-                currentOrgan.setRulePackage(addedRulePackage);
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/editOrgan");
-                try {
-                    String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentOrgan)), String.class);
-                    if (condition.equalsIgnoreCase("true")) {
-                        refresh();
-                        me.addInfoMessage("operation.occurred");
-                        me.redirect("/organ/list-organ.htm");
-                    } else {
-                        me.addInfoMessage("operation.not.occurred");
-                        return;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            currentOrgan.setRulePackage(addedRulePackage);
+            boolean condition = organService.editOrgan(currentOrgan);
+            if (condition) {
+                refresh();
+                me.addInfoMessage("operation.occurred");
+                me.redirect("/organ/list-organ.htm");
             } else {
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
@@ -619,13 +540,10 @@ public class HandleOrganAction implements Serializable {
     }
 
     public void selectForEdit() {
-        currentOrgan = organList.getRowData();
+//        currentOrgan = organList.getRowData();
         setSelectRow(true);
     }
 
-    public void setOrganList(DataModel<Organ> organList) {
-        this.organList = organList;
-    }
 
     public String getOrganDescriptionFilter() {
         return organDescriptionFilter;
@@ -704,14 +622,13 @@ public class HandleOrganAction implements Serializable {
 
     public List<BLookup> getOrganTypes() {
         if (organTypes == null) {
-            WebServiceInfo bLookupService = new WebServiceInfo();
-            bLookupService.setServiceName("/getByLookupId");
-            try {
-                organTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), new ObjectMapper().writeValueAsString(Lookup.ORGAN_TYPE_ID)), new TypeReference<List<BLookup>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            bLookupService.setServiceName("/getByLookupId");
+//            try {
+//                organTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), new ObjectMapper().writeValueAsString(Lookup.ORGAN_TYPE_ID)), new TypeReference<List<BLookup>>() {
+//                });
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
             for (BLookup bLookup : organTypes) {
                 bLookup.setTitleText(me.getValue(bLookup.getCode()));
             }
@@ -750,9 +667,6 @@ public class HandleOrganAction implements Serializable {
         this.page = page;
     }
 
-    public DataModel<Organ> getOrganList() {
-        return organList;
-    }
 
     public Organ getCurrentOrgan() {
         return currentOrgan;
@@ -818,24 +732,11 @@ public class HandleOrganAction implements Serializable {
         this.allowExitGadget = allowExitGadget;
     }
 
-    public DataModel<RulePackage> getRulePackageList() {
-        return rulePackageList;
-    }
-
-    public void setRulePackageList(DataModel<RulePackage> rulePackageList) {
-        this.rulePackageList = rulePackageList;
-    }
 
     public List<Organ> getRootOrgans() {
         if (rootOrgans == null) {
-            try {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOrgan");
-                List<Organ> organs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Organ>>() {
-                });
+            List<Organ> organs = organService.getAllOrgan();
 //                rootOrgans = Organ.prepareHierarchy(organs);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return rootOrgans;
     }
@@ -908,13 +809,6 @@ public class HandleOrganAction implements Serializable {
         this.ruleAllowExitGadget = ruleAllowExitGadget;
     }
 
-    public DataModel<Rule> getRuleListTemp() {
-        return ruleListTemp;
-    }
-
-    public void setRuleListTemp(DataModel<Rule> ruleListTemp) {
-        this.ruleListTemp = ruleListTemp;
-    }
 
     public Calendar getSelectedCalendar() {
         return selectedCalendar;
@@ -1140,13 +1034,6 @@ public class HandleOrganAction implements Serializable {
         this.organTypeOrder = organTypeOrder;
     }
 
-    public DataModel<Person> getPersonList() {
-        return personList;
-    }
-
-    public void setPersonList(DataModel<Person> personList) {
-        this.personList = personList;
-    }
 
     public int getPersonPage() {
         return personPage;

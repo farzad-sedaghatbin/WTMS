@@ -29,10 +29,10 @@ public class OrganDAOImpl extends BaseDAOImpl<Organ> {
         }
     }
 
-    public Organ findById(String id) {
+    public Organ findById(long id) {
         try {
             return (Organ) em.createNamedQuery("Organ.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

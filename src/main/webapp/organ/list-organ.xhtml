@@ -1,0 +1,161 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:define name="content">
+
+
+
+
+<br/>
+<h:form>
+<table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
+
+<tr valign="top">
+    <td nowrap="nowrap" class="englishMode toolbar">
+        <p:panel id="pathsPanel">
+            <c:forEach items="#{handleOrganAction.allParents}" var="parent">
+                <c:choose>
+                    <c:when test="#{parent == null}">
+                        <p:commandLink value=".."
+                                         execute="@this"
+                                         limitRender="true"
+                                         render="organTable, pathsPanel"
+                                         onclick="#{p:component('waitingPanel.show();"
+                                         oncomplete="#{p:component('waitingPanel.hide();"
+                                         action="#{handleOrganAction.changeParentOrgan(-1)}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <p:commandLink value="#{parent.name}"
+                                         execute="@this"
+                                         limitRender="true"
+                                         render="organTable, pathsPanel"
+                                         onclick="#{p:component('waitingPanel.show();"
+                                         oncomplete="#{p:component('waitingPanel.hide();"
+                                         action="#{handleOrganAction.changeParentOrgan(parent.id)}"/>
+                    </c:otherwise>
+                </c:choose>
+                <span>/</span>
+            </c:forEach>
+        </p:panel>
+    </td>
+</tr>
+
+<tr valign="top">
+    <td nowrap="nowrap" align="right">
+        <fieldset dir="#{me.direction}">
+            <legend>
+                <h:outputText escape="true" value="organ_list"/>
+            </legend>
+
+
+            <table dir="RTL" style="width:100%">
+                <tr>
+                    <td valign="top">
+                        <div align="right">
+                            <p:tree id="tree" var="organ" value="#{handleOrganAction.rootOrgans}"
+                                       style="width: 310px; height: 400px;" dir="RTL"
+                                       toggleType="client">
+                                <p:treeNode iconCollapsed="/images/node_icon.gif"
+                                               iconExpanded="/images/node_open.jpg" expanded="true">
+                                    <p:commandLink
+                                            value="#{organ.name} - #{organ.code} - #{organ.organType.code} - #{organ.title}"
+                                            execute="@this"
+                                            limitRender="true"
+                                            render="organTable, pathsPanel"
+                                            action="#{handleOrganAction.changeParentOrgan(organ.id)}"/>
+                                </p:treeNode>
+                            </p:tree>
+                        </div>
+                    </td>
+                    <td valign="top" dir="#{me.direction}" align="#{me.align}">
+                        <p:dataTable id="organTable"
+                                        keepSaved="true"
+                                        value="#{handleOrganAction.organList}"
+                                        rowKeyVar="rowIndex"
+                                        noDataLabel="no_result_found"
+                                        sortMode="single"
+                                        var="organ"
+                                        rows="10"
+
+                                        style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                        rowClasses="ROW1,ROW2">
+
+                            <p:column sortBy="#{organ.name}"
+                                         sortOrder="#{handleOrganAction.organNameOrder}">
+                                <f:facet name="header">
+                                    <p:commandLink value="organ_name" render="organTable"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     action="#{handleOrganAction.sortByOrganName}"/>
+                                    <br/>
+                                    <h:inputText value="#{handleOrganAction.organNameFilter}">
+                                        <p:ajax event="blur" render="organTable" execute="@this"
+                                                  limitRender="true"/>
+                                    </h:inputText>
+                                </f:facet>
+                                <p:commandLink id="editLink" value="#{organ.name}"
+                                                 render="operationArea"
+                                                 styleClass="withoutUnderlineLink"
+                                                 execute="@this"
+                                                 limitRender="true"
+                                                 action="#{handleOrganAction.selectForEdit}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="organ_code"/>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{organ.code}"/>
+                            </p:column>
+                            <p:column sortBy="#{organ.organType.titleText}"
+                                         sortOrder="#{handleOrganAction.organTypeOrder}">
+                                <f:facet name="header">
+                                    <p:commandLink value="organ_type"
+                                                     render="organTable"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     action="#{handleOrganAction.sortByOrganType}"/>
+                                    <br/>
+                                    <h:inputText value="#{handleOrganAction.organTypeFilter}">
+                                        <p:ajax event="blur" render="organTable" execute="@this" limitRender="true"/>
+                                    </h:inputText>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{organ.organType.titleText}"/>
+                            </p:column>
+                            <p:column sortBy="#{organ.title}"
+                                         sortOrder="#{handleOrganAction.organDescriptionOrder}">
+                                <f:facet name="header">
+                                    <p:commandLink value="organ_title" render="organTable"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     action="#{handleOrganAction.sortByOrganDescription}"/>
+                                    <br/>
+                                    <h:inputText value="#{handleOrganAction.organDescriptionFilter}">
+                                        <p:ajax event="blur" render="organTable" execute="@this"
+                                                  limitRender="true"/>
+                                    </h:inputText>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{organ.title}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:dataScroller limitRender="true" execute="@this" render="organTable"
+                                                   page="#{handleOrganAction.page}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </td>
+</tr>
+</table>
+</h:form>
+
+</ui:define>
+</ui:composition>
