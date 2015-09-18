@@ -1,0 +1,156 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="cards">
+                <p:menuitem value="View" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardDialog').show()"
+                            actionListener="#{handleCardAction.view}"/>
+                <p:menuitem value="Edit" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardDialog').show()"
+                            actionListener="#{handleCardAction.edit}"/>
+                <p:menuitem value="Delete" update="cards" icon="ui-icon-close"
+                            actionListener="#{handleCardAction.doDelete}"/>
+            </p:contextMenu>
+
+            <p:dataTable id="cards" var="currentCard" value="#{handleCardAction.cardList}" rowKey="#{currentCard.id}"
+                         selection="#{handleCardAction.currentCard}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
+                </f:facet>
+                <p:column headerText="name">
+                    <h:outputText value="#{currentCard.name}"/>
+                </p:column>
+                <p:column headerText="code">
+                    <h:outputText value="#{currentCard.code}"/>
+                </p:column>
+                <p:column headerText="card type">
+                    <h:outputText value="#{currentCard.cardType.code}"/>
+                </p:column>
+                <p:column headerText="card status">
+                    <h:outputText value="#{currentCard.cardStatus.code}"/>
+                </p:column>
+                <p:column headerText="start date">
+                    <h:outputText value="#{currentCard.startDate}"/>
+                </p:column>
+                <p:column headerText="expiration date">
+                    <h:outputText value="#{currentCard.expirationDate}"/>
+                </p:column>
+                <p:column headerText="person name">
+                    <h:outputText value="#{currentCard.person.name}"/>
+                </p:column>
+                <p:column headerText="person lastname">
+                    <h:outputText value="#{currentCard.person.lastName}"/>
+                </p:column>
+                <p:column headerText="personnel code">
+                    <h:outputText value="#{currentCard.person.personnelNo}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p:dialog header="Card Info" widgetVar="cardDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="cardDetail" style="text-align:center;">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                    </f:facet>
+                    <table>
+                        <tr>
+                            <td>
+                                <h:outputText value="name:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleCardAction.disableFields}"
+                                             value="#{handleCardAction.card.name}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="code:"/>
+                            </td>
+                            <td>
+                                <h:outputText value="#{handleCardAction.card.code}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="person name:"/>
+                            </td>
+                            <td>
+                                <h:outputText value="#{handleCardAction.card.person.name} #{handleCardAction.card.person.lastName}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="personnel No:"/>
+                            </td>
+                            <td>
+                                <h:outputText value="#{handleCardAction.card.person.personnelNo}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="card type:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu disabled="#{handleCardAction.disableFields}"
+                                                 value="#{handleCardAction.card.cardType.id}" valueChangeListener="#{handleCardAction.selectCardType}">
+                                    <f:selectItems value="#{handleCardAction.cardTypes}" var="cardType" itemLabel="#{cardType.code}" itemValue="#{cardType.id}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="card status:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu disabled="#{handleCardAction.disableFields}"
+                                                 value="#{handleCardAction.card.cardStatus.id}" valueChangeListener="#{handleCardAction.selectCardStatus}">
+                                    <f:selectItems value="#{handleCardAction.cardStatus}" var="cardStatus" itemLabel="#{cardStatus.code}" itemValue="#{cardStatus.id}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="visible:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handleCardAction.card.visible}"
+                                                         disabled="#{handleCardAction.disableFields}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="start date:"/>
+                            </td>
+                            <td>
+                                <p:calendar value="#{handleCardAction.card.startDate}"
+                                                         disabled="#{handleCardAction.disableFields}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="expiration date:"/>
+                            </td>
+                            <td>
+                                <p:calendar value="#{handleCardAction.card.expirationDate}"
+                                                         disabled="#{handleCardAction.disableFields}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:commandButton value="Submit" id="edit" update="cards"
+                                                 actionListener="#{handleCardAction.doEdit}"
+                                                 oncomplete="PF('cardDialog').hide()" styleClass="ui-priority-primary"
+                                                 rendered="#{not handleCardAction.disableFields}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

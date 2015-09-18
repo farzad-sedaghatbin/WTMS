@@ -94,6 +94,7 @@ public class HandleCardAction implements Serializable {
     private String cardPersonnelNoFilter;
     private String startDateFilter;
     private String expirationDateFilter;
+    private boolean disableFields;
 
 
     public String getCardData() {
@@ -394,8 +395,21 @@ public class HandleCardAction implements Serializable {
         }
     }
 
+
+    public void view() {
+        setCard(currentCard);
+        setDisableFields(true);
+        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCardById");
+        try {
+            setCard(new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(getCard().getId())), Card.class));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void edit() {
         setCard(currentCard);
+        setDisableFields(false);
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCardById");
         try {
             setCard(new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(getCard().getId())), Card.class));
@@ -1148,5 +1162,13 @@ public class HandleCardAction implements Serializable {
 
     public int getSelectionItemsSize() {
         return selectionItems == null ? 0 : selectionItems.size();
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }
