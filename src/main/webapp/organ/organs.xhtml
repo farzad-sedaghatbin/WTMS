@@ -1,0 +1,114 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="organs">
+                <p:menuitem value="View" update="organDetail" icon="ui-icon-search"
+                            oncomplete="PF('organDialog').show()"
+                            actionListener="#{handleOrganAction.view}"/>
+                <p:menuitem value="Edit" update="organDetail" icon="ui-icon-search"
+                            oncomplete="PF('organDialog').show()"
+                            actionListener="#{handleOrganAction.edit}"/>
+                <p:menuitem value="Delete" update="organs" icon="ui-icon-close"
+                            actionListener="#{handleOrganAction.doDelete}"/>
+            </p:contextMenu>
+
+            <p:commandButton value="Add" id="add" update="organDetail" actionListener="#{handleOrganAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('organDialog').show()"/>
+
+            <p:dataTable id="organs" var="currentOrgan" value="#{handleOrganAction.organList}"
+                         rowKey="#{currentOrgan.id}"
+                         selection="#{handleOrganAction.currentOrgan}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
+                </f:facet>
+                <p:column headerText="name">
+                    <h:outputText value="#{currentOrgan.name}"/>
+                </p:column>
+                <p:column headerText="code">
+                    <h:outputText value="#{currentOrgan.code}"/>
+                </p:column>
+                <p:column headerText="type">
+                    <h:outputText value="#{currentOrgan.organType.titleText}"/>
+                </p:column>
+                <p:column headerText="title">
+                    <h:outputText value="#{currentOrgan.title}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p:dialog header="Organ Info" widgetVar="organDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="organDetail" style="text-align:center;">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                    </f:facet>
+                    <table>
+                        <tr>
+                            <td>
+                                <h:outputText value="name:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleOrganAction.disableFields}"
+                                             value="#{handleOrganAction.organName}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="code:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleOrganAction.disableFields}"
+                                             value="#{handleOrganAction.organCode}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="title:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleOrganAction.disableFields}"
+                                             value="#{handleOrganAction.organTitle}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="type:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu value="#{handleOrganAction.organType.id}" disabled="#{handleOrganAction.disableFields}"
+                                                 valueChangeListener="#{handleOrganAction.selectOrganType}">
+                                    <f:selectItems itemLabel="#{orgType.code}" itemValue="#{orgType.id}"
+                                                   var="orgType"
+                                                   value="#{handleOrganAction.organTypes}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="inheritance:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handleOrganAction.inheritance}" disabled="#{handleOrganAction.disableFields}"
+                                                         valueChangeListener="#{handleOrganAction.selectInheritance}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:commandButton value="Submit" id="edit" update="organs"
+                                                 actionListener="#{handleOrganAction.saveOrUpdate}"
+                                                 oncomplete="PF('organDialog').hide()" styleClass="ui-priority-primary"
+                                                 rendered="#{not handleOrganAction.disableFields}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

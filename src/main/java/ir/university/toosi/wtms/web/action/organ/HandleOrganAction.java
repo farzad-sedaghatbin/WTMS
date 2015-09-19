@@ -115,6 +115,7 @@ public class HandleOrganAction implements Serializable {
     private SortOrder organDescriptionOrder = SortOrder.UNSORTED;
     private int personPage = 1;
     private String listPerson;
+    private boolean disableFields;
 
 
     public String begin() {
@@ -159,7 +160,7 @@ public class HandleOrganAction implements Serializable {
     public void add() {
         init();
         setEditable("false");
-
+        setDisableFields(false);
     }
 
     public void doDelete() {
@@ -207,6 +208,17 @@ public class HandleOrganAction implements Serializable {
 
     public void edit() {
         setEditable("true");
+        setDisableFields(false);
+        currentOrgan = organService.findById(currentOrgan.getId());
+        organName = currentOrgan.getName();
+        organTitle = currentOrgan.getTitle();
+        organCode = currentOrgan.getCode();
+        organType = currentOrgan.getOrganType();
+    }
+
+    public void view() {
+        setEditable("true");
+        setDisableFields(true);
         currentOrgan = organService.findById(currentOrgan.getId());
         organName = currentOrgan.getName();
         organTitle = currentOrgan.getTitle();
@@ -1049,5 +1061,21 @@ public class HandleOrganAction implements Serializable {
 
     public void setListPerson(String listPerson) {
         this.listPerson = listPerson;
+    }
+
+    public List<Organ> getOrganList() {
+        return organList;
+    }
+
+    public void setOrganList(List<Organ> organList) {
+        this.organList = organList;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }
