@@ -8,9 +8,9 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="rulePackageTable">
-                <p:menuitem value="View" update="rulePackageDetailPanel" icon="ui-icon-search"
+                <p:menuitem value="View" update="rulePackageDetailPanel" icon="ui-icon-document"
                             oncomplete="PF('rulePackageDialog').show()" actionListener="#{handleRuleAction.view}"/>
-                <p:menuitem value="Edit" update="rulePackageDetailPanel" icon="ui-icon-search"
+                <p:menuitem value="Edit" update="rulePackageDetailPanel" icon="ui-icon-comment"
                             oncomplete="PF('rulePackageDialog').show()" actionListener="#{handleRuleAction.edit}"/>
                 <p:menuitem value="Delete" update="rulePackageTable" icon="ui-icon-close"
                             actionListener="#{handleRuleAction.doDelete}"/>
