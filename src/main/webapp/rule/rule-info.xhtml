@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog header="Rule Package Info" widgetVar="rulePackageDialog" modal="true" showEffect="fade" hideEffect="fade"
+              resizable="false">
+        <p:outputPanel id="rulePackageDetailPanel" style="text-align:center;">
+            <p:panelGrid columns="2" columnClasses="label,value">
+                <f:facet name="header">
+                    <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                </f:facet>
+
+                <h:outputText value="name:"/>
+                <p:inputText readonly="#{handleRuleAction.disableFields}" value="#{handleRuleAction.name}"/>
+
+                <h:outputText value="selectedCalendarIdTemp:"/>
+                <h:selectOneMenu id="calendarIdTempSelection"
+                                 value="#{handleRuleAction.selectedCalendarIdTemp}"
+                                 required="true"
+                                 readonly="#{handleRuleAction.disableFields}">
+                    <f:selectItems value="#{handleRuleAction.calendarItems}"/>
+                </h:selectOneMenu>
+
+                <h:outputText value="ruleAniPassBack:"/>
+                <p:selectBooleanCheckbox readonly="#{handleRuleAction.disableFields}"
+                                         value="#{handleRuleAction.ruleAniPassBack}"/>
+
+                <h:outputText value="ruleAllowExit:"/>
+                <p:selectBooleanCheckbox readonly="#{handleRuleAction.disableFields}"
+                                         value="#{handleRuleAction.ruleAllowExit}"/>
+
+                <h:outputText value="ruleAllowExitGadget:"/>
+                <p:selectBooleanCheckbox readonly="#{handleRuleAction.disableFields}"
+                                         value="#{handleRuleAction.ruleAllowExitGadget}"/>
+
+            </p:panelGrid>
+
+            <p:contextMenu for="ruleTempTable" rendered="#{not handleRuleAction.disableFields}">
+                <p:menuitem value="Delete" update="ruleTempTable" icon="ui-icon-close"
+                            actionListener="#{handleRuleAction.remove}"/>
+            </p:contextMenu>
+
+            <p:dataTable id="ruleTempTable"
+                         var="ruleTemp"
+                         value="#{handleRuleAction.ruleListTemp}"
+                         rowKey="#{ruleTemp.id}"
+                         selection="#{handleRuleAction.currentRule}"
+                         selectionMode="single">
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="rule_dayType"/>
+                    </f:facet>
+                    <h:outputText value="#{ruleTemp.dayType.title}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="rule_startTime"/>
+                    </f:facet>
+                    <h:outputText value="#{ruleTemp.startTime}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="rule_endTime"/>
+                    </f:facet>
+                    <h:outputText value="#{ruleTemp.endTime}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="rule_entranceCount"/>
+                    </f:facet>
+                    <h:outputText value="#{ruleTemp.entranceCount}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="rule_exitCount"/>
+                    </f:facet>
+                    <h:outputText value="#{ruleTemp.exitCount}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{'انکار'}"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{ruleTemp.deny eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                </p:column>
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this"
+                                    render="ruleTempTable"
+                                    page="#{handleRuleAction.page}"/>
+                </f:facet>
+
+            </p:dataTable>
+
+            <p:commandButton value="Submit"
+                             update="rulePackageTable"
+                             actionListener="#{handleRuleAction.saveOrUpdate}"
+                             oncomplete="PF('rulePackageDialog').hide()"
+                             styleClass="ui-priority-primary"
+                             rendered="#{not handleRuleAction.disableFields}"/>
+        </p:outputPanel>
+    </p:dialog>
+
+</ui:composition>

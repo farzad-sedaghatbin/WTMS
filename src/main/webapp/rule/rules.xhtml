@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="rulePackageTable">
+                <p:menuitem value="View" update="rulePackageDetailPanel" icon="ui-icon-search"
+                            oncomplete="PF('rulePackageDialog').show()" actionListener="#{handleRuleAction.view}"/>
+                <p:menuitem value="Edit" update="rulePackageDetailPanel" icon="ui-icon-search"
+                            oncomplete="PF('rulePackageDialog').show()" actionListener="#{handleRuleAction.edit}"/>
+                <p:menuitem value="Delete" update="rulePackageTable" icon="ui-icon-close"
+                            actionListener="#{handleRuleAction.doDelete}"/>
+            </p:contextMenu>
+
+            <p:commandButton value="Add" id="add" update="rulePackageDetailPanel"
+                             actionListener="#{handleRuleAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('rulePackageDialog').show()"/>
+
+            <p:dataTable id="rulePackageTable" var="rulePackage" value="#{handleRuleAction.rulePackageList}"
+                         rowKey="#{rulePackage.id}"
+                         selection="#{handleRuleAction.currentRulePackage}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
+                </f:facet>
+                <p:column sortBy="#{rulePackage.name}"
+                          sortOrder="#{handleRuleAction.ruleNameOrder}">
+                    <f:facet name="header">
+                        <p:commandLink value="name" render="ruleTable"
+                                       execute="@this"
+                                       limitRender="true"
+                                       action="#{handleRuleAction.sortByRuleName}"/>
+                        <br/>
+                        <h:inputText value="#{handleRuleAction.ruleNameFilter}">
+                            <p:ajax event="blur" render="ruleTable" execute="@this"
+                                    limitRender="true"/>
+                        </h:inputText>
+                    </f:facet>
+                    <p:commandLink id="editLink" value="#{rulePackage.name}"
+                                   render="operationArea"
+                                   styleClass="withoutUnderlineLink"
+                                   execute="@this"
+                                   limitRender="true"
+                                   action="#{handleRuleAction.selectForEdit}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="namecalendar"/>
+                    </f:facet>
+                    <h:outputText value="#{rulePackage.calendar.name}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="antipassback"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{rulePackage.aniPassBack eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="allowexit"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{rulePackage.allowExit eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="allowgadget"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{rulePackage.allowExitGadget eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this" render="rulePackageTable"
+                                    page="#{handleRuleAction.page}"/>
+                </f:facet>
+            </p:dataTable>
+
+
+            <ui:include src="rule-info.xhtml"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

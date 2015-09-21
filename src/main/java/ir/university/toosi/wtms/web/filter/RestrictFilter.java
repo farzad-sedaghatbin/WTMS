@@ -1,6 +1,5 @@
 package ir.university.toosi.wtms.web.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.entity.User;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
@@ -19,29 +18,29 @@ import java.io.IOException;
  */
 
 @WebFilter(urlPatterns = {
-        "/authorization/*",
-        "/report/*",
-        "/business-rules/*",
-        "/calendar/*",
-        "/card/*",
-        "/comment/*",
-        "/operation/*",
-        "/event/*",
-        "/language/*",
-        "/lookup/*",
-        "/role/*",
-        "/user/*",
-        "/workgroup/*",
-        "/map/*",
-        "/menu/*",
-        "/monitoring/*",
-        "/organ/*",
-        "/pc/*",
-        "/person/*",
-        "/setting/*",
-        "/traffic/*",
-        "/zone/*",
-        "/bLookup//*",
+        "/authorization",
+        "/report",
+        "/business-rules",
+        "/calendar",
+        "/card",
+        "/comment",
+        "/operation",
+        "/event",
+        "/language",
+        "/lookup",
+        "/role",
+        "/user",
+        "/workgroup",
+        "/map",
+        "/menu",
+        "/monitoring",
+        "/organ",
+        "/pc",
+        "/person",
+        "/setting",
+        "/traffic",
+        "/zone",
+        "/bLookup/",
         "/home.htm",
         "/exception.htm",
         "/password.htm",
@@ -52,7 +51,8 @@ import java.io.IOException;
         "/change-password.htm",
         "/progress.htm",
         "/top.htm",
-        "/menuHandler"
+        "/menuHandler",
+        "/rules"
 })
 public class RestrictFilter implements Filter {
 

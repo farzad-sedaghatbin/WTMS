@@ -1,6 +1,5 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
@@ -9,7 +8,7 @@
     <div class="Animated05" id="layout-menu-cover">
         <h:form>
             <pm:menu>
-                <p:submenu id="usermanagemen" label="usermanagemen" icon="icon-user">
+                <p:submenu id="usermanagemen" label="user Management" icon="icon-user">
                     <p:menuitem id="rm_dashboard" value="Dashboard" icon="icon-dvr"/>
 
                     <p:menuitem id="rm_user" value="user" icon="icon-verified_user" action="#{handleUserAction.begin}"/>
@@ -53,6 +52,11 @@
                     <p:menuitem id="rm_trackBytime" value="trackBytime" icon="icon-trackBytime"
                                 actionListener="#{handleMonitoringAction.trackByPersonAndTime}"/>
 
+                </p:submenu>
+
+                <p:submenu id="schedule" label="Schedule" icon="icon-timer">
+                    <p:menuitem id="rm_rule" value="rule" icon="icon-device_hub"
+                                actionListener="#{handleRuleAction.begin}"/>
                 </p:submenu>
             </pm:menu>
         </h:form>

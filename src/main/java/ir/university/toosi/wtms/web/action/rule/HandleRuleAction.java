@@ -1,30 +1,23 @@
 package ir.university.toosi.wtms.web.action.rule;//**
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.calendar.Calendar;
+import ir.university.toosi.tms.model.entity.calendar.DayType;
+import ir.university.toosi.tms.model.entity.rule.Rule;
+import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.tms.model.service.calendar.DayTypeServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.tms.model.entity.MenuType;
-import ir.university.toosi.tms.model.entity.calendar.Calendar;
-import ir.university.toosi.tms.model.entity.calendar.DayType;
-import ir.university.toosi.tms.model.entity.rule.Rule;
-import ir.university.toosi.tms.model.entity.rule.RulePackage;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
-
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -69,6 +62,7 @@ public class HandleRuleAction implements Serializable {
     private Calendar selectedCalendar;
     private ArrayList<Rule> ruleArrayList = new ArrayList<>();
     private ArrayList<RulePackage> rulePackages = new ArrayList<>();
+    private boolean disableFields = true;
     private boolean addNewRuleFlag = false;
     private boolean ruleAniPassBack = false;
     private boolean ruleAllowExit = false;
@@ -84,17 +78,13 @@ public class HandleRuleAction implements Serializable {
 
     private Hashtable<String, DayType> dayTypeHashtable = new Hashtable<>();
 
-    public String begin() {
-        me.setActiveMenu(MenuType.CALENDAR);
+    public void begin() {
+        me.setActiveMenu(MenuType.USER);
         refresh();
-        return "list-rule";
+        me.redirect("/rule/rules.xhtml");
     }
 
     private void refresh() {
-        init();
-    }
-
-    public void init() {
         page = 1;
         ruleAllowExit = false;
         ruleAniPassBack = false;
@@ -144,21 +134,30 @@ public class HandleRuleAction implements Serializable {
         String condition = rulePackageService.deleteRulePackage(currentRulePackage);
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/business-rules/list-rule.htm");
+        me.redirect("/rule/rules.xhtml");
+    }
+
+    public void view() {
+        editable = "true";
+        disableFields = true;
+        fetchRulePackage();
     }
 
     public void edit() {
+        editable = "true";
+        disableFields = false;
+        fetchRulePackage();
+    }
+
+    private void fetchRulePackage() {
         ruleArrayList = new ArrayList<>();
-
         ruleListTemp = ruleService.getByRulePackageId(currentRulePackage.getId());
-
         name = currentRulePackage.getName();
         ruleAllowExitGadget = currentRulePackage.isAllowExitGadget();
         ruleAniPassBack = currentRulePackage.isAniPassBack();
         ruleAllowExit = currentRulePackage.isAllowExit();
         selectedCalendar = currentRulePackage.getCalendar();
         selectedCalendarIdTemp = String.valueOf(selectedCalendar.getId());
-        editable = "true";
         selectedRulePackage = currentRulePackage;
     }
 
@@ -184,7 +183,7 @@ public class HandleRuleAction implements Serializable {
             }
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/business-rules/list-rule.htm");
+            me.redirect("/rule/rules.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -195,15 +194,15 @@ public class HandleRuleAction implements Serializable {
         ruleArrayList = new ArrayList<>();
         name = "";
         calendar = "";
-        init();
+        refresh();
         selectedCalendar = null;
         addNewRuleFlag = false;
         ruleListTemp = ruleArrayList;
         editable = "false";
+        disableFields = false;
     }
 
     public void remove() {
-//        currentRule = ruleListTemp.getRowData();
         ruleArrayList.remove(currentRule);
         ruleListTemp = ruleArrayList;
     }
@@ -302,7 +301,7 @@ public class HandleRuleAction implements Serializable {
             refresh();
             rulePackageService.fillRulePackageHashTable();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/business-rules/list-rule.htm");
+            me.redirect("/rule/rules.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -658,5 +657,13 @@ public class HandleRuleAction implements Serializable {
 
     public void setSelectedRulePackage(RulePackage selectedRulePackage) {
         this.selectedRulePackage = selectedRulePackage;
+    }
+
+    public boolean isDisableFields() {
+        return disableFields;
+    }
+
+    public void setDisableFields(boolean disableFields) {
+        this.disableFields = disableFields;
     }
 }
