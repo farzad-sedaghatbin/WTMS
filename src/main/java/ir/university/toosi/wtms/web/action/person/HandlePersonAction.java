@@ -2,26 +2,30 @@ package ir.university.toosi.wtms.web.action.person;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.*;
+import ir.university.toosi.tms.model.entity.calendar.Calendar;
+import ir.university.toosi.tms.model.entity.calendar.DayType;
+import ir.university.toosi.tms.model.entity.personnel.Card;
+import ir.university.toosi.tms.model.entity.personnel.Job;
+import ir.university.toosi.tms.model.entity.personnel.Organ;
+import ir.university.toosi.tms.model.entity.personnel.Person;
+import ir.university.toosi.tms.model.entity.rule.Rule;
+import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.tms.model.entity.*;
-import ir.university.toosi.tms.model.entity.calendar.Calendar;
-import ir.university.toosi.tms.model.entity.calendar.DayType;
-import ir.university.toosi.tms.model.entity.personnel.*;
-import ir.university.toosi.tms.model.entity.rule.Rule;
-import ir.university.toosi.tms.model.entity.rule.RulePackage;
-import ir.university.toosi.wtms.web.util.*;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
+import ir.university.toosi.wtms.web.util.LangUtils;
+import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import ir.university.toosi.wtms.web.util.ReportUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.SortOrder;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.StreamedContent;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -33,7 +37,6 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -131,6 +134,15 @@ public class HandlePersonAction implements Serializable {
     private String personnameFilter;
     private String personFamilyFilter;
     private String personnelNoFilter;
+    private StreamedContent graphicText;
+
+    public void begin() {
+        me.setActiveMenu(MenuType.PERSONEL);
+        refresh();
+        me.redirect("/person/list-person.xhtml");
+    }
+
+
 
     public void init() {
         rowIndex = 0;
@@ -256,12 +268,6 @@ public class HandlePersonAction implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String begin() {
-//        me.setActiveMenu(MenuType.MANAGEMENT);
-        refresh();
-        return "list-person";
     }
 
     public void back() {
@@ -2405,6 +2411,14 @@ public class HandlePersonAction implements Serializable {
 
     public void setSimpleValue(String simpleValue) {
         this.simpleValue = simpleValue;
+    }
+
+    public StreamedContent getGraphicText() {
+        return graphicText;
+    }
+
+    public void setGraphicText(StreamedContent graphicText) {
+        this.graphicText = graphicText;
     }
 }
 
