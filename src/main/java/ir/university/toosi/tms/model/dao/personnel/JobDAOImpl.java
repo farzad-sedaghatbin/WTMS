@@ -28,10 +28,10 @@ public class JobDAOImpl extends BaseDAOImpl<Job> {
         }
     }
 
-    public Job findByPersonId(String id) {
+    public Job findByPersonId(long id) {
         try {
             return (Job) em.createNamedQuery("Job.findByPersonId")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

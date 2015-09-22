@@ -1,0 +1,57 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+
+
+        <br/>
+        <h:form>
+            <p:dataTable id="blookupTable"
+                            keepSaved="true"
+                            value="#{handleBLookupAction.bLookupList}"
+                            rowKeyVar="rowIndex"
+                            noDataLabel="no_result_found"
+                            sortMode="single"
+                            var="blookup"
+                            rows="10"
+                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                            rowClasses="ROW1,ROW2">
+
+                <p:column sortBy="#{blookup.name}">
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="#{'عنوان'}"/>
+                    </f:facet>
+                    <h:outputText escape="true" value="#{blookup.code}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="operation"/>
+                    </f:facet>
+                    <p:commandButton image="/images/edit.png"
+                                       action="#{handleBLookupAction.edit}"
+                                       title="edit"
+                                       execute="@this"
+                                       limitRender="true"
+                                       render="blookupTable, blookupPanelId"/>
+                    &#160;&#160;
+                    <p:commandButton image="/images/delete.png"
+                                       title="delete"
+                                       action="#{handleBLookupAction.doDelete}"
+                                       execute="@this"
+                                       limitRender="true"
+                                       render="blookupTable"
+                                       onclick="return confirm('deleteMessage')"/>
+                </p:column>
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this" render="blookupTable"
+                                       page="#{handleBLookupAction.page}"/>
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

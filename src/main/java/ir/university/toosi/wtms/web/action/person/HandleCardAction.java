@@ -2,7 +2,9 @@ package ir.university.toosi.wtms.web.action.person;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.BLookupServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.BLookup;
@@ -50,6 +52,11 @@ public class HandleCardAction implements Serializable {
 
     @EJB
     private CardServiceImpl cardService;
+    @EJB
+    private PersonServiceImpl personService;
+    @EJB
+    private BLookupServiceImpl bLookupService;
+
 
     private List<Card> cardList;
     private String cardData;
@@ -102,12 +109,7 @@ public class HandleCardAction implements Serializable {
             cardData = ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getParameter("cardData");
             if (cardData != null) {
 //            cardData = new EncryptUtil().decrypt(cardData);
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCardByCode");
-                try {
-                    card = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(cardData)), Card.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                card = cardService.findByCode(cardData);
                 if (card != null) {
                     messageText = me.getValue("CARD_ALREADY_EXIST") + " " + card.getPerson().getName() + " " + card.getPerson().getLastName();
                     if (card.getCardStatus().getCode().equalsIgnoreCase(BLookup.CARD_STATUS_LOST)) {
@@ -197,15 +199,10 @@ public class HandleCardAction implements Serializable {
     public void doDelete() {
         setCard(currentCard);
         getCard().setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteCard");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(getCard())), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/card/list-card.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = cardService.deleteCard(getCard());
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/card/list-card.htm");
     }
 
     public void downloadJnlp() throws IOException {
@@ -259,15 +256,8 @@ public class HandleCardAction implements Serializable {
             enablePoll = true;
 
             Object personId = personItems.get((Integer) selection.iterator().next()).getId();
-            try {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonById");
-                String serverUrl = me.getGeneralHelper().getWebServiceInfo().getServerUrl();
-                String serviceName = me.getGeneralHelper().getWebServiceInfo().getServiceName();
-                currentPerson = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(serverUrl, serviceName, String.valueOf(personId)), Person.class);
-                selection.remove(selection.iterator().next());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            currentPerson = personService.findById((Long) personId);
+            selection.remove(selection.iterator().next());
             startProcess();
             return "";
         } else {
@@ -384,115 +374,78 @@ public class HandleCardAction implements Serializable {
     public void doDeleteInvisible() {
         setCard(currentCard);
         getCard().setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteCard");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(getCard())), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/card/list-invisible-card.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = cardService.deleteCard(getCard());
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/card/list-invisible-card.htm");
     }
 
 
     public void view() {
         setCard(currentCard);
         setDisableFields(true);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCardById");
-        try {
-            setCard(new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(getCard().getId())), Card.class));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setCard(cardService.findById(getCard().getId()));
     }
 
     public void edit() {
         setCard(currentCard);
         setDisableFields(false);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCardById");
-        try {
-            setCard(new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(getCard().getId())), Card.class));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setCard(cardService.findById(getCard().getId()));
+
     }
 
     public void doEdit() {
         getCard().setCardType(getCardType());
         getCard().setCardStatus(getCardStatus());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editCard");
         getCard().setEffectorUser(me.getUsername());
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(getCard())), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/card/list-card.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = cardService.editCard(getCard());
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/card/list-card.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
         }
     }
 
     public void doEditInvisible() {
         getCard().setCardType(getCardType());
         getCard().setCardStatus(getCardStatus());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editCard");
         getCard().setEffectorUser(me.getUsername());
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(getCard())), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refreshInvis();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/card/list-invisible-card.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = cardService.editCard(getCard());
+        if (condition) {
+            refreshInvis();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/card/list-invisible-card.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
         }
     }
 
     public void addNewCard() {
         getCard().setCode(getCardData().toUpperCase());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonById");
         Person person = null;
-        try {
-            person = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), getPersonId().toString()), Person.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        person = personService.findById(getPersonId());
 
 
         getCard().setPerson(person);
         getCard().setCardType(getCardType());
         getCard().setCardStatus(getCardStatus());
         getCard().setEffectorUser(me.getUsername());
+        Card insertedCard = null;
+
+
         if (getCard().getId() > 0) {
             getCard().setDeleted("0");
             getCard().setStatus("c");
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editCard");
+            cardService.editCard(getCard());
         } else {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/createCard");
-        }
-        Card insertedCard = null;
-        try {
-            insertedCard = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(getCard())), Card.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+            insertedCard = cardService.createCard(getCard());
         }
 
         if (insertedCard != null) {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editPerson");
             person.setHasCard(true);
-            try {
-                new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(person));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+           personService.editPerson(person);
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/card/list-card.htm");
@@ -519,14 +472,14 @@ public class HandleCardAction implements Serializable {
         startDateFilter = "";
         expirationDateFilter = "";
         setPage(1);
-            notSelectedCard = new ArrayList<>();
-            cardList = cardService.getAllActiveCard();
-            for (Card card : allCard) {
-                notSelectedCard.add(card);
-                if (card.getCardType() != null)
-                    card.getCardType().setTitleText(me.getValue(card.getCardType().getTitle()));
-                card.getCardStatus().setTitleText(me.getValue(card.getCardStatus().getTitle()));
-            }
+        notSelectedCard = new ArrayList<>();
+        cardList = cardService.getAllActiveCard();
+        for (Card card : allCard) {
+            notSelectedCard.add(card);
+            if (card.getCardType() != null)
+                card.getCardType().setTitleText(me.getValue(card.getCardType().getTitle()));
+            card.getCardStatus().setTitleText(me.getValue(card.getCardStatus().getTitle()));
+        }
     }
 
     private void refreshInvis() {
@@ -547,11 +500,11 @@ public class HandleCardAction implements Serializable {
         setCurrentCard(null);
         setSelectRow(false);
         setPage(1);
-            cardList =cardService.getAllInvisible();
-            for (Card card : cardList) {
-                card.getCardType().setTitleText(me.getValue(card.getCardType().getTitle()));
-                card.getCardStatus().setTitleText(me.getValue(card.getCardStatus().getTitle()));
-            }
+        cardList = cardService.getAllInvisible();
+        for (Card card : cardList) {
+            card.getCardType().setTitleText(me.getValue(card.getCardType().getTitle()));
+            card.getCardStatus().setTitleText(me.getValue(card.getCardStatus().getTitle()));
+        }
     }
 
     private void refreshAssignCardToPersonList() {
@@ -566,17 +519,8 @@ public class HandleCardAction implements Serializable {
         cardOwnerFamilyOrder = SortOrder.ASCENDING;
         enablePoll = false;
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPersonDataModel");
-        try {
-            String serverUrl = me.getGeneralHelper().getWebServiceInfo().getServerUrl();
-            String serviceName = me.getGeneralHelper().getWebServiceInfo().getServiceName();
-            String restFullService = new RESTfulClientUtil().restFullService(serverUrl, serviceName);
-            personItems = new ObjectMapper().readValue(restFullService, new TypeReference<List<Person>>() {
-            });
+            personItems =personService.getAllPersonModel();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void selectForEdit() {
@@ -605,14 +549,7 @@ public class HandleCardAction implements Serializable {
 
     public List<BLookup> getCardTypes() {
         if (cardTypes == null) {
-            WebServiceInfo bLookupService = new WebServiceInfo();
-            bLookupService.setServiceName("/getByLookupId");
-            try {
-                cardTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), new ObjectMapper().writeValueAsString(Lookup.CARD_TYPE_ID)), new TypeReference<List<BLookup>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                cardTypes = bLookupService.getByLookupId(Lookup.CARD_TYPE_ID);
             for (BLookup bLookup : cardTypes) {
                 bLookup.setTitleText(me.getValue(bLookup.getTitle()));
             }
@@ -626,14 +563,7 @@ public class HandleCardAction implements Serializable {
 
     public List<BLookup> getCardStatuses() {
         if (cardStatuses == null) {
-            WebServiceInfo bLookupService = new WebServiceInfo();
-            bLookupService.setServiceName("/getByLookupId");
-            try {
-                cardStatuses = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), new ObjectMapper().writeValueAsString(Lookup.CARD_STATUS_ID)), new TypeReference<List<BLookup>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                cardStatuses = bLookupService.getByLookupId(Lookup.CARD_STATUS_ID);
             for (BLookup bLookup : cardStatuses) {
                 bLookup.setTitleText(me.getValue(bLookup.getTitle()));
             }
@@ -703,7 +633,6 @@ public class HandleCardAction implements Serializable {
 
     public void doSpecializeCard() throws IOException {
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editCard");
         getCard().setEffectorUser(me.getUsername());
         BLookup specialCard = null;
         BLookup normalCard = null;
@@ -713,24 +642,18 @@ public class HandleCardAction implements Serializable {
             if (type.getCode().equalsIgnoreCase(BLookup.CARD_NORMAL))
                 normalCard = type;
         }
-
-        try {
             for (Card card : notSelectedCard) {
                 card.setCardType(normalCard);
-                new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(card)), String.class);
+               cardService.editCard(card);
             }
             for (Card card : selectedCards) {
                 card.setCardType(specialCard);
-                new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(card)), String.class);
+                cardService.editCard(card);
             }
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/card/list-card.htm");
 
-        } catch (IOException e) {
-            me.addInfoMessage("operation.not.occurred");
-            e.printStackTrace();
-        }
     }
 
 /*    public void selectionListener(AjaxBehaviorEvent event) {
@@ -763,88 +686,88 @@ public class HandleCardAction implements Serializable {
         };
     }*/
 
-   /* public Filter<?> getCardStatusCodeFilterImpl() {
-        return new Filter<Card>() {
-            public boolean accept(Card card) {
-                return StringUtils.isEmpty(cardStatusCodeFilter) || card.getCardStatus().getCode().toLowerCase().contains(cardStatusCodeFilter.toLowerCase());
-            }
-        };
-    }
+    /* public Filter<?> getCardStatusCodeFilterImpl() {
+         return new Filter<Card>() {
+             public boolean accept(Card card) {
+                 return StringUtils.isEmpty(cardStatusCodeFilter) || card.getCardStatus().getCode().toLowerCase().contains(cardStatusCodeFilter.toLowerCase());
+             }
+         };
+     }
 
-    public Filter<?> getCardCodeFilterImpl() {
-        return new Filter<Card>() {
-            public boolean accept(Card card) {
-                return StringUtils.isEmpty(cardCodeFilter) || card.getCode().toLowerCase().contains(cardCodeFilter.toLowerCase());
-            }
-        };
-    }
+     public Filter<?> getCardCodeFilterImpl() {
+         return new Filter<Card>() {
+             public boolean accept(Card card) {
+                 return StringUtils.isEmpty(cardCodeFilter) || card.getCode().toLowerCase().contains(cardCodeFilter.toLowerCase());
+             }
+         };
+     }
 
-    public Filter<?> getCardOwnerNameFilterImpl() {
-        return new Filter<Card>() {
-            public boolean accept(Card card) {
-                return StringUtils.isEmpty(cardOwnerNameFilter) || card.getPerson().getName().toLowerCase().contains(cardOwnerNameFilter.toLowerCase());
-            }
-        };
-    }
+     public Filter<?> getCardOwnerNameFilterImpl() {
+         return new Filter<Card>() {
+             public boolean accept(Card card) {
+                 return StringUtils.isEmpty(cardOwnerNameFilter) || card.getPerson().getName().toLowerCase().contains(cardOwnerNameFilter.toLowerCase());
+             }
+         };
+     }
 
-    public Filter<?> getCardOwnerFamilyFilterImpl() {
-        return new Filter<Card>() {
-            public boolean accept(Card card) {
-                return StringUtils.isEmpty(cardOwnerFamilyFilter) || card.getPerson().getLastName().toLowerCase().contains(cardOwnerFamilyFilter.toLowerCase());
-            }
-        };
-    }
+     public Filter<?> getCardOwnerFamilyFilterImpl() {
+         return new Filter<Card>() {
+             public boolean accept(Card card) {
+                 return StringUtils.isEmpty(cardOwnerFamilyFilter) || card.getPerson().getLastName().toLowerCase().contains(cardOwnerFamilyFilter.toLowerCase());
+             }
+         };
+     }
 
-    public Filter<?> getCardPersonnelNoFilterImpl() {
-        return new Filter<Card>() {
-            public boolean accept(Card card) {
-                return StringUtils.isEmpty(cardPersonnelNoFilter) || card.getPerson().getPersonnelNo().toLowerCase().contains(cardPersonnelNoFilter.toLowerCase());
-            }
-        };
-    }
+     public Filter<?> getCardPersonnelNoFilterImpl() {
+         return new Filter<Card>() {
+             public boolean accept(Card card) {
+                 return StringUtils.isEmpty(cardPersonnelNoFilter) || card.getPerson().getPersonnelNo().toLowerCase().contains(cardPersonnelNoFilter.toLowerCase());
+             }
+         };
+     }
 
-    public Filter<?> getPersonNameFilterImpl() {
-        return new Filter<Person>() {
-            public boolean accept(Person person) {
-                return StringUtils.isEmpty(cardOwnerNameFilter) || person.getName().toLowerCase().contains(cardOwnerNameFilter.toLowerCase());
-            }
-        };
-    }
+     public Filter<?> getPersonNameFilterImpl() {
+         return new Filter<Person>() {
+             public boolean accept(Person person) {
+                 return StringUtils.isEmpty(cardOwnerNameFilter) || person.getName().toLowerCase().contains(cardOwnerNameFilter.toLowerCase());
+             }
+         };
+     }
 
-    public Filter<?> getPersonFamilyFilterImpl() {
-        return new Filter<Person>() {
-            public boolean accept(Person person) {
-                return StringUtils.isEmpty(cardOwnerFamilyFilter) || person.getLastName().toLowerCase().contains(cardOwnerFamilyFilter.toLowerCase());
-            }
-        };
-    }
+     public Filter<?> getPersonFamilyFilterImpl() {
+         return new Filter<Person>() {
+             public boolean accept(Person person) {
+                 return StringUtils.isEmpty(cardOwnerFamilyFilter) || person.getLastName().toLowerCase().contains(cardOwnerFamilyFilter.toLowerCase());
+             }
+         };
+     }
 
-    public Filter<?> getPersonPersonnelNoFilterImpl() {
-        return new Filter<Person>() {
-            public boolean accept(Person person) {
-                return StringUtils.isEmpty(cardPersonnelNoFilter) || person.getPersonnelNo().toLowerCase().contains(cardPersonnelNoFilter.toLowerCase());
-            }
-        };
-    }
+     public Filter<?> getPersonPersonnelNoFilterImpl() {
+         return new Filter<Person>() {
+             public boolean accept(Person person) {
+                 return StringUtils.isEmpty(cardPersonnelNoFilter) || person.getPersonnelNo().toLowerCase().contains(cardPersonnelNoFilter.toLowerCase());
+             }
+         };
+     }
 
-    public Filter<?> getStartDateFilterImpl() {
-        return new Filter<Card>() {
-            public boolean accept(Card card) {
-                return StringUtils.isEmpty(startDateFilter) ||
-                        LangUtils.getEnglishNumber(card.getStartDate()).equals(LangUtils.getEnglishNumber(startDateFilter));
-            }
-        };
-    }
+     public Filter<?> getStartDateFilterImpl() {
+         return new Filter<Card>() {
+             public boolean accept(Card card) {
+                 return StringUtils.isEmpty(startDateFilter) ||
+                         LangUtils.getEnglishNumber(card.getStartDate()).equals(LangUtils.getEnglishNumber(startDateFilter));
+             }
+         };
+     }
 
-    public Filter<?> getExpirationDateFilterImpl() {
-        return new Filter<Card>() {
-            public boolean accept(Card card) {
-                return StringUtils.isEmpty(expirationDateFilter) ||
-                        LangUtils.getEnglishNumber(card.getExpirationDate()).equals(LangUtils.getEnglishNumber(expirationDateFilter));
-            }
-        };
-    }
-*/
+     public Filter<?> getExpirationDateFilterImpl() {
+         return new Filter<Card>() {
+             public boolean accept(Card card) {
+                 return StringUtils.isEmpty(expirationDateFilter) ||
+                         LangUtils.getEnglishNumber(card.getExpirationDate()).equals(LangUtils.getEnglishNumber(expirationDateFilter));
+             }
+         };
+     }
+ */
     public void sortByCardName() {
         cardNameOrder = newSortOrder(cardNameOrder);
     }

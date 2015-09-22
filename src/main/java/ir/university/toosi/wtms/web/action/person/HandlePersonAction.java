@@ -11,6 +11,14 @@ import ir.university.toosi.tms.model.entity.personnel.Organ;
 import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.tms.model.entity.rule.Rule;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
+import ir.university.toosi.tms.model.service.BLookupServiceImpl;
+import ir.university.toosi.tms.model.service.calendar.DayTypeServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.JobServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.OrganServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
@@ -27,6 +35,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.StreamedContent;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -59,6 +68,24 @@ public class HandlePersonAction implements Serializable {
     private GeneralHelper generalHelper;
     @Inject
     private AccessControlAction accessControlAction;
+    @EJB
+    private PersonServiceImpl personService;
+
+    @EJB
+    private OrganServiceImpl organService;
+    @EJB
+    private RulePackageServiceImpl rulePackageService;
+    @EJB
+    private RuleServiceImpl ruleService;
+    @EJB
+    private JobServiceImpl jobService;
+    @EJB
+    private DayTypeServiceImpl dayTypeService;
+    @EJB
+    private BLookupServiceImpl bLookupService;
+    @EJB
+    private CardServiceImpl cardService;
+
 
     private List<Long> personListID = null;
     private Person currentPerson = null;
@@ -87,7 +114,7 @@ public class HandlePersonAction implements Serializable {
     private List<String> pageCount;
     private int pageFrom = 1;
     private int pageTo = 9;
-    private ArrayList<Rule> ruleArrayList = new ArrayList<>();
+    private List<Rule> ruleArrayList = new ArrayList<>();
     private boolean ruleAniPassBack = false;
     private boolean ruleAllowExit = false;
     private boolean ruleAllowExitGadget = false;
@@ -125,7 +152,7 @@ public class HandlePersonAction implements Serializable {
     private int totalPages = 1;
     private List<String> personCount;
     private String lastPageIndex = "1";
-    private DataModel<PersonSearch> personSearches = null;
+    private List<PersonSearch> personSearches = null;
 
     private SortOrder personnameOrder = SortOrder.UNSORTED;
     private SortOrder personFamilyOrder = SortOrder.UNSORTED;
@@ -137,11 +164,10 @@ public class HandlePersonAction implements Serializable {
     private StreamedContent graphicText;
 
     public void begin() {
-        me.setActiveMenu(MenuType.PERSONEL);
+//        me.setActiveMenu(MenuType.PERSONEL);
         refresh();
         me.redirect("/person/list-person.xhtml");
     }
-
 
 
     public void init() {
@@ -193,7 +219,7 @@ public class HandlePersonAction implements Serializable {
         personnelNoFilter = "";
         personSearchList = new ArrayList<>();
         fillSearchCombos();
-        personSearches = new ListDataModel<>(personSearchList);
+        personSearches = personSearchList;
         lastPageIndex = "1";
         personCount = new ArrayList<>();
         pageCount = new ArrayList<>();
@@ -259,15 +285,10 @@ public class HandlePersonAction implements Serializable {
 
     public void selectForEdit() {
         String personId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("personId");
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonById");
 
         System.out.println(">>>>>>>>>>>>>>>>");
-        try {
-            currentPerson = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), personId), Person.class);
-            selectRow = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        currentPerson = personService.findById(Long.parseLong(personId));
+        selectRow = true;
     }
 
     public void back() {
@@ -297,14 +318,8 @@ public class HandlePersonAction implements Serializable {
 
     private void fillDayTypeCombo() {
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllDayType");
-        ArrayList<DayType> dayTypes = null;
-        try {
-            dayTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<DayType>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<DayType> dayTypes = null;
+        dayTypes = dayTypeService.getAllDayType();
 
         dayTypeItems = new SelectItem[dayTypes.size()];
         int i = 0;
@@ -317,14 +332,7 @@ public class HandlePersonAction implements Serializable {
 
     private void refresh() {
         init();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllPersonID");
-
-        try {
-            innerPersonList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Long>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        innerPersonList = personService.getAllPersonID();
 
         totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 18));
         if (totalPages <= 10)
@@ -470,7 +478,7 @@ public class HandlePersonAction implements Serializable {
 
         PersonSearch personSearch = new PersonSearch(preCondition, attributeName, attributeValue, postCondition);
         personSearchList.add(personSearch);
-        personSearches = new ListDataModel<>(personSearchList);
+        personSearches = personSearchList;
         preCondition = " ";
         attributeName = "name";
         attributeValue = "";
@@ -479,14 +487,14 @@ public class HandlePersonAction implements Serializable {
 
     public void removeCondition() {
         List<PersonSearch> searches = new ArrayList<>();
-        PersonSearch personSearchData = personSearches.getRowData();
+//        PersonSearch personSearchData = personSearches.getRowData();
         for (PersonSearch personSearch : personSearchList) {
-            if (personSearch.equals(personSearchData)) {
-                searches.add(personSearch);
-            }
+//            if (personSearch.equals(personSearchData)) {
+//                searches.add(personSearch);
+//            }
         }
         personSearchList.removeAll(searches);
-        personSearches = new ListDataModel<>(personSearchList);
+        personSearches = personSearchList;
     }
 
     public void simpleSearch() {
@@ -499,15 +507,8 @@ public class HandlePersonAction implements Serializable {
         String query = "select p.id from Person p where (";
         query += " p.name like \'%" + simpleValue + "%\' or " + " p.lastName like \'%" + simpleValue + "%\' or " + " p.personnelNo like \'%" + simpleValue + "%\') and p.deleted='0' ";
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/queryPerson");
         personSearchList = new ArrayList<>();
-        try {
-            innerPersonList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), query), new TypeReference<List<Long>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        innerPersonList = personService.query(query);
         totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 18));
 
         if (innerPersonList.size() > 17) {
@@ -550,14 +551,8 @@ public class HandlePersonAction implements Serializable {
         else
             query += "and p.deleted=\'0\'";
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/queryPerson");
         personSearchList = new ArrayList<>();
-        try {
-            innerPersonList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), query), new TypeReference<List<Long>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        innerPersonList = personService.query(query);
 
         totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 18));
 
@@ -632,25 +627,16 @@ public class HandlePersonAction implements Serializable {
         currentPerson.setCreateTime(currentTime);
         currentPerson.setStatus("o," + me.getUsername());
         currentPerson.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deletePerson");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPerson)), String.class);
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findJobByPersonId");
+        String condition = personService.deletePerson(currentPerson);
 
-            currentJob = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPerson.getId())), Job.class);
+        currentJob = jobService.findByPersonId(currentPerson.getId());
 
-            currentJob.setStatus("o," + me.getUsername());
-            currentJob.setEffectorUser(me.getUsername());
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteJob");
-            condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentJob)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/person/list-person.htm");
-        } catch (IOException e) {
-            refresh();
-            me.addInfoMessage("operation.occurred");
-            me.redirect("/person/list-person.htm");
-        }
+        currentJob.setStatus("o," + me.getUsername());
+        currentJob.setEffectorUser(me.getUsername());
+        condition = jobService.deleteJob(currentJob);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/person/list-person.htm");
     }
 
     public void add() {
@@ -715,17 +701,12 @@ public class HandlePersonAction implements Serializable {
     public void resetPassword() {
         if (password.equals(rePassword)) {
             currentPerson.setPassword(password);
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editPerson");
-            try {
-                String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPerson)), String.class);
-                if (condition.equalsIgnoreCase("true")) {
-                    refresh();
-                    me.addInfoMessage("operation.occurred");
-                    me.redirect("/person/list-person.htm");
-                    return;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            boolean condition = personService.editPerson(currentPerson);
+            if (condition) {
+                refresh();
+                me.addInfoMessage("operation.occurred");
+                me.redirect("/person/list-person.htm");
+                return;
             }
         }
         me.addInfoMessage("password.not.match");
@@ -766,24 +747,13 @@ public class HandlePersonAction implements Serializable {
         newPerson.setPassword(password);
         newPerson.setOrganRef(selectedOrgan);
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/existPerson");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newPerson)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                me.addInfoMessage("person.exist");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = personService.editPerson(newPerson);
+        if (condition) {
+            me.addInfoMessage("person.exist");
+            return;
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createPerson");
         Person person = null;
-        try {
-            person = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newPerson)), Person.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        person = personService.createPerson(newPerson);
         Job newJob = new Job();
         newJob.setDeleted("0");
         newJob.setEffectorUser(me.getUsername());
@@ -798,13 +768,8 @@ public class HandlePersonAction implements Serializable {
         newJob.setFolderNo(folderNo);
         newJob.setEmployType(employeeType);
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createJob");
-        Job job = null;
-        try {
-            job = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newJob)), Job.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Job job = jobService.createJob(newJob);
+
 
         if (person != null || job != null) {
             refresh();
@@ -819,12 +784,7 @@ public class HandlePersonAction implements Serializable {
         detail();
         setEditable("true");
         havePicture = true;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonById");
-        try {
-            currentPerson = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPerson.getId())), Person.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        currentPerson = personService.findById(currentPerson.getId());
         personname = currentPerson.getName();
         lastname = currentPerson.getLastName();
         email = currentPerson.getEmail();
@@ -845,53 +805,30 @@ public class HandlePersonAction implements Serializable {
         } else {
             finger = "true";
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findJobByPersonId");
-
-        try {
-            currentJob = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPerson.getId())), Job.class);
-            if (currentJob == null) {
-                currentJob = new Job();
-            }
-            description = currentJob.getDescription();
-            internalTel = currentJob.getInternalTel();
-            folderNo = currentJob.getFolderNo();
-            employNo = currentJob.getEmployNo();
-            employeeType = currentJob.getEmployType();
-            postType = currentJob.getPostType();
-            assistType = currentJob.getAssistType();
-        } catch (IOException e) {
+        currentJob = jobService.findByPersonId(currentPerson.getId());
+        if (currentJob == null) {
             currentJob = new Job();
-            description = "";
-            internalTel = "";
-            folderNo = "";
-            employNo = "";
-            employeeType = new BLookup();
-            ;
-            postType = new BLookup();
-            ;
-            assistType = new BLookup();
-            ;
         }
+        description = currentJob.getDescription();
+        internalTel = currentJob.getInternalTel();
+        folderNo = currentJob.getFolderNo();
+        employNo = currentJob.getEmployNo();
+        employeeType = currentJob.getEmployType();
+        postType = currentJob.getPostType();
+        assistType = currentJob.getAssistType();
     }
 
     public void detail() {
         setEditable("true");
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCardByPersonId");
-        try {
-            cards = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPerson.getId())), new TypeReference<List<Card>>() {
-            });
-            ;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            cards = cardService.findByPersonId(currentPerson.getId());
 
-        if (currentPerson.getFinger() == null) {
-            finger = "false";
-        } else {
-            finger = "true";
-        }
+            if (currentPerson.getFinger() == null) {
+                finger = "false";
+            } else {
+                finger = "true";
+            }
 
-    }
+        }
 
     public void doEdit() {
 //        Person person = new Person(personname, currentPerson.getPassword(), enabled == true ? "true" : "false");
@@ -922,41 +859,31 @@ public class HandlePersonAction implements Serializable {
         currentPerson.setCreateBy(me.getUsername());
         currentPerson.setOrganRef(selectedOrgan);
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editPerson");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPerson)), String.class);
-            currentJob.setEffectorUser(me.getUsername());
-            currentJob.setAssistType(assistType);
-            currentJob.setDescription(description);
-            currentJob.setEmployNo(employNo);
-            currentJob.setInternalTel(internalTel);
-            currentJob.setPostType(postType);
-            currentJob.setPerson(getCurrentPerson());
-            currentJob.setFolderNo(folderNo);
-            currentJob.setEmployType(employeeType);
-            boolean tempFirst = firstPage;
-            boolean tempLast = lastPage;
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/editJob");
-            try {
-                condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentJob)), String.class);
-                if (condition.equalsIgnoreCase("true")) {
-                    int p = pageIndex;
+        boolean condition = personService.editPerson(currentPerson);
+        currentJob.setEffectorUser(me.getUsername());
+        currentJob.setAssistType(assistType);
+        currentJob.setDescription(description);
+        currentJob.setEmployNo(employNo);
+        currentJob.setInternalTel(internalTel);
+        currentJob.setPostType(postType);
+        currentJob.setPerson(getCurrentPerson());
+        currentJob.setFolderNo(folderNo);
+        currentJob.setEmployType(employeeType);
+        boolean tempFirst = firstPage;
+        boolean tempLast = lastPage;
+        condition = jobService.editJob(currentJob);
+        if (condition) {
+            int p = pageIndex;
 //                    refresh();
-                    page = p;
-                    lastPage = tempLast;
-                    firstPage = tempFirst;
-                    pageCordinator(String.valueOf(p), false, false, false);
-                    me.addInfoMessage("operation.occurred");
-                    me.redirect("/person/list-person.htm");
-                } else {
-                    me.addInfoMessage("operation.not.occurred");
-                    return;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            page = p;
+            lastPage = tempLast;
+            firstPage = tempFirst;
+            pageCordinator(String.valueOf(p), false, false, false);
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/person/list-person.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
@@ -970,48 +897,31 @@ public class HandlePersonAction implements Serializable {
     }
 
     public void assignRule() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonById");
-        try {
-            currentPerson = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPerson.getId())), Person.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        selectedRulePackage = currentPerson.getRulePackage();
-        if (selectedRulePackage != null) {
-            rulePackageName = selectedRulePackage.getName();
-            if (selectedRulePackage.getCalendar() != null)
-                calendarName = selectedRulePackage.getCalendar().getName();
-            else
+            currentPerson = personService.findById(currentPerson.getId());
+            selectedRulePackage = currentPerson.getRulePackage();
+            if (selectedRulePackage != null) {
+                rulePackageName = selectedRulePackage.getName();
+                if (selectedRulePackage.getCalendar() != null)
+                    calendarName = selectedRulePackage.getCalendar().getName();
+                else
+                    calendarName = "";
+                antiPassBack = selectedRulePackage.isAniPassBack();
+                allowExit = selectedRulePackage.isAllowExit();
+                allowExitGadget = selectedRulePackage.isAllowExitGadget();
+            } else {
+                rulePackageName = "";
                 calendarName = "";
-            antiPassBack = selectedRulePackage.isAniPassBack();
-            allowExit = selectedRulePackage.isAllowExit();
-            allowExitGadget = selectedRulePackage.isAllowExitGadget();
-        } else {
-            rulePackageName = "";
-            calendarName = "";
-            antiPassBack = false;
-            allowExit = false;
-            allowExitGadget = false;
-        }
+                antiPassBack = false;
+                allowExit = false;
+                allowExitGadget = false;
+            }
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllRulePackage");
-        List<RulePackage> rulePackages = null;
-        try {
-            rulePackages = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<RulePackage>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            List rulePackages = rulePackageService.getAllRulePackage();
+            rulePackageList = new ListDataModel<>(rulePackages);
         }
-        rulePackageList = new ListDataModel<>(rulePackages);
-    }
 
     public void editRule() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonById");
-        try {
-            currentPerson = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentPerson.getId())), Person.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        currentPerson = personService.findById(currentPerson.getId());
         if (currentPerson.getRulePackage() == null) {
             refresh();
             me.addErrorMessage("has.not.rulePackage");
@@ -1025,13 +935,7 @@ public class HandlePersonAction implements Serializable {
 
     public void editPersonRule(RulePackage rulePackage) {
         ruleArrayList = new ArrayList<>();
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getRulesByRulePackage");
-        try {
-            ruleArrayList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(rulePackage.getId())), new TypeReference<List<Rule>>() {
-            });
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        ruleArrayList = ruleService.getByRulePackageId(rulePackage.getId());
         ruleListTemp = new ListDataModel<>(ruleArrayList);
         name = rulePackage.getName();
         ruleAllowExitGadget = rulePackage.isAllowExitGadget();
@@ -1118,39 +1022,28 @@ public class HandlePersonAction implements Serializable {
         newRulePackage.setAniPassBack(ruleAniPassBack);
         newRulePackage.setAllowExitGadget(ruleAllowExitGadget);
         newRulePackage.setCalendar(me.calendarHashtable.get(selectedCalendarIdTemp));
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRulePackage");
 
         RulePackage addedRulePackage = null;
-        try {
-            addedRulePackage = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newRulePackage)), RulePackage.class);
-            if (addedRulePackage != null) {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRule");
-                for (Rule rule : ruleArrayList) {
-                    rule.setRulePackage(addedRulePackage);
-                    new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(rule)), Rule.class);
-                }
+        addedRulePackage = rulePackageService.createRulePackage(newRulePackage);
+        if (addedRulePackage != null) {
+            for (Rule rule : ruleArrayList) {
+                rule.setRulePackage(addedRulePackage);
+                ruleService.createRule(rule);
+            }
 
-                currentPerson.setRulePackage(addedRulePackage);
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/editPerson");
-                try {
-                    String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPerson)), String.class);
-                    if (condition.equalsIgnoreCase("true")) {
-                        refresh();
-                        me.addInfoMessage("operation.occurred");
-                        me.redirect("/person/list-person.htm");
-                    } else {
-                        me.addInfoMessage("operation.not.occurred");
-                        return;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            currentPerson.setRulePackage(addedRulePackage);
+            boolean condition = personService.editPerson(currentPerson);
+            if (condition) {
+                refresh();
+                me.addInfoMessage("operation.occurred");
+                me.redirect("/person/list-person.htm");
             } else {
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
@@ -1165,19 +1058,14 @@ public class HandlePersonAction implements Serializable {
         currentPerson.setDeleted("0");
         currentPerson.setEffectorUser(me.getUsername());
         currentPerson.setRulePackage(selectedRulePackage);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editPerson");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentPerson)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/person/list-person.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean condition = personService.editPerson(currentPerson);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/person/list-person.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
@@ -1203,13 +1091,8 @@ public class HandlePersonAction implements Serializable {
     }
 
     public void selectOrgan(long organId) {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findOrganById");
-        try {
-            selectedOrgan = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(organId)), Organ.class);
-            selectedOrganName = selectedOrgan.getName();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        selectedOrgan = organService.findById(organId);
+        selectedOrganName = selectedOrgan.getName();
     }
 
     public void sortByPersonname() {
@@ -1243,8 +1126,7 @@ public class HandlePersonAction implements Serializable {
         Long personId = (Long) object;
         Person person = null;
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonById");
-        person = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(personId)), Person.class);
+        person = personService.findById(personId);
 
         if (null != person.getPicture()) {
             stream.write(person.getPicture());
@@ -1518,16 +1400,10 @@ public class HandlePersonAction implements Serializable {
     }
 
     public SelectItem[] getOrganItem() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOrgan");
-        try {
-            List<Organ> organs = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Organ>>() {
-            });
-            organItem = new SelectItem[organs.size()];
-            for (int i = 0; i < organs.size(); i++) {
-                organItem[i] = new SelectItem(organs.get(i).getId(), organs.get(i).getName());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<Organ> organs = organService.getAllOrgan();
+        organItem = new SelectItem[organs.size()];
+        for (int i = 0; i < organs.size(); i++) {
+            organItem[i] = new SelectItem(organs.get(i).getId(), organs.get(i).getName());
         }
         return organItem;
     }
@@ -1766,14 +1642,6 @@ public class HandlePersonAction implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public ArrayList<Rule> getRuleArrayList() {
-        return ruleArrayList;
-    }
-
-    public void setRuleArrayList(ArrayList<Rule> ruleArrayList) {
-        this.ruleArrayList = ruleArrayList;
     }
 
     public boolean isRuleAniPassBack() {
@@ -2018,14 +1886,7 @@ public class HandlePersonAction implements Serializable {
 
     public List<BLookup> getEmployeeTypes() {
         if (employeeTypes.size() == 0) {
-            WebServiceInfo bLookupService = new WebServiceInfo();
-            bLookupService.setServiceName("/getByLookupId");
-            try {
-                employeeTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), new ObjectMapper().writeValueAsString(Lookup.EMPLOYEE_TYPE_ID)), new TypeReference<List<BLookup>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                employeeTypes = bLookupService.getByLookupId(Lookup.EMPLOYEE_TYPE_ID);
             for (BLookup bLookup : employeeTypes) {
                 bLookup.setTitleText(me.getValue(bLookup.getCode()));
             }
@@ -2063,14 +1924,7 @@ public class HandlePersonAction implements Serializable {
 
     public List<BLookup> getAssistTypes() {
         if (assistTypes.size() == 0) {
-            WebServiceInfo bLookupService = new WebServiceInfo();
-            bLookupService.setServiceName("/getByLookupId");
-            try {
-                assistTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), new ObjectMapper().writeValueAsString(Lookup.ASSIST_TYPE_ID)), new TypeReference<List<BLookup>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            assistTypes = bLookupService.getByLookupId(Lookup.ASSIST_TYPE_ID);
             for (BLookup bLookup : assistTypes) {
                 bLookup.setTitleText(me.getValue(bLookup.getCode()));
             }
@@ -2093,14 +1947,7 @@ public class HandlePersonAction implements Serializable {
 
     public List<BLookup> getPostTypes() {
         if (postTypes.size() == 0) {
-            WebServiceInfo bLookupService = new WebServiceInfo();
-            bLookupService.setServiceName("/getByLookupId");
-            try {
-                postTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), new ObjectMapper().writeValueAsString(Lookup.POST_TYPE_ID)), new TypeReference<List<BLookup>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            postTypes = bLookupService.getByLookupId(Lookup.POST_TYPE_ID);
             for (BLookup bLookup : postTypes) {
                 bLookup.setTitleText(me.getValue(bLookup.getCode()));
             }
@@ -2214,14 +2061,6 @@ public class HandlePersonAction implements Serializable {
 
     public void setAttributeNames(SelectItem[] attributeNames) {
         this.attributeNames = attributeNames;
-    }
-
-    public DataModel<PersonSearch> getPersonSearches() {
-        return personSearches;
-    }
-
-    public void setPersonSearches(DataModel<PersonSearch> personSearches) {
-        this.personSearches = personSearches;
     }
 
     public List<String> getPersonCount() {
@@ -2395,13 +2234,8 @@ public class HandlePersonAction implements Serializable {
     }
 
     public Person returnPerson(long id) {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findPersonById");
-        try {
-            dataModelPerson = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(id)), Person.class);
+            dataModelPerson =personService.findById(id);
             return dataModelPerson;
-        } catch (IOException e) {
-            return new Person();
-        }
 
     }
 
@@ -2419,6 +2253,22 @@ public class HandlePersonAction implements Serializable {
 
     public void setGraphicText(StreamedContent graphicText) {
         this.graphicText = graphicText;
+    }
+
+    public List<PersonSearch> getPersonSearches() {
+        return personSearches;
+    }
+
+    public void setPersonSearches(List<PersonSearch> personSearches) {
+        this.personSearches = personSearches;
+    }
+
+    public List<Rule> getRuleArrayList() {
+        return ruleArrayList;
+    }
+
+    public void setRuleArrayList(List<Rule> ruleArrayList) {
+        this.ruleArrayList = ruleArrayList;
     }
 }
 

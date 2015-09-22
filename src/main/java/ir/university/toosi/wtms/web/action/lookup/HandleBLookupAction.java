@@ -3,6 +3,8 @@ package ir.university.toosi.wtms.web.action.lookup;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.BLookupServiceImpl;
+import ir.university.toosi.tms.model.service.LookupServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.BLookup;
 import ir.university.toosi.tms.model.entity.Lookup;
@@ -10,6 +12,7 @@ import ir.university.toosi.tms.model.entity.WebServiceInfo;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -35,7 +38,11 @@ public class HandleBLookupAction implements Serializable {
     private UserManagementAction me;
     @Inject
     private HandleLookupAction handleLookupAction;
-    private DataModel<BLookup> bLookupList = null;
+    @EJB
+    private LookupServiceImpl lookupService;
+    @EJB
+    private BLookupServiceImpl bLookupService;
+    private List<BLookup> bLookupList = null;
     private String editable = "false";
     private String bLookupTitle;
     private BLookup currentBLookup = null;
@@ -54,7 +61,7 @@ public class HandleBLookupAction implements Serializable {
     }
 
 
-    public DataModel<BLookup> getSelectionGrid() {
+    public List<BLookup> getSelectionGrid() {
         List<BLookup> bLookups = new ArrayList<>();
         refresh();
         return bLookupList;
@@ -62,18 +69,10 @@ public class HandleBLookupAction implements Serializable {
 
     private void refresh() {
         init();
-        WebServiceInfo bLookupService = new WebServiceInfo();
-        bLookupService.setServiceName("/getByLookupId");
-        try {
-            List<BLookup> bLookups = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), String.valueOf(handleLookupAction.getCurrentLookup().getId())), new TypeReference<List<BLookup>>() {
-            });
-            for (BLookup bLookup : bLookups) {
+       bLookupList = bLookupService.getByLookup(currentLookup.getTitle());
+            for (BLookup bLookup : bLookupList) {
                 bLookup.setTitleText(me.getValue(bLookup.getCode()));
             }
-            bLookupList = new ListDataModel<>(bLookups);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void add() {
@@ -83,17 +82,12 @@ public class HandleBLookupAction implements Serializable {
     }
 
     public void doDelete() {
-        currentBLookup = bLookupList.getRowData();
+//        currentBLookup = bLookupList.getRowData();
         currentBLookup.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteBLookup");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentBLookup)), String.class);
+            String condition = bLookupService.deleteBLookup(currentBLookup);
             refresh();
             me.addInfoMessage(condition);
             me.redirect("/bLookup/list-blookup.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void init() {
@@ -104,7 +98,7 @@ public class HandleBLookupAction implements Serializable {
 
     public void edit() {
         setEditable("true");
-        currentBLookup = bLookupList.getRowData();
+//        currentBLookup = bLookupList.getRowData();
 //        me.getGeneralHelper().getWebServiceInfo().setServiceName("/getByLookupId");
 //        try {
 //            currentBLookup = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentBLookup.getId())), BLookup.class);
@@ -123,12 +117,10 @@ public class HandleBLookupAction implements Serializable {
     }
 
     private void doEdit() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editBLookup");
         currentBLookup.setTitleText(bLookupTitle);
         currentBLookup.setEffectorUser(me.getUsername());
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentBLookup)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
+            boolean condition =bLookupService.editBLookup(currentBLookup);
+            if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
                 me.redirect("/lookup/list-blookup.htm");
@@ -136,9 +128,6 @@ public class HandleBLookupAction implements Serializable {
                 me.addInfoMessage("operation.not.occurred");
                 return;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -154,11 +143,7 @@ public class HandleBLookupAction implements Serializable {
 
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/createBLookup");
         BLookup insertedBLookup = null;
-        try {
-            insertedBLookup = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newBLookup)), BLookup.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            insertedBLookup =bLookupService.createBLookup(newBLookup);
 
         if (insertedBLookup != null) {
             refresh();
@@ -187,13 +172,6 @@ public class HandleBLookupAction implements Serializable {
 //        };
 //    }
 
-    public DataModel<BLookup> getBLookupList() {
-        return bLookupList;
-    }
-
-    public void setBLookupList(DataModel<BLookup> bLookupList) {
-        this.bLookupList = bLookupList;
-    }
 
     public String getBLookupDescriptionFilter() {
         return bLookupDescriptionFilter;
@@ -252,13 +230,6 @@ public class HandleBLookupAction implements Serializable {
         this.page = page;
     }
 
-    public DataModel<BLookup> getPcList() {
-        return bLookupList;
-    }
-
-    public void setPcList(DataModel<BLookup> bLookupList) {
-        this.bLookupList = bLookupList;
-    }
 
     public String getPcName() {
         return bLookupTitle;
@@ -309,13 +280,6 @@ public class HandleBLookupAction implements Serializable {
         this.me = me;
     }
 
-    public DataModel<BLookup> getbLookupList() {
-        return bLookupList;
-    }
-
-    public void setbLookupList(DataModel<BLookup> bLookupList) {
-        this.bLookupList = bLookupList;
-    }
 
     public String getbLookupTitle() {
         return bLookupTitle;
@@ -348,5 +312,13 @@ public class HandleBLookupAction implements Serializable {
 
     public void setbLookupDescriptionFilter(String bLookupDescriptionFilter) {
         this.bLookupDescriptionFilter = bLookupDescriptionFilter;
+    }
+
+    public List<BLookup> getbLookupList() {
+        return bLookupList;
+    }
+
+    public void setbLookupList(List<BLookup> bLookupList) {
+        this.bLookupList = bLookupList;
     }
 }

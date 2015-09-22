@@ -193,7 +193,7 @@ public class PersonServiceImpl<T extends Person> {
             if (users != null && users.size() != 0)
                 return new ObjectMapper().writeValueAsString("REL_USER_PERSON");
 
-            Job job = jobService.findByPersonId(String.valueOf(entity.getId()));
+            Job job = jobService.findByPersonId(entity.getId());
             jobService.deleteJob(job);
 
             List<GatewayPerson> gatewayPersons = gatewayPersonService.findByPersonId(entity.getId());

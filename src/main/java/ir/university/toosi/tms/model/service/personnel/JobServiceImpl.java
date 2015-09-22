@@ -33,7 +33,7 @@ public class JobServiceImpl<T extends Job> {
         }
     }
 
-    public T findByPersonId(String id) {
+    public T findByPersonId(long id) {
         try {
             return (T) jobDAO.findByPersonId(id);
         } catch (Exception e) {

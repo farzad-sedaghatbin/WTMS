@@ -246,7 +246,7 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
         Person person = personService.getPersonByPersonOtherId(personId);
         if (person == null || pdp == null)
             return null;
-        Card card = (Card) cardService.findByPersonId(String.valueOf(person.getId())).get(0);
+        Card card = (Card) cardService.findByPersonId((person.getId())).get(0);
         String photos = "/" + pdp.getName() + card.getName() + new Date().getTime();
 
         TrafficLog trafficLog = new TrafficLog();

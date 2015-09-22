@@ -46,10 +46,10 @@ public class BLookupDAOImpl extends BaseDAOImpl<BLookup> {
         }
     }
 
-    public List<BLookup> findByLookupId(String lookupId) {
+    public List<BLookup> findByLookupId(long lookupId) {
         try {
             return (List<BLookup>) em.createNamedQuery("BLookup.findByLookupId")
-                    .setParameter("lookupId", Long.valueOf(lookupId))
+                    .setParameter("lookupId", lookupId)
                     .getResultList();
         } catch (Exception e) {
             return null;

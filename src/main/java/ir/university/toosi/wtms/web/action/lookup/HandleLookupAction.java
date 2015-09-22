@@ -3,6 +3,7 @@ package ir.university.toosi.wtms.web.action.lookup;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.LookupServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.Lookup;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -11,6 +12,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -35,7 +37,10 @@ public class HandleLookupAction implements Serializable {
     private UserManagementAction me;
     @Inject
     private HandleBLookupAction handleBLookupAction;
-    private DataModel<Lookup> lookupList = null;
+
+    @EJB
+    private LookupServiceImpl lookupService;
+    private List<Lookup> lookupList = null;
     private String editable = "false";
     private String lookupTitle;
     private Lookup currentLookup = null;
@@ -57,19 +62,11 @@ public class HandleLookupAction implements Serializable {
 
     private void refresh() {
         init();
-        WebServiceInfo lookupService = new WebServiceInfo();
-        lookupService.setServiceName("/getAllLookup");
-        try {
-            List<Lookup> lookups = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(lookupService.getServerUrl(), lookupService.getServiceName()), new TypeReference<List<Lookup>>() {
-            });
-            for (Lookup lookup : lookups) {
+     lookupList = lookupService.getAllLookup();
+            for (Lookup lookup : lookupList) {
 //                lookup.setTitleText(me.getValue(lookup.getTitle()));
                 lookup.setTitleText(lookup.getTitle());
             }
-            lookupList = new ListDataModel<>(lookups);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void add() {
@@ -78,19 +75,6 @@ public class HandleLookupAction implements Serializable {
 
     }
 
-    public void doDelete() {
-        currentLookup.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteLookup");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentLookup)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/lookup/list-lookup.htm");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void init() {
         lookupTitle = "";
@@ -101,41 +85,7 @@ public class HandleLookupAction implements Serializable {
         setDefinable(false);
     }
 
-    public String edit() {
-        setEditable("true");
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findLookupById");
-        try {
-            currentLookup = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentLookup.getId())), Lookup.class);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        handleBLookupAction.setCurrentLookup(currentLookup);
 
-        return "list-blookup";
-    }
-
-    public void saveOrUpdate() {
-        doEdit();
-    }
-
-    private void doEdit() {
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/editLookup");
-        currentLookup.setEffectorUser(me.getUsername());
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentLookup)), String.class);
-            if (condition.equalsIgnoreCase("true")) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/lookup/list-lookup.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
 
     public void sortByLookupDescription() {
@@ -155,7 +105,7 @@ public class HandleLookupAction implements Serializable {
     }*/
 
     public void selectForEdit() {
-        currentLookup = lookupList.getRowData();
+//        currentLookup = lookupList.getRowData();
         setSelectRow(true);
         setDefinable(currentLookup.isDefinable());
     }
@@ -168,11 +118,11 @@ public class HandleLookupAction implements Serializable {
         this.selectRow = selectRow;
     }
 
-    public DataModel<Lookup> getLookupList() {
+    public List<Lookup> getLookupList() {
         return lookupList;
     }
 
-    public void setLookupList(DataModel<Lookup> lookupList) {
+    public void setLookupList(List<Lookup> lookupList) {
         this.lookupList = lookupList;
     }
 
@@ -235,13 +185,6 @@ public class HandleLookupAction implements Serializable {
         this.page = page;
     }
 
-    public DataModel<Lookup> getPcList() {
-        return lookupList;
-    }
-
-    public void setPcList(DataModel<Lookup> lookupList) {
-        this.lookupList = lookupList;
-    }
 
     public String getPcName() {
         return lookupTitle;

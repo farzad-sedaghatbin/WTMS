@@ -27,7 +27,7 @@ public class CardServiceImpl<T extends Card> {
     private EventLogServiceImpl eventLogService;
 
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) cardDAO.findById(id);
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class CardServiceImpl<T extends Card> {
         }
     }
 
-    public List<T> findByPersonId(String id) {
+    public List<T> findByPersonId(long id) {
         try {
             return (List<T>) cardDAO.findByPersonId(id);
         } catch (Exception e) {
@@ -137,7 +137,7 @@ public class CardServiceImpl<T extends Card> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Card.class.getSimpleName(), EventLogType.EDIT, entity.getEffectorUser());
 
-            Card oldCard = findById(String.valueOf(entity.getId()));
+            Card oldCard = findById(entity.getId());
             Card newCard = new Card();
             newCard.setCardStatus(oldCard.getCardStatus());
             newCard.setCardType(oldCard.getCardType());

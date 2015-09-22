@@ -1,0 +1,49 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+
+        <h:form>
+            <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
+                <tr valign="top">
+                    <td nowrap="nowrap" align="#{me.align}">
+                        <fieldset dir="#{me.direction}">
+                            <p:dataTable id="lookupTable"
+                                            keepSaved="true"
+                                            value="#{handleLookupAction.lookupList}"
+                                            rowKeyVar="rowIndex"
+                                            noDataLabel="no_result_found"
+                                            sortMode="single"
+                                            var="lookup"
+                                            rows="10"
+                                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                            rowClasses="ROW1,ROW2">
+
+                                <p:column sortBy="#{lookup.title}">
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="#{'عنوان'}"/>
+                                    </f:facet>
+                                    <p:commandLink id="editLink" value="#{lookup.titleText}"
+                                                     render="operationArea"
+                                                     styleClass="withoutUnderlineLink"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     action="#{handleLookupAction.selectForEdit}"/>
+                                </p:column>
+                                <f:facet name="footer">
+                                    <p:dataScroller limitRender="true" execute="@this" render="lookupTable"
+                                                       page="#{handleLookupAction.page}"/>
+                                </f:facet>
+                            </p:dataTable>
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </ui:define>
+</ui:composition>

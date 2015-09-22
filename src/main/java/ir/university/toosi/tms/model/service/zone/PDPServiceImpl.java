@@ -282,7 +282,7 @@ public class PDPServiceImpl<T extends PDP> {
                 if (pdpSync.isDb()) {
 
                     rulepackage = person.getRulePackage() != null ? String.valueOf(rulePackageTable.get(person.getRulePackage().getId())) : "";
-                    List<Card> cards = cardService.findByPersonId(String.valueOf(person.getId()));
+                    List<Card> cards = cardService.findByPersonId(person.getId());
                     if (cards != null && cards.size() != 0)
 
                         for (Card card : cards) {

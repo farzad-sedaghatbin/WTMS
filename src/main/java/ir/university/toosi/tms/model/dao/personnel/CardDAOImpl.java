@@ -19,20 +19,20 @@ import java.util.List;
 public class CardDAOImpl extends BaseDAOImpl<Card> {
 
 
-    public Card findById(String id) {
+    public Card findById(long id) {
         try {
             return (Card) em.createNamedQuery("Card.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;
         }
     }
 
-    public List<Card> findByPersonId(String id) {
+    public List<Card> findByPersonId(long id) {
         try {
             return (List<Card>) em.createNamedQuery("Card.findByPersonId")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id",id)
                     .getResultList();
         } catch (Exception e) {
             return null;
@@ -77,7 +77,7 @@ public class CardDAOImpl extends BaseDAOImpl<Card> {
 
     public List<Card> stolen() {
         try {
-            return (List<Card>) em.createNamedQuery("Card.")
+            return (List<Card>) em.createNamedQuery("Card.stolen")
                     .getResultList();
         } catch (Exception e) {
             return null;

@@ -68,7 +68,7 @@ public class BLookupServiceImpl<T extends BLookup> {
         }
     }
 
-    public List<T> getByLookupId(String lookupId) {
+    public List<T> getByLookupId(long lookupId) {
         try {
             return (List<T>) bLookupDAO.findByLookupId(lookupId);
         } catch (Exception e) {
