@@ -10,6 +10,12 @@
             <p:contextMenu for="users">
                 <p:menuitem value="View" update="userDetail" icon="ui-icon-search" oncomplete="PF('userDialog').show()"
                             actionListener="#{handleUserAction.edit}"/>
+                <p:menuitem value="Assign PC" update="assignPCDetail" icon="ui-icon-search"
+                            oncomplete="PF('assignPCDialog').show()"
+                            actionListener="#{handleUserAction.assignPC}"/>
+                <p:menuitem value="Assign PC" update="assignPersonDetail" icon="ui-icon-search"
+                            oncomplete="PF('assignPersonDialog').show()"
+                            actionListener="#{handleUserAction.assignPersonz}"/>
                 <p:menuitem value="Delete" update="users" icon="ui-icon-close"
                             actionListener="#{handleUserAction.doDelete}"/>
             </p:contextMenu>
@@ -58,7 +64,7 @@
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
-                                                 value="#{handleUserAction.lastname}"/>
+                                             value="#{handleUserAction.lastname}"/>
                             </td>
                         </tr>
                         <tr>
@@ -67,7 +73,7 @@
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
-                                                 value="#{handleUserAction.username}"/>
+                                             value="#{handleUserAction.username}"/>
                             </td>
                         </tr>
                         <tr>
@@ -76,7 +82,7 @@
                             </td>
                             <td>
                                 <p:password readonly="#{handleUserAction.disableFields}"
-                                                 value="#{handleUserAction.password}"/>
+                                            value="#{handleUserAction.password}"/>
                             </td>
                         </tr>
                         <tr>
@@ -85,7 +91,7 @@
                             </td>
                             <td>
                                 <p:password readonly="#{handleUserAction.disableFields}"
-                                                 value="#{handleUserAction.rePassword}"/>
+                                            value="#{handleUserAction.rePassword}"/>
                             </td>
                         </tr>
                         <tr>
@@ -94,7 +100,7 @@
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
-                                                 value="#{handleUserAction.extraField1}"/>
+                                             value="#{handleUserAction.extraField1}"/>
                             </td>
                         </tr>
                         <tr>
@@ -103,7 +109,7 @@
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
-                                                 value="#{handleUserAction.extraField2}"/>
+                                             value="#{handleUserAction.extraField2}"/>
                             </td>
                         </tr>
                         <tr>
@@ -112,7 +118,7 @@
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
-                                                 value="#{handleUserAction.extraField3}"/>
+                                             value="#{handleUserAction.extraField3}"/>
                             </td>
                         </tr>
                         <tr>
@@ -121,7 +127,7 @@
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
-                                                 value="#{handleUserAction.extraField4}"/>
+                                             value="#{handleUserAction.extraField4}"/>
                             </td>
                         </tr>
                         <tr>
@@ -130,7 +136,7 @@
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
-                                                 value="#{handleUserAction.enabled}"/>
+                                             value="#{handleUserAction.enabled}"/>
                             </td>
                         </tr>
                         <tr>
@@ -175,6 +181,73 @@
                             </td>
                         </tr>
                     </table>
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog header="Assign PC" widgetVar="assignPCDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="assignPCDetail" style="text-align:center;">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                    </f:facet>
+                    <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                        <tr>
+                            <td>
+                                <p:pickList id="assignPCPickList" value="#{handleUserAction.pcList}"
+                                            var="pc"
+                                            effect="bounce"
+                                            itemValue="#{pc}" itemLabel="#{pc.name}"
+                                            showSourceControls="true"
+                                            showTargetControls="true" showCheckbox="true" responsive="true"
+                                            showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+                                            disabled="#{handleUserAction.disableFields}">
+                                    <f:facet name="sourceCaption">Source</f:facet>
+                                    <f:facet name="targetCaption">Target</f:facet>
+
+                                    <p:ajax event="transfer" listener="#{handleUserAction.onTransfer}"/>
+
+                                    <p:column style="width:90%;">
+                                        <h:outputText value="#{pc.name}"/>
+                                    </p:column>
+                                    <p:column style="width:90%;">
+                                        <h:outputText value="#{pc.ip}"/>
+                                    </p:column>
+                                    <p:column style="width:90%;">
+                                        <h:outputText value="#{pc.location.code}"/>
+                                    </p:column>
+                                </p:pickList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p:commandButton value="Submit" id="assignPC" update="users"
+                                                 actionListener="#{handleUserAction.associatePCs}"
+                                                 oncomplete="PF('assignPCDialog').hide()"
+                                                 styleClass="ui-priority-primary"
+                                                 rendered="#{not handleUserAction.disableFields}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog header="Assign Person" widgetVar="assignPersonDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="assignPersonDetail" style="text-align:center;">
+                <p:dataTable id="assignPerson" var="person" value="#{handleUserAction.personList}"
+                             selectionMode="single" selection="#{handleUserAction.selectedPerson}"
+                             rowKey="#{person.id}">
+                    <f:facet name="header">
+                        Select Events
+                    </f:facet>
+                    <p:ajax event="rowSelect" listener="#{handleUserAction.associatePerson}" update=":form:users"/>
+                    <p:column headerText="Id">
+                        <h:outputText value="#{person.name}"/>
+                    </p:column>
+                    <p:column headerText="Year">
+                        <h:outputText value="#{person.lastName}"/>
+                    </p:column>
+                </p:dataTable>
                 </p:outputPanel>
             </p:dialog>
         </h:form>

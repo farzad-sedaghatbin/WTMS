@@ -2,6 +2,7 @@ package ir.university.toosi.wtms.web.action.user;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.model.service.PCServiceImpl;
 import ir.university.toosi.tms.model.service.UserServiceImpl;
 import ir.university.toosi.tms.model.service.WorkGroupServiceImpl;
@@ -12,17 +13,12 @@ import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.wtms.web.action.workgroup.HandleWorkGroupAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.tms.model.entity.MenuType;
-import ir.university.toosi.tms.model.entity.PC;
-import ir.university.toosi.tms.model.entity.SystemParameterType;
 import ir.university.toosi.tms.model.entity.personnel.Person;
-import ir.university.toosi.tms.model.entity.Role;
-import ir.university.toosi.tms.model.entity.User;
-import ir.university.toosi.tms.model.entity.WorkGroup;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 //import org.apache.commons.lang.StringUtils;
+import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
@@ -88,16 +84,11 @@ public class HandleUserAction implements Serializable {
     private String extraField2;
     private String extraField3;
     private String extraField4;
-    private boolean extraField1Enable;
-    private boolean extraField2Enable;
-    private boolean extraField3Enable;
-    private boolean extraField4Enable;
     private String password = "";
     private String newPassword;
     private String rePassword;
     private String chatFirstName = "";
     private String chatLastName = "";
-    private List<PC> pcList;
     private List<Person> personList;
     private PC currentPC;
     private Person currentPerson;
@@ -115,7 +106,6 @@ public class HandleUserAction implements Serializable {
     private int personPage = 1;
     private SelectItem[] personItem;
     private Set<WorkGroup> selectedWorkGroup;
-    private Set<PC> selectedPCs;
     private Person selectedPerson;
     private boolean selectRow = false;
     private String oldPassword;
@@ -131,6 +121,7 @@ public class HandleUserAction implements Serializable {
     private SortOrder roleDescriptionOrder = SortOrder.UNSORTED;
     private SortOrder personNameOrder = SortOrder.UNSORTED;
     private SortOrder personLastNameOrder = SortOrder.UNSORTED;
+    private DualListModel<PC> pcList;
 
     private boolean disableFields;
 
@@ -158,10 +149,6 @@ public class HandleUserAction implements Serializable {
         handleWorkGroupAction.setSelectWorkGroups(new HashSet<WorkGroup>());
         currentUser = null;
         setSelectRow(false);
-        extraField1Enable = me.getSystemParameter().get(SystemParameterType.USER_EXTRA_FIELD_1).equalsIgnoreCase("true") ? true : false;
-        extraField2Enable = me.getSystemParameter().get(SystemParameterType.USER_EXTRA_FIELD_2).equalsIgnoreCase("true") ? true : false;
-        extraField3Enable = me.getSystemParameter().get(SystemParameterType.USER_EXTRA_FIELD_3).equalsIgnoreCase("true") ? true : false;
-        extraField4Enable = me.getSystemParameter().get(SystemParameterType.USER_EXTRA_FIELD_4).equalsIgnoreCase("true") ? true : false;
         usernameFilter = "";
         workgroupFilter = "";
         personNameFilter = "";
@@ -174,43 +161,6 @@ public class HandleUserAction implements Serializable {
 
         handleRoleAction.setRoleList(new ArrayList<Role>());
     }
-
-    public void personChange(ValueChangeEvent event) {
-        String id = (String) event.getNewValue();
-        if (!id.equalsIgnoreCase("0")) {
-            selectedPerson = null;//me.getGeneralHelper().getWorkGroupService().findById(id);
-        } else {
-            selectedPerson = null;
-        }
-    }
-
-    public void selectPCs(ValueChangeEvent event) {
-//        currentPC = pcList.getRowData();
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            currentPC.setSelected(true);
-            selectedPCs.add(currentPC);
-        } else {
-            currentPC.setSelected(false);
-            selectedPCs.remove(currentPC);
-        }
-    }
-
-    public void selectAllPC(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            for (PC pc : pcList) {
-                pc.setSelected(true);
-                selectedPCs.add(pc);
-            }
-        } else {
-            for (PC pc : pcList) {
-                pc.setSelected(false);
-            }
-            selectedPCs.clear();
-        }
-    }
-
 
     public void doDelete() {
         if (currentUser.getWorkGroups() != null && currentUser.getWorkGroups().size() > 0) {
@@ -237,32 +187,37 @@ public class HandleUserAction implements Serializable {
     }
 
     public void assignPC() {
-        selectedPCs = new HashSet<>();
-        selectAll = false;
+        setDisableFields(false);
+        List<PC> sourcePCs = new ArrayList<>();
+        List<PC> targetPCs = new ArrayList<>();
 
-        pcList = pcService.getAllPCs();
-        for (PC pc : pcList) {
+        List<PC> pcs = pcService.getAllPCs();
+        for (PC pc : pcs) {
             for (PC pc1 : currentUser.getPcs()) {
-                if (pc1.getId() == pc.getId())
-                    pc.setSelected(true);
-                selectedPCs.add(pc);
+                if (pc1.getId() == pc.getId()) {
+                    targetPCs.add(pc);
+                } else {
+                    sourcePCs.add(pc);
+                }
+            }
+        }
+        pcList = new DualListModel<>(sourcePCs, targetPCs);
+    }
+
+    public void onTransfer(TransferEvent event) {
+        if (event.isAdd()) {
+            for (Object item : event.getItems()) {
+                pcList.getSource().remove(item);
+                pcList.getTarget().add((PC) item);
+            }
+        } else {
+            for (Object item : event.getItems()) {
+                pcList.getSource().add((PC) item);
+                pcList.getTarget().remove(item);
             }
         }
     }
 
-    public void associatePCs() {
-        currentUser.setPcs(selectedPCs);
-        boolean condition = userService.editUser(currentUser);
-        if (condition) {
-            selectedPCs = new HashSet<>();
-            refresh();
-            me.addInfoMessage("operation.occurred");
-            me.redirect("/user/list-user.htm");
-        } else {
-            me.addInfoMessage("operation.not.occurred");
-            return;
-        }
-    }
 
     public void assignPerson() {
         handlePersonAction.setPersonnameOrder(SortOrder.UNSORTED);
@@ -275,8 +230,7 @@ public class HandleUserAction implements Serializable {
     }
 
     public void associatePerson() {
-//        currentPerson = personList.getRowData();
-        currentUser.setPerson(currentPerson);
+        currentUser.setPerson(selectedPerson);
         currentUser.setFirstname("");
         currentUser.setLastname("");
 
@@ -284,7 +238,6 @@ public class HandleUserAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/user/list-user.htm");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -334,6 +287,19 @@ public class HandleUserAction implements Serializable {
         }
     }
 
+    public void associatePCs() {
+        currentUser.setPcs(new HashSet<>(pcList.getTarget()));
+        boolean condition = userService.editUser(currentUser);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/user/users.xhtml");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
+        }
+
+    }
 
     public void edit() {
         setEditable("true");
@@ -490,15 +456,15 @@ public class HandleUserAction implements Serializable {
         me.addInfoMessage("success");
         currentUser = me.getUser();
         currentUser.setPassword(newPassword);
-            boolean condition =userService.editUser(currentUser);
-            if (condition) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-                me.redirect("/user/list-user.htm");
-            } else {
-                me.addInfoMessage("operation.not.occurred");
-                return;
-            }
+        boolean condition = userService.editUser(currentUser);
+        if (condition) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+            me.redirect("/user/list-user.htm");
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
+        }
     }
 
     public void selectForEdit() {
@@ -811,14 +777,6 @@ public class HandleUserAction implements Serializable {
         this.currentPerson = currentPerson;
     }
 
-    public Set<PC> getSelectedPCs() {
-        return selectedPCs;
-    }
-
-    public void setSelectedPCs(Set<PC> selectedPCs) {
-        this.selectedPCs = selectedPCs;
-    }
-
     public Set<WorkGroup> getSelectedWorkGroup() {
         return selectedWorkGroup;
     }
@@ -907,38 +865,6 @@ public class HandleUserAction implements Serializable {
         this.status = status;
     }
 
-    public boolean isExtraField1Enable() {
-        return extraField1Enable;
-    }
-
-    public void setExtraField1Enable(boolean extraField1Enable) {
-        this.extraField1Enable = extraField1Enable;
-    }
-
-    public boolean isExtraField2Enable() {
-        return extraField2Enable;
-    }
-
-    public void setExtraField2Enable(boolean extraField2Enable) {
-        this.extraField2Enable = extraField2Enable;
-    }
-
-    public boolean isExtraField3Enable() {
-        return extraField3Enable;
-    }
-
-    public void setExtraField3Enable(boolean extraField3Enable) {
-        this.extraField3Enable = extraField3Enable;
-    }
-
-    public boolean isExtraField4Enable() {
-        return extraField4Enable;
-    }
-
-    public void setExtraField4Enable(boolean extraField4Enable) {
-        this.extraField4Enable = extraField4Enable;
-    }
-
     public SortOrder getPcIpOrder() {
         return pcIpOrder;
     }
@@ -1001,5 +927,31 @@ public class HandleUserAction implements Serializable {
 
     public void setDisableFields(boolean disableFields) {
         this.disableFields = disableFields;
+    }
+
+    public DualListModel<PC> getPcList() {
+        if (pcList == null)
+            pcList = new DualListModel<>();
+        return pcList;
+    }
+
+    public void setPcList(DualListModel<PC> pcList) {
+        this.pcList = pcList;
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
+    public List<Person> getPersonList() {
+        return personList;
+    }
+
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
 }
