@@ -24,11 +24,11 @@ public class AuthenticationType extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.AuthenticationType.staticType;
+        return AuthenticationType.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.AuthenticationType.staticType = staticType;
+        AuthenticationType.staticType = staticType;
     }
     //</generated-proxy>
 }

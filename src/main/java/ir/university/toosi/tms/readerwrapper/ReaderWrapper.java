@@ -22,53 +22,53 @@ public class ReaderWrapper extends system.Object {
     @net.sf.jni4net.attributes.ClrConstructor("()V")
     public ReaderWrapper() {
             super(((net.sf.jni4net.inj.INJEnv)(null)), 0);
-        readerwrapper.ReaderWrapper.__ctorReaderWrapper0(this);
+        ReaderWrapper.__ctorReaderWrapper0(this);
     }
     
     @net.sf.jni4net.attributes.ClrMethod("()V")
     private native static void __ctorReaderWrapper0(net.sf.jni4net.inj.IClrProxy thiz);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/GetAccessEventDataDelegate;)V")
-    public native void addOnGetAccessEventData(readerwrapper.GetAccessEventDataDelegate value);
+    public native void addOnGetAccessEventData(GetAccessEventDataDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/GetAccessEventDataDelegate;)V")
-    public native void removeOnGetAccessEventData(readerwrapper.GetAccessEventDataDelegate value);
+    public native void removeOnGetAccessEventData(GetAccessEventDataDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VerifyUserPassDelegate;)V")
-    public native void addOnVerifyUserPass(readerwrapper.VerifyUserPassDelegate value);
+    public native void addOnVerifyUserPass(VerifyUserPassDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VerifyUserPassDelegate;)V")
-    public native void removeOnVerifyUserPass(readerwrapper.VerifyUserPassDelegate value);
+    public native void removeOnVerifyUserPass(VerifyUserPassDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VerifyCardDelegate;)V")
-    public native void addOnVerifyCard(readerwrapper.VerifyCardDelegate value);
+    public native void addOnVerifyCard(VerifyCardDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VerifyCardDelegate;)V")
-    public native void removeOnVerifyCard(readerwrapper.VerifyCardDelegate value);
+    public native void removeOnVerifyCard(VerifyCardDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VerifyFinger1To1Delegate;)V")
-    public native void addOnVerifyFinger1To1(readerwrapper.VerifyFinger1To1Delegate value);
+    public native void addOnVerifyFinger1To1(VerifyFinger1To1Delegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VerifyFinger1To1Delegate;)V")
-    public native void removeOnVerifyFinger1To1(readerwrapper.VerifyFinger1To1Delegate value);
+    public native void removeOnVerifyFinger1To1(VerifyFinger1To1Delegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VerifyFinger1ToNDelegate;)V")
-    public native void addOnVerifyFinger1ToN(readerwrapper.VerifyFinger1ToNDelegate value);
+    public native void addOnVerifyFinger1ToN(VerifyFinger1ToNDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VerifyFinger1ToNDelegate;)V")
-    public native void removeOnVerifyFinger1ToN(readerwrapper.VerifyFinger1ToNDelegate value);
+    public native void removeOnVerifyFinger1ToN(VerifyFinger1ToNDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/TerminalConnectedDelegate;)V")
-    public native void addOnTerminalConnected(readerwrapper.TerminalConnectedDelegate value);
+    public native void addOnTerminalConnected(TerminalConnectedDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/TerminalConnectedDelegate;)V")
-    public native void removeOnTerminalConnected(readerwrapper.TerminalConnectedDelegate value);
+    public native void removeOnTerminalConnected(TerminalConnectedDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/TerminalDisConnectedDelegate;)V")
-    public native void addOnTerminalDisConnected(readerwrapper.TerminalDisConnectedDelegate value);
+    public native void addOnTerminalDisConnected(TerminalDisConnectedDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/TerminalDisConnectedDelegate;)V")
-    public native void removeOnTerminalDisConnected(readerwrapper.TerminalDisConnectedDelegate value);
+    public native void removeOnTerminalDisConnected(TerminalDisConnectedDelegate value);
     
     @net.sf.jni4net.attributes.ClrMethod("(I)V")
     public native void StartService(int port);
@@ -77,13 +77,13 @@ public class ReaderWrapper extends system.Object {
     public native void ShutDown();
     
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/AuthenticationType;Z)V")
-    public native void SendAuthResultToTerminal(int terminalId, int userId, readerwrapper.AuthenticationType authenticationType, boolean isAuthenticated);
+    public native void SendAuthResultToTerminal(int terminalId, int userId, AuthenticationType authenticationType, boolean isAuthenticated);
     
     @net.sf.jni4net.attributes.ClrMethod("([LReaderWrapper/Person;[B)LReaderWrapper/Person;")
-    public native readerwrapper.Person Verify(readerwrapper.Person[] allUsers, byte[] fingerData);
+    public native Person Verify(Person[] allUsers, byte[] fingerData);
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/Person;[B)Z")
-    public native boolean Verify(readerwrapper.Person person, byte[] fingerData);
+    public native boolean Verify(Person person, byte[] fingerData);
     
     @net.sf.jni4net.attributes.ClrMethod("(I)V")
     public native void ForceOpenDoor(int terminalId);
@@ -101,13 +101,13 @@ public class ReaderWrapper extends system.Object {
     public native void UnLockTerminal(int terminalId);
     
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/GetUserInfoCompletedCallBackDelegate;)V")
-    public native void GetUserInfo(int terminalId, int userId, readerwrapper.GetUserInfoCompletedCallBackDelegate callBack);
+    public native void GetUserInfo(int terminalId, int userId, GetUserInfoCompletedCallBackDelegate callBack);
     
     @net.sf.jni4net.attributes.ClrMethod("(ILReaderWrapper/GetUserListCompletedCallBackDelegate;)V")
-    public native void GetUserInfo(int terminalId, readerwrapper.GetUserListCompletedCallBackDelegate callBack);
+    public native void GetUserInfo(int terminalId, GetUserListCompletedCallBackDelegate callBack);
     
     @net.sf.jni4net.attributes.ClrMethod("([I[LReaderWrapper/Person;ZLReaderWrapper/AddCompletedCallBackDelegate;)V")
-    public native void AddUserInfo(int[] terminals, readerwrapper.Person[] persons, boolean isOverwrite, readerwrapper.AddCompletedCallBackDelegate callBack);
+    public native void AddUserInfo(int[] terminals, Person[] persons, boolean isOverwrite, AddCompletedCallBackDelegate callBack);
     
     @net.sf.jni4net.attributes.ClrMethod("()V")
     public native void InitAccessControlData();
@@ -128,11 +128,11 @@ public class ReaderWrapper extends system.Object {
     public native void SetTimezone(String code, int index, int startHour, int startMinute, int endHour, int endMinute);
     
     public static system.Type typeof() {
-        return readerwrapper.ReaderWrapper.staticType;
+        return ReaderWrapper.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.ReaderWrapper.staticType = staticType;
+        ReaderWrapper.staticType = staticType;
     }
     //</generated-proxy>
 }

@@ -24,11 +24,11 @@ public class VirdiAuthMode extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.VirdiAuthMode.staticType;
+        return VirdiAuthMode.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.VirdiAuthMode.staticType = staticType;
+        VirdiAuthMode.staticType = staticType;
     }
     //</generated-proxy>
 }

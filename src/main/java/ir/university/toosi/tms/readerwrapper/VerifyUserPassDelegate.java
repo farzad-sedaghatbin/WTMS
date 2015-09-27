@@ -24,10 +24,10 @@ public abstract class VerifyUserPassDelegate extends system.MulticastDelegate {
     }
     
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/VirdiAuthMode;LSystem/String;)V")
-    public abstract void Invoke(int terminalId, int userId, readerwrapper.VirdiAuthMode authMode, String password);
+    public abstract void Invoke(int terminalId, int userId, VirdiAuthMode authMode, String password);
 
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/VirdiAuthMode;LSystem/String;LSystem/AsyncCallback;LSystem/Object;)LSystem/IAsyncResult;")
-    public system.IAsyncResult BeginInvoke(int terminalId, int userId, readerwrapper.VirdiAuthMode authMode, String password, system.AsyncCallback callback, system.Object object) {
+    public system.IAsyncResult BeginInvoke(int terminalId, int userId, VirdiAuthMode authMode, String password, system.AsyncCallback callback, system.Object object) {
         throw new system.NotImplementedException();
     }
     
@@ -37,28 +37,28 @@ public abstract class VerifyUserPassDelegate extends system.MulticastDelegate {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.VerifyUserPassDelegate.staticType;
+        return VerifyUserPassDelegate.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.VerifyUserPassDelegate.staticType = staticType;
+        VerifyUserPassDelegate.staticType = staticType;
     }
     //</generated-proxy>
 }
 
 //<generated-proxy>
 @net.sf.jni4net.attributes.ClrProxy
-class __VerifyUserPassDelegate extends readerwrapper.VerifyUserPassDelegate {
+class __VerifyUserPassDelegate extends VerifyUserPassDelegate {
     
     protected __VerifyUserPassDelegate(net.sf.jni4net.inj.INJEnv __env, long __handle) {
             super(__env, __handle);
     }
     
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/VirdiAuthMode;LSystem/String;)V")
-    public native void Invoke(int terminalId, int userId, readerwrapper.VirdiAuthMode authMode, String password);
+    public native void Invoke(int terminalId, int userId, VirdiAuthMode authMode, String password);
 
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/VirdiAuthMode;LSystem/String;LSystem/AsyncCallback;LSystem/Object;)LSystem/IAsyncResult;")
-    public native system.IAsyncResult BeginInvoke(int terminalId, int userId, readerwrapper.VirdiAuthMode authMode, String password, system.AsyncCallback callback, system.Object object);
+    public native system.IAsyncResult BeginInvoke(int terminalId, int userId, VirdiAuthMode authMode, String password, system.AsyncCallback callback, system.Object object);
     
     @net.sf.jni4net.attributes.ClrMethod("(LSystem/IAsyncResult;)V")
     public native void EndInvoke(system.IAsyncResult result);

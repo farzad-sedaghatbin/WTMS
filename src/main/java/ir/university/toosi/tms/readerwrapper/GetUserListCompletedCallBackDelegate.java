@@ -24,10 +24,10 @@ public abstract class GetUserListCompletedCallBackDelegate extends system.Multic
     }
     
     @net.sf.jni4net.attributes.ClrMethod("(I[LReaderWrapper/Person;ZLSystem/String;)V")
-    public abstract void Invoke(int terminalId, readerwrapper.Person[] persons, boolean isSucceed, String failedMessage);
+    public abstract void Invoke(int terminalId, Person[] persons, boolean isSucceed, String failedMessage);
 
     @net.sf.jni4net.attributes.ClrMethod("(I[LReaderWrapper/Person;ZLSystem/String;LSystem/AsyncCallback;LSystem/Object;)LSystem/IAsyncResult;")
-    public system.IAsyncResult BeginInvoke(int terminalId, readerwrapper.Person[] persons, boolean isSucceed, String failedMessage, system.AsyncCallback callback, system.Object object) {
+    public system.IAsyncResult BeginInvoke(int terminalId, Person[] persons, boolean isSucceed, String failedMessage, system.AsyncCallback callback, system.Object object) {
         throw new system.NotImplementedException();
     }
     
@@ -37,28 +37,28 @@ public abstract class GetUserListCompletedCallBackDelegate extends system.Multic
     }
     
     public static system.Type typeof() {
-        return readerwrapper.GetUserListCompletedCallBackDelegate.staticType;
+        return GetUserListCompletedCallBackDelegate.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.GetUserListCompletedCallBackDelegate.staticType = staticType;
+        GetUserListCompletedCallBackDelegate.staticType = staticType;
     }
     //</generated-proxy>
 }
 
 //<generated-proxy>
 @net.sf.jni4net.attributes.ClrProxy
-class __GetUserListCompletedCallBackDelegate extends readerwrapper.GetUserListCompletedCallBackDelegate {
+class __GetUserListCompletedCallBackDelegate extends GetUserListCompletedCallBackDelegate {
     
     protected __GetUserListCompletedCallBackDelegate(net.sf.jni4net.inj.INJEnv __env, long __handle) {
             super(__env, __handle);
     }
     
     @net.sf.jni4net.attributes.ClrMethod("(I[LReaderWrapper/Person;ZLSystem/String;)V")
-    public native void Invoke(int terminalId, readerwrapper.Person[] persons, boolean isSucceed, String failedMessage);
+    public native void Invoke(int terminalId, Person[] persons, boolean isSucceed, String failedMessage);
 
     @net.sf.jni4net.attributes.ClrMethod("(I[LReaderWrapper/Person;ZLSystem/String;LSystem/AsyncCallback;LSystem/Object;)LSystem/IAsyncResult;")
-    public native system.IAsyncResult BeginInvoke(int terminalId, readerwrapper.Person[] persons, boolean isSucceed, String failedMessage, system.AsyncCallback callback, system.Object object);
+    public native system.IAsyncResult BeginInvoke(int terminalId, Person[] persons, boolean isSucceed, String failedMessage, system.AsyncCallback callback, system.Object object);
     
     @net.sf.jni4net.attributes.ClrMethod("(LSystem/IAsyncResult;)V")
     public native void EndInvoke(system.IAsyncResult result);

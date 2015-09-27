@@ -24,11 +24,11 @@ public class EntryType extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.EntryType.staticType;
+        return EntryType.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.EntryType.staticType = staticType;
+        EntryType.staticType = staticType;
     }
     //</generated-proxy>
 }

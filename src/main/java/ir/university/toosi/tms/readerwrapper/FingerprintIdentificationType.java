@@ -24,11 +24,11 @@ public class FingerprintIdentificationType extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.FingerprintIdentificationType.staticType;
+        return FingerprintIdentificationType.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.FingerprintIdentificationType.staticType = staticType;
+        FingerprintIdentificationType.staticType = staticType;
     }
     //</generated-proxy>
 }

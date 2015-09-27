@@ -24,11 +24,11 @@ public class DeviceType extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.DeviceType.staticType;
+        return DeviceType.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.DeviceType.staticType = staticType;
+        DeviceType.staticType = staticType;
     }
     //</generated-proxy>
 }

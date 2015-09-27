@@ -24,17 +24,17 @@ public class EnumHelper extends system.Object {
     }
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/DeviceType;)LSystem/String;")
-    public native static String GetTitle(readerwrapper.DeviceType deviceType);
+    public native static String GetTitle(DeviceType deviceType);
     
     @net.sf.jni4net.attributes.ClrMethod("(IIIIII)LReaderWrapper/AuthenticationType;")
-    public native static readerwrapper.AuthenticationType GetEnumValue(int isAndOperation, int isFinger, int isCard, int isPassword, int isCardId, int isFpCard);
+    public native static AuthenticationType GetEnumValue(int isAndOperation, int isFinger, int isCard, int isPassword, int isCardId, int isFpCard);
     
     public static system.Type typeof() {
-        return readerwrapper.EnumHelper.staticType;
+        return EnumHelper.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.EnumHelper.staticType = staticType;
+        EnumHelper.staticType = staticType;
     }
     //</generated-proxy>
 }

@@ -24,10 +24,10 @@ public abstract class GetAccessEventDataDelegate extends system.MulticastDelegat
     }
     
     @net.sf.jni4net.attributes.ClrMethod("(ILReaderWrapper/AccessEventData;)V")
-    public abstract void Invoke(int terminalId, readerwrapper.AccessEventData accessEventData);
+    public abstract void Invoke(int terminalId, AccessEventData accessEventData);
     
     @net.sf.jni4net.attributes.ClrMethod("(ILReaderWrapper/AccessEventData;LSystem/AsyncCallback;LSystem/Object;)LSystem/IAsyncResult;")
-    public system.IAsyncResult BeginInvoke(int terminalId, readerwrapper.AccessEventData accessEventData, system.AsyncCallback callback, system.Object object) {
+    public system.IAsyncResult BeginInvoke(int terminalId, AccessEventData accessEventData, system.AsyncCallback callback, system.Object object) {
         throw new system.NotImplementedException();
     }
     
@@ -37,28 +37,28 @@ public abstract class GetAccessEventDataDelegate extends system.MulticastDelegat
     }
     
     public static system.Type typeof() {
-        return readerwrapper.GetAccessEventDataDelegate.staticType;
+        return GetAccessEventDataDelegate.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.GetAccessEventDataDelegate.staticType = staticType;
+        GetAccessEventDataDelegate.staticType = staticType;
     }
     //</generated-proxy>
 }
 
 //<generated-proxy>
 @net.sf.jni4net.attributes.ClrProxy
-class __GetAccessEventDataDelegate extends readerwrapper.GetAccessEventDataDelegate {
+class __GetAccessEventDataDelegate extends GetAccessEventDataDelegate {
     
     protected __GetAccessEventDataDelegate(net.sf.jni4net.inj.INJEnv __env, long __handle) {
             super(__env, __handle);
     }
     
     @net.sf.jni4net.attributes.ClrMethod("(ILReaderWrapper/AccessEventData;)V")
-    public native void Invoke(int terminalId, readerwrapper.AccessEventData accessEventData);
+    public native void Invoke(int terminalId, AccessEventData accessEventData);
     
     @net.sf.jni4net.attributes.ClrMethod("(ILReaderWrapper/AccessEventData;LSystem/AsyncCallback;LSystem/Object;)LSystem/IAsyncResult;")
-    public native system.IAsyncResult BeginInvoke(int terminalId, readerwrapper.AccessEventData accessEventData, system.AsyncCallback callback, system.Object object);
+    public native system.IAsyncResult BeginInvoke(int terminalId, AccessEventData accessEventData, system.AsyncCallback callback, system.Object object);
     
     @net.sf.jni4net.attributes.ClrMethod("(LSystem/IAsyncResult;)V")
     public native void EndInvoke(system.IAsyncResult result);

@@ -24,11 +24,11 @@ public class AccessDateType extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.AccessDateType.staticType;
+        return AccessDateType.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.AccessDateType.staticType = staticType;
+        AccessDateType.staticType = staticType;
     }
     //</generated-proxy>
 }

@@ -24,11 +24,11 @@ public class VirdiLogType extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.VirdiLogType.staticType;
+        return VirdiLogType.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.VirdiLogType.staticType = staticType;
+        VirdiLogType.staticType = staticType;
     }
     //</generated-proxy>
 }

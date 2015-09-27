@@ -24,11 +24,11 @@ public class TerminalStatus extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.TerminalStatus.staticType;
+        return TerminalStatus.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.TerminalStatus.staticType = staticType;
+        TerminalStatus.staticType = staticType;
     }
     //</generated-proxy>
 }

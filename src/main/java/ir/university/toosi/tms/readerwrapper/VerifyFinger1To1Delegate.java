@@ -24,10 +24,10 @@ public abstract class VerifyFinger1To1Delegate extends system.MulticastDelegate 
     }
     
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/VirdiAuthMode;[B)V")
-    public abstract void Invoke(int terminalId, int userId, readerwrapper.VirdiAuthMode authMode, byte[] fingerData);
+    public abstract void Invoke(int terminalId, int userId, VirdiAuthMode authMode, byte[] fingerData);
     
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/VirdiAuthMode;[BLSystem/AsyncCallback;LSystem/Object;)LSystem/IAsyncResult;")
-    public system.IAsyncResult BeginInvoke(int terminalId, int userId, readerwrapper.VirdiAuthMode authMode, byte[] fingerData, system.AsyncCallback callback, system.Object object) {
+    public system.IAsyncResult BeginInvoke(int terminalId, int userId, VirdiAuthMode authMode, byte[] fingerData, system.AsyncCallback callback, system.Object object) {
         throw new system.NotImplementedException();
     }
     
@@ -37,28 +37,28 @@ public abstract class VerifyFinger1To1Delegate extends system.MulticastDelegate 
     }
     
     public static system.Type typeof() {
-        return readerwrapper.VerifyFinger1To1Delegate.staticType;
+        return VerifyFinger1To1Delegate.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.VerifyFinger1To1Delegate.staticType = staticType;
+        VerifyFinger1To1Delegate.staticType = staticType;
     }
     //</generated-proxy>
 }
 
 //<generated-proxy>
 @net.sf.jni4net.attributes.ClrProxy
-class __VerifyFinger1To1Delegate extends readerwrapper.VerifyFinger1To1Delegate {
+class __VerifyFinger1To1Delegate extends VerifyFinger1To1Delegate {
     
     protected __VerifyFinger1To1Delegate(net.sf.jni4net.inj.INJEnv __env, long __handle) {
             super(__env, __handle);
     }
     
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/VirdiAuthMode;[B)V")
-    public native void Invoke(int terminalId, int userId, readerwrapper.VirdiAuthMode authMode, byte[] fingerData);
+    public native void Invoke(int terminalId, int userId, VirdiAuthMode authMode, byte[] fingerData);
     
     @net.sf.jni4net.attributes.ClrMethod("(IILReaderWrapper/VirdiAuthMode;[BLSystem/AsyncCallback;LSystem/Object;)LSystem/IAsyncResult;")
-    public native system.IAsyncResult BeginInvoke(int terminalId, int userId, readerwrapper.VirdiAuthMode authMode, byte[] fingerData, system.AsyncCallback callback, system.Object object);
+    public native system.IAsyncResult BeginInvoke(int terminalId, int userId, VirdiAuthMode authMode, byte[] fingerData, system.AsyncCallback callback, system.Object object);
     
     @net.sf.jni4net.attributes.ClrMethod("(LSystem/IAsyncResult;)V")
     public native void EndInvoke(system.IAsyncResult result);

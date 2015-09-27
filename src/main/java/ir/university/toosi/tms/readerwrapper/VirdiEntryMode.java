@@ -24,11 +24,11 @@ public class VirdiEntryMode extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.VirdiEntryMode.staticType;
+        return VirdiEntryMode.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.VirdiEntryMode.staticType = staticType;
+        VirdiEntryMode.staticType = staticType;
     }
     //</generated-proxy>
 }

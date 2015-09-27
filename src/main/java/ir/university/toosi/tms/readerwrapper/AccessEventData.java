@@ -22,7 +22,7 @@ public class AccessEventData extends system.Object {
     @net.sf.jni4net.attributes.ClrConstructor("()V")
     public AccessEventData() {
             super(((net.sf.jni4net.inj.INJEnv)(null)), 0);
-        readerwrapper.AccessEventData.__ctorAccessEventData0(this);
+        AccessEventData.__ctorAccessEventData0(this);
     }
     
     @net.sf.jni4net.attributes.ClrMethod("()V")
@@ -41,16 +41,16 @@ public class AccessEventData extends system.Object {
     public native void setDateTime(system.DateTime value);
     
     @net.sf.jni4net.attributes.ClrMethod("()LReaderWrapper/VirdiAuthMode;")
-    public native readerwrapper.VirdiAuthMode getVirdiAuthMode();
+    public native VirdiAuthMode getVirdiAuthMode();
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VirdiAuthMode;)V")
-    public native void setVirdiAuthMode(readerwrapper.VirdiAuthMode value);
+    public native void setVirdiAuthMode(VirdiAuthMode value);
     
     @net.sf.jni4net.attributes.ClrMethod("()LReaderWrapper/EntryType;")
-    public native readerwrapper.EntryType getAuthType();
+    public native EntryType getAuthType();
     
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/EntryType;)V")
-    public native void setAuthType(readerwrapper.EntryType value);
+    public native void setAuthType(EntryType value);
     
     @net.sf.jni4net.attributes.ClrMethod("()Z")
     public native boolean isAuthorized();
@@ -113,11 +113,11 @@ public class AccessEventData extends system.Object {
     public native void setFingerImageData(system.Object value);
     
     public static system.Type typeof() {
-        return readerwrapper.AccessEventData.staticType;
+        return AccessEventData.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.AccessEventData.staticType = staticType;
+        AccessEventData.staticType = staticType;
     }
     //</generated-proxy>
 }

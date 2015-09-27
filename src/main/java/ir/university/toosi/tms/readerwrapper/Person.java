@@ -22,7 +22,7 @@ public class Person extends system.Object {
     @net.sf.jni4net.attributes.ClrConstructor("()V")
     public Person() {
             super(((net.sf.jni4net.inj.INJEnv)(null)), 0);
-        readerwrapper.Person.__ctorPerson0(this);
+        Person.__ctorPerson0(this);
     }
     
     @net.sf.jni4net.attributes.ClrMethod("()V")
@@ -53,10 +53,10 @@ public class Person extends system.Object {
     public native void setAccessGroup(String value);
 
     @net.sf.jni4net.attributes.ClrMethod("()LReaderWrapper/AccessDateType;")
-    public native readerwrapper.AccessDateType getAccessDateType();
+    public native AccessDateType getAccessDateType();
 
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/AccessDateType;)V")
-    public native void setAccessDateType(readerwrapper.AccessDateType value);
+    public native void setAccessDateType(AccessDateType value);
 
     @net.sf.jni4net.attributes.ClrMethod("()LSystem/DateTime;")
     public native system.DateTime getStartAccessDate();
@@ -71,10 +71,10 @@ public class Person extends system.Object {
     public native void setEndAccessDate(system.DateTime value);
 
     @net.sf.jni4net.attributes.ClrMethod("()LReaderWrapper/AuthenticationType;")
-    public native readerwrapper.AuthenticationType getAuthenticationType();
+    public native AuthenticationType getAuthenticationType();
 
     @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/AuthenticationType;)V")
-    public native void setAuthenticationType(readerwrapper.AuthenticationType value);
+    public native void setAuthenticationType(AuthenticationType value);
 
     @net.sf.jni4net.attributes.ClrMethod("()LSystem/String;")
     public native String getPasswordForTerminal();
@@ -101,11 +101,11 @@ public class Person extends system.Object {
     public native void setFingerprints(byte[] value);
     
     public static system.Type typeof() {
-        return readerwrapper.Person.staticType;
+        return Person.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.Person.staticType = staticType;
+        Person.staticType = staticType;
     }
     //</generated-proxy>
 }

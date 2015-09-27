@@ -24,11 +24,11 @@ public class MainEntryMode extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.MainEntryMode.staticType;
+        return MainEntryMode.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.MainEntryMode.staticType = staticType;
+        MainEntryMode.staticType = staticType;
     }
     //</generated-proxy>
 }

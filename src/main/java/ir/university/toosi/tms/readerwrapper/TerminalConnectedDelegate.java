@@ -37,18 +37,18 @@ public abstract class TerminalConnectedDelegate extends system.MulticastDelegate
     }
     
     public static system.Type typeof() {
-        return readerwrapper.TerminalConnectedDelegate.staticType;
+        return TerminalConnectedDelegate.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.TerminalConnectedDelegate.staticType = staticType;
+        TerminalConnectedDelegate.staticType = staticType;
     }
     //</generated-proxy>
 }
 
 //<generated-proxy>
 @net.sf.jni4net.attributes.ClrProxy
-class __TerminalConnectedDelegate extends readerwrapper.TerminalConnectedDelegate {
+class __TerminalConnectedDelegate extends TerminalConnectedDelegate {
     
     protected __TerminalConnectedDelegate(net.sf.jni4net.inj.INJEnv __env, long __handle) {
             super(__env, __handle);

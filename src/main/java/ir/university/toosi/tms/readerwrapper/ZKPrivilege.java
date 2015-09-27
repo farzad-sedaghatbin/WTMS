@@ -24,11 +24,11 @@ public class ZKPrivilege extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.ZKPrivilege.staticType;
+        return ZKPrivilege.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.ZKPrivilege.staticType = staticType;
+        ZKPrivilege.staticType = staticType;
     }
     //</generated-proxy>
 }

@@ -24,11 +24,11 @@ public class SecurityLevel extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.SecurityLevel.staticType;
+        return SecurityLevel.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.SecurityLevel.staticType = staticType;
+        SecurityLevel.staticType = staticType;
     }
     //</generated-proxy>
 }

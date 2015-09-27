@@ -24,11 +24,11 @@ public class DoorLockStatus extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.DoorLockStatus.staticType;
+        return DoorLockStatus.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.DoorLockStatus.staticType = staticType;
+        DoorLockStatus.staticType = staticType;
     }
     //</generated-proxy>
 }

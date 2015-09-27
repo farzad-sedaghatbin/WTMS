@@ -24,11 +24,11 @@ public class ZKEntryMode extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.ZKEntryMode.staticType;
+        return ZKEntryMode.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.ZKEntryMode.staticType = staticType;
+        ZKEntryMode.staticType = staticType;
     }
     //</generated-proxy>
 }

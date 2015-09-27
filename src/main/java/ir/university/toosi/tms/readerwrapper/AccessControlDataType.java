@@ -24,11 +24,11 @@ public class AccessControlDataType extends system.Enum {
     }
     
     public static system.Type typeof() {
-        return readerwrapper.AccessControlDataType.staticType;
+        return AccessControlDataType.staticType;
     }
     
     private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        readerwrapper.AccessControlDataType.staticType = staticType;
+        AccessControlDataType.staticType = staticType;
     }
     //</generated-proxy>
 }
