@@ -1,0 +1,143 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:contextMenu for="virdis">
+                <p:menuitem value="View" update="virdiDetail" icon="ui-icon-search" oncomplete="PF('virdiDialog').show()"
+                            actionListener="#{handleVirdiAction.view}"/>
+                <p:menuitem value="Edit" update="virdiDetail" icon="ui-icon-search" oncomplete="PF('virdiDialog').show()"
+                            actionListener="#{handleVirdiAction.edit}"/>
+                <p:menuitem value="Delete" update="virdis" icon="ui-icon-close"
+                            actionListener="#{handleVirdiAction.doDelete}"/>
+            </p:contextMenu>
+
+            <p:commandButton value="Add" id="add" update="virdiDetail" actionListener="#{handleVirdiAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('virdiDialog').show()"/>
+
+            <p:dataTable id="virdis" var="currentVirdi" value="#{handleVirdiAction.virdiList}" rowKey="#{currentVirdi.id}"
+                         selection="#{handleVirdiAction.currentVirdi}" selectionMode="single">
+                <f:facet name="header">
+                    RightClick to View Options
+                </f:facet>
+                <p:column headerText="name">
+                    <h:outputText value="#{currentVirdi.name}"/>
+                </p:column>
+                <p:column headerText="description">
+                    <h:outputText value="#{currentVirdi.description}"/>
+                </p:column>
+                <p:column headerText="ip">
+                    <h:outputText value="#{currentVirdi.ip}"/>
+                </p:column>
+                <p:column headerText="enabeld">
+                    <p:graphicImage value="#{currentVirdi.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
+                </p:column>
+                <p:column headerText="type">
+                    <h:outputText value="#{currentVirdi.entrance ? 'entrance' : 'exit'}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p:dialog header="Virdi Info" widgetVar="virdiDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="virdiDetail" style="text-align:center;">
+                    <f:facet name="header">
+                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+                    </f:facet>
+                    <table>
+                        <tr>
+                            <td>
+                                <h:outputText value="name:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleVirdiAction.disableFields}"
+                                             value="#{handleVirdiAction.virdiName}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="description:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleVirdiAction.disableFields}"
+                                             value="#{handleVirdiAction.descText}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="ip:"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleVirdiAction.disableFields}" value="#{handleVirdiAction.ip}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="camera:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu disabled="#{handleVirdiAction.disableFields}"
+                                                 value="#{handleVirdiAction.cameraId}">
+                                    <f:selectItems value="#{handleVirdiAction.cameraItems}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="gateway:"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu disabled="#{handleVirdiAction.disableFields}"
+                                                 value="#{handleVirdiAction.gatewayId}">
+                                    <f:selectItems value="#{handleVirdiAction.gatewayItems}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="enabled:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handleVirdiAction.virdiEnabled}"
+                                                         valueChangeListener="#{handleVirdiAction.changeVirdis}"
+                                                         disabled="#{handleVirdiAction.disableFields}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="online:"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handleVirdiAction.online}"
+                                                         valueChangeListener="#{handleVirdiAction.changeOnline}"
+                                                         disabled="#{handleVirdiAction.disableFields}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:selectOneRadio id="oneDirection"
+                                                  value="#{handleVirdiAction.entrance}">
+                                    <f:selectItem itemLabel="entrance" itemValue='true'/>
+                                    <f:selectItem itemLabel="exit" itemValue='false'/>
+                                    <f:selectItem itemLabel="entranceAndExit" itemValue='false' itemDisabled="true"/>
+                                </p:selectOneRadio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:commandButton value="Submit" id="edit" update="virdis"
+                                                 actionListener="#{handleVirdiAction.saveOrUpdate}"
+                                                 oncomplete="PF('virdiDialog').hide()" styleClass="ui-priority-primary"
+                                                 rendered="#{not handleVirdiAction.disableFields}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

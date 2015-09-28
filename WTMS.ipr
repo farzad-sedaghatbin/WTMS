@@ -73,6 +73,7 @@
             <element id="library" level="project" name="Maven: org.apache.poi:poi:3.12" />
             <element id="library" level="project" name="Maven: org.primefaces:primefaces:5.2" />
             <element id="library" level="project" name="Maven: org.primefaces:theme:1.0.1" />
+            <element id="library" level="project" name="Maven: com.customjar:jni4net:0.8.8" />
             <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.6.1" />
             <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.6.1" />
             <element id="library" level="project" name="Maven: org.eclipse.jetty.orbit:javax.mail.glassfish:1.4.1.v201005082020" />
@@ -80,7 +81,7 @@
           </element>
         </element>
         <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/target/MANIFEST.MF" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/modena-1.0.1/META-INF/MANIFEST.MF" />
         </element>
         <element id="javaee-facet-resources" facet="WTMS/web/Web" />
       </root>
@@ -103,7 +104,7 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+      <profile default="false" name="Annotation profile for WTMS" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -347,6 +348,17 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/bouncycastle/bcprov-jdk14/138/bcprov-jdk14-138-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.customjar:jni4net:0.8.8">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/customjar/jni4net/0.8.8/jni4net-0.8.8.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/com/customjar/jni4net/0.8.8/jni4net-0.8.8-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/customjar/jni4net/0.8.8/jni4net-0.8.8-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.6.1">
