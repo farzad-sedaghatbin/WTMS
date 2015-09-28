@@ -14,6 +14,8 @@
                 <p:menuitem value="Edit" update="organDetail" icon="ui-icon-search"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.edit}"/>
+                <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
+                            oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleOrganAction.assignRule}"/>
                 <p:menuitem value="Delete" update="organs" icon="ui-icon-close"
                             actionListener="#{handleOrganAction.doDelete}"/>
             </p:contextMenu>
@@ -106,6 +108,38 @@
                             </td>
                         </tr>
                     </table>
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog header="Assign Rule" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="assignRuleDetail" style="text-align:center;">
+                    <p:dataTable id="assignRule" var="rule" value="#{handleOrganAction.rulePackageList}"
+                                 selectionMode="single" selection="#{handleOrganAction.selectedRulePackage}"
+                                 rowKey="#{rule.id}">
+                        <f:facet name="header">
+                            Select Events
+                        </f:facet>
+                        <p:ajax event="rowSelect" listener="#{handleOrganAction.doAssignRule}" update=":form:organs"/>
+                        <p:column headerText="rule name">
+                            <h:outputText value="#{rule.name}"/>
+                        </p:column>
+                        <p:column headerText="calendar name">
+                            <h:outputText value="#{rule.calendar.name}"/>
+                        </p:column>
+                        <p:column headerText="anti pass back">
+                            <h:graphicImage
+                                    value="#{rule.aniPassBack ? '/images/s_true.png':'/images/s_false.png'}"/>
+                        </p:column>
+                        <p:column headerText="allow exit">
+                            <h:graphicImage
+                                    value="#{rule.allowExit ? '/images/s_true.png':'/images/s_false.png'}"/>
+                        </p:column>
+                        <p:column headerText="allow exit gadget">
+                            <h:graphicImage
+                                    value="#{rule.allowExitGadget ? '/images/s_true.png':'/images/s_false.png'}"/>
+                        </p:column>
+                    </p:dataTable>
                 </p:outputPanel>
             </p:dialog>
         </h:form>

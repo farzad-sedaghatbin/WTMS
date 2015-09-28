@@ -3,6 +3,7 @@ package ir.university.toosi.wtms.web.action.organ;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.BLookupServiceImpl;
 import ir.university.toosi.tms.model.service.calendar.DayTypeServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.OrganServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
@@ -54,6 +55,8 @@ public class HandleOrganAction implements Serializable {
     private RuleServiceImpl ruleService;
     @EJB
     private DayTypeServiceImpl dayTypeService;
+    @EJB
+    private BLookupServiceImpl bLookupService;
     @Inject
     private HandleRoleAction handleRoleAction;
     private List<Organ> organList = null;
@@ -333,7 +336,6 @@ public class HandleOrganAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/organ/list-organ.htm");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -634,13 +636,7 @@ public class HandleOrganAction implements Serializable {
 
     public List<BLookup> getOrganTypes() {
         if (organTypes == null) {
-//            bLookupService.setServiceName("/getByLookupId");
-//            try {
-//                organTypes = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(bLookupService.getServerUrl(), bLookupService.getServiceName(), new ObjectMapper().writeValueAsString(Lookup.ORGAN_TYPE_ID)), new TypeReference<List<BLookup>>() {
-//                });
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+                organTypes = bLookupService.getByLookupId(Lookup.ORGAN_TYPE_ID);
             for (BLookup bLookup : organTypes) {
                 bLookup.setTitleText(me.getValue(bLookup.getCode()));
             }
@@ -1077,5 +1073,13 @@ public class HandleOrganAction implements Serializable {
 
     public void setDisableFields(boolean disableFields) {
         this.disableFields = disableFields;
+    }
+
+    public List<RulePackage> getRulePackageList() {
+        return rulePackageList;
+    }
+
+    public void setRulePackageList(List<RulePackage> rulePackageList) {
+        this.rulePackageList = rulePackageList;
     }
 }
