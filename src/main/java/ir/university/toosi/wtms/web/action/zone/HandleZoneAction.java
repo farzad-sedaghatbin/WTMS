@@ -362,14 +362,13 @@ public class HandleZoneAction implements Serializable {
     }
 
 
-    public void doAssignRule() {
+    private void doAssignRule() {
         currentZone.setEffectorUser(me.getUsername());
         currentZone.setRulePackage(selectedRulePackage);
         boolean condition = zoneService.editZone(currentZone);
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/zone/list-zone.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -413,7 +412,6 @@ public class HandleZoneAction implements Serializable {
     }
 
     public void selectNewRuleForZone() {
-//        selectedRulePackage = rulePackageList.getRowData();
         rulePackageName = selectedRulePackage.getName();
         if (selectedRulePackage.getCalendar() != null)
             calendarName = selectedRulePackage.getCalendar().getName();
@@ -422,6 +420,7 @@ public class HandleZoneAction implements Serializable {
         antiPassBack = selectedRulePackage.isAniPassBack();
         allowExit = selectedRulePackage.isAllowExit();
         allowExitGadget = selectedRulePackage.isAllowExitGadget();
+        doAssignRule();
     }
 
     public void selectForEdit() {
