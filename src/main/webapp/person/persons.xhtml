@@ -1,0 +1,673 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <p:popupPanel id="selectPDP"
+                         autosized="true"
+                         followByScroll="true"
+                         moveable="true"
+                         modal="true"
+                         minWidth="700">
+
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <f:facet name="controls">
+                <a4j:commandLink>
+                    <h:graphicImage value="/images/close.png"/>
+                    <p:componentControl event="click" target="selectPDP" operation="hide"/>
+                </a4j:commandLink>
+            </f:facet>
+            <ui:include src="../person/selectlist-pdp.xhtml"/>
+        </p:popupPanel>
+
+        <p:popupPanel id="PersonPanel"
+                         autosized="true"
+                         followByScroll="true"
+                         moveable="true"
+                         modal="true"
+                         minWidth="750"
+                         minHeight="450">
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <f:facet name="controls">
+                <a4j:commandLink>
+                    <h:graphicImage value="/images/close.png"/>
+                    <p:componentControl event="click" target="PersonPanel" operation="hide"/>
+                </a4j:commandLink>
+            </f:facet>
+            <ui:include src="handle-person.xhtml"/>
+        </p:popupPanel>
+
+        <p:popupPanel id="rulePanel"
+                         autosized="true"
+                         followByScroll="true"
+                         moveable="true"
+                         modal="true">
+
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <f:facet name="controls">
+                <a4j:commandLink>
+                    <h:graphicImage value="/images/close.png"/>
+                    <p:componentControl event="click" target="rulePanel" operation="hide"/>
+                </a4j:commandLink>
+            </f:facet>
+            <ui:include src="../business-rules/handle-rule-edit.xhtml"/>
+        </p:popupPanel>
+
+        <p:popupPanel id="resetPanel"
+
+                         autosized="true"
+                         followByScroll="true"
+                         moveable="true"
+                         modal="true">
+
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <f:facet name="controls">
+                <a4j:commandLink>
+                    <h:graphicImage value="/images/close.png"/>
+                    <p:componentControl event="click" target="resetPanel" operation="hide"/>
+                </a4j:commandLink>
+            </f:facet>
+            <ui:include src="./reset-password.xhtml"/>
+        </p:popupPanel>
+
+
+        <p:popupPanel id="AssignRulePanel"
+
+                         autosized="true"
+                         followByScroll="true"
+                         moveable="true"
+                         modal="true">
+
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <f:facet name="controls">
+                <a4j:commandLink>
+                    <h:graphicImage value="/images/close.png"/>
+                    <p:componentControl event="click" target="AssignRulePanel" operation="hide"/>
+                </a4j:commandLink>
+            </f:facet>
+            <ui:include src="../person/assign-person-rule.xhtml"/>
+        </p:popupPanel>
+
+        <p:popupPanel id="PersonDetailPanel"
+
+                         autosized="true"
+                         followByScroll="false"
+                         moveable="true"
+                         modal="true">
+
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <f:facet name="controls">
+                <a4j:commandLink>
+                    <h:graphicImage value="/images/close.png"/>
+                    <p:componentControl event="click" target="PersonDetailPanel" operation="hide"/>
+                </a4j:commandLink>
+            </f:facet>
+            <ui:include src="../person/detail-person.xhtml"/>
+        </p:popupPanel>
+
+
+        <p:popupPanel id="ConfirmationPanel"
+
+                         autosized="false"
+                         width="350"
+                         height="125"
+                         followByScroll="true"
+                         moveable="true"
+                         modal="true">
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <h:form>
+
+                <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
+                    <tr valign="top">
+                        <td nowrap="nowrap" align="center">
+                            <h:outputText escape="true" value="#{me.getValue('deleteMessage')}"/>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td nowrap="nowrap" align="center">
+                            <a4j:commandButton execute="@this" limitRender="true"
+                                               action="#{handlePersonAction.doDelete}"
+                                               render="globalMessages"
+                                               value="#{me.getValue('yes')}"/>
+                            &#160;
+                            <a4j:commandButton execute="@this" limitRender="true" value="#{me.getValue('no')}"
+                                               oncomplete="#{p:component('ConfirmationPanel')}.hide();"/>
+                        </td>
+                    </tr>
+                </table>
+            </h:form>
+        </p:popupPanel>
+
+        <br/>
+
+        <h:form dir="#{me.direction}" id="frm">
+            <fieldset dir="#{me.direction}">
+
+                <legend>
+                    <h:outputText escape="true" value="#{me.getValue('person_list')}"/>
+                </legend>
+                <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
+
+                    <tr valign="top">
+                        <td colspan="2" style="padding-bottom: 0; padding-bottom: 0">
+                            <a4j:outputPanel id="advanceSearchID" ajaxRendered="true">
+                                <table cellpadding="3" cellspacing="3" class="panelLikeTable">
+                                    <tr>
+                                        <td align="#{me.align}" nowrap="nowrap" valign="top" width="90%">
+                                            <p:collapsiblePanel header="#{me.getValue('advance_search')}" dir="#{me.direction}"
+                                                                   switchType="client" expanded="#{view.viewId eq '/list-person.xhtml'}"
+                                                                   headerClass="collapsiblePanelHeaderClass">
+                                                <fieldset dir="#{me.direction}">
+
+                                                    <legend>
+                                                        <h:outputText escape="true" value="#{me.getValue('advance_search')}"/>
+                                                    </legend>
+                                                    <table border="0" cellpadding="3" align="#{me.appositeAlign}" cellspacing="3"
+                                                           class="panelLikeTable">
+
+                                                        <tr valign="top">
+                                                            <td align="#{me.align}" nowrap="nowrap">
+                                                                <h:selectOneMenu value="#{handlePersonAction.preCondition}">
+                                                                    <f:selectItems value="#{handlePersonAction.preConditions}"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+                                                            &#160;&#160;
+                                                            <td align="#{me.align}" nowrap="nowrap">
+                                                                <h:selectOneMenu
+                                                                        value="#{handlePersonAction.attributeName}">
+                                                                    <f:selectItems
+                                                                            value="#{handlePersonAction.attributeNames}"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+                                                            &#160;&#160;
+                                                            <td>
+                                                                <h:inputText converter="persianConverter" value="#{handlePersonAction.attributeValue}"/>
+                                                            </td>
+                                                            &#160;&#160;
+                                                            <td align="#{me.align}" nowrap="nowrap">
+                                                                <h:selectOneMenu
+                                                                        value="#{handlePersonAction.postCondition}">
+                                                                    <f:selectItems
+                                                                            value="#{handlePersonAction.postConditions}"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+
+                                                            <td align="#{me.align}" nowrap="nowrap">
+                                                                <a4j:commandButton value="#{me.getValue('addCondition')}"
+                                                                                   action="#{handlePersonAction.addCondition}"
+                                                                                   render="conditionTable,advanceSearchID"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table border="0" cellpadding="3" align="#{me.appositeAlign}" cellspacing="3"
+                                                           class="panelLikeTable">
+                                                        <tr>
+                                                            <td>
+                                                                <p:dataTable id="conditionTable"
+                                                                                value="#{handlePersonAction.personSearches}"
+                                                                                keepSaved="true"
+                                                                                noDataLabel="#{me.getValue('no_result_found')}"
+                                                                                sortMode="single"
+                                                                                var="personSearch"
+                                                                                rows="10"
+                                                                                style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                                                                rowClasses="ROW1,ROW2">
+                                                                    <p:column>
+                                                                        <f:facet name="header">
+                                                                            <h:outputText escape="true" value=""/>
+                                                                        </f:facet>
+                                                                        <h:outputText escape="true" value="#{personSearch.preCondition}"/>
+                                                                    </p:column>
+
+                                                                    <p:column>
+                                                                        <f:facet name="header">
+                                                                            <h:outputText escape="true" value=""/>
+                                                                        </f:facet>
+                                                                        <h:outputText escape="true" value="#{me.getValue(personSearch.attributeName)}"/>
+                                                                    </p:column>
+
+                                                                    <p:column>
+                                                                        <f:facet name="header">
+                                                                            <h:outputText escape="true" value=""/>
+                                                                        </f:facet>
+                                                                        <h:outputText escape="true" value="#{personSearch.attributeValue}"/>
+                                                                    </p:column>
+
+                                                                    <p:column>
+                                                                        <f:facet name="header">
+                                                                            <h:outputText escape="true" value=""/>
+                                                                        </f:facet>
+                                                                        <h:outputText escape="true" value="#{personSearch.postCondition}"/>
+                                                                    </p:column>
+                                                                    <p:column>
+                                                                        <f:facet name="header">
+                                                                            <h:outputText escape="true" value=""/>
+                                                                        </f:facet>
+                                                                        <a4j:commandButton image="/images/delete.png"
+                                                                                           title="#{me.getValue('delete')}"
+                                                                                           execute="@this"
+                                                                                           render="conditionTable,advanceSearchID"
+                                                                                           limitRender="true"
+                                                                                           action="#{handlePersonAction.removeCondition}"
+                                                                                />
+                                                                    </p:column>
+                                                                    <f:facet name="footer">
+                                                                        <p:dataScroller limitRender="true" execute="@this"
+                                                                                           render="conditionTable"
+                                                                                           page="#{handleRuleAction.page}"/>
+                                                                    </f:facet>
+                                                                </p:dataTable>
+                                                            </td>
+                                                        </tr>
+                                                        <tr valign="top">
+                                                            <td align="#{me.align}" nowrap="nowrap">
+                                                                <h:commandButton value="#{me.getValue('search')}"
+                                                                                 action="#{handlePersonAction.search}"
+                                                                                 render="gallery,conditionTable,operationArea"/>
+                                                            </td>
+
+                                                        </tr>
+                                                    </table>
+                                                </fieldset>
+                                            </p:collapsiblePanel>
+                                        </td>
+                                        <td align="center" valign="bottom" nowrap="nowrap">
+                                            <a4j:outputPanel ajaxRendered="true" id="pic_top">
+                                                <a4j:mediaOutput element="img" mimeType="image/png"
+                                                                 value="#{handlePersonAction.currentPerson.id}"
+                                                                 createContent="#{handlePersonAction.paint}"
+                                                                 styleClass="personPicture"
+                                                                 style="height: 150px;"
+                                                                 cacheable="false" session="true"
+                                                                 rendered="#{handlePersonAction.selectRow}"/>
+                                            </a4j:outputPanel>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </a4j:outputPanel>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
+                        <td nowrap="nowrap" colspan="2" style="padding-top: 0">
+                            <table border="0" cellpadding="3" cellspacing="3" class="page_title">
+                                <tr valign="top">
+                                    <td nowrap="nowrap" class="page_title">
+                                        <h:outputText escape="true" value="#{me.getValue('management')}"/>
+                                    </td>
+                                    <td align="center" nowrap="nowrap" class="page_title_separator" valign="bottom">
+                                        <h:graphicImage rendered="#{me.direction eq 'rtl'}" value="/images/arrow-left.png"/>
+                                        <h:graphicImage rendered="#{not me.direction eq 'rtl'}"
+                                                        value="/images/arrow-right.png"/>
+                                    </td>
+                                    <td nowrap="nowrap" class="page_title">
+                                        <h:outputText escape="true" value="#{me.getValue('person')}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
+                        <td nowrap="nowrap" align="#{me.align}" colspan="2">
+                            <a4j:outputPanel ajaxRendered="true" id="operationArea">
+                                <f:subview id="operationAreaSubview" rendered="#{handlePersonAction.selectRow}">
+                                    <table border="0" cellpadding="3" cellspacing="3" class="toolbar panelLikeTable">
+                                        <tr valign="top">
+                                            <td nowrap="nowrap" style="padding-left: 15px; padding-right: 15px">
+                                                &diams;
+                                                <h:outputText escape="true" value="#{'سطر انتخاب شده:'}"/>
+                                                &#160;&#160;
+                                                <h:outputText escape="true" value="#{handlePersonAction.currentPerson.name}"/>
+                                                &#160;
+                                                <h:outputText escape="true" value="#{handlePersonAction.currentPerson.lastName}"/>
+                                            </td>
+                                            <td align="#{me.appositeAlign}" nowrap="nowrap" class="page_title_separator" valign="bottom">
+                                                <a4j:commandButton image="/images/edit.png"
+                                                                   action="#{handlePersonAction.edit}"
+                                                                   title="#{me.getValue('edit')}"
+                                                                   rendered="#{me.hasPermission('EDIT_PERSON')}"
+                                                                   execute="@this"
+                                                                   onclick="#{p:component('PersonPanel')}.show();"
+                                                                   limitRender="true"
+                                                                   render="handlePanel, _personnelConfirm-password,renderdpicture"/>
+                                                &#160;&#160;
+                                                <a4j:commandButton image="/images/assign-rule.png"
+                                                                   action="#{handlePersonAction.assignRule}"
+                                                                   title="#{me.getValue('assignRule')}"
+                                                                   rendered="#{me.hasPermission('ASSIGN_RULE_PERSON')}"
+                                                                   execute="@this"
+                                                                   limitRender="true"
+                                                                   render="handleAssignRulePanel,AssignRulePanel"
+                                                                   oncomplete="#{p:component('AssignRulePanel')}.show();"/>
+                                                &#160;&#160;
+                                                <h:commandButton image="/images/assign-card.png"
+                                                                 title="#{me.getValue('assign_card')}"
+                                                                 action="#{handlePersonAction.downloadJnlp}"
+                                                                 rendered="#{me.hasPermission('ADD_CARD')}"/>
+                                                &#160;&#160;
+                                                <a4j:commandButton image="/images/pdp.png"
+                                                                   title="#{me.getValue('synch')}"
+                                                                   action="#{handlePDPAction.synch}"
+                                                                   rendered="#{me.hasPermission('SYNCH')}"
+                                                                   onclick="#{p:component('selectPDP')}.show();"
+                                                                   execute="@this"
+                                                                   limitRender="true"
+                                                                   render="pdpFrm:selectPdpList"/>
+                                                &#160;&#160;
+                                                <a4j:commandButton image="/images/delete.png"
+                                                                   title="#{me.getValue('delete')}"
+                                                                   rendered="#{me.hasPermission('DELETE_PERSON')}"
+                                                                   execute="@this"
+                                                                   limitRender="true"
+                                                                   onclick="#{p:component('ConfirmationPanel')}.show();"/>
+                                                &#160;&#160;
+                                                <a4j:commandButton image="/images/assign-rule.png"
+                                                                   action="#{handlePersonAction.editRule}"
+                                                                   title="#{me.getValue('editRule')}"
+                                                                   rendered="#{me.hasPermission('EDIT_RULE_PERSON')}"
+                                                                   execute="@this"
+                                                                   limitRender="true"
+                                                                   render="handleRulePanel"
+                                                                   oncomplete="#{p:component('rulePanel')}.show();"/>
+                                                &#160;&#160;
+                                                <a4j:commandButton image="/images/s_key.png"
+                                                                   rendered="#{me.hasPermission('RESET_PASSWORD')}"
+                                                                   execute="@this"
+                                                                   limitRender="true"
+                                                                   render="handleResetPanel"
+                                                                   oncomplete="#{p:component('resetPanel')}.show();"/>
+                                            </td>
+
+
+                                        </tr>
+                                    </table>
+                                </f:subview>
+                            </a4j:outputPanel>
+                            <h:inputHidden value="#{handlePersonAction.cardData}" id="cardDataInput"/>
+                            <script type="text/javascript">
+                                function readCardData() {
+                                    try {
+                                        var txt = document.app.getCardData();
+                                        document.getElementById("frm:cardDataInput").value = txt;
+                                        alert(txt);
+                                    } catch (e) {
+                                        alert(e);
+                                    }
+                                }
+                            </script>
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
+                        <td align="#{me.align}" nowrap="nowrap" colspan="2">
+                            <a4j:commandButton value="#{me.getValue('person_add')}"
+                                               action="#{handlePersonAction.add}"
+                                               execute="@this"
+                                               limitRender="true"
+                                               onclick="#{p:component('PersonPanel')}.show();"
+                                               rendered="#{me.hasPermission('ADD_PERSON')}"
+                                               render="gallery, operationArea, handlePanel, pic_top, extrafiled1,extrafiled2,extrafiled3,extrafiled4"/>
+                            &#160;&#160;
+                            <h:commandButton action="#{handlePersonAction.exportExcel}" value="#{me.getValue('export')}"/>
+
+                        </td>
+                    </tr><tr valign="top">
+                    <td align="#{me.align}" nowrap="nowrap" colspan="2">
+                        <h:inputText converter="persianConverter" value="#{handlePersonAction.simpleValue}"/>
+                        &#160;&#160;
+                        <h:commandButton action="#{handlePersonAction.simpleSearch}"  render="gallery,operationArea" value="#{me.getValue('search')}"/>
+
+                    </td>
+                </tr>
+                    <tr valign="top">
+                        <td align="#{me.align}">
+                            <a4j:outputPanel id="gallery" ajaxRendered="true" rendered="#{handlePersonAction.personAvailable}">
+                                <table border="0" cellspacing="3" cellpadding="3" width="100%" dir="rtl">
+                                    <ui:repeat value="#{handlePersonAction.personCount}" var="person" varStatus="loop" step="6">
+                                        <tr valign="middle">
+                                            <td nowrap="nowrap" align="center">
+                                                <a4j:commandLink action="#{handlePersonAction.selectForEdit}"
+                                                                 execute="@this"
+                                                                 rendered="#{handlePersonAction.renderedRow(loop.index +handlePersonAction.rowIndex)}"
+                                                                 limitRender="true"
+                                                                 render="operationArea, pic_top">
+                                                    <a4j:mediaOutput element="img" mimeType="image/png"
+                                                                     value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex)).id}"
+                                                                     createContent="#{handlePersonAction.paint}"
+                                                                     styleClass="personPicture"
+                                                                     cacheable="false" session="true"/>
+                                                    <br/>
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.name}"/>
+                                                    &#160;
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.lastName}"/>
+                                                    <a4j:param name="personId"
+                                                               value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex)).id}"/>
+                                                </a4j:commandLink>
+
+                                            </td>
+                                            <td nowrap="nowrap" align="center">
+                                                <a4j:commandLink action="#{handlePersonAction.selectForEdit}"
+                                                                 execute="@this"
+                                                                 rendered="#{handlePersonAction.renderedRow(loop.index +handlePersonAction.rowIndex+1)}"
+                                                                 limitRender="true"
+                                                                 render="operationArea , pic_top">
+                                                    <a4j:mediaOutput element="img" mimeType="image/png"
+                                                                     value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+1)).id}"
+                                                                     createContent="#{handlePersonAction.paint}"
+                                                                     styleClass="personPicture"
+                                                                     cacheable="false" session="true"/>
+                                                    <br/>
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.name}"/>
+                                                    &#160;
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.lastName}"/>
+                                                    <a4j:param name="personId"
+                                                               value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+1)).id}"/>
+                                                </a4j:commandLink>
+                                            </td>
+                                            <td nowrap="nowrap" align="center">
+                                                <a4j:commandLink action="#{handlePersonAction.selectForEdit}"
+                                                                 execute="@this"
+                                                                 rendered="#{handlePersonAction.renderedRow(loop.index +handlePersonAction.rowIndex+2)}"
+                                                                 limitRender="true"
+                                                                 render="operationArea , pic_top">
+                                                    <a4j:mediaOutput element="img" mimeType="image/png"
+                                                                     value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+2)).id}"
+                                                                     createContent="#{handlePersonAction.paint}"
+                                                                     styleClass="personPicture"
+                                                                     cacheable="false" session="true"/>
+                                                    <br/>
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.name}"/>
+                                                    &#160;
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.lastName}"/>
+                                                    <a4j:param name="personId"
+                                                               value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+2)).id}"/>
+                                                </a4j:commandLink>
+                                            </td>
+                                            <td nowrap="nowrap" align="center">
+                                                <a4j:commandLink action="#{handlePersonAction.selectForEdit}"
+                                                                 execute="@this"
+                                                                 rendered="#{handlePersonAction.renderedRow(loop.index +handlePersonAction.rowIndex+3)}"
+                                                                 limitRender="true"
+                                                                 render="operationArea , pic_top">
+                                                    <a4j:mediaOutput element="img" mimeType="image/png"
+                                                                     value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+3)).id}"
+                                                                     createContent="#{handlePersonAction.paint}"
+                                                                     styleClass="personPicture"
+                                                                     cacheable="false" session="true"/>
+                                                    <br/>
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.name}"/>
+                                                    &#160;
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.lastName}"/>
+                                                    <a4j:param name="personId"
+                                                               value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+3)).id}"/>
+                                                </a4j:commandLink>
+                                            </td>
+                                            <td nowrap="nowrap" align="center">
+                                                <a4j:commandLink action="#{handlePersonAction.selectForEdit}"
+                                                                 execute="@this"
+                                                                 rendered="#{handlePersonAction.renderedRow(loop.index +handlePersonAction.rowIndex+4)}"
+                                                                 limitRender="true"
+                                                                 render="operationArea , pic_top">
+                                                    <a4j:mediaOutput element="img" mimeType="image/png"
+                                                                     value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+4)).id}"
+                                                                     createContent="#{handlePersonAction.paint}"
+                                                                     styleClass="personPicture"
+                                                                     cacheable="false" session="true"/>
+                                                    <br/>
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.name}"/>
+                                                    &#160;
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.lastName}"/>
+                                                    <a4j:param name="personId"
+                                                               value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+4)).id}"/>
+                                                </a4j:commandLink>
+                                            </td>
+                                            <td nowrap="nowrap" align="center">
+                                                <a4j:commandLink action="#{handlePersonAction.selectForEdit}"
+                                                                 execute="@this"
+                                                                 limitRender="true"
+                                                                 rendered="#{handlePersonAction.renderedRow(loop.index +handlePersonAction.rowIndex+5)}"
+                                                                 render="operationArea , pic_top">
+                                                    <a4j:mediaOutput element="img" mimeType="image/png"
+                                                                     value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+5)).id}"
+                                                                     createContent="#{handlePersonAction.paint}"
+                                                                     styleClass="personPicture"
+                                                                     cacheable="false" session="true"/>
+                                                    <br/>
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.name}"/>
+                                                    &#160;
+                                                    <h:outputLabel
+                                                            value="#{handlePersonAction.dataModelPerson.lastName}"/>
+                                                    <a4j:param name="personId"
+                                                               value="#{handlePersonAction.returnPerson(handlePersonAction.innerPersonList.get(loop.index + handlePersonAction.rowIndex+5)).id}"/>
+                                                </a4j:commandLink>
+                                            </td>
+                                        </tr>
+                                    </ui:repeat>
+                                    <tr valign="middle">
+                                        <td nowrap="nowrap" align="center" colspan="6">
+                                            <table cellpadding="2" cellspacing="2" width="200px">
+                                                <tr valign="middle">
+                                                    <td align="right" nowrap="nowrap">
+                                                        <h:outputLabel value="#{loop.index}"/>
+                                                        <a4j:commandButton
+                                                                action="#{handlePersonAction.pageCordinator(handlePersonAction.pageCount.get(loop.index),false,false,true)}"
+                                                                disabled="#{handlePersonAction.firstPage}" title="first"
+                                                                execute="@this"
+                                                                limitRender="true"
+                                                                onclick="#{p:component('waitingPanel')}.show();"
+                                                                oncomplete="#{p:component('waitingPanel')}.hide();"
+                                                                render="gallery" value="&lt;&lt;&lt;"/>
+
+                                                    </td>
+                                                    <td align="left" nowrap="nowrap">
+
+                                                        <a4j:commandButton
+                                                                action="#{handlePersonAction.pageCordinator(handlePersonAction.pageCount.get(loop.index),true,false,false)}"
+                                                                disabled="#{handlePersonAction.firstPage}" title="previous"
+                                                                execute="@this"
+                                                                onclick="#{p:component('waitingPanel')}.show();"
+                                                                oncomplete="#{p:component('waitingPanel')}.hide();"
+                                                                limitRender="true"
+                                                                render="gallery" value="&lt;&lt;"/>
+                                                    </td>
+                                                    <td align="left" nowrap="nowrap">
+                                                        <a4j:commandButton action="#{handlePersonAction.previous}"
+                                                                           disabled="#{handlePersonAction.firstPage}" title="previous"
+                                                                           execute="@this"
+                                                                           onclick="#{p:component('waitingPanel')}.show();"
+                                                                           oncomplete="#{p:component('waitingPanel')}.hide();"
+                                                                           limitRender="true"
+                                                                           render="gallery" value="&lt;"/>
+                                                    </td>
+                                                    <td align="center" nowrap="nowrap">
+                                                        <ui:repeat value="#{handlePersonAction.pageCount}" var="page" varStatus="loop"
+                                                                   step="1">
+                                                            <a4j:commandLink execute="@this"
+                                                                             limitRender="true"
+                                                                             disabled="#{handlePersonAction.pageCount.get(loop.index)eq handlePersonAction.lastPageIndex}"
+                                                                             render="gallery"
+                                                                             onclick="#{p:component('waitingPanel')}.show();"
+                                                                             oncomplete="#{p:component('waitingPanel')}.hide();"
+                                                                             styleClass="textColor"
+                                                                             action="#{handlePersonAction.pageCordinator(handlePersonAction.pageCount.get(loop.index),false,false,false)}"
+                                                                             value="#{handlePersonAction.pageCount.get(loop.index)}"/> &#160;&#160;
+                                                        </ui:repeat>
+                                                    </td>
+                                                    <td align="right" nowrap="nowrap">
+                                                        <a4j:commandButton action="#{handlePersonAction.next}"
+                                                                           disabled="#{handlePersonAction.lastPage}" title="next"
+                                                                           execute="@this"
+                                                                           onclick="#{p:component('waitingPanel')}.show();"
+                                                                           oncomplete="#{p:component('waitingPanel')}.hide();"
+                                                                           limitRender="true"
+                                                                           render="gallery" value="&gt;"/>
+
+                                                    </td>
+                                                    <td align="right" nowrap="nowrap">
+                                                        <a4j:commandButton
+                                                                action="#{handlePersonAction.pageCordinator(handlePersonAction.pageCount.get(loop.index),true,true,false)}"
+                                                                disabled="#{handlePersonAction.lastPage}" title="next"
+                                                                execute="@this"
+                                                                limitRender="true"
+                                                                onclick="#{p:component('waitingPanel')}.show();"
+                                                                oncomplete="#{p:component('waitingPanel')}.hide();"
+                                                                render="gallery" value="&gt;&gt;"/>
+
+                                                    </td>
+                                                    <td align="right" nowrap="nowrap">
+                                                        <a4j:commandButton
+                                                                action="#{handlePersonAction.pageCordinator(handlePersonAction.pageCount.get(loop.index),false,true,true)}"
+                                                                disabled="#{handlePersonAction.lastPage}" title="last"
+                                                                execute="@this"
+                                                                limitRender="true"
+                                                                onclick="#{p:component('waitingPanel')}.show();"
+                                                                oncomplete="#{p:component('waitingPanel')}.hide();"
+                                                                render="gallery" value="&gt;&gt;&gt;"/>
+
+                                                    </td>
+
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </a4j:outputPanel>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
