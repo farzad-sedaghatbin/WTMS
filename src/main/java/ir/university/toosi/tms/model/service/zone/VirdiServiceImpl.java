@@ -96,9 +96,9 @@ public class VirdiServiceImpl<T extends Virdi> {
         }
     }
 
-    public List<T> getAllPdpbyIDs(List<Long> id) {
+    public List<T> getAllVirdibyIDs(List<Long> id) {
         try {
-            return (List<T>) virdiDAO.getAllPdpbyIDs(id);
+            return (List<T>) virdiDAO.getAllVirdibyIDs(id);
         } catch (Exception e) {
             return null;
         }
@@ -189,28 +189,28 @@ public class VirdiServiceImpl<T extends Virdi> {
 
 
 
-    public boolean synchronizePdp(VirdiSync virdiSync) {
-        Set<Virdi> pdps = virdiSync.getVirdiList();
-        if (pdps == null || pdps.size() == 0)
+    public boolean synchronizeVirdi(VirdiSync virdiSync) {
+        Set<Virdi> virdis = virdiSync.getVirdiList();
+        if (virdis == null || virdis.size() == 0)
             return false;
         boolean flag = true;
-//        cleanDirectory(pdpSync);
+//        cleanDirectory(virdiSync);
 //        try {
-//            generateGate(pdpSync);
+//            generateGate(virdiSync);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        for (Virdi pdp : pdps) {
+        for (Virdi virdi : virdis) {
 //            try {
-//                if (ping(pdp.getIp())) {
-//                    if (generateFiles(pdpSync, pdp)) {
-//                        new Thread(new FileUploaderUtil(pdp, this)).start();
+//                if (ping(virdi.getIp())) {
+//                    if (generateFiles(virdiSync, virdi)) {
+//                        new Thread(new FileUploaderUtil(virdi, this)).start();
 //                    } else {
 //                        flag = false;
 //
 //                    }
 //                } else {
-                    T t = findByIp(pdp.getIp());
+                    T t = findByIp(virdi.getIp());
                     t.setUpdateDate(CalendarUtil.getDate(new Date(), new Locale("fa")));
                     t.setSuccess(false);
                     editVirdi(t);
@@ -224,21 +224,21 @@ public class VirdiServiceImpl<T extends Virdi> {
         return flag;
     }
 
-    public boolean synchronizeOnePdp(VirdiSync pdpSync) {
-        Set<Virdi> pdps = pdpSync.getVirdiList();
-        if (pdps == null || pdps.size() == 0)
+    public boolean synchronizeOneVirdi(VirdiSync virdiSync) {
+        Set<Virdi> virdis = virdiSync.getVirdiList();
+        if (virdis == null || virdis.size() == 0)
             return false;
         boolean flag = true;
-//        cleanDirectory(pdpSync);
+//        cleanDirectory(virdiSync);
 //        try {
-//            generate4OneGate(pdpSync);
+//            generate4OneGate(virdiSync);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-//        for (Virdi pdp : pdps) {
+//        for (Virdi virdi : virdis) {
 //            try {
-//                if (generateFiles4One(pdpSync, pdp)) {
-//                    new Thread(new FileUploaderUtil(pdp, this)).start();
+//                if (generateFiles4One(virdiSync, virdi)) {
+//                    new Thread(new FileUploaderUtil(virdi, this)).start();
 //                } else {
 //                    flag = false;
 //
@@ -252,25 +252,25 @@ public class VirdiServiceImpl<T extends Virdi> {
         return flag;
     }
 
-    public boolean fingerPrint(Set<Virdi> pdps) {
+    public boolean fingerPrint(Set<Virdi> virdis) {
         List<Person> persons = personService.findWithRulePackage();
-        for (Virdi pdp : pdps) {
+        for (Virdi virdi : virdis) {
             try {
-                if (ping(pdp.getIp())) {
+                if (ping(virdi.getIp())) {
                     for (Person person : persons) {
 
                         String zeros = "";
                         for (int i = 1; i <= 8 - (person.getPersonOtherId().length()); i++) {
                             zeros += "0";
                         }
-                        byte[] b = TFTPUtility.get(pdp.getIp(), zeros + person.getPersonOtherId() + ".fpt");
+                        byte[] b = TFTPUtility.get(virdi.getIp(), zeros + person.getPersonOtherId() + ".fpt");
                         person.setFinger(b.length == 0 ? null : b);
                         if (person.getFinger() != null) {
                             personService.editPerson(person);
                         }
                     }
                 } else {
-                    T t = findByIp(pdp.getIp());
+                    T t = findByIp(virdi.getIp());
                     t.setUpdateDate(CalendarUtil.getDate(new Date(), new Locale("fa")));
                     t.setSuccess(false);
                     editVirdi(t);

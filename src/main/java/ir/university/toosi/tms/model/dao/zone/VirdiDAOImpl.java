@@ -36,7 +36,7 @@ public class VirdiDAOImpl extends BaseDAOImpl<Virdi> {
         } catch (Exception e) {
             return null;
         }
-    } public List<Virdi> getAllPdpbyIDs(List<Long> id) {
+    } public List<Virdi> getAllVirdibyIDs(List<Long> id) {
         try {
             return (List<Virdi>) em.createNamedQuery("Virdi.findByGatewayId")
                     .setParameter("id", id)
