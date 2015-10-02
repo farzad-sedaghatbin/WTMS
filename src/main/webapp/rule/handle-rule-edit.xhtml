@@ -1,0 +1,268 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+<h:form>
+<a4j:outputPanel id="handleRulePanel" ajaxRendered="true">
+<fieldset dir="#{me.direction}">
+<legend>
+
+    <h:outputText escape="true" value="#{me.getValue('rule_edit')}"/>
+</legend>
+<table border="0" cellpadding="3" cellspacing="3" width="290" dir="#{me.direction}">
+<tr valign="top">
+    <td nowrap="nowrap">
+        <h:outputText escape="true"
+                value="#{me.getValue('rule_name')}:"/>
+        &#160;&#160;&#160;&#160;&#160;
+        <h:inputText id="ruleName"
+                     converter="persianConverter"
+                     styleClass="inputRequiredField"
+                     required="true"
+                     tabindex="1"
+                     value="#{handlePersonAction.name}"
+                     dir="#{me.direction}"/>
+        <rich:message ajaxRendered="true" id="messageName" for="ruleName" showSummary="true"
+                      showDetail="false" errorClass="errorMsg"/>
+    </td>
+</tr>
+<tr valign="top">
+    <td nowrap="nowrap">
+        <h:outputText escape="true"
+                value="#{me.getValue('rule_date')}:"/>
+        &#160;&#160;&#160;&#160;&#160;
+        <h:selectOneMenu value="#{handlePersonAction.selectedCalendarIdTemp}" tabindex="2">
+            <f:selectItems value="#{handlePersonAction.calendarItems}"/>
+        </h:selectOneMenu>
+    </td>
+</tr>
+<tr valign="top">
+    <td nowrap="nowrap">
+        <h:outputText escape="true"
+                value="#{me.getValue('antiPassBack')}:" styleClass="textColor"/>
+        &#160;&#160;&#160;
+        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAniPassBack}" tabindex="3"/>
+    </td>
+</tr>
+<tr valign="top">
+    <td nowrap="nowrap">
+        <h:outputText escape="true"
+                value="#{me.getValue('allowExit')}:" styleClass="textColor"/>
+        &#160;&#160;&#160;
+        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExit}" tabindex="4"/>
+    </td>
+</tr>
+<tr valign="top">
+    <td nowrap="nowrap">
+        <h:outputText escape="true"
+                value="#{me.getValue('allowExitGadget')}:" styleClass="textColor"/>
+        &#160;&#160;&#160;
+        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExitGadget}" tabindex="5"/>
+    </td>
+</tr>
+
+<tr valign="top">
+    <td nowrap="nowrap" colspan="2">
+        <rich:dataTable id="ruleTempTable"
+                        value="#{handlePersonAction.ruleListTemp}"
+                        keepSaved="true"
+                        noDataLabel="#{me.getValue('no_result_found')}"
+                        sortMode="single"
+                        var="ruleTemp"
+                        rows="10"
+                        style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                        rowClasses="ROW1,ROW2">
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText escape="true" value="#{me.getValue('rule_dayType')}"/>
+                </f:facet>
+                <h:outputText escape="true" value="#{ruleTemp.dayType.title}"/>
+            </rich:column>
+
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText escape="true" value="#{me.getValue('rule_startTime')}"/>
+                </f:facet>
+                <h:outputText escape="true" value="#{ruleTemp.startTime}"/>
+            </rich:column>
+
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText escape="true" value="#{me.getValue('rule_endTime')}"/>
+                </f:facet>
+                <h:outputText escape="true" value="#{ruleTemp.endTime}"/>
+            </rich:column>
+
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText escape="true" value="#{me.getValue('allowExitGadget')}"/>
+                </f:facet>
+                <h:outputText escape="true" value="#{ruleTemp.entranceCount}"/>
+            </rich:column>
+
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText escape="true" value="#{me.getValue('rule_exitCount')}"/>
+                </f:facet>
+                <h:outputText escape="true" value="#{ruleTemp.exitCount}"/>
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText escape="true" value="#{'انکار'}"/>
+                </f:facet>
+                <h:graphicImage
+                        value="#{ruleTemp.deny eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+            </rich:column>
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText escape="true" value="#{me.getValue('delete')}"/>
+                </f:facet>
+                <a4j:commandButton image="/images/delete.png"
+                                   title="#{me.getValue('delete')}"
+                                   execute="@this"
+                                   render="ruleTempTable"
+                                   limitRender="true"
+                                   action="#{handlePersonAction.remove}"
+                        />
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller limitRender="true" execute="@this"
+                                   render="ruleTempTable"
+                                   page="#{handlePersonAction.pageInPopup}"/>
+            </f:facet>
+        </rich:dataTable>
+    </td>
+</tr>
+
+
+<tr valign="top">
+    <td nowrap="nowrap">
+        <a4j:commandButton image="/images/add.png"
+                           action="#{handlePersonAction.addNewRule}"
+                           title="#{me.getValue('rule_add')}"
+                           execute="@this"
+                           render="newRuleDetailPanel"/>
+    </td>
+</tr>
+
+<tr valign="top">
+    <td nowrap="nowrap">
+        <a4j:outputPanel ajaxRendered="true" id="newRuleDetailPanel">
+            <f:subview id="newRuleDetail" rendered="#{handlePersonAction.addNewRuleFlag}">
+                <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                    <tr valign="middle">
+                        <td nowrap="nowrap">
+                            <h:outputText escape="true" value="#{me.getValue('rule_dayType')}"/>
+                        </td>
+                        <td nowrap="nowrap">
+                            <h:selectOneMenu value="#{handlePersonAction.dayTypeIdTemp}">
+                                <f:selectItems value="#{handlePersonAction.dayTypeItems}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr valign="bottom">
+                        <td nowrap="nowrap">
+                            <h:outputText escape="true" value="#{me.getValue('rule_startTime')}"/>
+                        </td>
+                        <td nowrap="nowrap">
+                            <rich:inputNumberSpinner value="#{handlePersonAction.startSecond}"
+                                                     step="1" maxValue="59" inputSize="1" minValue="0"/>
+                            &#160;
+                            <rich:inputNumberSpinner value="#{handlePersonAction.startMinute}"
+                                                     step="1" maxValue="59" inputSize="1" minValue="0"/>
+
+                            &#160;
+                            <rich:inputNumberSpinner value="#{handlePersonAction.startHour}"
+                                                     step="1" maxValue="23" inputSize="1" minValue="0"/>
+                        </td>
+                    </tr>
+
+                    <tr valign="bottom">
+                        <td nowrap="nowrap">
+                            <h:outputText escape="true" value="#{me.getValue('rule_endTime')}"/>
+                        </td>
+                        <td nowrap="nowrap">
+                            <rich:inputNumberSpinner value="#{handlePersonAction.endSecond}"
+                                                     step="1" maxValue="59" inputSize="1" minValue="0"/>
+                            &#160;
+                            <rich:inputNumberSpinner value="#{handlePersonAction.endMinute}"
+                                                     step="1" maxValue="59" inputSize="1" minValue="0"/>
+                            &#160;
+                            <rich:inputNumberSpinner value="#{handlePersonAction.endHour}"
+                                                     step="1" maxValue="59" inputSize="1" minValue="0"/>
+                        </td>
+                    </tr>
+                    <tr valign="bottom">
+                        <td nowrap="nowrap">
+                            <h:outputText escape="true" value="#{me.getValue('rule_entranceCount')}"/>
+                        </td>
+                        <td nowrap="nowrap">
+                            <rich:inputNumberSpinner dir="#{me.direction}"
+                                                     value="#{handlePersonAction.ruleEntranceCount}"
+                                                     step="1" maxValue="99" inputSize="1" minValue="0"/>
+
+                        </td>
+                    </tr>
+                    <tr valign="bottom">
+                        <td nowrap="nowrap">
+                            <h:outputText escape="true" value="#{me.getValue('rule_exitCount')}"/>
+                        </td>
+                        <td nowrap="nowrap">
+                            <rich:inputNumberSpinner dir="#{me.direction}"
+                                                     value="#{handlePersonAction.ruleExitCount}"
+                                                     step="1" maxValue="99" inputSize="1" minValue="0"/>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap="nowrap">
+                            <h:outputText escape="true" value="#{me.getValue('deny')}:" styleClass="textColor"/>
+                        </td>
+                        <td nowrap="nowrap">
+                            <h:selectBooleanCheckbox value="#{handlePersonAction.ruleDeny}"/>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td nowrap="nowrap">
+                            <a4j:commandButton action="#{handlePersonAction.doAddNewRule}"
+                                               value="#{me.getValue('rule_add')}"
+                                               title="افزودن قانون"
+                                               tabindex="6"
+                                               execute="@form"
+                                               limitRender="true"
+                                               render="handleRulePanel,globalMessages"/>
+                        </td>
+                    </tr>
+                </table>
+            </f:subview>
+        </a4j:outputPanel>
+    </td>
+</tr>
+
+
+<tr valign="top">
+    <td nowrap="nowrap" align="#{me.align}" colspan="2">
+        <a4j:commandButton id="saveRuleId"
+                           value="#{me.getValue('save')}"
+                           execute="@form"
+                           limitRender="true"
+                           onclick="#{rich:component('waitingPanel')}.show();"
+                           oncomplete="#{rich:component('waitingPanel')}.hide();"
+                           action="#{handlePersonAction.doEditPersonRule}"/>
+        <a4j:commandButton id="resetRuleId"
+                           limitRender="true"
+                           action="#{handlePersonAction.init}"
+                           execute="@this"
+                           value="#{me.getValue('revert')}"
+                           oncomplete="#{rich:component('rulePanel')}.hide();"/>
+    </td>
+</tr>
+</table>
+</fieldset>
+</a4j:outputPanel>
+</h:form>
+</ui:composition>

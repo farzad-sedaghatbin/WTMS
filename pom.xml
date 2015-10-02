@@ -14,6 +14,13 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.richfaces</groupId>
+            <artifactId>richfaces-a4j</artifactId>
+            <version>4.5.0.Final</version>
+        </dependency>
+
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>

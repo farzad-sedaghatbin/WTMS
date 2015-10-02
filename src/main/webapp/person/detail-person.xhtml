@@ -1,0 +1,285 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+<h:form>
+<a4j:outputPanel id="detailPanel" ajaxRendered="true">
+
+<rich:tabPanel switchType="client" id="tabPanel">
+<rich:tab header="#{me.getValue('person')}">
+    <fieldset dir="#{me.direction}">
+        <legend>
+            <h:outputText escape="true" value="#{me.getValue('person_detail')}"/>
+        </legend>
+        <table border="0" cellpadding="3" cellspacing="3" align="#{me.align}">
+            <tr valign="top">
+                <td>
+                    <table border="0" cellpadding="3" cellspacing="3"
+                           align="#{me.align}">
+
+
+                        <tr valign="top">
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true"
+                                        value="#{me.getValue('firstname')}:"
+                                        styleClass="textColor"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true" dir="#{me.direction}"
+                                              id="firstname"
+                                              value="#{handlePersonAction.personname}"
+                                              maxlength="25"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true" value="#{me.getValue('email')}:"
+                                              styleClass="textColor"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true" dir="#{me.direction}"
+                                              id="email"
+                                              value="#{handlePersonAction.email}"
+                                              maxlength="25"
+                                        />
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true"
+                                        value="#{me.getValue('lastname')}:"
+                                        styleClass="textColor"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true" dir="#{me.direction}"
+                                              id="lastname"
+                                              value="#{handlePersonAction.lastname}"
+                                              maxlength="25"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true"
+                                        value="#{me.getValue('mobile')}:"
+                                        styleClass="textColor"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true" dir="#{me.direction}"
+                                              id="mobile"
+                                              value="#{handlePersonAction.mobile}"
+                                              maxlength="25"
+
+                                        />
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true"
+                                        value="#{me.getValue('address')}:"
+                                        styleClass="textColor"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:inputTextarea dir="#{me.direction}"
+                                                 id="address"
+                                                 disabled="true"
+                                                 value="#{handlePersonAction.address}"
+                                                 maxlength="25"
+
+                                        />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true"
+                                        value="#{me.getValue('personnelCode')}:"
+                                        styleClass="textColor"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true" dir="#{me.direction}"
+                                              id="_personnelCode"
+                                              value="#{handlePersonAction.personnelNo}"
+                                              maxlength="25"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true" value="#{me.getValue('nationalCode')}:"
+                                              styleClass="textColor"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true" dir="#{me.direction}"
+                                              id="_nationalCode"
+                                              value="#{handlePersonAction.nationalCode}"
+                                              maxlength="25"
+                                              styleClass="inputRequiredField"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true"
+                                        value="#{me.getValue('workStation')}:"
+                                        styleClass="textColor"/>
+                            </td>
+                            <td nowrap="nowrap">
+                                <h:outputText escape="true" dir="#{me.direction}"
+                                              id="_workStation"
+                                              value="#{handlePersonAction.workStation}"
+                                              maxlength="25"/>
+                            </td>
+                            <td nowrap="nowrap" align="#{me.align}">
+                                <h:outputText escape="true" value="#{me.getValue('organ')}"/>
+                            </td>
+                            <td nowrap="nowrap" align="#{me.align}">
+                                <h:outputText escape="true" id="organName" value="#{handlePersonAction.selectedOrgan.name}"
+                                              styleClass="textColor"/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+
+                <td>
+                    <a4j:mediaOutput id="renderdpicture" element="img" mimeType="image/jpeg"
+                                     createContent="#{handlePersonAction.painter}"
+                                     style="width:200px; height:200px;" cacheable="false">
+                    </a4j:mediaOutput>
+                </td>
+            </tr>
+        </table>
+
+    </fieldset>
+</rich:tab>
+<rich:tab header="#{me.getValue('job')}">
+    <fieldset dir="#{me.direction}">
+        <legend>
+            <h:outputText escape="true" value="#{me.getValue('person_detail')}"/>
+        </legend>
+        <table border="0" cellpadding="3" cellspacing="3"
+               align="#{me.align}">
+
+
+            <tr valign="top">
+                <td nowrap="nowrap">
+                    <h:outputText escape="true"
+                            value="#{me.getValue('folderNo')}:"
+                            styleClass="textColor"/>
+                </td>
+                <td nowrap="nowrap">
+                    <h:outputText escape="true" dir="#{me.direction}"
+                                  id="folderNo"
+                                  value="#{handlePersonAction.job.folderNo}"
+                                  maxlength="25"/>
+                </td>
+                <td nowrap="nowrap">
+                    <h:outputText escape="true"
+                            value="#{me.getValue('internalTel')}:"
+                            styleClass="textColor"/>
+                </td>
+                <td nowrap="nowrap">
+                    <h:outputText escape="true" dir="#{me.direction}"
+                                  id="internalTel"
+                                  value="#{handlePersonAction.job.internalTel}"
+                                  maxlength="25"/>
+                </td>
+            </tr>
+            <tr valign="top">
+                <td nowrap="nowrap">
+                    <h:outputText escape="true" value="#{me.getValue('assistType')}"/>
+                </td>
+                <td nowrap="nowrap">
+                    <h:outputText escape="true" dir="#{me.direction}"
+                                  id="assistType"
+                                  value="#{me.getValue(handlePersonAction.job.assistType.code)}"
+                                  maxlength="25"/>
+                </td>
+                <td nowrap="nowrap">
+                    <h:outputText escape="true" value="#{me.getValue('postType')}"/>
+                </td>
+                <td nowrap="nowrap">
+                    <h:outputText escape="true" dir="#{me.direction}"
+                                  id="postType"
+                                  value="#{me.getValue(handlePersonAction.job.postType.code)}"
+                                  maxlength="25"/>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</rich:tab>
+<rich:tab header="#{me.getValue('cards')}">
+    <table border="0" cellpadding="3" cellspacing="3" align="#{me.align}">
+        <a4j:repeat value="#{handlePersonAction.cards}" var="card">
+            <tr valign="top">
+                <td nowrap="nowrap">
+                    <fieldset dir="#{me.direction}">
+                        <legend>
+                            <h:outputText escape="true" value="#{me.getValue('person_detail')}"/>
+                        </legend>
+                        <table border="0" cellpadding="3" cellspacing="3"
+                               align="#{me.align}">
+
+
+                            <tr valign="top">
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true"
+                                            value="#{me.getValue('card')}:"
+                                            styleClass="textColor"/>
+                                </td>
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true" dir="#{me.direction}"
+                                                  id="card"
+                                                  value="#{card.code}"
+                                                  maxlength="25"/>
+                                </td>
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true"
+                                            value="#{me.getValue('finger')}:"
+                                            styleClass="textColor"/>
+                                </td>
+                                <td nowrap="nowrap">
+                                    <h:graphicImage
+                                            value="#{handlePersonAction.finger eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true" value="#{me.getValue('card_status')}"/>
+                                </td>
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true" value="#{me.getValue(card.cardStatus.code)}"/>
+                                </td>
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true" value="#{me.getValue('card_type')}"/>
+                                </td>
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true" value="#{me.getValue(card.cardType.code)}"/>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true" value="#{me.getValue('startDate')}"/>
+                                </td>
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true" value="#{card.startDate}" converter="dateConverter"/>
+                                </td>
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true" value="#{me.getValue('expirationDate')}"/>
+                                </td>
+                                <td nowrap="nowrap">
+                                    <h:outputText escape="true" value="#{card.expirationDate}"
+                                                  converter="dateConverter"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </td>
+            </tr>
+        </a4j:repeat>
+    </table>
+</rich:tab>
+
+</rich:tabPanel>
+</a4j:outputPanel>
+</h:form>
+</ui:composition>
+
+
+

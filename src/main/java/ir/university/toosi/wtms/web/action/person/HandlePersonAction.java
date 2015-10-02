@@ -1,6 +1,5 @@
 package ir.university.toosi.wtms.web.action.person;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
@@ -150,7 +149,7 @@ public class HandlePersonAction implements Serializable {
     private int rowIndex = 0;
     private int pageIndex = 1;
     private int totalPages = 1;
-    private List<String> personCount;
+    private List<Person> persons = new ArrayList<>();
     private String lastPageIndex = "1";
     private List<PersonSearch> personSearches = null;
 
@@ -166,7 +165,7 @@ public class HandlePersonAction implements Serializable {
     public void begin() {
 //        me.setActiveMenu(MenuType.PERSONEL);
         refresh();
-        me.redirect("/person/list-person.xhtml");
+        me.redirect("/person/persons.xhtml");
     }
 
 
@@ -221,12 +220,12 @@ public class HandlePersonAction implements Serializable {
         fillSearchCombos();
         personSearches = personSearchList;
         lastPageIndex = "1";
-        personCount = new ArrayList<>();
+        persons = new ArrayList<>();
         pageCount = new ArrayList<>();
-        extraField1Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_1).equalsIgnoreCase("true") ? true : false;
-        extraField2Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_2).equalsIgnoreCase("true") ? true : false;
-        extraField3Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_3).equalsIgnoreCase("true") ? true : false;
-        extraField4Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_4).equalsIgnoreCase("true") ? true : false;
+//        extraField1Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_1).equalsIgnoreCase("true") ? true : false;
+//        extraField2Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_2).equalsIgnoreCase("true") ? true : false;
+//        extraField3Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_3).equalsIgnoreCase("true") ? true : false;
+//        extraField4Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_4).equalsIgnoreCase("true") ? true : false;
         extraField1 = "";
         extraField2 = "";
         extraField3 = "";
@@ -293,7 +292,7 @@ public class HandlePersonAction implements Serializable {
 
     public void back() {
         refresh();
-        me.redirect("/person/list-person.htm");
+        me.redirect("/person/persons.xhtml");
     }
 
     private void fillSearchCombos() {
@@ -334,28 +333,29 @@ public class HandlePersonAction implements Serializable {
         init();
         innerPersonList = personService.getAllPersonID();
 
-        totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 18));
+        totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 6));
         if (totalPages <= 10)
             pageTo = totalPages;
         for (int i = pageFrom; i <= pageTo; i++) {
             pageCount.add(String.valueOf(i));
         }
-        if (innerPersonList.size() > 17) {
-            personListID = innerPersonList.subList(rowIndex, rowIndex + 18);
+        if (innerPersonList.size() > 5) {
+            personListID = innerPersonList.subList(rowIndex, rowIndex + 6);
         } else {
             personListID = innerPersonList;
         }
-        for (Long personItem : personListID) {
-            personCount.add("");
+        for (Long personId : personListID) {
+            Person person = personService.findById(personId);
+            persons.add(person);
         }
         if (innerPersonList.size() == 0) {
-            personCount.clear();
+            persons.clear();
         }
 
     }
 
     public void next() {
-        personCount.clear();
+        persons.clear();
         pageCount.clear();
         pageIndex++;
         if (pageTo + 1 <= totalPages && pageIndex > 10)
@@ -365,20 +365,22 @@ public class HandlePersonAction implements Serializable {
         firstPage = false;
         lastPageIndex = String.valueOf(pageIndex);
         if (pageIndex < totalPages) {
-            rowIndex = rowIndex + 18;
-            personListID = innerPersonList.subList(rowIndex, rowIndex + 18);
-            for (Long personItem : personListID) {
-                personCount.add("");
+            rowIndex = rowIndex + 6;
+            personListID = innerPersonList.subList(rowIndex, rowIndex + 6);
+            for (Long personId : personListID) {
+                Person person = personService.findById(personId);
+                persons.add(person);
             }
             for (int i = pageFrom; i <= pageTo; i++) {
                 pageCount.add(String.valueOf(i));
             }
         } else if (pageIndex == totalPages) {
             lastPage = true;
-            rowIndex = rowIndex + 18;
+            rowIndex = rowIndex + 6;
             personListID = innerPersonList.subList(rowIndex, rowIndex + (innerPersonList.size() - rowIndex - 1));
-            for (Long personItem : personListID) {
-                personCount.add("");
+            for (Long personId : personListID) {
+                Person person = personService.findById(personId);
+                persons.add(person);
             }
             for (int i = pageFrom; i <= pageTo; i++) {
                 pageCount.add(String.valueOf(i));
@@ -387,7 +389,7 @@ public class HandlePersonAction implements Serializable {
     }
 
     public void previous() {
-        personCount.clear();
+        persons.clear();
         pageCount.clear();
         if (pageFrom - 1 >= 1)
             pageFrom--;
@@ -396,10 +398,11 @@ public class HandlePersonAction implements Serializable {
         if (pageIndex != 1) {
             pageIndex--;
             lastPage = false;
-            rowIndex = rowIndex - 18;
-            personListID = innerPersonList.subList(rowIndex, rowIndex + 18);
-            for (Long personItem : personListID) {
-                personCount.add("");
+            rowIndex = rowIndex - 6;
+            personListID = innerPersonList.subList(rowIndex, rowIndex + 6);
+            for (Long personId : personListID) {
+                Person person = personService.findById(personId);
+                persons.add(person);
             }
             for (int i = pageFrom; i <= pageTo; i++) {
                 pageCount.add(String.valueOf(i));
@@ -498,7 +501,7 @@ public class HandlePersonAction implements Serializable {
     }
 
     public void simpleSearch() {
-        personCount.clear();
+        persons.clear();
         lastPage = false;
         rowIndex = 0;
         pageFrom = 1;
@@ -509,19 +512,20 @@ public class HandlePersonAction implements Serializable {
 
         personSearchList = new ArrayList<>();
         innerPersonList = personService.query(query);
-        totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 18));
+        totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 6));
 
-        if (innerPersonList.size() > 17) {
-            personListID = innerPersonList.subList(rowIndex, rowIndex + 18);
+        if (innerPersonList.size() > 5) {
+            personListID = innerPersonList.subList(rowIndex, rowIndex + 6);
         } else {
             personListID = innerPersonList;
         }
 
-        for (Long personItem : personListID) {
-            personCount.add("");
+        for (Long personId : personListID) {
+            Person person = personService.findById(personId);
+            persons.add(person);
         }
         if (innerPersonList.size() == 0) {
-            personCount.clear();
+            persons.clear();
         }
         lastPageIndex = "1";
         pageCount.clear();
@@ -536,7 +540,7 @@ public class HandlePersonAction implements Serializable {
     }
 
     public void search() {
-        personCount.clear();
+        persons.clear();
         lastPage = false;
         rowIndex = 0;
         pageFrom = 1;
@@ -554,19 +558,20 @@ public class HandlePersonAction implements Serializable {
         personSearchList = new ArrayList<>();
         innerPersonList = personService.query(query);
 
-        totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 18));
+        totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 6));
 
-        if (innerPersonList.size() > 17) {
-            personListID = innerPersonList.subList(rowIndex, rowIndex + 18);
+        if (innerPersonList.size() > 5) {
+            personListID = innerPersonList.subList(rowIndex, rowIndex + 6);
         } else {
             personListID = innerPersonList;
         }
 
-        for (Long personItem : personListID) {
-            personCount.add("");
+        for (Long personId : personListID) {
+            Person person = personService.findById(personId);
+            persons.add(person);
         }
         if (innerPersonList.size() == 0) {
-            personCount.clear();
+            persons.clear();
         }
         lastPageIndex = "1";
         pageCount.clear();
@@ -636,7 +641,7 @@ public class HandlePersonAction implements Serializable {
         condition = jobService.deleteJob(currentJob);
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/person/list-person.htm");
+        me.redirect("/person/persons.xhtml");
     }
 
     public void add() {
@@ -705,7 +710,7 @@ public class HandlePersonAction implements Serializable {
             if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
-                me.redirect("/person/list-person.htm");
+                me.redirect("/person/persons.xhtml");
                 return;
             }
         }
@@ -774,7 +779,7 @@ public class HandlePersonAction implements Serializable {
         if (person != null || job != null) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/person/list-person.htm");
+            me.redirect("/person/persons.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
@@ -820,15 +825,15 @@ public class HandlePersonAction implements Serializable {
 
     public void detail() {
         setEditable("true");
-            cards = cardService.findByPersonId(currentPerson.getId());
+        cards = cardService.findByPersonId(currentPerson.getId());
 
-            if (currentPerson.getFinger() == null) {
-                finger = "false";
-            } else {
-                finger = "true";
-            }
-
+        if (currentPerson.getFinger() == null) {
+            finger = "false";
+        } else {
+            finger = "true";
         }
+
+    }
 
     public void doEdit() {
 //        Person person = new Person(personname, currentPerson.getPassword(), enabled == true ? "true" : "false");
@@ -880,7 +885,7 @@ public class HandlePersonAction implements Serializable {
             firstPage = tempFirst;
             pageCordinator(String.valueOf(p), false, false, false);
             me.addInfoMessage("operation.occurred");
-            me.redirect("/person/list-person.htm");
+            me.redirect("/person/persons.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -897,35 +902,35 @@ public class HandlePersonAction implements Serializable {
     }
 
     public void assignRule() {
-            currentPerson = personService.findById(currentPerson.getId());
-            selectedRulePackage = currentPerson.getRulePackage();
-            if (selectedRulePackage != null) {
-                rulePackageName = selectedRulePackage.getName();
-                if (selectedRulePackage.getCalendar() != null)
-                    calendarName = selectedRulePackage.getCalendar().getName();
-                else
-                    calendarName = "";
-                antiPassBack = selectedRulePackage.isAniPassBack();
-                allowExit = selectedRulePackage.isAllowExit();
-                allowExitGadget = selectedRulePackage.isAllowExitGadget();
-            } else {
-                rulePackageName = "";
+        currentPerson = personService.findById(currentPerson.getId());
+        selectedRulePackage = currentPerson.getRulePackage();
+        if (selectedRulePackage != null) {
+            rulePackageName = selectedRulePackage.getName();
+            if (selectedRulePackage.getCalendar() != null)
+                calendarName = selectedRulePackage.getCalendar().getName();
+            else
                 calendarName = "";
-                antiPassBack = false;
-                allowExit = false;
-                allowExitGadget = false;
-            }
-
-            List rulePackages = rulePackageService.getAllRulePackage();
-            rulePackageList = new ListDataModel<>(rulePackages);
+            antiPassBack = selectedRulePackage.isAniPassBack();
+            allowExit = selectedRulePackage.isAllowExit();
+            allowExitGadget = selectedRulePackage.isAllowExitGadget();
+        } else {
+            rulePackageName = "";
+            calendarName = "";
+            antiPassBack = false;
+            allowExit = false;
+            allowExitGadget = false;
         }
+
+        List rulePackages = rulePackageService.getAllRulePackage();
+        rulePackageList = new ListDataModel<>(rulePackages);
+    }
 
     public void editRule() {
         currentPerson = personService.findById(currentPerson.getId());
         if (currentPerson.getRulePackage() == null) {
             refresh();
             me.addErrorMessage("has.not.rulePackage");
-            me.redirect("/person/list-person.htm");
+            me.redirect("/person/persons.xhtml");
             return;
         }
 
@@ -1036,7 +1041,7 @@ public class HandlePersonAction implements Serializable {
             if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
-                me.redirect("/person/list-person.htm");
+                me.redirect("/person/persons.xhtml");
             } else {
                 me.addInfoMessage("operation.not.occurred");
                 return;
@@ -1062,7 +1067,7 @@ public class HandlePersonAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/person/list-person.htm");
+            me.redirect("/person/persons.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -1120,6 +1125,9 @@ public class HandlePersonAction implements Serializable {
 
     }
 
+    private OutputStream stream;
+    private FacesContext fc;
+    private int i = 0;
 
     public void paint(OutputStream stream, Object object) throws IOException, URISyntaxException {
 
@@ -1596,6 +1604,7 @@ public class HandlePersonAction implements Serializable {
         OutputStream output = ec.getResponseOutputStream();
         output.write(xmlBytes);
         output.flush();
+        output.close();
         fc.responseComplete();
     }
 
@@ -1886,7 +1895,7 @@ public class HandlePersonAction implements Serializable {
 
     public List<BLookup> getEmployeeTypes() {
         if (employeeTypes.size() == 0) {
-                employeeTypes = bLookupService.getByLookupId(Lookup.EMPLOYEE_TYPE_ID);
+            employeeTypes = bLookupService.getByLookupId(Lookup.EMPLOYEE_TYPE_ID);
             for (BLookup bLookup : employeeTypes) {
                 bLookup.setTitleText(me.getValue(bLookup.getCode()));
             }
@@ -2063,12 +2072,12 @@ public class HandlePersonAction implements Serializable {
         this.attributeNames = attributeNames;
     }
 
-    public List<String> getPersonCount() {
-        return personCount;
+    public List<Person> getPersons() {
+        return persons;
     }
 
-    public void setPersonCount(List<String> personCount) {
-        this.personCount = personCount;
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
     }
 
     public int getRowIndex() {
@@ -2080,7 +2089,7 @@ public class HandlePersonAction implements Serializable {
     }
 
     public boolean isPersonAvailable() {
-        return personCount.size() != 0;
+        return persons.size() != 0;
     }
 
     public boolean isExtraField1Enable() {
@@ -2172,9 +2181,9 @@ public class HandlePersonAction implements Serializable {
     }
 
     public String renderedRow(int value) {
-        if (value >= 18)
-            value = value % 18;
-        return value < personCount.size() ? "true" : "false";
+        if (value >= 6)
+            value = value % 6;
+        return value < persons.size() ? "true" : "false";
     }
 
     public List<String> getPageCount() {
@@ -2234,8 +2243,8 @@ public class HandlePersonAction implements Serializable {
     }
 
     public Person returnPerson(long id) {
-            dataModelPerson =personService.findById(id);
-            return dataModelPerson;
+        dataModelPerson = personService.findById(id);
+        return dataModelPerson;
 
     }
 

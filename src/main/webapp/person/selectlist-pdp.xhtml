@@ -1,0 +1,139 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <br/>
+    <h:form id="pdpFrm">
+        <a4j:outputPanel id="selectPdpList" ajaxRendered="true">
+            <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
+                <tr valign="top" style="display: ''">
+                    <td nowrap="nowrap" align="#{me.align}">
+                        <h:outputText escape="true"  value="#{me.getValue('finger')}"/>
+                        <h:selectBooleanCheckbox
+                                                 value="#{handlePDPAction.fingers}">
+                        </h:selectBooleanCheckbox>
+                        &#160;&#160;
+                        <h:outputText escape="true" value="#{me.getValue('picture')}" />
+                        <h:selectBooleanCheckbox
+                                                 value="#{handlePDPAction.pictures}">
+                        </h:selectBooleanCheckbox>
+
+
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td nowrap="nowrap" align="#{me.align}">
+                        <fieldset dir="#{me.direction}">
+                            <legend>
+                                <h:outputText escape="true" value="#{me.getValue('pdp_list')}"/>
+                            </legend>
+                            <rich:dataTable id="pdpTable"
+                                            keepSaved="true"
+                                            value="#{handlePDPAction.pdpList}"
+                                            rowKeyVar="rowIndex"
+                                            noDataLabel="#{me.getValue('no_result_found')}"
+                                            sortMode="single"
+                                            var="pdp"
+                                            rows="10"
+                                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                            rowClasses="ROW1,ROW2">
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="#{me.getValue('row_number')}"/>
+                                    </f:facet>
+                                    <h:outputText escape="true" value="#{rowIndex + 1}"/>
+                                </rich:column>
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:selectBooleanCheckbox
+                                                value="#{handlePDPAction.selectAll}"
+                                                valueChangeListener="#{handlePDPAction.selectAllPdp}">
+                                            <a4j:ajax execute="@this" limitRender="true" render="pdpTable"/>
+                                        </h:selectBooleanCheckbox>
+                                    </f:facet>
+                                    <h:selectBooleanCheckbox value="#{pdp.selected}"
+                                                             valueChangeListener="#{handlePDPAction.selectPdps}">
+                                        <a4j:ajax execute="@this" limitRender="true"/>
+                                    </h:selectBooleanCheckbox>
+                                </rich:column>
+
+                                <rich:column sortBy="#{pdp.name}"
+                                             sortOrder="#{handlePDPAction.pdpNameOrder}"
+                                             filter="#{handlePDPAction.pdpNameFilterImpl}">
+                                    <f:facet name="header">
+                                        <a4j:commandLink value="#{me.getValue('name')}" render="pdpTable"
+                                                         execute="@this"
+                                                         limitRender="true"
+                                                         action="#{handlePDPAction.sortByPdpName}"/>
+                                        <br/>
+                                        <h:inputText converter="persianConverter" value="#{handlePDPAction.pdpNameFilter}">
+                                            <a4j:ajax event="blur" render="pdpTable" execute="@this"
+                                                      limitRender="true"/>
+                                        </h:inputText>
+                                    </f:facet>
+                                    <h:outputLabel value="#{pdp.name}"/>
+                                </rich:column>
+
+                                <rich:column sortBy="#{pdp.description}"
+                                             sortOrder="#{handlePDPAction.pdpDescriptionOrder}"
+                                             filter="#{handlePDPAction.pdpDescriptionFilterImpl}">
+                                    <f:facet name="header">
+                                        <a4j:commandLink value="#{me.getValue('description')}" render="pdpTable"
+                                                         execute="@this"
+                                                         limitRender="true"
+                                                         action="#{handlePDPAction.sortByPdpDescription}"/>
+                                        <br/>
+                                        <h:inputText value="#{handlePDPAction.pdpDescriptionFilter}">
+                                            <a4j:ajax event="blur" render="pdpTable" execute="@this"
+                                                      limitRender="true"/>
+                                        </h:inputText>
+                                    </f:facet>
+                                    <h:outputText escape="true" value="#{pdp.description}"/>
+                                </rich:column>
+                                <rich:column sortBy="#{pdp.ip}"
+                                             sortOrder="#{handlePDPAction.ipOrder}"
+                                             filter="#{handlePDPAction.PDPIPFilterImpl}">
+                                    <f:facet name="header">
+                                        <a4j:commandLink value="#{me.getValue('ip')}"
+                                                         render="pdpTable"
+                                                         execute="@this"
+                                                         limitRender="true"
+                                                         action="#{handlePDPAction.sortByIp}"/>
+                                        <br/>
+                                        <h:inputText value="#{handlePDPAction.pdpIPFilter}">
+                                            <a4j:ajax event="blur" render="pdpTable" execute="@this"
+                                                      limitRender="true"/>
+                                        </h:inputText>
+                                    </f:facet>
+                                    <h:outputText escape="true" value="#{pdp.ip}"/>
+                                </rich:column>
+
+                                <f:facet name="footer">
+                                    <rich:dataScroller limitRender="true" execute="@this" render="pdpTable"
+                                                       page="#{handlePDPAction.page}"/>
+                                </f:facet>
+                            </rich:dataTable>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td align="center" nowrap="nowrap">
+                        <h:commandButton value="#{me.getValue('synch')}"
+                                         execute="@this"
+                                         limitRender="true"
+                                         rendered="#{me.hasPermission('SYNCH')}"
+                                         render="pdpTable, pdpPanelId"
+                                         action="#{handlePDPAction.synchronizeOneByOne}"
+                                         onclick="#{rich:component('waitingPanel')}.show();"
+                                         oncomplete="#{rich:component('pdpSelect')}.hide();"/>
+                    </td>
+                </tr>
+            </table>
+        </a4j:outputPanel>
+    </h:form>
+</ui:composition>

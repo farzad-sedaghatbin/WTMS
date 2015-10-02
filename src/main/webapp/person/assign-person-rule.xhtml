@@ -1,0 +1,165 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+
+    <h:form>
+        <a4j:outputPanel id="handleAssignRulePanel" ajaxRendered="true">
+            <fieldset dir="#{me.direction}">
+                <legend>
+                    <h:outputText escape="true" value="#{'تخصیص قوانین'}"/>
+                </legend>
+                <table border="0" cellpadding="3" cellspacing="3" width="360"
+                       dir="#{me.direction}">
+                    <tr valign="top">
+                        <td>
+                            <table border="0" cellpadding="3" cellspacing="3" align="#{me.align}">
+                                <tr valign="top">
+                                    <td nowrap="nowrap">
+                                        <h:outputText escape="true" value="#{'نام بسته'}:" styleClass="textColor"/>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <h:inputText dir="#{me.direction}"
+                                                     id="firstname"
+                                                     value="#{handlePersonAction.rulePackageName}"
+                                                     maxlength="25"
+                                                     required="true"
+                                                     tabindex="1"
+                                                     styleClass="inputRequiredField"
+                                                     disabled="true"/>
+                                        <rich:message ajaxRendered="true" for="firstname" showSummary="true"
+                                                      showDetail="false" errorClass="errorMsg"/>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <h:outputText escape="true" value="#{'تقویم '}:" styleClass="textColor"/>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <h:inputText dir="#{me.direction}"
+                                                     tabindex="2"
+                                                     value="#{handlePersonAction.calendarName}"
+                                                     maxlength="25"
+                                                     disabled="true"/>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td nowrap="nowrap">
+                                        <h:outputText escape="true" value="#{'بازگشت'}:" styleClass="textColor"/>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <h:selectBooleanCheckbox tabindex="3" disabled="true"
+                                                                 value="#{handlePersonAction.antiPassBack}"/>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <h:outputText escape="true" value="#{'اجازه خروج'}:" styleClass="textColor"/>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <h:selectBooleanCheckbox disabled="true"
+                                                                 tabindex="4"
+                                                                 value="#{handlePersonAction.allowExit}"/>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td nowrap="nowrap">
+                                        <h:outputText escape="true" value="#{'خروج اموال'}:" styleClass="textColor"/>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <h:selectBooleanCheckbox disabled="true"
+                                                                 tabindex="5"
+                                                                 value="#{handlePersonAction.allowExitGadget}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td nowrap="nowrap" align="center" colspan="4">
+                            <a4j:commandButton id="saveId"
+                                               render=" globalMessages"
+                                               execute="@form"
+                                               tabindex="6"
+                                               value="#{me.getValue('save')}"
+                                               onclick="#{rich:component('waitingPanel')}.show();"
+                                               oncomplete="#{rich:component('waitingPanel')}.hide();"
+                                               action="#{handlePersonAction.doAssignRule}"/>
+                            <a4j:commandButton id="resetId"
+                                               limitRender="true"
+                                               rendered="#{handlePersonAction.enabled eq 'true'}"
+                                               tabindex="7"
+                                               action="#{handlePersonAction.begin}"
+                                               execute="@this"
+                                               value="#{me.getValue('revert')}"
+                                               oncomplete="#{rich:component('PersonPanel')}.hide();"/>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </a4j:outputPanel>
+
+        <fieldset dir="#{me.direction}">
+            <legend>
+                <h:outputText escape="true" value="#{'بسته ها'}"
+                              styleClass="richTitleText"/>
+            </legend>
+            <rich:dataTable id="personTableInPopup" value="#{handlePersonAction.rulePackageList}"
+                            keepSaved="true"
+                            noDataLabel="#{me.getValue('no_result_found')}"
+                            sortMode="single"
+                            var="rulePackage"
+                            onrowdblclick="highlight(#{rich:element('selectLink')});"
+                            rows="10"
+                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                            rowClasses="ROW1,ROW2">
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="#{me.getValue('package-name')}"/>
+                    </f:facet>
+                    <a4j:commandLink id="selectLink" value="#{rulePackage.name}"
+                                     action="#{handlePersonAction.selectNewRuleForPerson}"
+                                     execute="@this"
+                                     limitRender="true"
+                                     render="personTableInPopup, handleAssignRulePanel"
+                                     styleClass="withoutUnderlineLink"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="#{'تقویم'}"/>
+                    </f:facet>
+                    <h:outputText escape="true" value="#{rulePackage.calendar.name}"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="#{'بازگشت'}"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{rulePackage.aniPassBack eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="#{'خروج'}"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{rulePackage.allowExit eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="#{'خروج اجناس'}"/>
+                    </f:facet>
+                    <h:graphicImage
+                            value="#{rulePackage.allowExitGadget eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                </rich:column>
+
+                <f:facet name="footer">
+                    <rich:dataScroller limitRender="true" execute="@this" render="personTableInPopup"
+                                       page="#{handlePersonAction.pageInPopup}"/>
+                </f:facet>
+            </rich:dataTable>
+        </fieldset>
+    </h:form>
+</ui:composition>
+
+
+
