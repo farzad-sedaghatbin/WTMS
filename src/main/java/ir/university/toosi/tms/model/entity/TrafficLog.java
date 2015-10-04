@@ -7,6 +7,7 @@ import ir.university.toosi.tms.model.entity.personnel.Organ;
 import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.tms.model.entity.zone.PDP;
+import ir.university.toosi.tms.model.entity.zone.Virdi;
 import ir.university.toosi.tms.model.entity.zone.Zone;
 
 import javax.persistence.*;
@@ -82,6 +83,9 @@ public class TrafficLog extends BaseEntity {
     private PDP pdp;
     @OneToOne
     @JsonProperty
+    private Virdi virdi;
+    @OneToOne
+    @JsonProperty
     private Organ organ;
     @OneToOne
     @JsonProperty
@@ -119,6 +123,8 @@ public class TrafficLog extends BaseEntity {
     @JsonProperty
     @Column(name = "offlineTraffic")
     private boolean offline;
+    @Lob
+    private byte[] virdiPicture;
 
 
     public TrafficLog() {
@@ -274,4 +280,13 @@ public class TrafficLog extends BaseEntity {
     public void setDate(String date) {
         this.traffic_date = date;
     }
+
+    public Virdi getVirdi() {
+        return virdi;
+    }
+
+    public void setVirdi(Virdi virdi) {
+        this.virdi = virdi;
+    }
+
 }

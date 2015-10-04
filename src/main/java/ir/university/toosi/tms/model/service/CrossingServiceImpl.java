@@ -5,6 +5,7 @@ import ir.university.toosi.tms.model.entity.personnel.Card;
 import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.tms.model.entity.zone.PDP;
+import ir.university.toosi.tms.model.entity.zone.Virdi;
 import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
@@ -81,6 +82,51 @@ public class CrossingServiceImpl {
         trafficLog.setGateway(pdp.getGateway());
         trafficLog.setPdp(pdp);
         trafficLog.setZone(pdp.getGateway().getZone());
+        trafficLog.setTraffic_date(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
+        trafficLog.setTraffic_time(CalendarUtil.getTime(new Date(), new Locale("fa")));
+        return trafficLog;
+
+    }
+    public TrafficLog authorize(Virdi virdi,String personNo, String cardType) throws Exception {
+        long end = 0;
+        Object[] person = Initializer.persons.get(personNo);
+
+        if (person == null || virdi == null)
+            return null;
+        String photos = null;
+        Card card = null;
+        boolean finger = false;
+        if (cardType.equalsIgnoreCase("0")) {
+            finger = true;
+            photos = "/" + virdi.getId() + "finger" + new Date().getTime();
+        } else{
+            card = cardService.findByCode(cardType);
+            if (card != null) {
+                photos = "/" + virdi.getId() + card.getCode() + new Date().getTime();
+            } else {
+                photos = "/" + virdi.getId() + "noAuth" + new Date().getTime();
+            }
+
+        }
+        TrafficLog trafficLog = new TrafficLog();
+        if (authenticateService.authenticate(virdi.getGateway(), person, !virdi.isEntrance(), card, finger)) {
+            trafficLog.setStatus("OK");
+            trafficLog.setValid(true);
+        } else {
+            trafficLog.setStatus("fail");
+            trafficLog.setValid(false);
+        }
+        if (virdi.isEntrance() != true)
+            trafficLog.setExit(true);
+        else
+            trafficLog.setExit(false);
+        trafficLog.setPictures(photos);
+        trafficLog.setFinger(finger);
+        trafficLog.setCard(card);
+        trafficLog.setOffline(false);
+        trafficLog.setGateway(virdi.getGateway());
+        trafficLog.setVirdi(virdi);
+        trafficLog.setZone(virdi.getGateway().getZone());
         trafficLog.setTraffic_date(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
         trafficLog.setTraffic_time(CalendarUtil.getTime(new Date(), new Locale("fa")));
         return trafficLog;

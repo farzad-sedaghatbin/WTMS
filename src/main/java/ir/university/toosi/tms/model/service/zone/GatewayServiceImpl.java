@@ -9,6 +9,7 @@ import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.tms.model.entity.zone.PreRequestGateway;
 import ir.university.toosi.tms.model.entity.zone.Zone;
 import ir.university.toosi.tms.model.service.*;
+import ir.university.toosi.tms.readerwrapper.ReaderWrapper;
 import ir.university.toosi.tms.util.EventLogManager;
 
 import javax.ejb.*;
@@ -29,6 +30,8 @@ public class GatewayServiceImpl<T extends Gateway> {
     private GatewayDAOImpl GatewayDAO;
     @EJB
     private PDPServiceImpl pdpService;
+    @EJB
+    private VirdiServiceImpl virdiService;
     @EJB
     private PermissionServiceImpl permissionService;
     @EJB
@@ -224,8 +227,38 @@ public class GatewayServiceImpl<T extends Gateway> {
 
     public void forceOpen(String ip) {
 
-        byte[] message= new byte[]{ 0x40,0x04,0x00, 0x00, 0x00, 0x00,0x00, 0x00,0x04, 0x0A };
+        byte[] message = new byte[]{0x40, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x0A};
         ConsoleClientSocket.sendMessage(message, ip);
+    }
+
+    public void forceOpenVirdi(String ip) {
+
+        ReaderWrapper readerWrapper = new ReaderWrapper();
+        readerWrapper.ForceOpenDoor((int) virdiService.findByIp(ip).getId());
+    }
+
+    public void lockDoor(String ip) {
+
+        ReaderWrapper readerWrapper = new ReaderWrapper();
+        readerWrapper.LockDoor((int) virdiService.findByIp(ip).getId());
+    }
+
+    public void lockVirdi(String ip) {
+
+        ReaderWrapper readerWrapper = new ReaderWrapper();
+        readerWrapper.LockTerminal((int) virdiService.findByIp(ip).getId());
+    }
+
+    public void unlockDoor(String ip) {
+
+        ReaderWrapper readerWrapper = new ReaderWrapper();
+        readerWrapper.UnLockDoor((int) virdiService.findByIp(ip).getId());
+    }
+
+    public void unlockVirdi(String ip) {
+
+        ReaderWrapper readerWrapper = new ReaderWrapper();
+        readerWrapper.UnLockTerminal((int) virdiService.findByIp(ip).getId());
     }
 
 }
