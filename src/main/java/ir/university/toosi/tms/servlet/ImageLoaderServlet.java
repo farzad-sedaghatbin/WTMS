@@ -1,32 +1,42 @@
 package ir.university.toosi.tms.servlet;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletResponse;
+import ir.university.toosi.tms.model.entity.personnel.Person;
+import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
+import ir.university.toosi.wtms.web.helper.GeneralHelper;
+
+import javax.ejb.EJB;
+import javax.inject.Inject;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
- * @author : Hamed Hatami , Javad Sarhadi , Farzad Sedaghatbin, Atefeh Ahmadi
- * @version : 1.0
+ * Created by o_javaheri on 10/3/2015.
  */
-public abstract class ImageLoaderServlet extends HttpServlet {
+@WebServlet(value="/loadImage")
+public class ImageLoaderServlet extends GenericServlet {
 
-    public void service(ServletResponse servletResponse, byte[] img) throws IOException, ServletException {
-        if (img != null && img.length != 0) {
-            HttpServletResponse response = (HttpServletResponse) servletResponse;
-            response.setHeader("Content-Length", String.valueOf(img.length));
-            response.setContentType("image/png");
-            response.setHeader("Content-Disposition", "attachment;filename=chart.png");
-            response.setHeader("Pragma", "No-cache");
-            response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
-            response.setHeader("Expires", "0");
-            OutputStream out = response.getOutputStream();
-            out.write(img);
-            out.flush();
-            out.close();
+    @Inject
+    private PersonServiceImpl personService;
+    @Inject
+    private GeneralHelper generalHelper;
+
+    public void service(ServletRequest req, ServletResponse res)
+            throws IOException, ServletException
+    {
+        Person person = personService.findById(Long.parseLong(req.getParameter("id")));
+
+        ServletOutputStream stream = res.getOutputStream();
+
+        if (null != person.getPicture()) {
+            stream.write(person.getPicture());
+            stream.flush();
+        } else {
+            stream.write(generalHelper.getAnonymous());
+            stream.flush();
         }
-
+        stream.close();
     }
+
+
 }

@@ -4,11 +4,10 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:rich="http://richfaces.org/rich"
-                xmlns:a4j="http://richfaces.org/a4j">
+                xmlns:p="http://primefaces.org/ui">
 
-    <h:form>
-        <a4j:outputPanel id="handleAssignRulePanel" ajaxRendered="true">
+    <h:form id="assignPersonRule">
+        <p:outputPanel id="handleAssignRulePanel">
             <fieldset dir="#{me.direction}">
                 <legend>
                     <h:outputText escape="true" value="#{'تخصیص قوانین'}"/>
@@ -31,7 +30,7 @@
                                                      tabindex="1"
                                                      styleClass="inputRequiredField"
                                                      disabled="true"/>
-                                        <rich:message ajaxRendered="true" for="firstname" showSummary="true"
+                                        <p:message ajaxRendered="true" for="firstname" showSummary="true"
                                                       showDetail="false" errorClass="errorMsg"/>
                                     </td>
                                     <td nowrap="nowrap">
@@ -77,86 +76,77 @@
                     </tr>
                     <tr valign="top">
                         <td nowrap="nowrap" align="center" colspan="4">
-                            <a4j:commandButton id="saveId"
-                                               render=" globalMessages"
-                                               execute="@form"
+                            <p:commandButton id="saveId"
                                                tabindex="6"
                                                value="#{me.getValue('save')}"
-                                               onclick="#{rich:component('waitingPanel')}.show();"
-                                               oncomplete="#{rich:component('waitingPanel')}.hide();"
                                                action="#{handlePersonAction.doAssignRule}"/>
-                            <a4j:commandButton id="resetId"
+                            <p:commandButton id="resetId"
                                                limitRender="true"
                                                rendered="#{handlePersonAction.enabled eq 'true'}"
                                                tabindex="7"
                                                action="#{handlePersonAction.begin}"
-                                               execute="@this"
-                                               value="#{me.getValue('revert')}"
-                                               oncomplete="#{rich:component('PersonPanel')}.hide();"/>
+                                               value="#{me.getValue('revert')}"/>
                         </td>
                     </tr>
                 </table>
             </fieldset>
-        </a4j:outputPanel>
+        </p:outputPanel>
 
         <fieldset dir="#{me.direction}">
             <legend>
                 <h:outputText escape="true" value="#{'بسته ها'}"
-                              styleClass="richTitleText"/>
+                              styleClass="pTitleText"/>
             </legend>
-            <rich:dataTable id="personTableInPopup" value="#{handlePersonAction.rulePackageList}"
+            <p:dataTable id="personTableInPopup" value="#{handlePersonAction.rulePackageList}"
                             keepSaved="true"
                             noDataLabel="#{me.getValue('no_result_found')}"
                             sortMode="single"
                             var="rulePackage"
-                            onrowdblclick="highlight(#{rich:element('selectLink')});"
                             rows="10"
                             style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
                             rowClasses="ROW1,ROW2">
-                <rich:column>
+                <p:column>
                     <f:facet name="header">
                         <h:outputText escape="true" value="#{me.getValue('package-name')}"/>
                     </f:facet>
-                    <a4j:commandLink id="selectLink" value="#{rulePackage.name}"
+                    <p:commandLink id="selectLink" value="#{rulePackage.name}"
                                      action="#{handlePersonAction.selectNewRuleForPerson}"
-                                     execute="@this"
-                                     limitRender="true"
-                                     render="personTableInPopup, handleAssignRulePanel"
+                                     update="personTableInPopup, handleAssignRulePanel"
                                      styleClass="withoutUnderlineLink"/>
-                </rich:column>
-                <rich:column>
+                </p:column>
+                <p:column>
                     <f:facet name="header">
                         <h:outputText escape="true" value="#{'تقویم'}"/>
                     </f:facet>
                     <h:outputText escape="true" value="#{rulePackage.calendar.name}"/>
-                </rich:column>
-                <rich:column>
+                </p:column>
+                <p:column>
                     <f:facet name="header">
                         <h:outputText escape="true" value="#{'بازگشت'}"/>
                     </f:facet>
                     <h:graphicImage
                             value="#{rulePackage.aniPassBack eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                </rich:column>
-                <rich:column>
+                </p:column>
+                <p:column>
                     <f:facet name="header">
                         <h:outputText escape="true" value="#{'خروج'}"/>
                     </f:facet>
                     <h:graphicImage
                             value="#{rulePackage.allowExit eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                </rich:column>
-                <rich:column>
+                </p:column>
+                <p:column>
                     <f:facet name="header">
                         <h:outputText escape="true" value="#{'خروج اجناس'}"/>
                     </f:facet>
                     <h:graphicImage
                             value="#{rulePackage.allowExitGadget eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                </rich:column>
+                </p:column>
 
                 <f:facet name="footer">
-                    <rich:dataScroller limitRender="true" execute="@this" render="personTableInPopup"
+                    <p:dataScroller limitRender="true" execute="@this" render="personTableInPopup"
                                        page="#{handlePersonAction.pageInPopup}"/>
                 </f:facet>
-            </rich:dataTable>
+            </p:dataTable>
         </fieldset>
     </h:form>
 </ui:composition>

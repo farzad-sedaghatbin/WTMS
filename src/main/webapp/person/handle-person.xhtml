@@ -3,20 +3,19 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:rich="http://richfaces.org/rich"
-                xmlns:a4j="http://richfaces.org/a4j">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
 
 <h:form id="handlePersonForm">
 
-<a4j:outputPanel id="handlePanel" ajaxRendered="true">
+<p:outputPanel id="handlePanel" >
 <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
 
 <tr valign="top">
 <td>
-<rich:tabPanel switchType="client" id="tabPanel" activeItem="test">
+<p:tabView id="tabPanel">
 
-<rich:tab name="test" header="#{me.getValue('person')}">
+<p:tab title="Person">
 
     <fieldset dir="#{me.direction}">
         <legend>
@@ -49,7 +48,7 @@
                                              maxlength="25"
                                              required="true"
                                              styleClass="inputRequiredField"/>
-                                <rich:message ajaxRendered="true" for="firstname" showSummary="true" showDetail="false"
+                                <p:message ajaxRendered="true" for="firstname" showSummary="true" showDetail="false"
                                               errorClass="errorMsg"/>
                             </td>
 
@@ -66,7 +65,7 @@
                                              value="#{handlePersonAction.lastname}"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
-                                <rich:message ajaxRendered="true" for="lastname" showSummary="true" showDetail="false"
+                                <p:message ajaxRendered="true" for="lastname" showSummary="true" showDetail="false"
                                               errorClass="errorMsg"/>
                             </td>
                         </tr>
@@ -82,7 +81,7 @@
                                              value="#{handlePersonAction.email}"
                                              validator="#{handleValidationAction.validateEmailFormat}"
                                              maxlength="25"/>
-                                <rich:message ajaxRendered="true" for="email" showSummary="true"
+                                <p:message ajaxRendered="true" for="email" showSummary="true"
                                               showDetail="false" errorClass="errorMsg"/>
                             </td>
                             <td nowrap="nowrap">
@@ -111,7 +110,7 @@
                                              value="#{handlePersonAction.personnelNo}"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
-                                <rich:message ajaxRendered="true" for="_personnelCode" showSummary="true"
+                                <p:message ajaxRendered="true" for="_personnelCode" showSummary="true"
                                               showDetail="false" errorClass="errorMsg"/>
                             </td>
                             <td nowrap="nowrap">
@@ -127,7 +126,7 @@
                                              validator="nationalCodeValidator"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
-                                <rich:message ajaxRendered="true" for="_nationalCode" showSummary="true"
+                                <p:message ajaxRendered="true" for="_nationalCode" showSummary="true"
                                               showDetail="false" errorClass="errorMsg"/>
                             </td>
                         </tr>
@@ -189,9 +188,9 @@
             </tr>
         </table>
     </fieldset>
-</rich:tab>
+</p:tab>
 
-<rich:tab header="#{me.getValue('job')}">
+<p:tab title="Job">
 
     <fieldset dir="#{me.direction}">
         <legend>
@@ -297,9 +296,9 @@
             </tr>
         </table>
     </fieldset>
-</rich:tab>
+</p:tab>
 
-<rich:tab header="#{me.getValue('organ')}">
+<p:tab title="Organ">
 
     <fieldset dir="#{me.direction}">
         <legend>
@@ -316,25 +315,25 @@
             <tr>
                 <td>
                     <div align="right">
-                        <rich:tree id="tree" var="organ" dir="RTL" value="#{handleOrganAction.rootOrgans}"
+                        <p:tree id="tree" var="organ" dir="RTL" value="#{handleOrganAction.rootOrgans}"
                                    toggleType="client">
-                            <rich:treeNode iconCollapsed="/images/node_icon.gif" iconExpanded="/images/node_open.jpg">
-                                <a4j:commandLink
+                            <p:treeNode iconCollapsed="/images/node_icon.gif" iconExpanded="/images/node_open.jpg">
+                                <p:commandLink
                                         value="#{organ.name} - #{organ.code} - #{me.getValue(organ.organType.code)} - #{organ.title}"
                                         execute="@this"
                                         limitRender="true"
                                         render="organName"
                                         action="#{handlePersonAction.selectOrgan(organ.id)}"/>
-                            </rich:treeNode>
-                        </rich:tree>
+                            </p:treeNode>
+                        </p:tree>
                     </div>
                 </td>
             </tr>
         </table>
     </fieldset>
-</rich:tab>
+</p:tab>
 
-<rich:tab header="#{me.getValue('picture')}">
+<p:tab header="#{me.getValue('picture')}">
 
     <fieldset dir="#{me.direction}">
         <legend>
@@ -343,7 +342,7 @@
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
             <tr>
                 <td dir="ltr">
-                    <rich:fileUpload id="upload"
+                    <p:fileUpload id="upload"
                                      fileUploadListener="#{handlePersonAction.listener}"
                                      maxFilesQuantity="1"
                                      render="personPicture"
@@ -360,41 +359,32 @@
                                      clearLabel="#{me.getValue('delete-picture')}"
                                      deleteLabel="#{me.getValue('delete-picture')}"
                                      ontyperejected="alert('#{me.getValue('file_type_is_incorrect')}')"
-                                     onfileselect="removeLastUploadedFiles(this)">
-                        <a4j:ajax event="clear"
-                                  listener="#{handlePersonAction.deletePicture}"
-                                  execute="@this"
-                                  limitRender="true"
-                                  render="personPicture"/>
-                    </rich:fileUpload>
+                                     onfileselect="removeLastUploadedFiles(this)"/>
 
                 </td>
                 <td>
-                    <a4j:mediaOutput element="img" mimeType="image/png" id="personPicture"
-                                     createContent="#{handlePersonAction.painter}"
-                                     cacheable="false" session="true"
+                    <p:graphicImage id="personPicture"
+                                     value="/loadImage?id=#{handlePersonAction.currentPerson.id}"
                                      style="display:block;height: 150px">
                         <f:param value="#{handlePersonAction.time}" name="time"/>
-                    </a4j:mediaOutput>
+                    </p:graphicImage>
                     <br/>
-                    <a4j:commandLink value="#{me.getValue('delete-picture')}"
-                                     limitRender="true"
+                    <p:commandLink value="#{me.getValue('delete-picture')}"
                                      rendered="#{handlePersonAction.havePicture and handlePersonAction.editable}"
-                                     execute="@this"
                                      action="#{handlePersonAction.deletePicture}"
-                                     render="personPicture"/>
+                                     update="personPicture"/>
                 </td>
                 <td>
-                    <a4j:commandButton value="#{me.getValue('unload')}" limitRender="true" rendered="false"
-                                       execute="@this" action="#{handlePersonAction.unsetPicture}"
-                                       render="handlePanel"/>
+                    <p:commandButton value="#{me.getValue('unload')}" rendered="false"
+                                       action="#{handlePersonAction.unsetPicture}"
+                                       update="handlePanel"/>
                 </td>
             </tr>
         </table>
     </fieldset>
-</rich:tab>
+</p:tab>
 
-<rich:tab header="#{me.getValue('extraFeild')}">
+<p:tab header="#{me.getValue('extraFeild')}">
 
     <fieldset dir="#{me.direction}">
         <legend>
@@ -460,9 +450,9 @@
             </tr>
         </table>
     </fieldset>
-</rich:tab>
+</p:tab>
 
-<rich:tab header="#{me.getValue('cards')}" rendered="#{handlePersonAction.editable eq 'true'}">
+<p:tab header="#{me.getValue('cards')}" rendered="#{handlePersonAction.editable eq 'true'}">
     <table border="0" cellpadding="3" cellspacing="3" align="#{me.align}">
         <tr valign="top">
             <td nowrap="nowrap">
@@ -473,7 +463,7 @@
                         value="#{handlePersonAction.finger eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
             </td>
         </tr>
-        <a4j:repeat value="#{handlePersonAction.cards}" var="card">
+        <ui:repeat value="#{handlePersonAction.cards}" var="card">
             <tr valign="top">
                 <td nowrap="nowrap" colspan="2">
                     <fieldset dir="#{me.direction}">
@@ -533,34 +523,27 @@
                     </fieldset>
                 </td>
             </tr>
-        </a4j:repeat>
+        </ui:repeat>
     </table>
-</rich:tab>
-</rich:tabPanel>
+</p:tab>
+</p:tabView>
 </td>
 </tr>
 <tr valign="top">
     <td nowrap="nowrap" colspan="4">
-        <a4j:commandButton id="saveId"
-                           render="globalMessages"
-                           execute="@form"
+        <p:commandButton id="saveId"
                            value="#{me.getValue('save')}"
-                           onclick="#{rich:component('waitingPanel')}.show();"
-                           oncomplete="#{rich:component('waitingPanel')}.hide();"
                            action="#{handlePersonAction.saveOrUpdate}"/>
         <h:commandButton id="resetId"
-                         limitRender="true"
                          rendered="#{handlePersonAction.enabled eq 'true'}"
                          action="#{handlePersonAction.begin}"
-                         execute="@this"
-                         value="#{me.getValue('revert')}"
-                         oncomplete="#{rich:component('PersonPanel')}.hide();"/>
+                         value="#{me.getValue('revert')}"/>
 
 
     </td>
 </tr>
 </table>
-</a4j:outputPanel>
+</p:outputPanel>
 </h:form>
 
 </ui:composition>

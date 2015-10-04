@@ -3,14 +3,13 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:a4j="http://richfaces.org/a4j"
-                xmlns:rich="http://richfaces.org/rich">
+                xmlns:p="http://primefaces.org/ui">
 
-<h:form>
-<a4j:outputPanel id="detailPanel" ajaxRendered="true">
+<h:form id="detailPerson">
+<p:outputPanel id="detailPanel" ajaxRendered="true">
 
-<rich:tabPanel switchType="client" id="tabPanel">
-<rich:tab header="#{me.getValue('person')}">
+<p:tabView id="tabPanel">
+<p:tab title="Person">
     <fieldset dir="#{me.direction}">
         <legend>
             <h:outputText escape="true" value="#{me.getValue('person_detail')}"/>
@@ -138,17 +137,17 @@
             <tr>
 
                 <td>
-                    <a4j:mediaOutput id="renderdpicture" element="img" mimeType="image/jpeg"
-                                     createContent="#{handlePersonAction.painter}"
+                    <p:graphicImage id="renderdpicture"
+                                     value="/loadImage?id=#{handlePersonAction.currentPerson.id}"
                                      style="width:200px; height:200px;" cacheable="false">
-                    </a4j:mediaOutput>
+                    </p:graphicImage>
                 </td>
             </tr>
         </table>
 
     </fieldset>
-</rich:tab>
-<rich:tab header="#{me.getValue('job')}">
+</p:tab>
+<p:tab title="Job">
     <fieldset dir="#{me.direction}">
         <legend>
             <h:outputText escape="true" value="#{me.getValue('person_detail')}"/>
@@ -203,10 +202,10 @@
             </tr>
         </table>
     </fieldset>
-</rich:tab>
-<rich:tab header="#{me.getValue('cards')}">
+</p:tab>
+<p:tab title="Cards">
     <table border="0" cellpadding="3" cellspacing="3" align="#{me.align}">
-        <a4j:repeat value="#{handlePersonAction.cards}" var="card">
+        <ui:repeat value="#{handlePersonAction.cards}" var="card">
             <tr valign="top">
                 <td nowrap="nowrap">
                     <fieldset dir="#{me.direction}">
@@ -272,12 +271,12 @@
                     </fieldset>
                 </td>
             </tr>
-        </a4j:repeat>
+        </ui:repeat>
     </table>
-</rich:tab>
+</p:tab>
 
-</rich:tabPanel>
-</a4j:outputPanel>
+</p:tabView>
+</p:outputPanel>
 </h:form>
 </ui:composition>
 
