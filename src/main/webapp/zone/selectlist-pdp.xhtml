@@ -109,7 +109,7 @@
                                          limitRender="true"
                                          rendered="#{me.hasPermission('SYNCH')}"
                                          render="pdpTable, pdpPanelId"
-                                         action="#{handlePDPAction.synchronize}"
+                                         action="#{handlePDPAction.synchronizeOneByOne}"
                                          onclick="#{p:component('waitingPanel')}.show();"
                                          oncomplete="#{p:component('pdpSelect')}.hide();"/>
                     </td>

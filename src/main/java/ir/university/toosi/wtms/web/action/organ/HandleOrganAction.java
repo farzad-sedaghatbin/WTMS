@@ -1082,4 +1082,12 @@ public class HandleOrganAction implements Serializable {
     public void setRulePackageList(List<RulePackage> rulePackageList) {
         this.rulePackageList = rulePackageList;
     }
+
+    public List<Person> getPersonList() {
+        return personList;
+    }
+
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
+    }
 }

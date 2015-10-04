@@ -280,7 +280,7 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
         trafficLog.setPerson(card.getPerson());
         trafficLog.setOrgan(card.getPerson().getOrganRef());
         trafficLog.setTraffic_date(LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(CalendarUtil.getDate(date.substring(6, 8) + "/" + date.substring(4, 6) + "/" + date.substring(0, 4)), new Locale("fa"), "YYYYMMdd")));
-        trafficLog.setTraffic_time(date.substring(8, 10) + ":" + date.substring(10, 12) + ":" + date.substring(12));
+        trafficLog.setTraffic_time(date.substring(8, 10) +   ":" + date.substring(10, 12) + ":" + date.substring(12));
 
         return trafficLog;
     }

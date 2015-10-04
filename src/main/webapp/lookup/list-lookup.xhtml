@@ -9,6 +9,10 @@
     <ui:define name="content">
 
         <h:form>
+            <p:contextMenu for="lookupTable">
+                <p:menuitem value="Edit" update="lookupDetail" icon="ui-icon-search"  action="#{handleLookupAction.edit}"/>
+            </p:contextMenu>
+
             <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
                 <tr valign="top">
                     <td nowrap="nowrap" align="#{me.align}">
@@ -16,7 +20,9 @@
                             <p:dataTable id="lookupTable"
                                             keepSaved="true"
                                             value="#{handleLookupAction.lookupList}"
-                                            rowKeyVar="rowIndex"
+                                         rowKey="#{lookup.id}"
+                                         selection="#{handleLookupAction.currentLookup}"
+                                         selectionMode="single"
                                             noDataLabel="no_result_found"
                                             sortMode="single"
                                             var="lookup"

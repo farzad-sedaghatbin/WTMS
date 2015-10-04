@@ -1,0 +1,72 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+
+        <h:form id="trafficLogList">
+
+            <table border="0" cellpadding="3" cellspacing="3" width="90%" dir="#{me.direction}">
+                <tr valign="top">
+                    <td nowrap="nowrap" align="#{me.align}">
+                        <fieldset dir="#{me.direction}">
+                            <legend>
+                                <h:outputText escape="true" value="trafficLog"/>
+                            </legend>
+                            <p:dataTable id="trafficLogTable" value="#{handleMonitoringAction.eventLogList}"
+                                            keepSaved="true"
+                                            noDataLabel="no_result_found"
+                                            sortMode="single"
+                                            var="trafficLog"
+                                            rows="10"
+                                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                            rowClasses="ROW1,ROW2">
+
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="shakhs"/>
+                                    </f:facet>
+
+                                    <h:outputText escape="true" value="#{trafficLog.person.name}"/>
+                                    &#160;&#160;
+                                    <h:outputText escape="true" value="#{trafficLog.person.lastName}"/>
+
+
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="gateway"/>
+                                    </f:facet>
+                                    <h:outputText escape="true" value="#{trafficLog.gateway.name}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="time"/>
+                                    </f:facet>
+                                    <h:outputText escape="true" value="#{trafficLog.time}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="date"/>
+                                    </f:facet>
+                                    <h:outputText escape="true" value="#{trafficLog.date}" converter="dateConverter"/>
+                                </p:column>
+
+                                <f:facet name="footer">
+                                    <p:dataScroller limitRender="true" execute="@this" render="trafficLogTable"
+                                                       page="#{handleMonitoringAction.page}"/>
+                                </f:facet>
+                            </p:dataTable>
+                          
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </ui:define>
+</ui:composition>

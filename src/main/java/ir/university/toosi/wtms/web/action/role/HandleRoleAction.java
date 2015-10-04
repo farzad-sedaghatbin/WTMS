@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.model.service.OperationServiceImpl;
+import ir.university.toosi.tms.model.service.PermissionServiceImpl;
 import ir.university.toosi.tms.model.service.RoleServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.operation.HandleOperationAction;
@@ -49,6 +50,8 @@ public class HandleRoleAction implements Serializable {
     private OperationServiceImpl operationService;
     @EJB
     private RoleServiceImpl roleService;
+    @EJB
+    private PermissionServiceImpl permissionService;
     private List<Role> roleList = null;
     private DataModel<Permission> zoneList = null;
     private DataModel<Permission> gateList = null;
@@ -88,6 +91,76 @@ public class HandleRoleAction implements Serializable {
         List<Role> roles = new ArrayList<>();
         refresh();
         return roleList;
+    }
+    public void assignPermission() {
+        currentPermission = new Permission();
+        sPermision.clear();
+            currentPermission.setPermissionType(PermissionType.ZONE);
+            zoneList = new ListDataModel<>(permissionService.findByPermissionType(currentPermission));
+            currentPermission.setPermissionType(PermissionType.GATEWAY);
+            gateList = new ListDataModel<>(permissionService.findByPermissionType(currentPermission));
+            currentPermission.setPermissionType(PermissionType.PDP);
+            pdpList =new ListDataModel<>(permissionService.findByPermissionType(currentPermission));
+            currentPermission.setPermissionType(PermissionType.ORGAN);
+            organList = new ListDataModel<>(permissionService.findByPermissionType(currentPermission));
+        for (Permission permissions : currentRole.getPermissions()) {
+            switch (permissions.getPermissionType()) {
+                case ORGAN:
+                    for (Permission permission1 : organList) {
+                        if (permission1.getId() == permissions.getId()) {
+                            permission1.setSelected(true);
+//                            sPermision.add(permission1);
+                            break;
+                        }
+                    }
+                    break;
+                case ZONE:
+                    for (Permission permission1 : zoneList) {
+                        if (permission1.getId() == permissions.getId()) {
+                            permission1.setSelected(true);
+//                            sPermision.add(permission1);
+                            break;
+                        }
+                    }
+                    break;
+                case PDP:
+                    for (Permission permission1 : pdpList) {
+                        if (permission1.getId() == permissions.getId()) {
+                            permission1.setSelected(true);
+//                            selectedPermission.add(permission1);
+                            sPermision.add(permission1);
+                            break;
+                        }
+                    }
+                    break;
+                case GATEWAY:
+                    for (Permission permission1 : gateList) {
+                        if (permission1.getId() == permissions.getId()) {
+                            permission1.setSelected(true);
+//                            sPermision.add(permission1);
+                            break;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
+    public void doAssignPermission() {
+        currentRole.setPermissions(sPermision);
+        currentRole.setCurrentLang(me.getLanguages());
+            boolean condition =roleService.editRole(currentRole);
+            if (condition) {
+                refresh();
+                me.addInfoMessage("operation.occurred");
+                me.redirect("/role/roles.xhtml");
+            } else {
+                me.addInfoMessage("operation.not.occurred");
+                return;
+            }
     }
 
     private void refresh() {

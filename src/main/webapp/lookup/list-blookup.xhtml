@@ -9,12 +9,21 @@
     <ui:define name="content">
 
 
-        <br/>
         <h:form>
-            <p:dataTable id="blookupTable"
+
+            <p:contextMenu for="blookups">
+                <p:menuitem value="Edit" update="blookupDetail" icon="ui-icon-search" oncomplete="PF('blookupDialog').show()" actionListener="#{handleBLookupAction.edit}"/>
+                <p:menuitem value="Delete" update="blookups" icon="ui-icon-close" actionListener="#{handleBLookupAction.doDelete}"/>
+            </p:contextMenu>
+
+            <p:commandButton value="Add" id="add" update="blookupDetail" actionListener="#{handleBLookupAction.add}" styleClass="ui-priority-primary" onclick="PF('blookupDialog').show()"/>
+
+            <p:dataTable id="blookups"
                             keepSaved="true"
                             value="#{handleBLookupAction.bLookupList}"
-                            rowKeyVar="rowIndex"
+                         rowKey="#{blookup.id}"
+                         selection="#{handleBLookupAction.currentBLookup}"
+                         selectionMode="single"
                             noDataLabel="no_result_found"
                             sortMode="single"
                             var="blookup"
@@ -24,34 +33,55 @@
 
                 <p:column sortBy="#{blookup.name}">
                     <f:facet name="header">
-                        <h:outputText escape="true" value="#{'عنوان'}"/>
+                        <h:outputText escape="true" value="title"/>
                     </f:facet>
                     <h:outputText escape="true" value="#{blookup.code}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText escape="true" value="operation"/>
-                    </f:facet>
-                    <p:commandButton image="/images/edit.png"
-                                       action="#{handleBLookupAction.edit}"
-                                       title="edit"
-                                       execute="@this"
-                                       limitRender="true"
-                                       render="blookupTable, blookupPanelId"/>
-                    &#160;&#160;
-                    <p:commandButton image="/images/delete.png"
-                                       title="delete"
-                                       action="#{handleBLookupAction.doDelete}"
-                                       execute="@this"
-                                       limitRender="true"
-                                       render="blookupTable"
-                                       onclick="return confirm('deleteMessage')"/>
                 </p:column>
                 <f:facet name="footer">
                     <p:dataScroller limitRender="true" execute="@this" render="blookupTable"
                                        page="#{handleBLookupAction.page}"/>
                 </f:facet>
             </p:dataTable>
+            <p:dialog header="blookup Info" widgetVar="blookupDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="blookupPanelId" ajaxRendered="true">
+                    <fieldset dir="#{me.direction}">
+                        <legend>
+                            <h:outputText escape="true" value="add"
+                                          rendered="#{handlePCAction.editable eq 'false'}"/>
+                            <h:outputText escape="true" value="edit"
+                                          rendered="#{handlePCAction.editable eq 'true'}"/>
+                        </legend>
+                        <table border="0" cellpadding="3" cellspacing="3" width="50%"
+                               dir="#{me.direction}">
+                            <tr valign="top">
+                                <td nowrap="nowrap" align="#{me.align}">
+                                    <h:outputText escape="true" value="title:" styleClass="textColor"/>
+                                </td>
+                                <td nowrap="nowrap" align="#{me.align}">
+                                    <h:inputText id="textBoxblookupTitle"
+                                                 styleClass="inputRequiredField"
+                                                 dir="#{me.direction}"
+                                                 required="true"
+                                                 converter="persianConverter"
+                                                 value="#{handleBLookupAction.bLookupTitle}"/>
+                                    <p:message ajaxRendered="true" for="textBoxblookupTitle" showSummary="true"
+                                                  showDetail="false" errorClass="errorMsg"/>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td nowrap="nowrap" align="center" colspan="2">
+                                    <p:commandButton id="saveblookupId"
+                                                       render="blookupPanelId, globalMessages,blookupTable,blookupTables"
+                                                       execute="@form"
+                                                       value="save"
+                                                       action="#{handleBLookupAction.saveOrUpdate}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </p:outputPanel>
+                    </p:dialog>
         </h:form>
+        
     </ui:define>
 </ui:composition>
