@@ -23,6 +23,9 @@ import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.LangUtil;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.push.annotation.OnMessage;
+import org.primefaces.push.annotation.PushEndpoint;
+import org.primefaces.push.impl.JSONEncoder;
 //import org.richfaces.application.push.TopicKey;
 //import org.richfaces.application.push.TopicsContext;
 //import org.richfaces.cdi.push.Push;
@@ -42,7 +45,7 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.*;
 
-
+@PushEndpoint("/notify")
 @Named(value = "handleMonitoringAction")
 @ApplicationScoped
 public class HandleMonitoringAction implements Serializable {
@@ -57,9 +60,10 @@ public class HandleMonitoringAction implements Serializable {
     @Inject
     private HandlePersonAction handlePersonAction;
 
-    @Inject
-//    @Push(topic = CDI_PUSH_TOPIC)
+
+    //    @Push(topic = CDI_PUSH_TOPIC)
     private Event<SentryDataModel> pushEvent;
+
 
     @EJB
     private PersonServiceImpl personService;
@@ -72,7 +76,6 @@ public class HandleMonitoringAction implements Serializable {
     @EJB
     private TrafficLogServiceImpl logService;
 
-    private static final String CDI_PUSH_TOPIC = "pushCdi";
     private String message;
     private String width;
     private boolean person;
@@ -114,9 +117,10 @@ public class HandleMonitoringAction implements Serializable {
         }
     }
 
-    public void sendMessage(TrafficLog log) {
+    @OnMessage
+    public List<List<SentryDataModel>> sendMessage(TrafficLog log) {
         if (log == null || log.getGateway() == null || log.getPerson() == null)
-            return;
+            return trafficLogsbygate;
 
         LinkedList<SentryDataModel> sentryDataModels = sentries.get(log.getPdp().getId());
         if (sentryDataModels != null) {
@@ -138,10 +142,9 @@ public class HandleMonitoringAction implements Serializable {
                 trafficLogsbygate.add(new ArrayList<>(dataModels));
             }
 
-            pushEvent.fire(dataModel);
         }
 
-
+        return trafficLogsbygate;
     }
 
     public void forceOpen(DataModel<SentryDataModel> gate) {
@@ -334,10 +337,10 @@ public class HandleMonitoringAction implements Serializable {
 
         String data = /*personList.getRowData().getId()*/null + "#" + startTime + "#" + endTime;
         List<TrafficLog> innerTrafficLogList = null;
-            eventLogList = logService.findByPersonLocationInDuration(null, startTime, endTime, CalendarUtil.getDate(new Date()));
+        eventLogList = logService.findByPersonLocationInDuration(null, startTime, endTime, CalendarUtil.getDate(new Date()));
 
-            me.redirect("/monitoring/monitor-log.htm");
-        }
+        me.redirect("/monitoring/monitor-log.htm");
+    }
 
 
     private void refresh() {
@@ -364,10 +367,6 @@ public class HandleMonitoringAction implements Serializable {
         setPersonPage(1);
     }
 
-    public static String getCdiPushTopic() {
-
-        return CDI_PUSH_TOPIC;
-    }
 
     public String getMessage() {
         return message;

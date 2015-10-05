@@ -1,0 +1,119 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+
+        <h:form id="trafficLogList">
+            <h:inputHidden id="logs" value="#{handleMonitoringAction.trafficLogsbygate}"/>
+            <p:socket onMessage="handleMessage" channel="/notify"  />
+
+            <script type="text/javascript">
+                function handleMessage(trafficlog) {
+                    document.getElementById('trafficLogList:logs').value=trafficlog;
+                }
+            </script>
+
+            <p:outputPanel ajaxRendered="true" id="messages">
+
+                <table border="0" cellpadding="3" cellspacing="3" width="90%" dir="#{me.direction}" id="container">
+
+
+                    <tr valign="top">
+                        <td nowrap="nowrap">
+                            <p:commandButton value="maximize"
+                                               execute="@this"
+                                               limitRender="true"
+                                               immediate="true"
+                                               oncomplete="newWindow('/WTMS/monitoring/sentry-monitor-popup.htm','بزرگنمایی',window.screen.width ,window.screen.height,'yes','no','no','no','no','no','no');">
+                                <p:tooltip layout="block"
+                                              styleClass="pTitleText">maximize</p:tooltip>
+                            </p:commandButton>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+
+                        <ui:repeat value="#{handleMonitoringAction.trafficLogsbygate}" var="item">
+                            <td align="#{me.align}" width="#{handleMonitoringAction.width}" style="position: relative;">
+                                <h:commandButton image="/images/confirm.png"
+                                                   action="#{handleMonitoringAction.forceOpen(item)}"/>
+                                <br/>
+                                <fieldset dir="#{me.direction}">
+                                    <legend>
+                                        <h:outputText escape="true" value="#{item.rowAvailable ? item.rowData.pdpName:''}"/>
+                                    </legend>
+
+                                    <p:dataTable value="#{item}"
+                                                    keepSaved="true"
+                                                    noDataLabel="no_result_found"
+                                                    sortMode="single"
+                                                    var="trafficLog"
+                                                    rows="#{handleMonitoringAction.sentryCount}"
+                                                    render="commentPanel commentPanel2"
+                                                    onrowdblclick="highlight(#{p:element('editLink);#{p:component('CommentPanel.show();"
+                                                    style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                                    rowClasses="ROW1,ROW2">
+
+
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText escape="true" value="person"/>
+                                            </f:facet>
+                                            <h:outputText escape="true" value="#{trafficLog.name}"/>
+
+                                            <p:commandLink id="editLink" value="#{trafficLog.name}"
+                                                             render="operationArea, commentPanel"
+                                                             styleClass="withoutUnderlineLink"
+                                                             execute="@this"
+                                                             limitRender="true"
+                                                             style="displa  public static String getCdiPushTopic() {
+
+        return CDI_PUSH_TOPIC;
+    }y: none"
+                                                             action="#{handleMonitoringAction.selectForComment(trafficLog)}"/>
+
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText escape="true" value="pdp"/>
+                                            </f:facet>
+                                            <h:outputText escape="true" value="#{trafficLog.pdpName}"/>
+
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText escape="true" value="time"/>
+                                            </f:facet>
+                                            <h:outputText escape="true" value="#{trafficLog.time}"/>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText escape="true" value="status"/>
+                                            </f:facet>
+                                            <h:graphicImage
+                                                    value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                                        </p:column>
+                                        <p:column>
+                                            <f:facet name="header">
+                                                <h:outputText escape="true" value="type"/>
+                                            </f:facet>
+                                            <h:graphicImage
+                                                    value="#{trafficLog.exit eq 'true' ? '/images/s_default.png':'/images/s_go.png'}"/>
+                                        </p:column>
+                                    </p:dataTable>
+
+                                </fieldset>
+                            </td>
+                        </ui:repeat>
+                    </tr>
+                </table>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

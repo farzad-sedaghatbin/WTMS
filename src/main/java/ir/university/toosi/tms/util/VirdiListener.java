@@ -9,7 +9,10 @@ import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
 import ir.university.toosi.tms.readerwrapper.*;
+import org.primefaces.push.EventBus;
+import org.primefaces.push.EventBusFactory;
 
+import javax.faces.application.FacesMessage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,6 +31,7 @@ public class VirdiListener {
     private static TrafficLogServiceImpl trafficLogService;
     static ReaderWrapper readerWrapper = new ReaderWrapper();
 
+    private final static String CHANNEL = "/notify";
 
     public static void accessControl() {
         readerWrapper.addOnVerifyFinger1To1(new VerifyFinger1To1Delegate() {
@@ -53,6 +57,8 @@ public class VirdiListener {
                             e.printStackTrace();
                         }
                         readerWrapper.SendAuthResultToTerminal(terminalId, userId, null, trafficLog.isValid());
+                        send(trafficLog);
+
                     } else {
                         readerWrapper.SendAuthResultToTerminal(terminalId, userId, null, false);
                     }
@@ -82,6 +88,7 @@ public class VirdiListener {
                             e.printStackTrace();
                         }
                         readerWrapper.SendAuthResultToTerminal(terminalId, Integer.parseInt(String.valueOf(person.getId())), null, trafficLog.isValid());
+                        send(trafficLog);
 
                     } else {
                         readerWrapper.SendAuthResultToTerminal(terminalId, Integer.parseInt(String.valueOf(person.getId())), null, false);
@@ -109,6 +116,8 @@ public class VirdiListener {
                         e.printStackTrace();
                     }
                     readerWrapper.SendAuthResultToTerminal(terminalId, userId, null, trafficLog.isValid());
+                    send(trafficLog);
+
                 } else {
                     readerWrapper.SendAuthResultToTerminal(terminalId, userId, null, false);
                 }
@@ -122,7 +131,7 @@ public class VirdiListener {
         readerWrapper.addOnTerminalConnected(new TerminalConnectedDelegate() {
             @Override
             public void Invoke(int terminalId, String terminalIP) {
-                Virdi virdi=virdiService.findById(terminalId);
+                Virdi virdi = virdiService.findById(terminalId);
                 virdi.setHealthStatus(true);
                 virdiService.editVirdi(virdi);
             }
@@ -130,7 +139,7 @@ public class VirdiListener {
         readerWrapper.addOnTerminalConnected(new TerminalConnectedDelegate() {
             @Override
             public void Invoke(int terminalId, String terminalIP) {
-                Virdi virdi=virdiService.findById(terminalId);
+                Virdi virdi = virdiService.findById(terminalId);
                 virdi.setHealthStatus(false);
                 virdiService.editVirdi(virdi);
             }
@@ -180,6 +189,10 @@ public class VirdiListener {
         }
 
 
+    }
+    public static void send(TrafficLog trafficLog) {
+        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+        eventBus.publish(CHANNEL, trafficLog);
     }
 
 
