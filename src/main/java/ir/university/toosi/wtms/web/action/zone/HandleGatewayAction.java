@@ -1,11 +1,15 @@
 package ir.university.toosi.wtms.web.action.zone;
 
 import ir.university.toosi.tms.model.entity.*;
+import ir.university.toosi.tms.model.entity.calendar.*;
+import ir.university.toosi.tms.model.entity.calendar.Calendar;
+import ir.university.toosi.tms.model.entity.rule.Rule;
 import ir.university.toosi.tms.model.service.GatewayPersonServiceImpl;
 import ir.university.toosi.tms.model.service.GatewaySpecialStateScheduler;
 import ir.university.toosi.tms.model.service.GatewaySpecialStateServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
 import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PreRequestGatewayServiceImpl;
@@ -59,6 +63,8 @@ public class HandleGatewayAction implements Serializable {
     private RulePackageServiceImpl rulePackageService;
     @EJB
     private GatewaySpecialStateScheduler gatewaySpecialStateScheduler;
+    @EJB
+    private RuleServiceImpl ruleService;
 
     private List<Gateway> gateways;
     private List<Gateway> preRequestGateways;
@@ -96,7 +102,6 @@ public class HandleGatewayAction implements Serializable {
     private String rulePackageName;
     private String calendarName;
     private boolean antiPassBack, allowExit, allowExitGadget;
-    private boolean selectRow = false;
     private List<RulePackage> rulePackageList = null;
     private List<GatewaySpecialState> gatewaySpecialStates = new ArrayList<>();
     private List<GatewaySpecialState> gatewaySpecialStateList = null;
@@ -119,6 +124,37 @@ public class HandleGatewayAction implements Serializable {
     private DualListModel<Gateway> gatewayDuals;
     private boolean disableFields;
     private DualListModel<Gateway> gatewayDualsForZone;
+
+
+    private String name;
+    private ArrayList<Rule> ruleArrayList = new ArrayList<>();
+
+    private boolean ruleAniPassBack = false;
+    private boolean ruleAllowExit = false;
+    private boolean ruleAllowExitGadget = false;
+    private boolean selectRow = false;
+    private List<Rule> ruleListTemp = null;
+    private ir.university.toosi.tms.model.entity.calendar.Calendar selectedCalendar;
+    private DayType ruleDayType;
+    private String selectedCalendarIdTemp;
+    private String dayTypeIdTemp;
+    private String ruleStartTime;
+    private String ruleEndTime;
+    private String startHour;
+    private String startMinute;
+    private String startSecond;
+    private String endHour;
+    private String endMinute;
+    private String endSecond;
+    private String ruleEntranceCount;
+    private String ruleExitCount;
+    private Boolean ruleDeny;
+    private String editableRule = "false";
+    private boolean addNewRuleFlag = false;
+    private Rule currentRule;
+    private SelectItem[] dayTypeItems;
+    private SelectItem[] calendarItems = me.calendarItem;
+    private Hashtable<String, DayType> dayTypeHashtable = new Hashtable<>();
 
 
     public void begin() {
@@ -150,126 +186,125 @@ public class HandleGatewayAction implements Serializable {
             gatewayEnabled = false;
     }
 
-    public void selectAllGateWay(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            for (Gateway gateway : gatewayList) {
-                gateway.setSelected(true);
-                selectedGateways.add(gateway);
+
+    public void editRule() {
+        currentGetway = gatewayService.findById(currentGetway.getId());
+        if (currentGetway.getRulePackage() == null) {
+            refresh();
+            me.addErrorMessage("has.not.rulePackage");
+            me.redirect("/gateway/gateways.xhtml");
+            return;
+        }
+
+        editOrganRule(currentGetway.getRulePackage());
+    }
+
+    public void editOrganRule(RulePackage rulePackage) {
+        ruleArrayList = new ArrayList<>();
+        ruleListTemp = ruleService.getByRulePackageId(rulePackage.getId());
+        ruleListTemp = ruleArrayList;
+        name = rulePackage.getName();
+        ruleAllowExitGadget = rulePackage.isAllowExitGadget();
+        ruleAniPassBack = rulePackage.isAniPassBack();
+        ruleAllowExit = rulePackage.isAllowExit();
+        selectedCalendar = rulePackage.getCalendar();
+        selectedCalendarIdTemp = String.valueOf(selectedCalendar.getId());
+        editable = "true";
+    }
+
+    public void remove() {
+//        currentRule = ruleListTemp.getRowData();
+        ruleArrayList.remove(currentRule);
+        ruleListTemp = ruleArrayList;
+    }
+
+    public void addNewRule() {
+        ruleDayType = null;
+        ruleStartTime = "";
+        ruleEndTime = "";
+        ruleEntranceCount = "";
+        ruleExitCount = "";
+        ruleDeny = false;
+        addNewRuleFlag = true;
+    }
+
+    public void doEditGatewayRule() {
+        RulePackage newRulePackage = new RulePackage();
+        newRulePackage.setStatus("c");
+        newRulePackage.setDeleted("0");
+        newRulePackage.setEffectorUser(me.getUsername());
+        newRulePackage.setName(name);
+        newRulePackage.setAllowExit(ruleAllowExit);
+        newRulePackage.setAniPassBack(ruleAniPassBack);
+        newRulePackage.setAllowExitGadget(ruleAllowExitGadget);
+        newRulePackage.setCalendar(me.calendarHashtable.get(selectedCalendarIdTemp));
+
+        RulePackage addedRulePackage = null;
+        addedRulePackage = rulePackageService.createRulePackage(newRulePackage);
+        if (addedRulePackage != null) {
+            for (Rule rule : ruleArrayList) {
+                rule.setRulePackage(addedRulePackage);
+                ruleService.createRule(rule);
+            }
+
+            currentGetway.setRulePackage(addedRulePackage);
+            boolean condition = gatewayService.editGateway(currentGetway);
+            if (condition) {
+                refresh();
+                me.addInfoMessage("operation.occurred");
+                me.redirect("/gateway/gateways.htm");
+            } else {
+                me.addInfoMessage("operation.not.occurred");
+                return;
             }
         } else {
-            for (Gateway gateWay : gatewayList) {
-                gateWay.setSelected(false);
-            }
-            selectedGateways.clear();
+            me.addInfoMessage("operation.not.occurred");
+            return;
         }
     }
 
-
-    public void selectAllPreRequest(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            for (Gateway gateway : preRequier) {
-                gateway.setSelected(true);
-                preRequestGateways.add(gateway);
-                preRequestGatewayIds.add(gateway.getId());
-            }
-        } else {
-            for (Gateway gateway : preRequier) {
-                gateway.setSelected(false);
-            }
-            preRequestGateways.clear();
-            preRequestGatewayIds.clear();
-        }
+    public void doAddNewRule() {
+        ruleStartTime = startHour + ":" + startMinute + ":" + startSecond;
+        ruleEndTime = endHour + ":" + endMinute + ":" + endSecond;
+        Rule rule = new Rule();
+        rule.setDayType(dayTypeHashtable.get(dayTypeIdTemp));
+        rule.setStartTime(ruleStartTime);
+        rule.setEndTime(ruleEndTime);
+        rule.setEntranceCount(ruleEntranceCount);
+        rule.setExitCount(ruleExitCount);
+        rule.setDeny(ruleDeny);
+        if (feasible(rule)) {
+            ruleArrayList.add(rule);
+            ruleListTemp = ruleArrayList;
+            addNewRuleFlag = false;
+        } else me.addInfoMessage("conflict");
     }
 
-    public void selectAllCameraListener(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            for (Camera camera : cameras) {
-                camera.setSelected(true);
-                selectedCamera.add(camera);
-            }
-        } else {
-            for (Camera camera : cameras) {
-                camera.setSelected(false);
-            }
-            selectedCamera.clear();
-        }
-    }
+    public boolean feasible(Rule rule) {
 
-    public void selectPreRequest(ValueChangeEvent event) {
-//        currentPreGateway = preRequier.getRowData();
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            currentPreGateway.setSelected(true);
-            preRequestGateways.add(currentPreGateway);
-            preRequestGatewayIds.add(currentPreGateway.getId());
-        } else {
-            currentPreGateway.setSelected(false);
-            for (Gateway gateway : preRequier) {
-                if (gateway.getId() == currentPreGateway.getId())
-                    preRequestGateways.remove(gateway);
-                preRequestGatewayIds.remove(gateway.getId());
+        if (rule.isDeny())
+            return true;
+        long startTime = time2long(rule.getStartTime());
+        long endTime = time2long(rule.getEndTime());
+        boolean flag = true;
+
+        if (endTime < startTime)
+            return false;
+
+        for (Rule rule1 : ruleArrayList) {
+            if (rule1.getDayType().getId() != rule.getDayType().getId())
+                continue;
+            if (startTime >= time2long(rule1.getStartTime()) && endTime <= time2long(rule1.getStartTime()))
+                flag = true;
+            else if (startTime > time2long(rule1.getEndTime()) && endTime > time2long(rule1.getEndTime()))
+                flag = true;
+            else {
+                flag = false;
+                break;
             }
         }
-    }
 
-    public void selectAllPersonListener(ValueChangeEvent event) {
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            for (Person person : notAssignPersonList) {
-                if (!person.isSelected()) {
-                    newSelectedPersons.add(person);
-                    unSelectedPersons.remove(person);
-                }
-                person.setSelected(true);
-                selectedPersons.add(person);
-            }
-        } else {
-            for (Person person : notAssignPersonList) {
-                person.setSelected(false);
-
-            }
-            unSelectedPersons.addAll(persons);
-            newSelectedPersons.clear();
-            selectedPersons.clear();
-        }
-    }
-
-    public void selectPerson(ValueChangeEvent event) {
-        Person person = null/*notAssignPersonList.getRowData()*/;
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            person.setSelected(true);
-            selectedPersons.add(person);
-            newSelectedPersons.add(person);
-            unSelectedPersons.remove(person);
-        } else {
-            person.setSelected(false);
-            unSelectedPersons.add(person);
-            for (Person person1 : notAssignPersonList) {
-                if (person1.getId() == person.getId()) {
-                    selectedPersons.remove(person1);
-                    newSelectedPersons.remove(person);
-                }
-            }
-        }
-    }
-
-    public void selectCamera(ValueChangeEvent event) {
-        Camera cam = null /*cameras.getRowData()*/;
-        boolean temp = (Boolean) event.getNewValue();
-        if (temp) {
-            cam.setSelected(true);
-            selectedCamera.add(cam);
-        } else {
-            cam.setSelected(false);
-            for (Camera camera : cameras) {
-                if (camera.getId() == cam.getId())
-                    selectedCamera.remove(cam);
-            }
-        }
+        return flag;
     }
 
     public List<Gateway> getSelectionGrid() {
@@ -500,6 +535,17 @@ public class HandleGatewayAction implements Serializable {
         rulePackageList = rulePackageService.getAllRulePackage();
     }
 
+    public void selectNewRuleForZone() {
+        rulePackageName = selectedRulePackage.getName();
+        if (selectedRulePackage.getCalendar() != null)
+            calendarName = selectedRulePackage.getCalendar().getName();
+        else
+            calendarName = "";
+        antiPassBack = selectedRulePackage.isAniPassBack();
+        allowExit = selectedRulePackage.isAllowExit();
+        allowExitGadget = selectedRulePackage.isAllowExitGadget();
+        doAssignRule();
+    }
 
     public void doAssignRule() {
         currentGetway.setEffectorUser(me.getUsername());
@@ -1253,5 +1299,221 @@ public class HandleGatewayAction implements Serializable {
 
     public void setGatewayDualsForZone(DualListModel<Gateway> gatewayDualsForZone) {
         this.gatewayDualsForZone = gatewayDualsForZone;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ArrayList<Rule> getRuleArrayList() {
+        return ruleArrayList;
+    }
+
+    public void setRuleArrayList(ArrayList<Rule> ruleArrayList) {
+        this.ruleArrayList = ruleArrayList;
+    }
+
+    public boolean isRuleAniPassBack() {
+        return ruleAniPassBack;
+    }
+
+    public void setRuleAniPassBack(boolean ruleAniPassBack) {
+        this.ruleAniPassBack = ruleAniPassBack;
+    }
+
+    public boolean isRuleAllowExit() {
+        return ruleAllowExit;
+    }
+
+    public void setRuleAllowExit(boolean ruleAllowExit) {
+        this.ruleAllowExit = ruleAllowExit;
+    }
+
+    public boolean isRuleAllowExitGadget() {
+        return ruleAllowExitGadget;
+    }
+
+    public void setRuleAllowExitGadget(boolean ruleAllowExitGadget) {
+        this.ruleAllowExitGadget = ruleAllowExitGadget;
+    }
+
+    public List<Rule> getRuleListTemp() {
+        return ruleListTemp;
+    }
+
+    public void setRuleListTemp(List<Rule> ruleListTemp) {
+        this.ruleListTemp = ruleListTemp;
+    }
+
+    public Calendar getSelectedCalendar() {
+        return selectedCalendar;
+    }
+
+    public void setSelectedCalendar(Calendar selectedCalendar) {
+        this.selectedCalendar = selectedCalendar;
+    }
+
+    public DayType getRuleDayType() {
+        return ruleDayType;
+    }
+
+    public void setRuleDayType(DayType ruleDayType) {
+        this.ruleDayType = ruleDayType;
+    }
+
+    public String getSelectedCalendarIdTemp() {
+        return selectedCalendarIdTemp;
+    }
+
+    public void setSelectedCalendarIdTemp(String selectedCalendarIdTemp) {
+        this.selectedCalendarIdTemp = selectedCalendarIdTemp;
+    }
+
+    public String getDayTypeIdTemp() {
+        return dayTypeIdTemp;
+    }
+
+    public void setDayTypeIdTemp(String dayTypeIdTemp) {
+        this.dayTypeIdTemp = dayTypeIdTemp;
+    }
+
+    public String getRuleStartTime() {
+        return ruleStartTime;
+    }
+
+    public void setRuleStartTime(String ruleStartTime) {
+        this.ruleStartTime = ruleStartTime;
+    }
+
+    public String getRuleEndTime() {
+        return ruleEndTime;
+    }
+
+    public void setRuleEndTime(String ruleEndTime) {
+        this.ruleEndTime = ruleEndTime;
+    }
+
+    public String getStartHour() {
+        return startHour;
+    }
+
+    public void setStartHour(String startHour) {
+        this.startHour = startHour;
+    }
+
+    public String getStartMinute() {
+        return startMinute;
+    }
+
+    public void setStartMinute(String startMinute) {
+        this.startMinute = startMinute;
+    }
+
+    public String getStartSecond() {
+        return startSecond;
+    }
+
+    public void setStartSecond(String startSecond) {
+        this.startSecond = startSecond;
+    }
+
+    public String getEndHour() {
+        return endHour;
+    }
+
+    public void setEndHour(String endHour) {
+        this.endHour = endHour;
+    }
+
+    public String getEndMinute() {
+        return endMinute;
+    }
+
+    public void setEndMinute(String endMinute) {
+        this.endMinute = endMinute;
+    }
+
+    public String getEndSecond() {
+        return endSecond;
+    }
+
+    public void setEndSecond(String endSecond) {
+        this.endSecond = endSecond;
+    }
+
+    public String getRuleEntranceCount() {
+        return ruleEntranceCount;
+    }
+
+    public void setRuleEntranceCount(String ruleEntranceCount) {
+        this.ruleEntranceCount = ruleEntranceCount;
+    }
+
+    public String getRuleExitCount() {
+        return ruleExitCount;
+    }
+
+    public void setRuleExitCount(String ruleExitCount) {
+        this.ruleExitCount = ruleExitCount;
+    }
+
+    public Boolean getRuleDeny() {
+        return ruleDeny;
+    }
+
+    public void setRuleDeny(Boolean ruleDeny) {
+        this.ruleDeny = ruleDeny;
+    }
+
+    public String getEditableRule() {
+        return editableRule;
+    }
+
+    public void setEditableRule(String editableRule) {
+        this.editableRule = editableRule;
+    }
+
+    public boolean isAddNewRuleFlag() {
+        return addNewRuleFlag;
+    }
+
+    public void setAddNewRuleFlag(boolean addNewRuleFlag) {
+        this.addNewRuleFlag = addNewRuleFlag;
+    }
+
+    public Rule getCurrentRule() {
+        return currentRule;
+    }
+
+    public void setCurrentRule(Rule currentRule) {
+        this.currentRule = currentRule;
+    }
+
+    public SelectItem[] getDayTypeItems() {
+        return dayTypeItems;
+    }
+
+    public void setDayTypeItems(SelectItem[] dayTypeItems) {
+        this.dayTypeItems = dayTypeItems;
+    }
+
+    public SelectItem[] getCalendarItems() {
+        return calendarItems;
+    }
+
+    public void setCalendarItems(SelectItem[] calendarItems) {
+        this.calendarItems = calendarItems;
+    }
+
+    public Hashtable<String, DayType> getDayTypeHashtable() {
+        return dayTypeHashtable;
+    }
+
+    public void setDayTypeHashtable(Hashtable<String, DayType> dayTypeHashtable) {
+        this.dayTypeHashtable = dayTypeHashtable;
     }
 }

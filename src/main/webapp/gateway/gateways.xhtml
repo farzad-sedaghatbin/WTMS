@@ -12,6 +12,10 @@
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.view}"/>
                 <p:menuitem value="Edit" update="gatewayDetail" icon="ui-icon-search"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.edit}"/>
+                <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
+                            oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleGatewayAction.assignRule}"/>
+                <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
+                            oncomplete="PF('editRuleDialog').show()" actionListener="#{handleGatewayAction.editRule}"/>
                 <p:menuitem value="Delete" update="gateways" icon="ui-icon-close"
                             actionListener="#{handleGatewayAction.doDelete}"/>
             </p:contextMenu>
@@ -115,6 +119,46 @@
                     </table>
                 </p:outputPanel>
             </p:dialog>
+
+            <p:dialog header="Assign Rule" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="assignRuleDetail" style="text-align:center;">
+                    <p:dataTable id="assignRule" var="rule" value="#{handleGatewayAction.rulePackageList}"
+                                 selectionMode="single" selection="#{handleGatewayAction.selectedRulePackage}"
+                                 rowKey="#{rule.id}">
+                        <f:facet name="header">
+                            Select Events
+                        </f:facet>
+                        <p:ajax event="rowSelect" listener="#{handleGatewayAction.selectNewRuleForZone}" update=":form:gateways"/>
+                        <p:column headerText="rule name">
+                            <h:outputText value="#{rule.name}"/>
+                        </p:column>
+                        <p:column headerText="calendar name">
+                            <h:outputText value="#{rule.calendar.name}"/>
+                        </p:column>
+                        <p:column headerText="anti pass back">
+                            <h:graphicImage
+                                    value="#{rule.aniPassBack ? '/images/s_true.png':'/images/s_false.png'}"/>
+                        </p:column>
+                        <p:column headerText="allow exit">
+                            <h:graphicImage
+                                    value="#{rule.allowExit ? '/images/s_true.png':'/images/s_false.png'}"/>
+                        </p:column>
+                        <p:column headerText="allow exit gadget">
+                            <h:graphicImage
+                                    value="#{rule.allowExitGadget ? '/images/s_true.png':'/images/s_false.png'}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:outputPanel>
+            </p:dialog>
+
+
+            <p:dialog header="Edit Rule" widgetVar="editRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <ui:include src="../rule/gateway-rule-edit.xhtml"/>
+            </p:dialog>
+
+
         </h:form>
     </ui:define>
 

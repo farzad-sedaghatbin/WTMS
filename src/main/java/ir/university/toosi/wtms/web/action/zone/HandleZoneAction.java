@@ -3,7 +3,11 @@ package ir.university.toosi.wtms.web.action.zone;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.entity.Operation;
+import ir.university.toosi.tms.model.entity.calendar.Calendar;
+import ir.university.toosi.tms.model.entity.calendar.DayType;
+import ir.university.toosi.tms.model.entity.rule.Rule;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.ZoneServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
@@ -23,14 +27,12 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,6 +56,8 @@ public class HandleZoneAction implements Serializable {
     private GatewayServiceImpl gatewayService;
     @EJB
     private RulePackageServiceImpl rulePackageService;
+    @EJB
+    private RuleServiceImpl ruleService;
 
 
     private String editable = "false";
@@ -80,7 +84,45 @@ public class HandleZoneAction implements Serializable {
     private List<HardwareTree> rootZones;
     private SortOrder zoneNameOrder = SortOrder.UNSORTED;
     private SortOrder zoneDescriptionOrder = SortOrder.UNSORTED;
+
+    private ArrayList<Rule> ruleArrayList = new ArrayList<>();
+
+    private boolean ruleAniPassBack = false;
+    private boolean ruleAllowExit = false;
+    private boolean ruleAllowExitGadget = false;
+    private List<Rule> ruleListTemp = null;
+    private Calendar selectedCalendar;
+    private DayType ruleDayType;
+    private String selectedCalendarIdTemp;
+    private String dayTypeIdTemp;
+    private String ruleStartTime;
+    private String ruleEndTime;
+    private String startHour;
+    private String startMinute;
+    private String startSecond;
+    private String endHour;
+    private String endMinute;
+    private String endSecond;
+    private String ruleEntranceCount;
+    private String ruleExitCount;
+    private Boolean ruleDeny;
+    private String editableRule = "false";
+    private boolean addNewRuleFlag = false;
+    private String name;
+    private Rule currentRule;
+    private SelectItem[] dayTypeItems;
+    private SelectItem[] calendarItems = me.calendarItem;
+    private Hashtable<String, DayType> dayTypeHashtable = new Hashtable<>();
+    private String organNameFilter;
+    private String organTypeFilter;
+    private String organDescriptionFilter;
+    private SortOrder organNameOrder = SortOrder.UNSORTED;
+    private SortOrder organTypeOrder = SortOrder.UNSORTED;
+    private SortOrder organDescriptionOrder = SortOrder.UNSORTED;
+    private int personPage = 1;
+    private String listPerson;
     private boolean disableFields;
+    private int pageInPopup = 1;
 
 
     public void begin() {
@@ -166,6 +208,134 @@ public class HandleZoneAction implements Serializable {
             }
         }
     }
+
+    public void editRule() {
+        currentZone = zoneService.findById(currentZone.getId());
+        if (currentZone.getRulePackage() == null) {
+            refresh();
+            me.addErrorMessage("has.not.rulePackage");
+            me.redirect("/zone/list-zone.xhtml");
+            return;
+        }
+
+        editOrganRule(currentZone.getRulePackage());
+    }
+
+    public void remove() {
+//        currentRule = ruleListTemp.getRowData();
+        ruleArrayList.remove(currentRule);
+        ruleListTemp = ruleArrayList;
+    }
+
+    public void addNewRule() {
+        ruleDayType = null;
+        ruleStartTime = "";
+        ruleEndTime = "";
+        ruleEntranceCount = "";
+        ruleExitCount = "";
+        ruleDeny = false;
+        addNewRuleFlag = true;
+    }
+
+    public void doEditZoneRule() {
+        RulePackage newRulePackage = new RulePackage();
+        newRulePackage.setStatus("c");
+        newRulePackage.setDeleted("0");
+        newRulePackage.setEffectorUser(me.getUsername());
+        newRulePackage.setName(name);
+        newRulePackage.setAllowExit(ruleAllowExit);
+        newRulePackage.setAniPassBack(ruleAniPassBack);
+        newRulePackage.setAllowExitGadget(ruleAllowExitGadget);
+        newRulePackage.setCalendar(me.calendarHashtable.get(selectedCalendarIdTemp));
+
+        RulePackage addedRulePackage = null;
+        addedRulePackage = rulePackageService.createRulePackage(newRulePackage);
+        if (addedRulePackage != null) {
+            for (Rule rule : ruleArrayList) {
+                rule.setRulePackage(addedRulePackage);
+                ruleService.createRule(rule);
+            }
+
+            currentZone.setRulePackage(addedRulePackage);
+            boolean condition = zoneService.editZone(currentZone);
+            if (condition) {
+                refresh();
+                me.addInfoMessage("operation.occurred");
+                me.redirect("/zone/list-zone.xhtml");
+            } else {
+                me.addInfoMessage("operation.not.occurred");
+                return;
+            }
+        } else {
+            me.addInfoMessage("operation.not.occurred");
+            return;
+        }
+    }
+
+
+    public void doAddNewRule() {
+        ruleStartTime = startHour + ":" + startMinute + ":" + startSecond;
+        ruleEndTime = endHour + ":" + endMinute + ":" + endSecond;
+        Rule rule = new Rule();
+        rule.setDayType(dayTypeHashtable.get(dayTypeIdTemp));
+        rule.setStartTime(ruleStartTime);
+        rule.setEndTime(ruleEndTime);
+        rule.setEntranceCount(ruleEntranceCount);
+        rule.setExitCount(ruleExitCount);
+        rule.setDeny(ruleDeny);
+        if (feasible(rule)) {
+            ruleArrayList.add(rule);
+            ruleListTemp = ruleArrayList;
+            addNewRuleFlag = false;
+        } else me.addInfoMessage("conflict");
+    }
+
+    public boolean feasible(Rule rule) {
+
+        if (rule.isDeny())
+            return true;
+        long startTime = time2long(rule.getStartTime());
+        long endTime = time2long(rule.getEndTime());
+        boolean flag = true;
+
+        if (endTime < startTime)
+            return false;
+
+        for (Rule rule1 : ruleArrayList) {
+            if (rule1.getDayType().getId() != rule.getDayType().getId())
+                continue;
+            if (startTime >= time2long(rule1.getStartTime()) && endTime <= time2long(rule1.getStartTime()))
+                flag = true;
+            else if (startTime > time2long(rule1.getEndTime()) && endTime > time2long(rule1.getEndTime()))
+                flag = true;
+            else {
+                flag = false;
+                break;
+            }
+        }
+
+        return flag;
+    }
+
+    public long time2long(String time) {
+        String[] d = time.split(":");
+        String s = (d[0].length() == 2 ? d[0] : '0' + d[0]) + (d[1].length() == 2 ? d[1] : '0' + d[1]) + (d[2].length() == 2 ? d[2] : '0' + d[2]);
+        return Long.valueOf(s);
+    }
+
+    public void editOrganRule(RulePackage rulePackage) {
+        rulePackageList = new ArrayList<>();
+        ruleListTemp = ruleService.getByRulePackageId(rulePackage.getId());
+        ruleListTemp = ruleArrayList;
+        name = rulePackage.getName();
+        ruleAllowExitGadget = rulePackage.isAllowExitGadget();
+        ruleAniPassBack = rulePackage.isAniPassBack();
+        ruleAllowExit = rulePackage.isAllowExit();
+        selectedCalendar = rulePackage.getCalendar();
+        selectedCalendarIdTemp = String.valueOf(selectedCalendar.getId());
+        editable = "true";
+    }
+
 
     public void add() {
         init();
@@ -664,6 +834,294 @@ public class HandleZoneAction implements Serializable {
 
     public void setDisableFields(boolean disableFields) {
         this.disableFields = disableFields;
+    }
+
+    public ArrayList<Rule> getRuleArrayList() {
+        return ruleArrayList;
+    }
+
+    public void setRuleArrayList(ArrayList<Rule> ruleArrayList) {
+        this.ruleArrayList = ruleArrayList;
+    }
+
+    public boolean isRuleAniPassBack() {
+        return ruleAniPassBack;
+    }
+
+    public void setRuleAniPassBack(boolean ruleAniPassBack) {
+        this.ruleAniPassBack = ruleAniPassBack;
+    }
+
+    public boolean isRuleAllowExit() {
+        return ruleAllowExit;
+    }
+
+    public void setRuleAllowExit(boolean ruleAllowExit) {
+        this.ruleAllowExit = ruleAllowExit;
+    }
+
+    public boolean isRuleAllowExitGadget() {
+        return ruleAllowExitGadget;
+    }
+
+    public void setRuleAllowExitGadget(boolean ruleAllowExitGadget) {
+        this.ruleAllowExitGadget = ruleAllowExitGadget;
+    }
+
+    public List<Rule> getRuleListTemp() {
+        return ruleListTemp;
+    }
+
+    public void setRuleListTemp(List<Rule> ruleListTemp) {
+        this.ruleListTemp = ruleListTemp;
+    }
+
+    public Calendar getSelectedCalendar() {
+        return selectedCalendar;
+    }
+
+    public void setSelectedCalendar(Calendar selectedCalendar) {
+        this.selectedCalendar = selectedCalendar;
+    }
+
+    public DayType getRuleDayType() {
+        return ruleDayType;
+    }
+
+    public void setRuleDayType(DayType ruleDayType) {
+        this.ruleDayType = ruleDayType;
+    }
+
+    public String getSelectedCalendarIdTemp() {
+        return selectedCalendarIdTemp;
+    }
+
+    public void setSelectedCalendarIdTemp(String selectedCalendarIdTemp) {
+        this.selectedCalendarIdTemp = selectedCalendarIdTemp;
+    }
+
+    public String getDayTypeIdTemp() {
+        return dayTypeIdTemp;
+    }
+
+    public void setDayTypeIdTemp(String dayTypeIdTemp) {
+        this.dayTypeIdTemp = dayTypeIdTemp;
+    }
+
+    public String getRuleStartTime() {
+        return ruleStartTime;
+    }
+
+    public void setRuleStartTime(String ruleStartTime) {
+        this.ruleStartTime = ruleStartTime;
+    }
+
+    public String getRuleEndTime() {
+        return ruleEndTime;
+    }
+
+    public void setRuleEndTime(String ruleEndTime) {
+        this.ruleEndTime = ruleEndTime;
+    }
+
+    public String getStartHour() {
+        return startHour;
+    }
+
+    public void setStartHour(String startHour) {
+        this.startHour = startHour;
+    }
+
+    public String getStartMinute() {
+        return startMinute;
+    }
+
+    public void setStartMinute(String startMinute) {
+        this.startMinute = startMinute;
+    }
+
+    public String getStartSecond() {
+        return startSecond;
+    }
+
+    public void setStartSecond(String startSecond) {
+        this.startSecond = startSecond;
+    }
+
+    public String getEndHour() {
+        return endHour;
+    }
+
+    public void setEndHour(String endHour) {
+        this.endHour = endHour;
+    }
+
+    public String getEndMinute() {
+        return endMinute;
+    }
+
+    public void setEndMinute(String endMinute) {
+        this.endMinute = endMinute;
+    }
+
+    public String getEndSecond() {
+        return endSecond;
+    }
+
+    public void setEndSecond(String endSecond) {
+        this.endSecond = endSecond;
+    }
+
+    public String getRuleEntranceCount() {
+        return ruleEntranceCount;
+    }
+
+    public void setRuleEntranceCount(String ruleEntranceCount) {
+        this.ruleEntranceCount = ruleEntranceCount;
+    }
+
+    public String getRuleExitCount() {
+        return ruleExitCount;
+    }
+
+    public void setRuleExitCount(String ruleExitCount) {
+        this.ruleExitCount = ruleExitCount;
+    }
+
+    public Boolean getRuleDeny() {
+        return ruleDeny;
+    }
+
+    public void setRuleDeny(Boolean ruleDeny) {
+        this.ruleDeny = ruleDeny;
+    }
+
+    public String getEditableRule() {
+        return editableRule;
+    }
+
+    public void setEditableRule(String editableRule) {
+        this.editableRule = editableRule;
+    }
+
+    public boolean isAddNewRuleFlag() {
+        return addNewRuleFlag;
+    }
+
+    public void setAddNewRuleFlag(boolean addNewRuleFlag) {
+        this.addNewRuleFlag = addNewRuleFlag;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Rule getCurrentRule() {
+        return currentRule;
+    }
+
+    public void setCurrentRule(Rule currentRule) {
+        this.currentRule = currentRule;
+    }
+
+    public SelectItem[] getDayTypeItems() {
+        return dayTypeItems;
+    }
+
+    public void setDayTypeItems(SelectItem[] dayTypeItems) {
+        this.dayTypeItems = dayTypeItems;
+    }
+
+    public SelectItem[] getCalendarItems() {
+        return calendarItems;
+    }
+
+    public void setCalendarItems(SelectItem[] calendarItems) {
+        this.calendarItems = calendarItems;
+    }
+
+    public Hashtable<String, DayType> getDayTypeHashtable() {
+        return dayTypeHashtable;
+    }
+
+    public void setDayTypeHashtable(Hashtable<String, DayType> dayTypeHashtable) {
+        this.dayTypeHashtable = dayTypeHashtable;
+    }
+
+    public String getOrganNameFilter() {
+        return organNameFilter;
+    }
+
+    public void setOrganNameFilter(String organNameFilter) {
+        this.organNameFilter = organNameFilter;
+    }
+
+    public String getOrganTypeFilter() {
+        return organTypeFilter;
+    }
+
+    public void setOrganTypeFilter(String organTypeFilter) {
+        this.organTypeFilter = organTypeFilter;
+    }
+
+    public String getOrganDescriptionFilter() {
+        return organDescriptionFilter;
+    }
+
+    public void setOrganDescriptionFilter(String organDescriptionFilter) {
+        this.organDescriptionFilter = organDescriptionFilter;
+    }
+
+    public SortOrder getOrganNameOrder() {
+        return organNameOrder;
+    }
+
+    public void setOrganNameOrder(SortOrder organNameOrder) {
+        this.organNameOrder = organNameOrder;
+    }
+
+    public SortOrder getOrganTypeOrder() {
+        return organTypeOrder;
+    }
+
+    public void setOrganTypeOrder(SortOrder organTypeOrder) {
+        this.organTypeOrder = organTypeOrder;
+    }
+
+    public SortOrder getOrganDescriptionOrder() {
+        return organDescriptionOrder;
+    }
+
+    public void setOrganDescriptionOrder(SortOrder organDescriptionOrder) {
+        this.organDescriptionOrder = organDescriptionOrder;
+    }
+
+    public int getPersonPage() {
+        return personPage;
+    }
+
+    public void setPersonPage(int personPage) {
+        this.personPage = personPage;
+    }
+
+    public String getListPerson() {
+        return listPerson;
+    }
+
+    public void setListPerson(String listPerson) {
+        this.listPerson = listPerson;
+    }
+
+    public int getPageInPopup() {
+        return pageInPopup;
+    }
+
+    public void setPageInPopup(int pageInPopup) {
+        this.pageInPopup = pageInPopup;
     }
 }
 

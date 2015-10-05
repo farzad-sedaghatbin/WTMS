@@ -15,7 +15,10 @@
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.edit}"/>
                 <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
-                            oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleOrganAction.assignRule}"/>
+                            oncomplete="PF('assignRuleDialog').show()"
+                            actionListener="#{handleOrganAction.assignRule}"/>
+                <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
+                            oncomplete="PF('editRuleDialog').show()" actionListener="#{handleOrganAction.editRule}"/>
                 <p:menuitem value="Delete" update="organs" icon="ui-icon-close"
                             actionListener="#{handleOrganAction.doDelete}"/>
             </p:contextMenu>
@@ -82,7 +85,8 @@
                                 <h:outputText value="type:"/>
                             </td>
                             <td>
-                                <p:selectOneMenu value="#{handleOrganAction.organType.id}" disabled="#{handleOrganAction.disableFields}"
+                                <p:selectOneMenu value="#{handleOrganAction.organType.id}"
+                                                 disabled="#{handleOrganAction.disableFields}"
                                                  valueChangeListener="#{handleOrganAction.selectOrganType}">
                                     <f:selectItems itemLabel="#{orgType.code}" itemValue="#{orgType.id}"
                                                    var="orgType"
@@ -95,7 +99,8 @@
                                 <h:outputText value="inheritance:"/>
                             </td>
                             <td>
-                                <p:selectBooleanCheckbox value="#{handleOrganAction.inheritance}" disabled="#{handleOrganAction.disableFields}"
+                                <p:selectBooleanCheckbox value="#{handleOrganAction.inheritance}"
+                                                         disabled="#{handleOrganAction.disableFields}"
                                                          valueChangeListener="#{handleOrganAction.selectInheritance}"/>
                             </td>
                         </tr>
@@ -141,6 +146,11 @@
                         </p:column>
                     </p:dataTable>
                 </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog header="Edit Rule" widgetVar="editRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <ui:include src="../rule/organ-rule-edit.xhtml"/>
             </p:dialog>
         </h:form>
     </ui:define>

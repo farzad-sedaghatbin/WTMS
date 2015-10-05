@@ -343,24 +343,13 @@ public class HandleOrganAction implements Serializable {
 
     }
 
-    public void selectNewRuleForOrgan() {
-//        selectedRulePackage = rulePackageList.getRowData();
-        rulePackageName = selectedRulePackage.getName();
-        if (selectedRulePackage.getCalendar() != null)
-            calendarName = selectedRulePackage.getCalendar().getName();
-        else
-            calendarName = "";
-        antiPassBack = selectedRulePackage.isAniPassBack();
-        allowExit = selectedRulePackage.isAllowExit();
-        allowExitGadget = selectedRulePackage.isAllowExitGadget();
-    }
 
     public void editRule() {
         currentOrgan = organService.findById(currentOrgan.getId());
         if (currentOrgan.getRulePackage() == null) {
             refresh();
             me.addErrorMessage("has.not.rulePackage");
-            me.redirect("/organ/list-organ.htm");
+            me.redirect("/organ/organs.xhtml");
             return;
         }
 
@@ -1081,5 +1070,13 @@ public class HandleOrganAction implements Serializable {
 
     public void setRulePackageList(List<RulePackage> rulePackageList) {
         this.rulePackageList = rulePackageList;
+    }
+
+    public List<Rule> getRuleListTemp() {
+        return ruleListTemp;
+    }
+
+    public void setRuleListTemp(List<Rule> ruleListTemp) {
+        this.ruleListTemp = ruleListTemp;
     }
 }
