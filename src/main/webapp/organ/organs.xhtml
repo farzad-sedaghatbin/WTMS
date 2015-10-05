@@ -19,8 +19,6 @@
                             actionListener="#{handleOrganAction.assignRule}"/>
                 <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleOrganAction.editRule}"/>
-                            oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleOrganAction.assignRule}"/>
-                
                 <p:menuitem value="Persons" update="PersonDetail" icon="ui-icon-search"
                             oncomplete="PF('PersonDialog').show()" actionListener="#{handleOrganAction.listPerson}"/>
                 <p:menuitem value="Delete" update="organs" icon="ui-icon-close"
