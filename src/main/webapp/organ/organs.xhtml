@@ -25,6 +25,15 @@
                             actionListener="#{handleOrganAction.doDelete}"/>
             </p:contextMenu>
 
+            <p:tree id="tree" var="organ" value="#{handleOrganAction.rootOrgans}"
+                    orientation="horizontal">
+                <p:treeNode>
+
+                    <h:outputText value="#{organ.name} - #{organ.code} - #{organ.organType.code} - #{organ.title}"/>
+
+                </p:treeNode>
+            </p:tree>
+
             <p:commandButton value="Add" id="add" update="organDetail" actionListener="#{handleOrganAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('organDialog').show()"/>
 
@@ -87,7 +96,8 @@
                                 <h:outputText value="type:"/>
                             </td>
                             <td>
-                                <p:selectOneMenu value="#{handleOrganAction.organType.id}" disabled="#{handleOrganAction.disableFields}"
+                                <p:selectOneMenu value="#{handleOrganAction.organType.id}"
+                                                 disabled="#{handleOrganAction.disableFields}"
                                                  valueChangeListener="#{handleOrganAction.selectOrganType}">
                                     <f:selectItems itemLabel="#{orgType.code}" itemValue="#{orgType.id}"
                                                    var="orgType"
@@ -100,7 +110,8 @@
                                 <h:outputText value="inheritance:"/>
                             </td>
                             <td>
-                                <p:selectBooleanCheckbox value="#{handleOrganAction.inheritance}" disabled="#{handleOrganAction.disableFields}"
+                                <p:selectBooleanCheckbox value="#{handleOrganAction.inheritance}"
+                                                         disabled="#{handleOrganAction.disableFields}"
                                                          valueChangeListener="#{handleOrganAction.selectInheritance}"/>
                             </td>
                         </tr>
@@ -127,56 +138,58 @@
                                         <h:outputText escape="true" value="person_list"/>
                                     </legend>
                                     <p:dataTable id="personTable" value="#{handleOrganAction.personList}"
-                                                    keepSaved="true"
-                                                    noDataLabel="no_result_found"
-                                                    sortMode="single"
-                                                    var="person"
-                                                    rows="10"
-                                                    style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                                    rowClasses="ROW1,ROW2">
+                                                 keepSaved="true"
+                                                 noDataLabel="no_result_found"
+                                                 sortMode="single"
+                                                 var="person"
+                                                 rows="10"
+                                                 style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                                 rowClasses="ROW1,ROW2">
                                         <p:column sortBy="#{person.name}"
-                                                     sortOrder="#{handlePersonAction.personnameOrder}">
+                                                  sortOrder="#{handlePersonAction.personnameOrder}">
                                             <f:facet name="header">
                                                 <p:commandLink value="name" render="personTable"
-                                                                 execute="@this"
-                                                                 limitRender="true"
-                                                                 action="#{handlePersonAction.sortByPersonname}"/>
+                                                               execute="@this"
+                                                               limitRender="true"
+                                                               action="#{handlePersonAction.sortByPersonname}"/>
                                                 <br/>
-                                                <h:inputText converter="persianConverter" value="#{handlePersonAction.personnameFilter}">
+                                                <h:inputText converter="persianConverter"
+                                                             value="#{handlePersonAction.personnameFilter}">
                                                     <p:ajax event="blur" render="personTable" execute="@this"
-                                                              limitRender="true"/>
+                                                            limitRender="true"/>
                                                 </h:inputText>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{person.name}"/>
                                         </p:column>
 
                                         <p:column sortBy="#{person.lastName}"
-                                                     sortOrder="#{handlePersonAction.personFamilyOrder}">
+                                                  sortOrder="#{handlePersonAction.personFamilyOrder}">
                                             <f:facet name="header">
                                                 <p:commandLink value="lastname" render="personTable"
-                                                                 execute="@this"
-                                                                 limitRender="true"
-                                                                 action="#{handlePersonAction.sortByPersonFamily}"/>
+                                                               execute="@this"
+                                                               limitRender="true"
+                                                               action="#{handlePersonAction.sortByPersonFamily}"/>
                                                 <br/>
-                                                <h:inputText converter="persianConverter" value="#{handlePersonAction.personFamilyFilter}">
+                                                <h:inputText converter="persianConverter"
+                                                             value="#{handlePersonAction.personFamilyFilter}">
                                                     <p:ajax event="blur" render="personTable" execute="@this"
-                                                              limitRender="true"/>
+                                                            limitRender="true"/>
                                                 </h:inputText>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{person.lastName}"/>
                                         </p:column>
 
                                         <p:column sortBy="#{person.personnelNo}"
-                                                     sortOrder="#{handlePersonAction.personnelNoOrder}">
+                                                  sortOrder="#{handlePersonAction.personnelNoOrder}">
                                             <f:facet name="header">
                                                 <p:commandLink value="personnelCode" render="personTable"
-                                                                 execute="@this"
-                                                                 limitRender="true"
-                                                                 action="#{handlePersonAction.sortByPersonnelNo}"/>
+                                                               execute="@this"
+                                                               limitRender="true"
+                                                               action="#{handlePersonAction.sortByPersonnelNo}"/>
                                                 <br/>
                                                 <h:inputText value="#{handlePersonAction.personnelNoFilter}">
                                                     <p:ajax event="blur" render="personTable" execute="@this"
-                                                              limitRender="true"/>
+                                                            limitRender="true"/>
                                                 </h:inputText>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{person.personnelNo}"/>
@@ -184,7 +197,7 @@
 
                                         <f:facet name="footer">
                                             <p:dataScroller limitRender="true" execute="@this" render="personTable"
-                                                               page="#{handleOrganAction.personPage}"/>
+                                                            page="#{handleOrganAction.personPage}"/>
                                         </f:facet>
                                     </p:dataTable>
                                 </fieldset>
