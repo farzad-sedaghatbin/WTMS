@@ -571,4 +571,36 @@ public class HandleMonitoringAction implements Serializable {
     public void setValidForComment(boolean validForComment) {
         this.validForComment = validForComment;
     }
+
+    public List<TrafficLog> getEventLogList() {
+        return eventLogList;
+    }
+
+    public void setEventLogList(List<TrafficLog> eventLogList) {
+        this.eventLogList = eventLogList;
+    }
+
+    public List<List<DataModel<SentryDataModel>>> getTrafficLogs() {
+        return trafficLogs;
+    }
+
+    public void setTrafficLogs(List<List<DataModel<SentryDataModel>>> trafficLogs) {
+        this.trafficLogs = trafficLogs;
+    }
+
+    public List<Person> getPersonList() {
+        return personList;
+    }
+
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
+    }
+
+    public List<List<SentryDataModel>> getTrafficLogsbygate() {
+        return trafficLogsbygate;
+    }
+
+    public void setTrafficLogsbygate(List<List<SentryDataModel>> trafficLogsbygate) {
+        this.trafficLogsbygate = trafficLogsbygate;
+    }
 }

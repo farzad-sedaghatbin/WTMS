@@ -59,7 +59,12 @@ public class HandleLookupAction implements Serializable {
         return "list-lookup";
     }
 
+    public String edit() {
+        setEditable("true");
+        handleBLookupAction.setCurrentLookup(currentLookup);
 
+        return "list-blookup";
+    }
     private void refresh() {
         init();
      lookupList = lookupService.getAllLookup();

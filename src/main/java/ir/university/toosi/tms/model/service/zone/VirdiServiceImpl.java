@@ -26,6 +26,9 @@ import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
+import ir.university.toosi.tms.readerwrapper.AddCompletedCallBackDelegate;
+import ir.university.toosi.tms.readerwrapper.GetUserInfoCompletedCallBackDelegate;
+import ir.university.toosi.tms.readerwrapper.ReaderWrapper;
 import ir.university.toosi.tms.util.*;
 import org.jboss.ejb3.annotation.TransactionTimeout;
 
@@ -189,84 +192,98 @@ public class VirdiServiceImpl<T extends Virdi> {
 
 
 
-    public boolean synchronizeVirdi(VirdiSync virdiSync) {
-        Set<Virdi> virdis = virdiSync.getVirdiList();
+    public void synchronizeVirdi(VirdiSync virdiSync) {
+        List<Virdi> virdis = new ArrayList<>(virdiSync.getVirdiList());
         if (virdis == null || virdis.size() == 0)
-            return false;
-        boolean flag = true;
-//        cleanDirectory(virdiSync);
-//        try {
-//            generateGate(virdiSync);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        for (Virdi virdi : virdis) {
-//            try {
-//                if (ping(virdi.getIp())) {
-//                    if (generateFiles(virdiSync, virdi)) {
-//                        new Thread(new FileUploaderUtil(virdi, this)).start();
-//                    } else {
-//                        flag = false;
-//
-//                    }
-//                } else {
-                    T t = findByIp(virdi.getIp());
-                    t.setUpdateDate(CalendarUtil.getDate(new Date(), new Locale("fa")));
-                    t.setSuccess(false);
-                    editVirdi(t);
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            return ;
+        ReaderWrapper readerWrapper= new ReaderWrapper();
+        int[] terminals= new int[virdis.size()];
+
+        for (int i = 0; i < virdis.size(); i++) {
+            terminals[i]=(int)virdis.get(i).getId();
+
         }
+        List<Person> persons=personService.getAllPerson();
+        ir.university.toosi.tms.readerwrapper.Person[] personVirdi= new ir.university.toosi.tms.readerwrapper.Person[persons.size()];
+        for (int i = 0; i < persons.size(); i++) {
+
+            ir.university.toosi.tms.readerwrapper.Person p= new ir.university.toosi.tms.readerwrapper.Person();
+            p.setUserIdforTerminal((int) persons.get(i).getId());
+            p.setFingerprints(persons.get(i).getFinger());
+            p.setEmploymentCode(persons.get(i).getPersonnelNo());
+            p.setPasswordForTerminal(persons.get(i).getPassword());
+            p.setPicture(persons.get(i).getPicture());
+            p.setUserName(persons.get(i).getName()+" "+persons.get(i).getLastName());
+            personVirdi[i]=p;
+
+        }
+        readerWrapper.AddUserInfo(terminals, personVirdi, true, new AddCompletedCallBackDelegate() {
+            @Override
+            public void Invoke(int terminalId, boolean isSucceed, String failedMessage) {
+
+                T t = findById(terminalId);
+                t.setUpdateDate(CalendarUtil.getDate(new Date(), new Locale("fa")));
+                t.setSuccess(isSucceed);
+                editVirdi(t);
+//
+            }
+        });
 
 
-        return flag;
     }
 
-    public boolean synchronizeOneVirdi(VirdiSync virdiSync) {
-        Set<Virdi> virdis = virdiSync.getVirdiList();
+    public void synchronizeOneVirdi(VirdiSync virdiSync) {
+        List<Virdi> virdis = new ArrayList<>(virdiSync.getVirdiList());
         if (virdis == null || virdis.size() == 0)
-            return false;
-        boolean flag = true;
-//        cleanDirectory(virdiSync);
-//        try {
-//            generate4OneGate(virdiSync);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        for (Virdi virdi : virdis) {
-//            try {
-//                if (generateFiles4One(virdiSync, virdi)) {
-//                    new Thread(new FileUploaderUtil(virdi, this)).start();
-//                } else {
-//                    flag = false;
+            return ;
+        ReaderWrapper readerWrapper= new ReaderWrapper();
+        int[] terminals= new int[virdis.size()];
+
+        for (int i = 0; i < virdis.size(); i++) {
+            terminals[i]=(int)virdis.get(i).getId();
+
+        }
+        Person persons=virdiSync.getPerson();
+        ir.university.toosi.tms.readerwrapper.Person[] personVirdi= new ir.university.toosi.tms.readerwrapper.Person[1];
+
+            ir.university.toosi.tms.readerwrapper.Person p= new ir.university.toosi.tms.readerwrapper.Person();
+            p.setUserIdforTerminal((int) persons.getId());
+            p.setFingerprints(persons.getFinger());
+            p.setEmploymentCode(persons.getPersonnelNo());
+            p.setPasswordForTerminal(persons.getPassword());
+            p.setPicture(persons.getPicture());
+            p.setUserName(persons.getName()+" "+persons.getLastName());
+            personVirdi[0]=p;
+
+        readerWrapper.AddUserInfo(terminals, personVirdi, false, new AddCompletedCallBackDelegate() {
+            @Override
+            public void Invoke(int terminalId, boolean isSucceed, String failedMessage) {
+
+                T t = findById(terminalId);
+                t.setUpdateDate(CalendarUtil.getDate(new Date(), new Locale("fa")));
+                t.setSuccess(isSucceed);
+                editVirdi(t);
 //
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
-
-        return flag;
+            }
+        });
     }
 
     public boolean fingerPrint(Set<Virdi> virdis) {
         List<Person> persons = personService.findWithRulePackage();
+        ReaderWrapper readerWrapper= new ReaderWrapper();
         for (Virdi virdi : virdis) {
             try {
                 if (ping(virdi.getIp())) {
-                    for (Person person : persons) {
 
-                        String zeros = "";
-                        for (int i = 1; i <= 8 - (person.getPersonOtherId().length()); i++) {
-                            zeros += "0";
-                        }
-                        byte[] b = TFTPUtility.get(virdi.getIp(), zeros + person.getPersonOtherId() + ".fpt");
-                        person.setFinger(b.length == 0 ? null : b);
-                        if (person.getFinger() != null) {
-                            personService.editPerson(person);
+                    for (final Person outPerson : persons) {
+                        readerWrapper.GetUserInfo((int) virdi.getId(), (int) outPerson.getId(), new GetUserInfoCompletedCallBackDelegate() {
+                            @Override
+                            public void Invoke(int terminalId, ir.university.toosi.tms.readerwrapper.Person person, boolean isSucceed, String failedMessage) {
+                                outPerson.setFinger(person.getFingerprints());
+                            }
+                        });
+                        if (outPerson.getFinger() != null) {
+                            personService.editPerson(outPerson);
                         }
                     }
                 } else {
