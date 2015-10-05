@@ -1,0 +1,172 @@
+textarea, input[type="text"], input[type="password"], select {
+    border-color: #90c3d1;
+}
+
+.selectedInDataTable {
+    background-color: darkseagreen;
+}
+
+.valueText {
+    color: #006400;
+}
+
+.linkLikeButton {
+    background-color: #5d7343;
+}
+
+.linkLikeButton:hover {
+    background-color: #5d7383;
+}
+
+a:not(.linkLikeButton) {
+    color: darkgreen;
+}
+
+a:hover:not(.linkLikeButton) {
+    color: darkcyan;
+}
+
+/* Mozilla based browsers */
+::-moz-selection {
+    background-color: darkgreen;
+}
+
+/* Works in Safari */
+::selection {
+    background-color: darkgreen;
+}
+
+/*login css*/
+.login-form {
+    background: -webkit-gradient(linear, center bottom, center top, from(#0e5615), to(#1d4021)); /* Safari4+ , Chrome2+ */
+    background: -webkit-linear-gradient(top, #0e5615, #1d4021); /* Safari5.1+ , Chrome10+ */
+    background: -moz-linear-gradient(center bottom, #0e5615, #1d4021); /* FF3.6+ */
+    background: -o-linear-gradient(bottom, #0e5615, #1d4021); /* Opera 11.10 */
+    background: -ms-linear-gradient(top, #0e5615, #1d4021); /* IE */
+    background: -khtml-gradient(linear, left top, left bottom, from(#0e5615), to(#1d4021)); /* Konqueror4.7.4+ */
+    background: linear-gradient(to top, #0e5615, #1d4021); /* The standardl */
+    background-color: #2c6b32; /* other browsers */
+
+    border-color: green;
+}
+
+/**********/
+
+/*richfaces css*/
+.rf-edt-r-sel {
+    background-color: darkseagreen !important;
+}
+
+.rf-pick-src-cptn, .rf-pick-tgt-cptn {
+    color: green;
+}
+
+.rf-pm-itm, .rf-pm-itm-dis:hover {
+    box-shadow: 0 2px 1px 0 #2E8B57;
+}
+
+.rf-pm-itm, .rf-pm-itm-dis:hover .persianMode {
+    border-left: 1px solid #9ACD32 !important;
+}
+
+.rf-pm-itm, .rf-pm-itm-dis:hover .persianMode {
+    border-right: 1px solid #9ACD32 !important;
+}
+
+.rf-pm-itm .rf-pm-itm-lbl {
+    color: darkgreen;
+}
+
+.rf-pm-itm:hover .rf-pm-itm-lbl:hover {
+    color: darkcyan;
+}
+
+.rf-pm-itm:hover .rf-pm-itm-lbl {
+    color: darkgreen;
+}
+
+.rf-pm-itm:hover {
+    border: 1px solid green;
+}
+
+.rf-pm-top-gr-lbl {
+    color: white;
+}
+
+.rf-pp-hdr {
+    background: -webkit-gradient(linear, center bottom, center top, from(#327A39), to(#AFD2AE)); /* Safari4+ , Chrome2+ */
+    background: -webkit-linear-gradient(top, #327A39, #AFD2AE); /* Safari5.1+ , Chrome10+ */
+    background: -moz-linear-gradient(center bottom, #327A39, #AFD2AE); /* FF3.6+ */
+    background: -o-linear-gradient(bottom, #327A39, #AFD2AE); /* Opera 11.10 */
+    background: -ms-linear-gradient(top, #327A39, #AFD2AE); /* IE */
+    background: -khtml-gradient(linear, left top, left bottom, from(#327A39), to(#AFD2AE)); /* Konqueror4.7.4+ */
+    background: linear-gradient(to top, #327A39, #AFD2AE); /* The standardl */
+    background-color: #327A39; /* other browsers */
+}
+
+.rf-dt-shdr-c {
+    background: none repeat scroll 0 0 #176017;
+    color: #FFFFFF;
+    text-shadow: 0 1px 2px yellowgreen;
+}
+
+.rf-dt-ftr-c {
+    background: none repeat scroll 0 0 #428B42;
+}
+
+.rf-dt-shdr-c >a:hover {
+    color: white;
+    text-shadow: 0 1px 2px yellowgreen;
+}
+
+.rf-dt-shdr-c > a {
+    color: white;
+    text-shadow: 0 1px 2px yellowgreen;
+}
+
+.rf-ds-dis {
+    color: #176017;
+}
+
+.rf-ds-dis:hover {
+    color: white;
+    background-color: #428B42;
+}
+
+.rf-ds-btn:hover {
+    color: white;
+    background-color: #428B42;
+}
+
+a.rf-ds-btn {
+    color: #176017;
+}
+
+/***************/
+
+/*header css */
+.topIcons {
+    background: -webkit-gradient(linear, center bottom, center top, from(#7da07c), to(#F5F5DC)); /* Safari4+ , Chrome2+ */
+    background: -webkit-linear-gradient(top, #7da07c, #F5F5DC); /* Safari5.1+ , Chrome10+ */
+    background: -moz-linear-gradient(center bottom, #7da07c, #F5F5DC); /* FF3.6+ */
+    background: -o-linear-gradient(bottom, #7da07c, #F5F5DC); /* Opera 11.10 */
+    background: -ms-linear-gradient(top, #7da07c, #F5F5DC); /* IE */
+    background: -khtml-gradient(linear, left top, left bottom, from(#7da07c), to(#F5F5DC)); /* Konqueror4.7.4+ */
+    background: linear-gradient(to top, #7da07c, #F5F5DC); /* The standardl */
+    background-color: #7da07c; /* other browsers */
+
+    border-bottom: 1px groove #9ACD32;
+}
+
+.header-repeat {
+    background: -webkit-gradient(linear, center bottom, center top, from(#013706), to(#569f5f)); /* Safari4+ , Chrome2+ */
+    background: -webkit-linear-gradient(top, #013706, #569f5f); /* Safari5.1+ , Chrome10+ */
+    background: -moz-linear-gradient(center bottom, #013706, #569f5f); /* FF3.6+ */
+    background: -o-linear-gradient(bottom, #013706, #569f5f); /* Opera 11.10 */
+    background: -ms-linear-gradient(top, #013706, #569f5f); /* IE */
+    background: -khtml-gradient(linear, left top, left bottom, from(#013706), to(#569f5f)); /* Konqueror4.7.4+ */
+    background: linear-gradient(to top, #013706, #569f5f); /* The standardl */
+    background-color: #2c6b32; /* other browsers */
+}
+
+/*******/

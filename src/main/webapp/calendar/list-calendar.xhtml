@@ -9,6 +9,9 @@
     <ui:define name="content">
 
 <h:form>
+    <p:commandButton value="Add" id="add"
+                     actionListener="#{handleCalendarAction.edit}"
+                     styleClass="ui-priority-primary"/>
         <p:dataTable id="calendarTable"
                      keepSaved="true"
                      value="#{handleCalendarAction.calendarList}"

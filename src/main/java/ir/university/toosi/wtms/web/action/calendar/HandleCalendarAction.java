@@ -56,7 +56,7 @@ public class HandleCalendarAction implements Serializable {
     private String description;
     private Calendar currentCalendar = null;
     private String currentPage;
-    private String address = "/kernel/restful/TMSService/getEditCalendar";
+    private String address = "/modena-1.0.1/restful/TMSService/getEditCalendar";
     private String content;
     private int page = 1;
     private boolean selected;
@@ -89,7 +89,7 @@ public class HandleCalendarAction implements Serializable {
     public void add() {
         init();
         setEditable("false");
-        me.redirect("/calendar/handle-calendar.htm");
+        me.redirect("/calendar/handle-calendar.xhtml");
 
     }
 
@@ -185,10 +185,10 @@ public class HandleCalendarAction implements Serializable {
 
     public void edit() {
         setEditable("true");
-        name = currentCalendar.getName();
-        code = currentCalendar.getCode();
-        description = currentCalendar.getDescription();
-        me.redirect("/calendar/handle-edit-calendar.htm");
+//        name = currentCalendar.getName();
+//        code = currentCalendar.getCode();
+//        description = currentCalendar.getDescription();
+        me.redirect("/calendar/handle-edit-calendar.xhtml");
 
     }
 
@@ -608,5 +608,13 @@ public class HandleCalendarAction implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Calendar getCurrentCalendar() {
+        return currentCalendar;
+    }
+
+    public void setCurrentCalendar(Calendar currentCalendar) {
+        this.currentCalendar = currentCalendar;
     }
 }

@@ -107,10 +107,10 @@ public class HandleMapAction implements Serializable {
     }
 
 
-    public String add() {
+    public void add() {
         init();
         setEditable("false");
-        return "map-editor";
+        me.redirect("/map/Editor.xhtml");
     }
 
 
@@ -150,9 +150,9 @@ public class HandleMapAction implements Serializable {
         }
     }
 
-    public String view() {
+    public void view() {
 
-        return "map-viewer";
+        me.redirect("/map/Viewer.xhtml");
 
     }
 

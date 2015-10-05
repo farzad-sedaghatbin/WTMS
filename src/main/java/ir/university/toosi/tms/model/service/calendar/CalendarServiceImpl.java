@@ -5,7 +5,6 @@ import ir.university.toosi.tms.model.dao.calendar.CalendarDAOImpl;
 import ir.university.toosi.tms.model.entity.EventLogType;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
 import ir.university.toosi.tms.model.entity.calendar.CalendarDate;
-import ir.university.toosi.tms.model.entity.calendar.CalendarInfo;
 import ir.university.toosi.tms.model.entity.calendar.DayType;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.tms.model.service.EventLogServiceImpl;
@@ -130,21 +129,21 @@ public class CalendarServiceImpl<T extends Calendar> {
     public String newCalendar() {
         List<DayType> dayTypes = dayTypeService.getAllDayType();
         CalendarInfo calendarInfo = new CalendarInfo();
-//        calendarInfo.setStatus(true);
-//        CalendarInfo.Year a2013 = new CalendarInfo.Year();
-//        CalendarInfo.Year.selectBox[] list = new CalendarInfo.Year.selectBox[dayTypes.size()];
-//        for (int i = 0; i < dayTypes.size(); i++) {
-//            CalendarInfo.Year.selectBox a0 = new CalendarInfo.Year.selectBox();
-//            a0.set_id(String.valueOf(dayTypes.get(i).getId()));
-//            a0.setColor(dayTypes.get(i).getColor());
-//            a0.setTitle(dayTypes.get(i).getTitle());
-//            a0.setTimestamp("4523456236-4343456236");
-//            list[i] = a0;
-//        }
-//        a2013.setselectBox(list);
-//        CalendarInfo.Year.Initialize[] listInit = new CalendarInfo.Year.Initialize[0];
-//        a2013.setInitialize(listInit);
-//        calendarInfo.setYear(a2013);
+        calendarInfo.setStatus(true);
+        CalendarInfo.Year a2013 = new CalendarInfo.Year();
+        CalendarInfo.Year.selectBox[] list = new CalendarInfo.Year.selectBox[dayTypes.size()];
+        for (int i = 0; i < dayTypes.size(); i++) {
+            CalendarInfo.Year.selectBox a0 = new CalendarInfo.Year.selectBox();
+            a0.set_id(String.valueOf(dayTypes.get(i).getId()));
+            a0.setColor(dayTypes.get(i).getColor());
+            a0.setTitle(dayTypes.get(i).getTitle());
+            a0.setTimestamp("4523456236-4343456236");
+            list[i] = a0;
+        }
+        a2013.setselectBox(list);
+        CalendarInfo.Year.Initialize[] listInit = new CalendarInfo.Year.Initialize[0];
+        a2013.setInitialize(listInit);
+        calendarInfo.setYear(a2013);
         try {
             String s = new ObjectMapper().writeValueAsString(calendarInfo);
             s = s.replace("year", "2014");
