@@ -192,12 +192,7 @@
                                                         <h:outputText escape="true" value="statusDate:"/>
                                                     </td>
                                                     <td nowrap="nowrap">
-                                                        <c:persianCalendarPicker id="calendar"
-                                                                                 converter="dateConverter"
-                                                                                 styleClass="textColor"
-                                                                                 srcRemove="/WTMS/images/remove.png"
-                                                                                 src="/WTMS/images/calendar.png"
-                                                                                 value="#{handleGatewayAction.statusDate}"/>
+                                                        <p:inputText id="calendar" value="#{handleGatewayAction.statusDate}" styleClass="datepicker"/>
 
                                                     </td>
                                                 </tr>
