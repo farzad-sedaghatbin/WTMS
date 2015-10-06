@@ -10,7 +10,9 @@
 
 
         <h:form>
-
+            <p:commandButton value="Add" id="add"
+                             actionListener="#{handleMapAction.add}"
+                             styleClass="ui-priority-primary"/>
             <p:dataTable id="mapTable"
                          keepSaved="true"
                          value="#{handleMapAction.mapList}"
