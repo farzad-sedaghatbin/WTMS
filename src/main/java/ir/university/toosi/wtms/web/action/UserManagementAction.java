@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -61,7 +62,9 @@ public class UserManagementAction implements Serializable {
     public static String SENTRY_COUNT = "10";
     public static final String INVALID_TRY = "invalid_try";
     public static final String usernameInSession = "username";
-//    private Mode componentMode = Mode.ajax;
+    private static final String BUNDLE_NAME = "messages.Messages";
+
+    //    private Mode componentMode = Mode.ajax;
 //    private Positioning componentPosition = Positioning.autoLeft;
 //    private Positioning mainJointPoint = Positioning.autoRight;
 //    private Positioning subJointPoint = Positioning.autoLeft;
@@ -80,6 +83,7 @@ public class UserManagementAction implements Serializable {
     private String actorId;
     private String toUsername;
     private String message;
+    private Locale locale = null;
     private String showMessage = "";
     private String changeCurrentUserPassword;
     private boolean newCMS = false;
@@ -120,6 +124,81 @@ public class UserManagementAction implements Serializable {
         Boolean hasPermission = permissionHash.get(checkedOperation);
         return hasPermission == null ? false : hasPermission;
     }
+    public ResourceBundle getBundle() {
+        return ResourceBundle.getBundle(BUNDLE_NAME, getLocale());
+    }
+
+    public String getBundleMessage(String bundleKey, String... arguments) {
+        if (bundleKey == null || bundleKey.isEmpty())
+            return "?";
+
+        try {
+            return MessageFormat.format(getBundle().getString(bundleKey), arguments);
+        } catch (MissingResourceException e) {
+//todo: don't log here please!!
+//            log.error(createExceptionCause(e));
+            return bundleKey;
+        }
+    }
+    public void changeLocale() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String language = context.getViewRoot().getLocale().getLanguage();
+        String currentPage = context.getViewRoot().getViewId().replaceAll(".xhtml", ".htm");
+
+        if (language == null) {
+            this.setLocale(Locale.ENGLISH);
+        }
+
+        if (language.equalsIgnoreCase("fa")) {
+            this.setLocale(Locale.ENGLISH);
+        } else {
+            this.setLocale(LangUtils.LOCALE_FARSI);
+        }
+
+        redirect(currentPage);
+    }
+
+    public void addErrorMessage(String bundleKey) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getBundleMessage(bundleKey, null), getBundleMessage(bundleKey, null)));
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    }
+
+    public void addErrorMessageString(String messageContent) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, messageContent, messageContent));
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    }
+
+    public void addErrorMessage(String bundleKey, String... arguments) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getBundleMessage(bundleKey, arguments), getBundleMessage(bundleKey, arguments)));
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    }
+
+    public void addWarnMessage(String bundleKey) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, getBundleMessage(bundleKey, null), getBundleMessage(bundleKey, null)));
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    }
+
+    public void addInfoMessage(String bundleKey) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getBundleMessage(bundleKey, null), getBundleMessage(bundleKey, null)));
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    }
+
+    public void addInfoMessage(String bundleKey, String... arguments) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getBundleMessage(bundleKey, arguments), getBundleMessage(bundleKey, arguments)));
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    }
+
+    public Locale getLocale() {
+        if (this.locale == null) {
+            this.locale = LangUtils.LOCALE_FARSI;
+        }
+        return this.locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
 
     public String authenticate() {
         permissionHash = new Hashtable<>();
@@ -279,25 +358,6 @@ public class UserManagementAction implements Serializable {
     }
 
 
-    public void addErrorMessage(String bundleKey) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, getValue(bundleKey), getValue(bundleKey)));
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-    }
-
-    public void addWarnMessage(String bundleKey) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, getValue(bundleKey), getValue(bundleKey)));
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-    }
-
-    public void addInfoMessage(String bundleKey) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getValue(bundleKey), getValue(bundleKey)));
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-    }
-
-    public void addInfoMessage(String bundleKey, FacesContext facesContext) {
-        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, getValue(bundleKey), getValue(bundleKey)));
-        facesContext.getExternalContext().getFlash().setKeepMessages(true);
-    }
 
     public Languages getLanguages() {
         return languages;

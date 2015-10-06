@@ -4,7 +4,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-
+<f:view locale="#{me.locale}">
+    <f:loadBundle basename="messages.Messages" var="bundle"/>
     <h:head>
         <f:facet name="first">
             <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -69,5 +70,5 @@
     <h:outputStylesheet name="css/font-awesome.css" library="modena-layout"/>
     <h:outputStylesheet name="css/modena-layout.css" library="modena-layout"/>
 </h:body>
-
+</f:view>
 </html>

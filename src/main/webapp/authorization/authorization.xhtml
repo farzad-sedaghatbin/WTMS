@@ -7,53 +7,57 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
+        <fieldset dir="#{me.direction}">
+            <legend>
+                <h:outputText escape="true" value="special_status"/>
+            </legend>
+            <h:form>
+                <p:menuitem value="accept" icon="icon-done" actionListener="#{handleCommentAction.accept}"/>
+                <p:menuitem value="refuse" icon="icon-delete2" actionListener="#{handleCommentAction.refuse}"/>
 
-        <h:form>
-            <p:menuitem value="accept" icon="icon-done" actionListener="#{handleCommentAction.accept}"/>
-            <p:menuitem value="refuse" icon="icon-delete2" actionListener="#{handleCommentAction.refuse}"/>
+                <p:dataTable id="commentTable"
+                             value="#{handleCommentAction.comments}"
+                             rowKeyVar="rowIndex"
+                             noDataLabel="no_result_found"
+                             sortMode="single"
+                             var="comment"
+                             rows="10">
 
-            <p:dataTable id="commentTable"
-                         value="#{handleCommentAction.comments}"
-                         rowKeyVar="rowIndex"
-                         noDataLabel="no_result_found"
-                         sortMode="single"
-                         var="comment"
-                         rows="10">
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="effectorUser"/>
+                        </f:facet>
+                        <h:outputText value="#{comment.effectorUser}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="message"/>
+                        </f:facet>
+                        <h:outputText value="#{comment.message}"/>
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="effectorUser"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="person"/>
+                        </f:facet>
+                        <h:outputText value="#{comment.trafficLog.person.name}"/>
+                        &#160;&#160;
+                        <h:outputText value="#{comment.trafficLog.person.lastName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="time"/>
+                        </f:facet>
+                        <h:outputText value="#{comment.trafficLog.time}"/>
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:dataScroller limitRender="true" execute="@this" render="commentTable"
+                                        page="#{handleCommentAction.page}"/>
                     </f:facet>
-                    <h:outputText value="#{comment.effectorUser}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="message"/>
-                    </f:facet>
-                    <h:outputText value="#{comment.message}"/>
+                </p:dataTable>
 
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="person"/>
-                    </f:facet>
-                    <h:outputText value="#{comment.trafficLog.person.name}"/>
-                    &#160;&#160;
-                    <h:outputText value="#{comment.trafficLog.person.lastName}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="time"/>
-                    </f:facet>
-                    <h:outputText value="#{comment.trafficLog.time}"/>
-                </p:column>
-
-                <f:facet name="footer">
-                    <p:dataScroller limitRender="true" execute="@this" render="commentTable"
-                                    page="#{handleCommentAction.page}"/>
-                </f:facet>
-            </p:dataTable>
-
-        </h:form>
+            </h:form>
+        </fieldset>
     </ui:define>
 </ui:composition>
