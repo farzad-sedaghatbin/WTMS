@@ -51,8 +51,8 @@
                                 <h:outputText value="from date:"/>
                             </td>
                             <td>
-                                <p:calendar id="from" readonly="#{handleRuleExceptionAction.disableFields}"
-                                            value="#{handleRuleExceptionAction.fromDate}" showOn="button"/>
+                                <p:inputText id="from" readonly="#{handleRuleExceptionAction.disableFields}"
+                                             value="#{handleRuleExceptionAction.fromDate}" styleClass="datepicker"/>
                             </td>
                         </tr>
                         <tr>
@@ -60,8 +60,8 @@
                                 <h:outputText value="to date:"/>
                             </td>
                             <td>
-                                <p:calendar id="to" readonly="#{handleRuleExceptionAction.disableFields}"
-                                            value="#{handleRuleExceptionAction.toDate}" showOn="button"/>
+                                <p:inputText id="to" readonly="#{handleRuleExceptionAction.disableFields}"
+                                             value="#{handleRuleExceptionAction.toDate}" styleClass="datepicker"/>
                             </td>
                         </tr>
                         <tr>
