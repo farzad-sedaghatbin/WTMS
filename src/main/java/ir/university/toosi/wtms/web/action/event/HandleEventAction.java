@@ -52,10 +52,10 @@ public class HandleEventAction implements Serializable {
     private String toDate;
     private int page = 1;
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.REPORT);
         refresh();
-        return "list-eventLog";
+        me.redirect("/event/list-event.xhtml");
     }
 
     private void refresh() {

@@ -68,7 +68,7 @@ public class HandleTrafficAction implements Serializable {
     private SortOrder gatewayNameOrder = SortOrder.UNSORTED;
     private String gatewayNameFilter;
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.REPORT);
         refresh();
 //
@@ -76,7 +76,7 @@ public class HandleTrafficAction implements Serializable {
         toDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
         search();
 //        refresh();
-        return "list-trafficLog";
+        me.redirect("/traffic/traffic-log.xhtml");
 
     }
 

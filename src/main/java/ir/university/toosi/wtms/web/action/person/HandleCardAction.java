@@ -178,7 +178,7 @@ public class HandleCardAction implements Serializable {
     public void begin() {
 //        me.setActiveMenu(MenuType.CARD);
         refresh();
-
+        me.redirect("/card/cards.xhtml");
         //return "list-card";
     }
 

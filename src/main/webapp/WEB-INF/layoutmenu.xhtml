@@ -59,6 +59,29 @@
                     <p:menuitem id="rm_rule" value="rule" icon="icon-device_hub"
                                 actionListener="#{handleRuleAction.begin}"/>
                 </p:submenu>
+
+                <p:submenu id="others" label="Schedule" icon="icon-timer">
+                    <p:menuitem id="rm_card" value="card" icon="icon-device_hub"
+                                actionListener="#{handleCardAction.begin}"/>
+                    <p:menuitem id="rm_day" value="day" icon="icon-device_hub"
+                                actionListener="#{handleDayTypeAction.begin}"/>
+                    <p:menuitem id="rm_event" value="event" icon="icon-device_hub"
+                                actionListener="#{handleEventAction.begin}"/>
+                    <p:menuitem id="rm_exception" value="exception" icon="icon-device_hub"
+                                actionListener="#{handleRuleExceptionAction.begin}"/>
+                    <p:menuitem id="rm_lookup" value="lookup" icon="icon-device_hub"
+                                actionListener="#{handleLookupAction.begin}"/>
+                    <p:menuitem id="rm_blookup" value="blookup" icon="icon-device_hub"
+                                actionListener="#{handleBLookupAction.begin}"/>
+                    <p:menuitem id="rm_map" value="map" icon="icon-device_hub"
+                                actionListener="#{handleMapAction.begin}"/>
+                    <p:menuitem id="rm_organ" value="organ" icon="icon-device_hub"
+                                actionListener="#{handleOrganAction.begin}"/>
+                    <p:menuitem id="rm_traffic" value="traffic" icon="icon-device_hub"
+                                actionListener="#{handleTrafficAction.begin}"/>
+                    <p:menuitem id="rm_virdi" value="virdi" icon="icon-device_hub"
+                                actionListener="#{handleVirdiAction.begin}"/>
+                </p:submenu>
             </pm:menu>
         </h:form>
 

@@ -53,10 +53,10 @@ public class HandleLookupAction implements Serializable {
     private boolean selectRow = false;
     private boolean definable = false;
 
-    public String begin() {
+    public void begin() {
 //        me.setActiveMenu(MenuType.SETTING);
         refresh();
-        return "list-lookup";
+        me.redirect("/lookup/list-lookup.xhtml");
     }
 
     public String edit() {

@@ -54,10 +54,10 @@ public class HandleBLookupAction implements Serializable {
     private boolean selected;
     private Set<BLookup> selectedBLookups = new HashSet<>();
 
-    public String begin() {
+    public void begin() {
 
         refresh();
-        return "list-bLookup";
+        me.redirect("/lookup/list-blookup.xhtml");
     }
 
 

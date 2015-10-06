@@ -121,11 +121,11 @@ public class HandleOrganAction implements Serializable {
     private boolean disableFields;
 
 
-    public String begin() {
+    public void begin() {
 //        me.setActiveMenu(MenuType.MANAGEMENT);
 
         refresh();
-        return "list-organ";
+        me.redirect("/organ/organs.xhtml");
     }
 
     public List<Organ> getSelectionGrid() {
