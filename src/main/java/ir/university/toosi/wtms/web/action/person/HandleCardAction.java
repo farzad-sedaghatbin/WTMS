@@ -2,23 +2,23 @@ package ir.university.toosi.wtms.web.action.person;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.model.service.BLookupServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.tms.model.entity.BLookup;
-import ir.university.toosi.tms.model.entity.Lookup;
-import ir.university.toosi.tms.model.entity.MenuType;
-import ir.university.toosi.tms.model.entity.WebServiceInfo;
 import ir.university.toosi.tms.model.entity.personnel.Card;
 import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.wtms.web.util.*;
+import ir.university.toosi.wtms.web.util.ReportUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.primefaces.event.TransferEvent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -73,7 +73,7 @@ public class HandleCardAction implements Serializable {
     private boolean canSave;
     private boolean selectRow = false;
     private long selectedCard;
-    private List<Card> selectedCards = new ArrayList<>();
+    private DualListModel<Card> selectedCards = new DualListModel<>();
     private List<Card> allCard = new ArrayList<>();
     private List<Card> notSelectedCard = new ArrayList<>();
     private List<Card> tempNotSelectedCard = new ArrayList<>();
@@ -157,7 +157,8 @@ public class HandleCardAction implements Serializable {
             selectedCard.add(selectedCard1);
         }
         notSelectedCard = cards;
-        selectedCards = selectedCard;
+        selectedCards.getTarget().addAll(selectedCard);
+        selectedCards.getSource().addAll(notSelectedCard);
 
     }
 
@@ -615,18 +616,30 @@ public class HandleCardAction implements Serializable {
         }
     }
 
-    public void changedList(ValueChangeEvent event) {
-        selectedCards = (List<Card>) event.getNewValue();
+    public void changedList(TransferEvent event) {
+        if (event.isAdd()) {
+            for (Object item : event.getItems()) {
+                ((Operation) item).setSelected(true);
+                selectedCards.getTarget().add((Card) item);
+                selectedCards.getSource().remove(item);
+            }
+        } else {
+            for (Object item : event.getItems()) {
+                selectedCards.getSource().add((Card) item);
+                selectedCards.getTarget().remove(item);
+            }
+        }
 
     }
 
 
     public void specializeCard() {
         tempNotSelectedCard = notSelectedCard;
-        selectedCards.clear();
+        selectedCards.getTarget().clear();
         for (Card card : notSelectedCard) {
             if (card.getCardType().getCode().equalsIgnoreCase(BLookup.CARD_SPECIAL)) {
-                selectedCards.add(card);
+                selectedCards.getTarget().add(card);
+                selectedCards.getSource().remove(card);
             }
         }
     }
@@ -646,7 +659,7 @@ public class HandleCardAction implements Serializable {
                 card.setCardType(normalCard);
                cardService.editCard(card);
             }
-            for (Card card : selectedCards) {
+            for (Card card : selectedCards.getTarget()) {
                 card.setCardType(specialCard);
                 cardService.editCard(card);
             }
@@ -879,11 +892,11 @@ public class HandleCardAction implements Serializable {
         this.selectedCard = selectedCard;
     }
 
-    public List<Card> getSelectedCards() {
+    public DualListModel<Card> getSelectedCards() {
         return selectedCards;
     }
 
-    public void setSelectedCards(List<Card> selectedCards) {
+    public void setSelectedCards(DualListModel<Card> selectedCards) {
         this.selectedCards = selectedCards;
     }
 
