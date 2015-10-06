@@ -10,8 +10,6 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -46,11 +44,13 @@ public class HandleCommentAction implements Serializable {
         me.setActiveMenu(MenuType.SENTRY);
 
         refreshAuthorize();
+        me.redirect("/authorization/authorization.xhtml");
     }
 
     public void begin() {
         me.setActiveMenu(MenuType.SENTRY);
         refresh();
+        me.redirect("/authorization/list-comment.xhtml");
     }
 
     public void submit() {

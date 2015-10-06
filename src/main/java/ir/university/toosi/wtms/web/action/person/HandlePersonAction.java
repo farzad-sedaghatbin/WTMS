@@ -86,7 +86,7 @@ public class HandlePersonAction implements Serializable {
     private CardServiceImpl cardService;
 
 
-    private List<Long> personListID = null;
+    private List<Long> personListID = new ArrayList<>();
     private Person currentPerson = null;
     private Job currentJob = null;
     private Person newPerson = null;
@@ -110,7 +110,7 @@ public class HandlePersonAction implements Serializable {
     private RulePackage selectedRulePackage;
     private byte[] picture;
     private String name;
-    private List<String> pageCount;
+    private List<String> pageCount= new ArrayList<>();
     private int pageFrom = 1;
     private int pageTo = 9;
     private List<Rule> ruleArrayList = new ArrayList<>();
@@ -127,7 +127,7 @@ public class HandlePersonAction implements Serializable {
     private String selectedCalendarIdTemp, dayTypeIdTemp, ruleStartTime, ruleEndTime, startHour, startMinute, startSecond;
     private String endHour, endMinute, endSecond, ruleEntranceCount, ruleExitCount, finger;
     private Boolean ruleDeny;
-    private List<Card> cards;
+    private List<Card> cards= new ArrayList<>();
     private Job job;
     private String editableRule = "false";
     private boolean addNewRuleFlag = false;
@@ -137,15 +137,15 @@ public class HandlePersonAction implements Serializable {
     private Hashtable<String, DayType> dayTypeHashtable = new Hashtable<>();
     private String employNo;
     private BLookup employeeType;
-    private List<BLookup> employeeTypes;
+    private List<BLookup> employeeTypes= new ArrayList<>();
     private BLookup assistType;
-    private List<BLookup> assistTypes;
+    private List<BLookup> assistTypes= new ArrayList<>();
     private BLookup postType;
-    private List<BLookup> postTypes;
-    private List<Long> innerPersonList = null;
+    private List<BLookup> postTypes= new ArrayList<>();
+    private List<Long> innerPersonList = new ArrayList<>();
     private String folderNo, internalTel, preCondition, attributeName, attributeValue, postCondition, description;
     private SelectItem[] preConditions, postConditions, attributeNames;
-    private List<PersonSearch> personSearchList;
+    private List<PersonSearch> personSearchList= new ArrayList<>();
     private int rowIndex = 0;
     private int pageIndex = 1;
     private int totalPages = 1;

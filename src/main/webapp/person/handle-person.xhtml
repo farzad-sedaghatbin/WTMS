@@ -315,11 +315,12 @@
             <tr>
                 <td>
                     <div align="right">
-                        <p:tree id="tree" var="organ" dir="RTL" value="#{handleOrganAction.rootOrgans}"
+                        <ui:repeat value="#{handleOrganAction.rootOrgans}" var="organs"/>
+                        <p:tree id="tree" var="organ" dir="RTL" value="#{organs}"
                                    toggleType="client">
                             <p:treeNode iconCollapsed="/images/node_icon.gif" iconExpanded="/images/node_open.jpg">
                                 <p:commandLink
-                                        value="#{organ.name} - #{organ.code} - #{me.getValue(organ.organType.code)} - #{organ.title}"
+                                        value="#{organ.name} - #{organ.code} - #{organ.organType.code} - #{organ.title}"
                                         execute="@this"
                                         limitRender="true"
                                         render="organName"

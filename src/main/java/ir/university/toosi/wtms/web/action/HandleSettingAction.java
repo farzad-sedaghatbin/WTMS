@@ -39,8 +39,8 @@ public class HandleSettingAction implements Serializable {
     @EJB
     private SystemConfigurationServiceImpl configurationService;
     private int page = 1;
-    private List<SystemConfiguration> systemConfigurationDataModel = null;
-    private List<SystemConfiguration> systemConfigurationList = null;
+    private List<SystemConfiguration> systemConfigurationDataModel = new ArrayList<>();
+    private List<SystemConfiguration> systemConfigurationList = new ArrayList<>();
     private SortOrder descriptionOrder = SortOrder.UNSORTED;
 
     public void begin() {

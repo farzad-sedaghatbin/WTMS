@@ -9,8 +9,6 @@
 
 <br/>
 <h:form id="trackFrm">
-
-
 <p:outputPanel id="selectPerson" ajaxRendered="true" rendered="#{handleMonitoringAction.person}">
     <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
         <tr valign="top">
@@ -114,7 +112,6 @@
                                     noDataLabel="no_result_found"
                                     sortMode="single"
                                     var="person"
-                                    onrowdblclick="highlight(#{p:element('selectLink1);"
                                     rows="10"
                                     style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
                                     rowClasses="ROW1,ROW2">
@@ -226,7 +223,6 @@
                     <p:dataTable id="personTable2"
                                     value="#{handleMonitoringAction.personList}"
                                     keepSaved="true"
-                                    onrowdblclick="highlight(#{p:element('selectLink2);"
                                     noDataLabel="no_result_found"
                                     sortMode="single"
                                     var="person"

@@ -68,10 +68,10 @@ public class HandleCalendarAction implements Serializable {
     private SortOrder calendarDescriptionOrder = SortOrder.UNSORTED;
 
 
-    public String begin() {
+    public void begin() {
         me.setActiveMenu(MenuType.CALENDAR);
         refresh();
-        return "list-calendar";
+        me.redirect("/calendar/list-calendar.xhtml");
     }
 
 

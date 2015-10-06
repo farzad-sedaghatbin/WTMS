@@ -87,7 +87,7 @@ public class HandleVirdiAction implements Serializable {
     public void begin() {
 //        me.setActiveMenu(MenuType.HARDWARE);
         refresh();
-        me.redirect("/virdi/virdis.xhtml");
+        me.redirect("/virdi/virdi.xhtml");
     }
 
     public void selectVirdis(ValueChangeEvent event) {

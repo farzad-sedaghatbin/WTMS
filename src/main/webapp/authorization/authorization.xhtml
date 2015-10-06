@@ -13,12 +13,10 @@
             <p:menuitem value="refuse" icon="icon-delete2" actionListener="#{handleCommentAction.refuse}"/>
 
             <p:dataTable id="commentTable"
-                         selection="#{handleCommentAction.currentComment}"
                          value="#{handleCommentAction.comments}"
                          rowKeyVar="rowIndex"
                          noDataLabel="no_result_found"
                          sortMode="single"
-                         selectionMode="single"
                          var="comment"
                          rows="10">
 

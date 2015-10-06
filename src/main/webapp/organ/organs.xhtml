@@ -19,13 +19,13 @@
                             actionListener="#{handleOrganAction.assignRule}"/>
                 <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleOrganAction.editRule}"/>
-                <p:menuitem value="Persons" update="PersonDetail" icon="ui-icon-search"
+                <p:menuitem value="Persons" update="personTable" icon="ui-icon-search"
                             oncomplete="PF('PersonDialog').show()" actionListener="#{handleOrganAction.listPerson}"/>
                 <p:menuitem value="Delete" update="organs" icon="ui-icon-close"
                             actionListener="#{handleOrganAction.doDelete}"/>
             </p:contextMenu>
-
-            <p:tree id="tree" var="organ" value="#{handleOrganAction.rootOrgans}"
+            <ui:repeat value="#{handleOrganAction.rootOrgans}" var="organs"/>
+            <p:tree id="tree" var="organ" dir="RTL" value="#{organs}"
                     orientation="horizontal">
                 <p:treeNode>
 
