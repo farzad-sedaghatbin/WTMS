@@ -467,6 +467,29 @@ public class HandleRoleAction implements Serializable {
 //            }
 //        }
 //    }
+public void selectPdp(ValueChangeEvent event) {
+    currentPermission = pdpList.getRowData();
+    boolean temp = (Boolean) event.getNewValue();
+    if (temp) {
+        currentPermission.setSelected(true);
+        sPermision.add(currentPermission);
+    } else {
+        sPermision.remove(currentPermission);
+        currentPermission.setSelected(false);
+
+/*
+            int i = 0;
+            for (Permission permission : selectedPermission) {
+
+                if (permission.getId() == currentPermission.getId()) {
+                    break;
+                }
+                i++;
+            }
+            selectedPermission.remove(i);
+*/
+    }
+}
 
     public boolean isSelectRow() {
         return selectRow;
