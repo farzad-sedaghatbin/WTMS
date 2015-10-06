@@ -744,7 +744,7 @@ public class HandleOrganAction implements Serializable {
     public List<Organ> getRootOrgans() {
         if (rootOrgans == null) {
             List<Organ> organs = organService.getAllOrgan();
-//                rootOrgans = Organ.prepareHierarchy(organs);
+                rootOrgans = Organ.prepareHierarchy(organs);
         }
         return rootOrgans;
     }
