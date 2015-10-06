@@ -428,3 +428,25 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Container:after {
     clear: both; 
 }
+
+.ui-datepicker-rtl .ui-datepicker-prev{
+	right: 2px !important;
+	left: auto !important;
+}
+.ui-datepicker .ui-datepicker-next{
+	left: 2px !important;
+	right: auto !important;
+}
+.ui-datepicker{
+	z-index: 9999 !important;
+}
+.ui-datepicker-rtl .ui-datepicker-header .ui-datepicker-prev .ui-icon{
+	background-image: url("/modena-1.0.1/javax.faces.resource/images/right-arrow.svg.xhtml?ln=primefaces-modena") !important;
+}
+
+.ui-datepicker-rtl .ui-datepicker-header .ui-datepicker-next .ui-icon{
+	background-image: url("/modena-1.0.1/javax.faces.resource/images/left-arrow.svg.xhtml?ln=primefaces-modena") !important;
+}
+.ui-datepicker-trigger{
+	position: fixed;
+}
