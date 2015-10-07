@@ -24,17 +24,20 @@
                              styleClass="ui-priority-primary" onclick="PF('userDialog').show()"/>
 
             <p:dataTable id="users" var="user" value="#{handleUserAction.userList}" rowKey="#{user.id}"
-                         selection="#{handleUserAction.currentUser}" selectionMode="single">
+                         selection="#{handleUserAction.currentUser}" selectionMode="single"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true">
                 <f:facet name="header">
                     RightClick to View Options
                 </f:facet>
-                <p:column headerText="username">
+                <p:column headerText="username" sortBy="#{user.username}" filterBy="#{user.username}" sortFunction="#{handleUserAction.sortByUsername}" filterValue="#{handleUserAction.username}" filterFunction="#{handleUserAction.filterByUsername}">
                     <h:outputText value="#{user.username}"/>
                 </p:column>
-                <p:column headerText="first name">
+                <p:column headerText="first name" sortBy="#{user.firstname}">
                     <h:outputText value="#{user.firstname}"/>
                 </p:column>
-                <p:column headerText="last name">
+                <p:column headerText="last name" sortBy="#{user.lastname}">
                     <h:outputText value="#{user.lastname}"/>
                 </p:column>
                 <p:column headerText="ip">

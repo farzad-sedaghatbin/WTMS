@@ -405,43 +405,6 @@ public class HandleUserAction implements Serializable {
 //        };
 //    }
 
-    public void sortByUsername() {
-        usernameOrder = newSortOrder(usernameOrder);
-    }
-
-    public void sortByworkgroup() {
-        workgroupOrder = newSortOrder(workgroupOrder);
-    }
-
-    public void sortByPcIp() {
-        pcIpOrder = newSortOrder(pcIpOrder);
-    }
-
-    public void sortByRoleDescription() {
-        roleDescriptionOrder = newSortOrder(roleDescriptionOrder);
-    }
-
-    public void sortByPersonName() {
-        personNameOrder = newSortOrder(personNameOrder);
-    }
-
-    public void sortByPersonLastName() {
-        personLastNameOrder = newSortOrder(personLastNameOrder);
-    }
-
-
-    private SortOrder newSortOrder(SortOrder currentSortOrder) {
-        usernameOrder = SortOrder.UNSORTED;
-        workgroupOrder = SortOrder.UNSORTED;
-        pcIpOrder = SortOrder.UNSORTED;
-        roleDescriptionOrder = SortOrder.UNSORTED;
-
-        if (currentSortOrder.equals(SortOrder.DESCENDING)) {
-            return SortOrder.ASCENDING;
-        } else {
-            return SortOrder.DESCENDING;
-        }
-    }
 
     //    @AssertTrue
     public boolean isPasswordsEquals() {
