@@ -20,6 +20,7 @@ import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 //import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
+import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -67,7 +68,7 @@ public class HandleUserAction implements Serializable {
     @EJB
     private WorkGroupServiceImpl workGroupService;
 
-    private List<User> userList = null;
+    private LazyDataModel<User> userList;
     private List<Role> roleList = null;
     private List<Role> workGroupRoleList = null;
     private User currentUser = null;
@@ -157,7 +158,7 @@ public class HandleUserAction implements Serializable {
 
     private void refresh() {
         init();
-        userList = userService.getAllUser();
+        userList = new UserLazyDataModel(userService);
 
         handleRoleAction.setRoleList(new ArrayList<Role>());
     }
@@ -902,11 +903,11 @@ public class HandleUserAction implements Serializable {
         this.pcList = pcList;
     }
 
-    public List<User> getUserList() {
+    public LazyDataModel<User> getUserList() {
         return userList;
     }
 
-    public void setUserList(List<User> userList) {
+    public void setUserList(LazyDataModel<User> userList) {
         this.userList = userList;
     }
 

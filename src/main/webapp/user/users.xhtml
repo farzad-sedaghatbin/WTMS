@@ -31,13 +31,13 @@
                 <f:facet name="header">
                     RightClick to View Options
                 </f:facet>
-                <p:column headerText="username" sortBy="#{user.username}" filterBy="#{user.username}" sortFunction="#{handleUserAction.sortByUsername}" filterValue="#{handleUserAction.username}" filterFunction="#{handleUserAction.filterByUsername}">
+                <p:column headerText="username" sortBy="#{user.username}" filterBy="#{user.username}">
                     <h:outputText value="#{user.username}"/>
                 </p:column>
-                <p:column headerText="first name" sortBy="#{user.firstname}">
+                <p:column headerText="first name" sortBy="#{user.firstname}" filterBy="#{user.firstname}">
                     <h:outputText value="#{user.firstname}"/>
                 </p:column>
-                <p:column headerText="last name" sortBy="#{user.lastname}">
+                <p:column headerText="last name" sortBy="#{user.lastname}" filterBy="#{user.lastname}">
                     <h:outputText value="#{user.lastname}"/>
                 </p:column>
                 <p:column headerText="ip">

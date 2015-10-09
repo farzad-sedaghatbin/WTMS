@@ -178,4 +178,7 @@ public class UserServiceImpl<T extends User> {
         }
     }
 
+    public UserDAOImpl getUserDAO() {
+        return userDAO;
+    }
 }

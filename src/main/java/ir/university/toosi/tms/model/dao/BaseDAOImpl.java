@@ -80,4 +80,7 @@ public class BaseDAOImpl<T extends BaseEntity> {
         }
     }
 
+    public EntityManager getEm() {
+        return em;
+    }
 }
