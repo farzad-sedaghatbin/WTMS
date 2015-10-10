@@ -266,4 +266,8 @@ public class PersonServiceImpl<T extends Person> {
         return personDAO.withOutCard();
     }
 
+    public List<Person> getAllPerson(int first,int pageIndex){
+        return personDAO.getAllPerson(first,pageIndex);
+    }
+
 }

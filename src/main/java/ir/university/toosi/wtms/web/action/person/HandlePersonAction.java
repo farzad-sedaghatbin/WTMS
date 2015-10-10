@@ -112,7 +112,7 @@ public class HandlePersonAction implements Serializable {
     private String name;
     private List<String> pageCount= new ArrayList<>();
     private int pageFrom = 1;
-    private int pageTo = 9;
+    private int pageTo = 5;
     private List<Rule> ruleArrayList = new ArrayList<>();
     private boolean ruleAniPassBack = false;
     private boolean ruleAllowExit = false;
@@ -183,7 +183,7 @@ public class HandlePersonAction implements Serializable {
         simpleValue = "";
         email = "";
         pageFrom = 1;
-        pageTo = 10;
+        pageTo = 6;
         mobile = "";
         address = "";
         rePassword = "";
@@ -256,13 +256,13 @@ public class HandlePersonAction implements Serializable {
         if (!ten) {
             request = Integer.valueOf(pageIndex);
         } else if (increase) {
-            request = Integer.valueOf(this.pageIndex) + 10;
+            request = Integer.valueOf(this.pageIndex) + 6;
             if (request > totalPages) {
                 request = totalPages;
                 lastPage = true;
             }
         } else {
-            request = Integer.valueOf(this.pageIndex) - 10;
+            request = Integer.valueOf(this.pageIndex) - 6;
             if (request < 1) {
                 request = 1;
                 firstPage = true;
@@ -334,7 +334,7 @@ public class HandlePersonAction implements Serializable {
         innerPersonList = personService.getAllPersonID();
 
         totalPages = (int) Math.abs(Math.ceil(((double) innerPersonList.size()) / 6));
-        if (totalPages <= 10)
+        if (totalPages <= 6)
             pageTo = totalPages;
         for (int i = pageFrom; i <= pageTo; i++) {
             pageCount.add(String.valueOf(i));
@@ -358,9 +358,9 @@ public class HandlePersonAction implements Serializable {
         persons.clear();
         pageCount.clear();
         pageIndex++;
-        if (pageTo + 1 <= totalPages && pageIndex > 10)
+        if (pageTo + 1 <= totalPages && pageIndex > 6)
             pageTo++;
-        if (totalPages > 10 && pageTo > 10 && pageIndex > 10)
+        if (totalPages > 6 && pageTo > 6 && pageIndex > 6)
             pageFrom++;
         firstPage = false;
         lastPageIndex = String.valueOf(pageIndex);
@@ -393,7 +393,7 @@ public class HandlePersonAction implements Serializable {
         pageCount.clear();
         if (pageFrom - 1 >= 1)
             pageFrom--;
-        if (totalPages > 10 && pageTo > 10 && pageIndex > 10)
+        if (totalPages > 6 && pageTo > 6 && pageIndex > 6)
             pageTo--;
         if (pageIndex != 1) {
             pageIndex--;
@@ -505,7 +505,7 @@ public class HandlePersonAction implements Serializable {
         lastPage = false;
         rowIndex = 0;
         pageFrom = 1;
-        pageTo = 10;
+        pageTo = 6;
 
         String query = "select p.id from Person p where (";
         query += " p.name like \'%" + simpleValue + "%\' or " + " p.lastName like \'%" + simpleValue + "%\' or " + " p.personnelNo like \'%" + simpleValue + "%\') and p.deleted='0' ";
@@ -529,7 +529,7 @@ public class HandlePersonAction implements Serializable {
         }
         lastPageIndex = "1";
         pageCount.clear();
-        if (totalPages <= 10)
+        if (totalPages <= 6)
             pageTo = totalPages;
         for (int i = pageFrom; i <= pageTo; i++) {
             pageCount.add(String.valueOf(i));
@@ -544,7 +544,7 @@ public class HandlePersonAction implements Serializable {
         lastPage = false;
         rowIndex = 0;
         pageFrom = 1;
-        pageTo = 10;
+        pageTo = 6;
 
         String query = "select p.id from Person p where ";
         for (PersonSearch personSearch : personSearchList) {
@@ -575,7 +575,7 @@ public class HandlePersonAction implements Serializable {
         }
         lastPageIndex = "1";
         pageCount.clear();
-        if (totalPages <= 10)
+        if (totalPages <= 6)
             pageTo = totalPages;
         for (int i = pageFrom; i <= pageTo; i++) {
             pageCount.add(String.valueOf(i));

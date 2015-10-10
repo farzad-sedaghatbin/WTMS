@@ -189,4 +189,7 @@ public class PersonDAOImpl extends BaseDAOImpl<Person> {
     }
 
 
+    public List<Person> getAllPerson(int first, int pageIndex) {
+        return em.createNamedQuery("Person.list").setFirstResult(first).setMaxResults(first + pageIndex).getResultList();
+    }
 }

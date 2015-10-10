@@ -6,6 +6,13 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+
+        <p:breadCrumb>
+            <p:menuitem value="Categories" url="#" />
+            <p:menuitem value="User Management" url="#" />
+            <p:menuitem value="user" url="#" />
+        </p:breadCrumb>
+
         <h:form id="form">
             <p:contextMenu for="users">
                 <p:menuitem value="View" update="userDetail" icon="ui-icon-search" oncomplete="PF('userDialog').show()"

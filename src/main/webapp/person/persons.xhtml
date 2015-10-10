@@ -7,6 +7,12 @@
 
     <ui:define name="content">
 
+        <p:breadCrumb>
+            <p:menuitem value="Categories" url="#" />
+            <p:menuitem value="User Management" url="#" />
+            <p:menuitem value="person" url="#" />
+        </p:breadCrumb>
+
         <p:dialog header="PC Info" widgetVar="selectPDP" modal="true" showEffect="fade" hideEffect="fade"
                   resizable="false">
             <ui:include src="selectlist-pdp.xhtml"/>
@@ -224,27 +230,6 @@
                     </tr>
 
                     <tr valign="top">
-                        <td nowrap="nowrap" colspan="2" style="padding-top: 0">
-                            <table border="0" cellpadding="3" cellspacing="3" class="page_title">
-                                <tr valign="top">
-                                    <td nowrap="nowrap" class="page_title">
-                                        <h:outputText escape="true" value="management"/>
-                                    </td>
-                                    <td align="center" nowrap="nowrap" class="page_title_separator" valign="bottom">
-                                        <h:graphicImage rendered="#{me.direction eq 'rtl'}"
-                                                        value="/images/arrow-left.png"/>
-                                        <h:graphicImage rendered="#{not me.direction eq 'rtl'}"
-                                                        value="/images/arrow-right.png"/>
-                                    </td>
-                                    <td nowrap="nowrap" class="page_title">
-                                        <h:outputText escape="true" value="person"/>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <tr valign="top">
                         <td nowrap="nowrap" align="#{me.align}" colspan="2">
                             <p:outputPanel ajaxRendered="true" id="operationArea">
                                 <f:subview id="operationAreaSubview" rendered="#{handlePersonAction.selectRow}">
@@ -313,63 +298,10 @@
                                     <tr>
                                         <td>
                                             <p:ring id="custom" value="#{handlePersonAction.persons}" var="person"
-                                                    styleClass="image-ring" easing="easeInOutBack">
+                                                    styleClass="image-ring"  easing="easeInOutBack">
                                                 <p:graphicImage value="/loadImage?id=#{person.id}"
                                                                 styleClass="personPicture"/>
                                                 <br/>
-                                                <table>
-                                                    <tr>
-                                                        <td>
-                                                            <p:commandLink action="#{handlePersonAction.edit}"
-                                                                           title="edit"
-                                                                           onclick="PF('PersonPanel').show()"
-                                                                           update="handlePersonForm:handlePanel, handlePersonForm:tabPanel:_personnelConfirm-password,detailPerson:tabPanel:renderdpicture">
-                                                                <p:graphicImage value="/images/edit.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink action="#{handlePersonAction.assignRule}"
-                                                                           title="assign rule"
-                                                                           update="assignPersonRule:handleAssignRulePanel,assignPersonRule:handleAssignRulePanel"
-                                                                           oncomplete="PF('AssignRulePanel').show()">
-                                                                <p:graphicImage value="/images/assign-rule.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink title="assign card"
-                                                                           action="#{handlePersonAction.downloadJnlp}">
-                                                                <p:graphicImage value="/images/assign-card.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink title="synch"
-                                                                           action="#{handlePDPAction.synch}"
-                                                                           onclick="PF('selectPDP').show()">
-                                                                <p:graphicImage value="/images/pdp.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink title="delete"
-                                                                           onclick="PF('ConfirmationPanel').show()">
-                                                                <p:graphicImage value="/images/delete.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink action="#{handlePersonAction.editRule}"
-                                                                           title="edit rule"
-                                                                           update="ruleFrm:handleRulePanel"
-                                                                           oncomplete="PF('rulePanel').show()">
-                                                                <p:graphicImage value="/images/assign-rule.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink update="resetFrm:handleResetPanel"
-                                                                           oncomplete="PF('resetPanel').show()">
-                                                                <p:graphicImage value="/images/s_key.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                    </tr>
-                                                </table>
                                             </p:ring>
                                         </td>
                                     </tr>

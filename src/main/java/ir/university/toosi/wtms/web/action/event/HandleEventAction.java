@@ -9,6 +9,7 @@ import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.EventLog;
 import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import javax.ejb.EJB;
@@ -39,7 +40,7 @@ public class HandleEventAction implements Serializable {
 
     @EJB
     private EventLogServiceImpl logService;
-    private List<EventLog> eventLogList = null;
+    private LazyDataModel<EventLog> eventLogList = null;
     private SortOrder eventLogOperationOrder = SortOrder.DESCENDING;
     private SortOrder eventLogDateOrder = SortOrder.DESCENDING;
     private SortOrder eventLogUsernameOrder = SortOrder.DESCENDING;
@@ -68,7 +69,7 @@ public class HandleEventAction implements Serializable {
         List<EventLog> innerEventLogList = null;
             innerEventLogList = logService.getAllEventLog();
 
-        eventLogList = innerEventLogList;
+        eventLogList = new EventLazyDataModel(logService);
     }
 
 
@@ -152,18 +153,6 @@ public class HandleEventAction implements Serializable {
 //        };
 //    }
 
-    public void search() {
-        if (fromDate != null && toDate != null && !fromDate.equalsIgnoreCase("") && !toDate.equalsIgnoreCase("")) {
-            eventLogList = logService.findEventInDuration(fromDate, toDate);
-        } else if (fromDate != null && !fromDate.equalsIgnoreCase("")) {
-            eventLogList = logService.findEventAfterDate(fromDate);
-        } else if (toDate != null && !toDate.equalsIgnoreCase("")) {
-            eventLogList = logService.findEventBeforeDate(toDate);
-        } else {
-            eventLogList = logService.getAllEventLog();
-        }
-    }
-
     public void resetPage() {
         setPage(1);
     }
@@ -184,11 +173,11 @@ public class HandleEventAction implements Serializable {
         this.fromDate = fromDate;
     }
 
-    public List<EventLog> getEventLogList() {
+    public LazyDataModel<EventLog> getEventLogList() {
         return eventLogList;
     }
 
-    public void setEventLogList(List<EventLog> eventLogList) {
+    public void setEventLogList(LazyDataModel<EventLog> eventLogList) {
         this.eventLogList = eventLogList;
     }
 

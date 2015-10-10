@@ -102,4 +102,8 @@ public class EventLogServiceImpl<T extends EventLog> {
             return false;
         }
     }
+
+    public EventLogDAOImpl getEventLogDAO() {
+        return eventLogDAO;
+    }
 }
