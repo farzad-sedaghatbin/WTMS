@@ -1,4 +1,4 @@
-package ir.university.toosi.wtms.web.action;
+package ir.university.toosi.wtms.web.action.traffic;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
+import ir.university.toosi.wtms.web.action.AccessControlAction;
+import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.TrafficLog;
@@ -14,6 +16,7 @@ import ir.university.toosi.wtms.web.util.CalendarUtil;
 //import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.util.LangUtil;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -50,7 +53,7 @@ public class HandleTrafficAction implements Serializable {
     @EJB
     private TrafficLogServiceImpl trafficLogService;
     TrafficLogDataModel trafficLog;
-    private List<TrafficLogDataModel> eventLogList = null;
+    private LazyDataModel<TrafficLogDataModel> eventLogList = null;
     private SortOrder eventLogOperationOrder = SortOrder.DESCENDING;
     private SortOrder eventLogDateOrder = SortOrder.DESCENDING;
     private SortOrder eventLogUsernameOrder = SortOrder.DESCENDING;
@@ -82,25 +85,7 @@ public class HandleTrafficAction implements Serializable {
 
 
     public void search() {
-        List<TrafficLog> innerTrafficLogList = null;
-        innerTrafficLogList = trafficLogService.findTrafficInDuration(fromDate, toDate);
-        List<TrafficLogDataModel> logDataModels = new ArrayList<>();
-        TrafficLogDataModel dataModel;
-        for (TrafficLog log : innerTrafficLogList) {
-            dataModel = new TrafficLogDataModel();
-            dataModel.setVideo(log.getVideo());
-            dataModel.setTime(LangUtil.getFarsiNumber(log.getTime()));
-            dataModel.setDate(log.getDate());
-            dataModel.setExit(log.isExit());
-            dataModel.setGate(log.getGateway().getName());
-            dataModel.setPictures(log.getPictures());
-            dataModel.setValid(log.isValid());
-            dataModel.setId(log.getId());
-            dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
-            logDataModels.add(dataModel);
-        }
-        eventLogList = Lists.reverse(logDataModels);
-        dateFilter = "";
+        eventLogList = new TrafficLazyDataModel(trafficLogService);
     }
 
     public void increase() {
@@ -308,11 +293,11 @@ public class HandleTrafficAction implements Serializable {
     }
 
 
-    public List<TrafficLogDataModel> getEventLogList() {
+    public LazyDataModel<TrafficLogDataModel> getEventLogList() {
         return eventLogList;
     }
 
-    public void setEventLogList(List<TrafficLogDataModel> eventLogList) {
+    public void setEventLogList(LazyDataModel<TrafficLogDataModel> eventLogList) {
         this.eventLogList = eventLogList;
     }
 

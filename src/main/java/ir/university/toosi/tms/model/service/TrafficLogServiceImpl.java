@@ -284,4 +284,8 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
 
         return trafficLog;
     }
+
+    public TrafficLogDAOImpl getTrafficLogDAO() {
+        return TrafficLogDAO;
+    }
 }

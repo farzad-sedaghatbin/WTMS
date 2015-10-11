@@ -1,20 +1,16 @@
 package ir.university.toosi.wtms.web.action;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.service.CommentServiceImpl;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
 import ir.university.toosi.tms.model.entity.Comment;
 import ir.university.toosi.tms.model.entity.MenuType;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import ir.university.toosi.wtms.web.action.traffic.HandleTrafficAction;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

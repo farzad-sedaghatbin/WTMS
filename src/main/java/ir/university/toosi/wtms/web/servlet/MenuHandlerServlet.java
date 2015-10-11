@@ -2,7 +2,7 @@ package ir.university.toosi.wtms.web.servlet;
 
 import ir.university.toosi.wtms.web.action.HandleCommentAction;
 import ir.university.toosi.wtms.web.action.HandleSettingAction;
-import ir.university.toosi.wtms.web.action.HandleTrafficAction;
+import ir.university.toosi.wtms.web.action.traffic.HandleTrafficAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.calendar.HandleCalendarAction;
 import ir.university.toosi.wtms.web.action.calendar.HandleDayTypeAction;

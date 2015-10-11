@@ -164,4 +164,8 @@ public class CardServiceImpl<T extends Card> {
             return null;
         }
     }
+
+    public CardDAOImpl getCardDAO() {
+        return cardDAO;
+    }
 }

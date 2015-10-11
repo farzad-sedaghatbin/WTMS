@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
+import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 
@@ -58,7 +59,7 @@ public class HandleCardAction implements Serializable {
     private BLookupServiceImpl bLookupService;
 
 
-    private List<Card> cardList;
+    private LazyDataModel<Card> cardList;
     private String cardData;
     private Long personId;
     private Card card;
@@ -474,7 +475,7 @@ public class HandleCardAction implements Serializable {
         expirationDateFilter = "";
         setPage(1);
         notSelectedCard = new ArrayList<>();
-        cardList = cardService.getAllActiveCard();
+        cardList = new CardLazyDataModel(cardService);
         for (Card card : allCard) {
             notSelectedCard.add(card);
             if (card.getCardType() != null)
@@ -501,7 +502,7 @@ public class HandleCardAction implements Serializable {
         setCurrentCard(null);
         setSelectRow(false);
         setPage(1);
-        cardList = cardService.getAllInvisible();
+        cardList = new CardLazyDataModel(cardService);
         for (Card card : cardList) {
             card.getCardType().setTitleText(me.getValue(card.getCardType().getTitle()));
             card.getCardStatus().setTitleText(me.getValue(card.getCardStatus().getTitle()));
@@ -529,11 +530,11 @@ public class HandleCardAction implements Serializable {
 
     }
 
-    public List<Card> getCardList() {
+    public LazyDataModel<Card> getCardList() {
         return cardList;
     }
 
-    public void setCardList(List<Card> cardList) {
+    public void setCardList(LazyDataModel<Card> cardList) {
         this.cardList = cardList;
     }
 
