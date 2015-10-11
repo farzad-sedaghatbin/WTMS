@@ -16,14 +16,21 @@
             <p:commandButton value="Add" id="add" update="pcDetail" actionListener="#{handlePCAction.add}" styleClass="ui-priority-primary" onclick="PF('pcDialog').show()"/>
 
             <p:dataTable id="pcs" var="currentPC" value="#{handlePCAction.pcList}" rowKey="#{currentPC.id}"
-                         selection="#{handlePCAction.currentPC}" selectionMode="single">
+                         selection="#{handlePCAction.currentPC}" selectionMode="single"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="pcs" trigger="toggler" />
                 </f:facet>
-                <p:column headerText="name">
+
+                <p:column headerText="name" sortBy="#{currentPC.name}" filterBy="#{currentPC.name}">
                     <h:outputText value="#{currentPC.name}" />
                 </p:column>
-                <p:column headerText="ip">
+                <p:column headerText="ip" sortBy="#{currentPC.ip}" filterBy="#{currentPC.ip}">
                     <h:outputText value="#{currentPC.ip}" />
                 </p:column>
             </p:dataTable>

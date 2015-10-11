@@ -20,17 +20,24 @@
                              styleClass="ui-priority-primary" onclick="PF('virdiDialog').show()"/>
 
             <p:dataTable id="virdis" var="currentVirdi" value="#{handleVirdiAction.virdiList}" rowKey="#{currentVirdi.id}"
-                         selection="#{handleVirdiAction.currentVirdi}" selectionMode="single">
+                         selection="#{handleVirdiAction.currentVirdi}" selectionMode="single"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="virdis" trigger="toggler" />
                 </f:facet>
-                <p:column headerText="name">
+
+                <p:column headerText="name" sortBy="#{currentVirdi.name}" filterBy="#{currentVirdi.name}">
                     <h:outputText value="#{currentVirdi.name}"/>
                 </p:column>
-                <p:column headerText="description">
+                <p:column headerText="description" sortBy="#{currentVirdi.description}" filterBy="#{currentVirdi.description}">
                     <h:outputText value="#{currentVirdi.description}"/>
                 </p:column>
-                <p:column headerText="ip">
+                <p:column headerText="ip" sortBy="#{currentVirdi.ip}" filterBy="#{currentVirdi.ip}">
                     <h:outputText value="#{currentVirdi.ip}"/>
                 </p:column>
                 <p:column headerText="enabeld">

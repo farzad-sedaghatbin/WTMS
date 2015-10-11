@@ -39,20 +39,27 @@
 
             <p:dataTable id="organs" var="currentOrgan" value="#{handleOrganAction.organList}"
                          rowKey="#{currentOrgan.id}"
-                         selection="#{handleOrganAction.currentOrgan}" selectionMode="single">
+                         selection="#{handleOrganAction.currentOrgan}" selectionMode="single"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="organs" trigger="toggler" />
                 </f:facet>
-                <p:column headerText="name">
+
+                <p:column headerText="name" sortBy="#{currentOrgan.name}" filterBy="#{currentOrgan.name}">
                     <h:outputText value="#{currentOrgan.name}"/>
                 </p:column>
-                <p:column headerText="code">
+                <p:column headerText="code" sortBy="#{currentOrgan.code}" filterBy="#{currentOrgan.code}">
                     <h:outputText value="#{currentOrgan.code}"/>
                 </p:column>
-                <p:column headerText="type">
+                <p:column headerText="type" sortBy="#{currentOrgan.organType.titleText}" filterBy="#{currentOrgan.organType.titleText}">
                     <h:outputText value="#{currentOrgan.organType.titleText}"/>
                 </p:column>
-                <p:column headerText="title">
+                <p:column headerText="title" sortBy="#{currentOrgan.title}" filterBy="#{currentOrgan.title}">
                     <h:outputText value="#{currentOrgan.title}"/>
                 </p:column>
             </p:dataTable>

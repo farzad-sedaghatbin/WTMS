@@ -12,28 +12,22 @@
         <h:form id="userList">
 
             <p:dataTable id="queryTable" value="#{handleCardReportAction.querieList}"
-                         keepSaved="true"
-                         noDataLabel="no_result_found"
-                         sortMode="single"
                          var="query"
-                         rows="10"
-                         style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                         rowClasses="ROW1,ROW2">
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText escape="true" value="name"/>
-                    </f:facet>
-                    <p:commandLink id="editLink" value="#{query.title}"
-                                   render="operationArea"
-                                   styleClass="withoutUnderlineLink"
-                                   execute="@this"
-                                   limitRender="true"
-                                   action="#{handleCardReportAction.selectForEdit}"/>
+                         rowKey="#{query.id}"
+                         selection="#{handleCardReportAction.currentSavedQuery}" selectionMode="single"                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="queryTable" trigger="toggler" />
+                </f:facet>
+
+                <p:column headerText="title" sortBy="#{query.title}" filterBy="#{query.title}">
+                    <h:outputText id="editLink" value="#{query.title}"/>
                 </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText escape="true" value="type"/>
-                    </f:facet>
+                <p:column headerText="type" sortBy="#{query.type}" filterBy="#{query.type}">
                     <h:outputText escape="true" value="#{query.type}"/>
                 </p:column>
                 <f:facet name="footer">

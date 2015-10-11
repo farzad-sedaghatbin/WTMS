@@ -18,9 +18,15 @@
                              styleClass="ui-priority-primary" onclick="PF('groupDialog').show()"/>
 
             <p:dataTable id="groups" var="group" value="#{handleWorkGroupAction.workGroupList}" rowKey="#{group.id}"
-                         selection="#{handleWorkGroupAction.currentWorkGroup}" selectionMode="single">
+                         selection="#{handleWorkGroupAction.currentWorkGroup}" selectionMode="single"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     <h:outputLabel value="#{bundle.workgroup_list}"/>
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="groups" trigger="toggler" />
                 </f:facet>
                 <p:column headerText="#{bundle.name}">
                     <h:outputText value="#{group.description}"/>

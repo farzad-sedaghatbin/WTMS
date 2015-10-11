@@ -22,14 +22,20 @@
                              styleClass="ui-priority-primary" onclick="PF('roleDialog').show()"/>
 
             <p:dataTable id="roles" var="role" value="#{handleRoleAction.roleList}" rowKey="#{role.id}"
-                         selection="#{handleRoleAction.currentRole}" selectionMode="single">
+                         selection="#{handleRoleAction.currentRole}" selectionMode="single"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="roles" trigger="toggler" />
                 </f:facet>
-                <p:column headerText="name">
-                    <h:outputText value="#{role.description}"/>
+
+                <p:column headerText="name" sortBy="#{role.name}" filterBy="#{role.name}">
+                    <h:outputText value="#{role.name}"/>
                 </p:column>
-                <p:column headerText="ip">
+                <p:column headerText="enabled">
                     <p:graphicImage value="#{role.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
                 </p:column>
             </p:dataTable>

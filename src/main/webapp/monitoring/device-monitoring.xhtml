@@ -11,58 +11,28 @@
 
 
             <p:dataTable id="deviceTable"
-                         keepSaved="true"
                          value="#{handleDeviceAction.listModel}"
-                         rowKeyVar="rowIndex"
-                         noDataLabel="no_result_found"
-                         sortMode="single"
                          var="device"
-                         rows="10">
+                         rowKey="#{device.id}"
+                         selectionMode="single"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="deviceTable" trigger="toggler" />
+                </f:facet>
 
-                <p:column sortBy="#{device.name}">
-                    <f:facet name="header">
-                        <p:commandLink value="name"
-                                       render="deviceTable"
-                                       execute="@this"
-                                       limitRender="true"
-                                       action="#{handleDeviceAction.sortByName}"/>
-                        <br/>
-                        <h:inputText value="#{handleDeviceAction.deviceNameFilter}">
-                            <p:ajax event="blur" render="deviceTable" execute="@this"
-                                    limitRender="true"/>
-                        </h:inputText>
-                    </f:facet>
+                <p:column headerText="name" sortBy="#{device.name}" filterBy="#{device.name}">
                     <h:outputText id="editLink" value="#{device.name}"/>
                 </p:column>
 
-                <p:column sortBy="#{device.description}">
-                    <f:facet name="header">
-                        <p:commandLink value="description"
-                                       render="deviceTable"
-                                       execute="@this"
-                                       limitRender="true"
-                                       action="#{handleDeviceAction.sortByDescription}"/>
-                        <br/>
-                        <h:inputText value="#{handleDeviceAction.deviceDescriptionFilter}">
-                            <p:ajax event="blur" render="deviceTable" execute="@this"
-                                    limitRender="true"/>
-                        </h:inputText>
-                    </f:facet>
+                <p:column headerText="description" sortBy="#{device.description}" filterBy="#{device.description}">
                     <h:outputText value="#{device.description}"/>
                 </p:column>
-                <p:column sortBy="#{device.ip}">
-                    <f:facet name="header">
-                        <p:commandLink value="ip"
-                                       render="deviceTable"
-                                       execute="@this"
-                                       limitRender="true"
-                                       action="#{handleDeviceAction.sortByIp}"/>
-                        <br/>
-                        <h:inputText value="#{handleDeviceAction.deviceIPFilter}">
-                            <p:ajax event="blur" render="deviceTable" execute="@this"
-                                    limitRender="true"/>
-                        </h:inputText>
-                    </f:facet>
+                <p:column headerText="ip" sortBy="#{device.ip}" filterBy="#{device.ip}">
                     <h:outputText value="#{device.ip}"/>
                 </p:column>
                 <p:column>

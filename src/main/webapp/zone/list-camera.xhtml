@@ -21,17 +21,23 @@
 
             <p:dataTable id="cameras" var="currentCamera" value="#{handleCameraAction.cameraList}"
                          rowKey="#{currentCamera.id}"
-                         selection="#{handleCameraAction.currentCamera}" selectionMode="single">
+                         selection="#{handleCameraAction.currentCamera}" selectionMode="single"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="cameras" trigger="toggler" />
                 </f:facet>
-                <p:column headerText="name">
+                <p:column headerText="name" sortBy="#{currentCamera.name}" filterBy="#{currentCamera.name}">
                     <h:outputText value="#{currentCamera.name}"/>
                 </p:column>
-                <p:column headerText="ip">
+                <p:column headerText="ip" sortBy="#{currentCamera.ip}" filterBy="#{currentCamera.ip}">
                     <h:outputText value="#{currentCamera.ip}"/>
                 </p:column>
-                <p:column headerText="description">
+                <p:column headerText="description" sortBy="#{currentCamera.description}" filterBy="#{currentCamera.description}">
                     <h:outputText value="#{currentCamera.description}"/>
                 </p:column>
             </p:dataTable>

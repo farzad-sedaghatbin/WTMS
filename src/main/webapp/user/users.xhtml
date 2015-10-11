@@ -34,9 +34,12 @@
                          selection="#{handleUserAction.currentUser}" selectionMode="single"
                          paginator="true" rows="10"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                         rowsPerPageTemplate="5,10,15" lazy="true">
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     <h:outputLabel value="#{bundle.user_list}"/>
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="users" trigger="toggler" />
                 </f:facet>
                 <p:column headerText="#{bundle.username}" sortBy="#{user.username}" filterBy="#{user.username}">
                     <h:outputText value="#{user.username}"/>

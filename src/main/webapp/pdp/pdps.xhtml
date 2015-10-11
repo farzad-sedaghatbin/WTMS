@@ -20,17 +20,23 @@
                              styleClass="ui-priority-primary" onclick="PF('pdpDialog').show()"/>
 
             <p:dataTable id="pdps" var="currentPdp" value="#{handlePDPAction.pdpList}" rowKey="#{currentPdp.id}"
-                         selection="#{handlePDPAction.currentPdp}" selectionMode="single">
+                         selection="#{handlePDPAction.currentPdp}" selectionMode="single"                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="pdps" trigger="toggler" />
                 </f:facet>
-                <p:column headerText="name">
+
+                <p:column headerText="name" sortBy="#{currentPdp.name}" filterBy="#{currentPdp.name}">
                     <h:outputText value="#{currentPdp.name}"/>
                 </p:column>
-                <p:column headerText="description">
+                <p:column headerText="description" sortBy="#{currentPdp.description}" filterBy="#{currentPdp.description}">
                     <h:outputText value="#{currentPdp.description}"/>
                 </p:column>
-                <p:column headerText="ip">
+                <p:column headerText="ip" sortBy="#{currentPdp.ip}" filterBy="#{currentPdp.ip}">
                     <h:outputText value="#{currentPdp.ip}"/>
                 </p:column>
                 <p:column headerText="enabeld">

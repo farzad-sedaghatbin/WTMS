@@ -18,13 +18,18 @@
                                 <h:outputText escape="true" value="trafficLog"/>
                             </legend>
                             <p:dataTable id="trafficLogTable" value="#{handleMonitoringAction.eventLogList}"
-                                            keepSaved="true"
-                                            noDataLabel="no_result_found"
-                                            sortMode="single"
-                                            var="trafficLog"
-                                            rows="10"
-                                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                            rowClasses="ROW1,ROW2">
+                                         var="trafficLog"
+                                         rowKey="#{trafficLog.id}"
+                                         selectionMode="single"
+                                         paginator="true" rows="10"
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                         rowsPerPageTemplate="5,10,15" lazy="true"
+                                         draggableColumns="true" style="margin-bottom:20px">
+                                <f:facet name="header">
+                                    RightClick to View Options
+                                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                                    <p:columnToggler datasource="trafficLogTable" trigger="toggler" />
+                                </f:facet>
 
 
                                 <p:column>
@@ -38,22 +43,13 @@
 
 
                                 </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText escape="true" value="gateway"/>
-                                    </f:facet>
+                                <p:column headerText="gateway name" sortBy="#{trafficLog.gateway.name}" filterBy="#{trafficLog.gateway.name}">
                                     <h:outputText escape="true" value="#{trafficLog.gateway.name}"/>
                                 </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText escape="true" value="time"/>
-                                    </f:facet>
+                                <p:column headerText="time" sortBy="#{trafficLog.time}" filterBy="#{trafficLog.time}">
                                     <h:outputText escape="true" value="#{trafficLog.time}"/>
                                 </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText escape="true" value="date"/>
-                                    </f:facet>
+                                <p:column headerText="date" sortBy="#{trafficLog.date}" filterBy="#{trafficLog.date}">
                                     <h:outputText escape="true" value="#{trafficLog.date}" converter="dateConverter"/>
                                 </p:column>
 

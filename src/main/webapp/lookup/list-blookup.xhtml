@@ -21,17 +21,21 @@
             <p:dataTable id="blookups"
                             keepSaved="true"
                             value="#{handleBLookupAction.bLookupList}"
+                         var="blookup"
                          rowKey="#{blookup.id}"
                          selection="#{handleBLookupAction.currentBLookup}"
                          selectionMode="single"
-                            noDataLabel="no_result_found"
-                            sortMode="single"
-                            var="blookup"
-                            rows="10"
-                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                            rowClasses="ROW1,ROW2">
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="blookups" trigger="toggler" />
+                </f:facet>
 
-                <p:column sortBy="#{blookup.name}">
+                <p:column headerText="title" sortBy="#{blookup.title}" filterBy="#{blookup.title}">
                     <f:facet name="header">
                         <h:outputText escape="true" value="title"/>
                     </f:facet>

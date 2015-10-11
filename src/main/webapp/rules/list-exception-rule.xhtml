@@ -11,32 +11,20 @@
         <h:form>
             <p:dataTable id="ruleTable"
                             value="#{handleRuleExceptionAction.ruleExceptionList}"
-                            keepSaved="true"
-                            noDataLabel="no_result_found"
-                            sortMode="single"
-                            var="exception"
-                            rows="10"
-                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                            rowClasses="ROW1,ROW2">
-                <p:column sortBy="#{exception.name}"
-                             sortOrder="#{handleRuleExceptionAction.exceptionNameOrder}">
-                    <f:facet name="header">
-                        <p:commandLink value="name" render="ruleTable"
-                                         execute="@this"
-                                         limitRender="true"
-                                         action="#{handleRuleExceptionAction.sortByExceptionName}"/>
-                        <br/>
-                        <h:inputText value="#{handleRuleExceptionAction.exceptionNameFilter}">
-                            <p:ajax event="blur" render="ruleTable" execute="@this"
-                                      limitRender="true"/>
-                        </h:inputText>
-                    </f:facet>
-                    <p:commandLink id="editLink" value="#{exception.name}"
-                                     render="operationArea"
-                                     styleClass="withoutUnderlineLink"
-                                     execute="@this"
-                                     limitRender="true"
-                                     action="#{handleRuleExceptionAction.selectForEdit}"/>
+                         var="exception"
+                         rowKey="#{exception.id}"
+                         selection="#{handleRuleExceptionAction.currentRuleException}" selectionMode="single"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="ruleTable" trigger="toggler" />
+                </f:facet>
+
+                <p:column headerText="name" sortBy="#{exception.name}" filterBy="#{exception.name}">
+                    <h:outputText id="editLink" value="#{exception.name}"/>
                 </p:column>
                 <f:facet name="footer">
                     <p:dataScroller limitRender="true" execute="@this" render="ruleTable"

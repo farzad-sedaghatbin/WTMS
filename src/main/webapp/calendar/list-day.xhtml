@@ -6,67 +6,42 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
-<ui:define name="content">
+    <ui:define name="content">
 
-                        <p:dataTable id="dayTypeTable"
-                                        keepSaved="true"
-                                        value="#{handleDayTypeAction.dayTypeList}"
-                                        rowKeyVar="rowIndex"
-                                        noDataLabel="no_result_found"
-                                        sortMode="single"
-                                        var="dayType"
-                                        rows="10"
-                                        style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                        rowClasses="ROW1,ROW2">
+        <p:dataTable id="dayTypeTable"
+                     keepSaved="true"
+                     value="#{handleDayTypeAction.dayTypeList}"
+                     var="dayType"
+                     rowKey="#{dayType.id}"
+                     selection="#{handleDayTypeAction.currentDayType}" selectionMode="single"
+                     paginator="true" rows="10"
+                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                     rowsPerPageTemplate="5,10,15" lazy="true"
+                     draggableColumns="true" style="margin-bottom:20px">
+            <f:facet name="header">
+                RightClick to View Options
+                <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                <p:columnToggler datasource="dayTypeTable" trigger="toggler" />
+            </f:facet>
 
-                            <p:column sortBy="#{dayType.title}"
-                                         sortOrder="#{handleDayTypeAction.dayNameOrder}">
-                                <f:facet name="header">
-                                    <p:commandLink value="title" render="dayTypeTable"
-                                                     execute="@this"
-                                                     limitRender="true"
-                                                     action="#{handleDayTypeAction.sortByDayName}"/>
-                                    <br/>
-                                    <h:inputText value="#{handleDayTypeAction.dayNameFilter}">
-                                        <p:ajax event="blur" render="dayTypeTable" execute="@this"
-                                                  limitRender="true"/>
-                                    </h:inputText>
-                                </f:facet>
-                                <p:commandLink id="editLink" value="#{dayType.title}"
-                                                 render="operationArea"
-                                                 styleClass="withoutUnderlineLink"
-                                                 execute="@this"
-                                                 converter="persianConverter"
-                                                 limitRender="true"
-                                                 action="#{handleDayTypeAction.selectForEdit}"/>
-                            </p:column>
+            <p:column headerText="title" sortBy="#{dayType.title}" filterBy="#{dayType.title}">
+                <h:outputText value="#{dayType.title}"/>
+            </p:column>
 
-                            <p:column style="background-color: #{dayType.color};">
-                                <f:facet name="header">
-                                    <h:outputText escape="true" value="#{'رنگ'}"/>
-                                </f:facet>
-                                <h:outputText escape="true"/>
-                            </p:column>
-                            <p:column sortBy="#{dayType.description}"
-                                         sortOrder="#{handleDayTypeAction.dayTypeDescriptionOrder}">
-                                <f:facet name="header">
-                                    <p:commandLink value="description" render="dayTypeTable"
-                                                     execute="@this"
-                                                     limitRender="true"
-                                                     action="#{handleDayTypeAction.sortByDayTypeDescription}"/>
-                                    <br/>
-                                    <h:inputText value="#{handleDayTypeAction.dayTypeDescriptionFilter}">
-                                        <p:ajax event="blur" render="dayTypeTable" execute="@this"
-                                                  limitRender="true"/>
-                                    </h:inputText>
-                                </f:facet>
-                                <h:outputText escape="true" value="#{dayType.description}"/>
-                            </p:column>
-                            <f:facet name="footer">
-                                <p:dataScroller limitRender="true" execute="@this" render="dayTypeTable"
-                                                   page="#{handleDayTypeAction.page}"/>
-                            </f:facet>
-                        </p:dataTable>
+            <p:column style="background-color: #{dayType.color};">
+                <f:facet name="header">
+                    <h:outputText escape="true" value="#{'رنگ'}"/>
+                </f:facet>
+                <h:outputText escape="true"/>
+            </p:column>
+            <p:column headerText="description" sortBy="#{dayType.description}" filterBy="#{dayType.description}">
+                <h:outputText escape="true" value="#{dayType.description}"/>
+            </p:column>
+            <f:facet name="footer">
+                <p:dataScroller limitRender="true" execute="@this" render="dayTypeTable"
+                                page="#{handleDayTypeAction.page}"/>
+            </f:facet>
+        </p:dataTable>
 
-</ui:define>
+    </ui:define>
 </ui:composition>

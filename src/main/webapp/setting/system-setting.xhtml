@@ -10,25 +10,19 @@
 
         <h:form>
             <p:dataTable id="settingTable"
-                         keepSaved="true"
                          value="#{handleSettingAction.systemConfigurationDataModel}"
-                         rowKeyVar="rowIndex"
-                         noDataLabel="no_result_found"
-                         sortMode="single"
                          var="setting"
-                         rows="10"
-                         style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                         rowClasses="ROW1,ROW2">
+                         rowKey="#{setting.id}"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="settingTable" trigger="toggler" />
+                </f:facet>
 
-                <p:column sortBy="#{setting.parameter.description}"
-                          sortOrder="#{handleSettingAction.descriptionOrder}">
-                    <f:facet name="header">
-                        <p:commandLink value="title"
-                                       render="settingTable"
-                                       execute="@this"
-                                       limitRender="true"
-                                       action="#{handleSettingAction.sortByDescription}"/>
-                    </f:facet>
+                <p:column headerText="parameter description" sortBy="#{setting.parameter.description}" filterBy="#{setting.parameter.description}">
                     <h:outputText value="#{setting.parameter.description}"/>
                 </p:column>
                 <p:column>

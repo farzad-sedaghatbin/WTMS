@@ -15,13 +15,19 @@
                          selection="#{handleTrafficAction.currentTrraficLog}" selectionMode="single"
                          paginator="true" rows="10"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                         rowsPerPageTemplate="5,10,15" lazy="true">
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="trafficLogTable" trigger="toggler" />
+                </f:facet>
 
-                <p:column sortBy="#{trafficLog.name}" filterBy="#{trafficLog.name}">
+                <p:column headerText="name" sortBy="#{trafficLog.name}" filterBy="#{trafficLog.name}">
                     <h:outputText value="#{trafficLog.name}"/>
                 </p:column>
 
-                <p:column sortBy="#{trafficLog.gate}" filterBy="#{trafficLog.gate}">
+                <p:column headerText="gate" sortBy="#{trafficLog.gate}" filterBy="#{trafficLog.gate}">
                     <h:outputText value="#{trafficLog.gate}"/>
                 </p:column>
                 <p:column>

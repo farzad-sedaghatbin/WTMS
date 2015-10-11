@@ -25,14 +25,21 @@
 
             <p:dataTable id="zones" var="currentZone" value="#{handleZoneAction.zoneList}"
                          rowKey="#{currentZone.id}"
-                         selection="#{handleZoneAction.currentZone}" selectionMode="single">
+                         selection="#{handleZoneAction.currentZone}" selectionMode="single"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="zones" trigger="toggler" />
                 </f:facet>
-                <p:column headerText="name">
+
+                <p:column headerText="name" sortBy="#{currentZone.name}" filterBy="#{currentZone.name}">
                     <h:outputText value="#{currentZone.name}"/>
                 </p:column>
-                <p:column headerText="description">
+                <p:column headerText="description" sortBy="#{currentZone.description}" filterBy="#{currentZone.description}">
                     <h:outputText value="#{currentZone.description}"/>
                 </p:column>
                 <p:column headerText="enabled">

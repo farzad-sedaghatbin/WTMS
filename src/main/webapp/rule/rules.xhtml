@@ -22,34 +22,20 @@
 
             <p:dataTable id="rulePackageTable" var="rulePackage" value="#{handleRuleAction.rulePackageList}"
                          rowKey="#{rulePackage.id}"
-                         selection="#{handleRuleAction.currentRulePackage}" selectionMode="single">
+                         selection="#{handleRuleAction.currentRulePackage}" selectionMode="single"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="rulePackageTable" trigger="toggler" />
                 </f:facet>
-                <p:column sortBy="#{rulePackage.name}"
-                          sortOrder="#{handleRuleAction.ruleNameOrder}">
-                    <f:facet name="header">
-                        <p:commandLink value="name" render="ruleTable"
-                                       execute="@this"
-                                       limitRender="true"
-                                       action="#{handleRuleAction.sortByRuleName}"/>
-                        <br/>
-                        <h:inputText value="#{handleRuleAction.ruleNameFilter}">
-                            <p:ajax event="blur" render="ruleTable" execute="@this"
-                                    limitRender="true"/>
-                        </h:inputText>
-                    </f:facet>
-                    <p:commandLink id="editLink" value="#{rulePackage.name}"
-                                   render="operationArea"
-                                   styleClass="withoutUnderlineLink"
-                                   execute="@this"
-                                   limitRender="true"
-                                   action="#{handleRuleAction.selectForEdit}"/>
+
+                <p:column headerText="name" sortBy="#{rulePackage.name}" filterBy="#{rulePackage.name}">
+                    <h:outputText id="editLink" value="#{rulePackage.name}"/>
                 </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="namecalendar"/>
-                    </f:facet>
+                <p:column headerText="calendar name" sortBy="#{rulePackage.calendar.name}" filterBy="#{rulePackage.calendar.name}">
                     <h:outputText value="#{rulePackage.calendar.name}"/>
                 </p:column>
                 <p:column>

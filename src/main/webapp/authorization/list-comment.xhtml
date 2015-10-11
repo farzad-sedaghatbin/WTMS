@@ -10,52 +10,52 @@
         <h:form>
 
             <p:dataTable id="commentTable"
-                         keepSaved="true"
                          value="#{handleCommentAction.comments}"
-                         rowKeyVar="rowIndex"
-                         noDataLabel="no_result_found"
-                         sortMode="single"
                          var="comment"
-                         rows="10">
-
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="effectorUser"/>
-                    </f:facet>
-                    <h:outputText value="#{comment.effectorUser}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="message"/>
-                    </f:facet>
-                    <h:outputText value="#{comment.message}"/>
-
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="person"/>
-                    </f:facet>
-                    <h:outputText value="#{comment.trafficLog.person.name}"/>
-                    &#160;&#160;
-                    <h:outputText value="#{comment.trafficLog.person.lastName}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="date"/>
-                    </f:facet>
-                    <h:outputText value="#{comment.trafficLog.date}" converter="dateConverter"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="time"/>
-                    </f:facet>
-                    <h:outputText value="#{comment.trafficLog.time}"/>
-                </p:column>
-                <f:facet name="footer">
-                    <p:dataScroller limitRender="true" execute="@this"
-                                    render="commentTable"
-                                    page="#{handleCommentAction.page}"/>
+                         rowKey="#{comment.id}"
+                         selection="#{handleCommentAction.currentComment}" selectionMode="single"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         draggableColumns="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    RightClick to View Options
+                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:columnToggler datasource="commentTable" trigger="toggler" />
                 </f:facet>
+
+                    <p:column headerText="effector user" sortBy="#{comment.effectorUser}" filterBy="#{comment.effectorUser}">
+                        <h:outputText value="#{comment.effectorUser}"/>
+                    </p:column>
+                    <p:column headerText="message" sortBy="#{comment.message}" filterBy="#{comment.message}">
+                        <h:outputText value="#{comment.message}"/>
+
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="person"/>
+                        </f:facet>
+                        <h:outputText value="#{comment.trafficLog.person.name}"/>
+                        &#160;&#160;
+                        <h:outputText value="#{comment.trafficLog.person.lastName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="date"/>
+                        </f:facet>
+                        <h:outputText value="#{comment.trafficLog.date}" converter="dateConverter"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="time"/>
+                        </f:facet>
+                        <h:outputText value="#{comment.trafficLog.time}"/>
+                    </p:column>
+                    <f:facet name="footer">
+                        <p:dataScroller limitRender="true" execute="@this"
+                                        render="commentTable"
+                                        page="#{handleCommentAction.page}"/>
+                    </f:facet>
             </p:dataTable>
 
         </h:form>
