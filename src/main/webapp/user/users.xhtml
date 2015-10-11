@@ -8,26 +8,26 @@
     <ui:define name="content">
 
         <p:breadCrumb>
-            <p:menuitem value="Categories" url="#" />
-            <p:menuitem value="User Management" url="#" />
-            <p:menuitem value="user" url="#" />
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.management}" url="#" />
+            <p:menuitem value="#{bundle.user_management}" url="#" />
         </p:breadCrumb>
 
         <h:form id="form">
             <p:contextMenu for="users">
-                <p:menuitem value="View" update="userDetail" icon="ui-icon-search" oncomplete="PF('userDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="userDetail" icon="ui-icon-search" oncomplete="PF('userDialog').show()"
                             actionListener="#{handleUserAction.edit}"/>
-                <p:menuitem value="Assign PC" update="assignPCDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.assign_pc}" update="assignPCDetail" icon="ui-icon-search"
                             oncomplete="PF('assignPCDialog').show()"
                             actionListener="#{handleUserAction.assignPC}"/>
-                <p:menuitem value="Assign PC" update="assignPersonDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.assign_person}" update="assignPersonDetail" icon="ui-icon-search"
                             oncomplete="PF('assignPersonDialog').show()"
                             actionListener="#{handleUserAction.assignPerson}"/>
-                <p:menuitem value="Delete" update="users" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="users" icon="ui-icon-close"
                             actionListener="#{handleUserAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="userDetail" actionListener="#{handleUserAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="userDetail" actionListener="#{handleUserAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('userDialog').show()"/>
 
             <p:dataTable id="users" var="user" value="#{handleUserAction.userList}" rowKey="#{user.id}"
@@ -36,18 +36,18 @@
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                          rowsPerPageTemplate="5,10,15" lazy="true">
                 <f:facet name="header">
-                    RightClick to View Options
+                    <h:outputLabel value="#{bundle.user_list}"/>
                 </f:facet>
-                <p:column headerText="username" sortBy="#{user.username}" filterBy="#{user.username}">
+                <p:column headerText="#{bundle.username}" sortBy="#{user.username}" filterBy="#{user.username}">
                     <h:outputText value="#{user.username}"/>
                 </p:column>
-                <p:column headerText="first name" sortBy="#{user.firstname}" filterBy="#{user.firstname}">
+                <p:column headerText="#{bundle.firstname}" sortBy="#{user.firstname}" filterBy="#{user.firstname}">
                     <h:outputText value="#{user.firstname}"/>
                 </p:column>
-                <p:column headerText="last name" sortBy="#{user.lastname}" filterBy="#{user.lastname}">
+                <p:column headerText="#{bundle.lastname}" sortBy="#{user.lastname}" filterBy="#{user.lastname}">
                     <h:outputText value="#{user.lastname}"/>
                 </p:column>
-                <p:column headerText="ip">
+                <p:column headerText="#{bundle.enable}">
                     <p:graphicImage value="#{user.enable ? '/images/s_true.png' : '/images/s_false.png'}"/>
                 </p:column>
             </p:dataTable>
@@ -61,7 +61,7 @@
                     <table border="0" cellpadding="3" cellspacing="3" width="50%">
                         <tr>
                             <td>
-                                <h:outputText value="First Name:"/>
+                                <h:outputText value="#{bundle.firstname}:"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
@@ -70,7 +70,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="description:"/>
+                                <h:outputText value="#{bundle.description}:"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
@@ -79,7 +79,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="Username:"/>
+                                <h:outputText value="#{bundle.username}:"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
@@ -88,7 +88,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="Password:"/>
+                                <h:outputText value="#{bundle.password}:"/>
                             </td>
                             <td>
                                 <p:password readonly="#{handleUserAction.disableFields}"
@@ -97,7 +97,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="Re Password:"/>
+                                <h:outputText value="#{bundle.re_password}:"/>
                             </td>
                             <td>
                                 <p:password readonly="#{handleUserAction.disableFields}"
@@ -142,7 +142,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="Enabled:"/>
+                                <h:outputText value="#{bundle.enabled}:"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
@@ -151,7 +151,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="enable:"/>
+                                <h:outputText value="#{bundle.enable}:"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox readonly="#{handleUserAction.disableFields}"
@@ -184,7 +184,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <p:commandButton value="Submit" id="edit" update="users"
+                                <p:commandButton value="#{bundle.submit}" id="edit" update="users"
                                                  actionListener="#{handleUserAction.saveOrUpdate}"
                                                  oncomplete="PF('userDialog').hide()" styleClass="ui-priority-primary"
                                                  rendered="#{not handleUserAction.disableFields}"/>
@@ -230,7 +230,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <p:commandButton value="Submit" id="assignPC" update="users"
+                                <p:commandButton value="#{bundle.submit}" id="assignPC" update="users"
                                                  actionListener="#{handleUserAction.associatePCs}"
                                                  oncomplete="PF('assignPCDialog').hide()"
                                                  styleClass="ui-priority-primary"

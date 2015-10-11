@@ -25,11 +25,12 @@
     <ui:insert name="head"/>
 </h:head>
 
-<h:body class="GrayModena Geometry">
+<h:body class="GrayModena Geometry" >
     <ui:include src="topbar.xhtml"/>
 
     <div id="wrapper">
         <div id="wrapperIndent">
+
 
             <ui:include src="layoutmenu.xhtml"/>
 
@@ -42,8 +43,15 @@
 
                     <!-- footer -->
                     <div class="Container100">
+                        <p:dock position="bottom">
+                            <p:menuitem value="Home" icon="/images/home.png" url="#"/>
+                            <p:menuitem value="User" icon="/images/account-menu.png" url="#"/>
+                            <p:menuitem value="Persons" icon="/images/email.png" url="#"/>
+                            <p:menuitem value="Map" icon="/images/history.png" url="#"/>
+                            <p:menuitem value="Calendar" icon="/images/report-menu.png" url="#"/>
+                        </p:dock>
                         <div class="ContainerIndent TexAlCenter Fs14 BoldGray">
-                            PrimeFaces Modena Theme And Layout | All Rights Reserved.
+                            <h:outputLabel value="#{bundle.copyright}"/>
                         </div>
                     </div>
 

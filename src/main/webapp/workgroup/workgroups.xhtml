@@ -8,24 +8,24 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="groups">
-                <p:menuitem value="Edit" update="groupDetail" icon="ui-icon-search" oncomplete="PF('groupDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="groupDetail" icon="ui-icon-search" oncomplete="PF('groupDialog').show()"
                             actionListener="#{handleWorkGroupAction.edit}"/>
-                <p:menuitem value="Delete" update="groups" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="groups" icon="ui-icon-close"
                             actionListener="#{handleWorkGroupAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="groupDetail" actionListener="#{handleWorkGroupAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="groupDetail" actionListener="#{handleWorkGroupAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('groupDialog').show()"/>
 
             <p:dataTable id="groups" var="group" value="#{handleWorkGroupAction.workGroupList}" rowKey="#{group.id}"
                          selection="#{handleWorkGroupAction.currentWorkGroup}" selectionMode="single">
                 <f:facet name="header">
-                    RightClick to View Options
+                    <h:outputLabel value="#{bundle.workgroup_list}"/>
                 </f:facet>
-                <p:column headerText="name">
+                <p:column headerText="#{bundle.name}">
                     <h:outputText value="#{group.description}"/>
                 </p:column>
-                <p:column headerText="ip">
+                <p:column headerText="#{bundle.enable}">
                     <p:graphicImage value="#{group.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
                 </p:column>
             </p:dataTable>
@@ -39,7 +39,7 @@
                     <table border="0" cellpadding="3" cellspacing="3" width="50%">
                         <tr>
                             <td>
-                                <h:outputText value="name:"/>
+                                <h:outputText value="#{bundle.name}:"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleWorkGroupAction.disableFields}"
@@ -48,7 +48,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="description:"/>
+                                <h:outputText value="#{bundle.description}:"/>
                             </td>
                             <td>
                                 <p:inputTextarea readonly="#{handleWorkGroupAction.disableFields}"
@@ -57,7 +57,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="enable:"/>
+                                <h:outputText value="#{bundle.enable}:"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox readonly="#{handleWorkGroupAction.disableFields}"
@@ -77,8 +77,12 @@
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
                                             disabled="#{handleWorkGroupAction.disableFields}">
-                                    <f:facet name="sourceCaption">Source</f:facet>
-                                    <f:facet name="targetCaption">Target</f:facet>
+                                    <f:facet name="sourceCaption">
+                                        <h:outputLabel value="#{bundle.source}"/>
+                                    </f:facet>
+                                    <f:facet name="targetCaption">
+                                        <h:outputLabel value="#{bundle.target}"/>
+                                    </f:facet>
 
                                     <p:ajax event="transfer" listener="#{handleRoleAction.onTransfer}"/>
 
@@ -90,7 +94,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <p:commandButton value="Submit" id="edit" update="groups"
+                                <p:commandButton value="#{bundle.submit}" id="edit" update="groups"
                                                  actionListener="#{handleWorkGroupAction.saveOrUpdate}"
                                                  oncomplete="PF('groupDialog').hide()" styleClass="ui-priority-primary"
                                                  rendered="#{not handleWorkGroupAction.disableFields}"/>

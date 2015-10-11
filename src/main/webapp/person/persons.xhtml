@@ -8,9 +8,9 @@
     <ui:define name="content">
 
         <p:breadCrumb>
-            <p:menuitem value="Categories" url="#" />
-            <p:menuitem value="User Management" url="#" />
-            <p:menuitem value="person" url="#" />
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.management}" url="#" />
+            <p:menuitem value="#{bundle.person}" url="#" />
         </p:breadCrumb>
 
         <p:dialog header="PC Info" widgetVar="selectPDP" modal="true" showEffect="fade" hideEffect="fade"
@@ -53,16 +53,16 @@
                 <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
                     <tr valign="top">
                         <td nowrap="nowrap" align="center">
-                            <h:outputText escape="true" value="delete message"/>
+                            <h:outputText escape="true" value="#{bundle.delete_message}"/>
                         </td>
                     </tr>
                     <tr valign="top">
                         <td nowrap="nowrap" align="center">
                             <p:commandButton execute="@this" limitRender="true"
                                              action="#{handlePersonAction.doDelete}"
-                                             value="yes"/>
+                                             value="#{bundle.yes}"/>
                             &#160;
-                            <p:commandButton execute="@this" limitRender="true" value="no"
+                            <p:commandButton execute="@this" limitRender="true" value="#{bundle.no}"
                                              oncomplete="PF('ConfirmationPanel').hide()"/>
                         </td>
                     </tr>
@@ -76,7 +76,7 @@
             <fieldset dir="#{me.direction}">
 
                 <legend>
-                    <h:outputText escape="true" value="person list"/>
+                    <h:outputText escape="true" value="#{bundle.person_list}"/>
                 </legend>
                 <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
 
@@ -93,7 +93,7 @@
                                                 <fieldset dir="#{me.direction}">
 
                                                     <legend>
-                                                        <h:outputText escape="true" value="advance search"/>
+                                                        <h:outputText escape="true" value="#{bundle.advance_search}"/>
                                                     </legend>
                                                     <table border="0" cellpadding="3" align="#{me.appositeAlign}"
                                                            cellspacing="3"
@@ -130,7 +130,7 @@
                                                             </td>
 
                                                             <td align="#{me.align}" nowrap="nowrap">
-                                                                <p:commandButton value="add condition"
+                                                                <p:commandButton value="#{bundle.add_condition}"
                                                                                  action="#{handlePersonAction.addCondition}"
                                                                                  render="conditionTable,advanceSearchID"/>
                                                             </td>
@@ -204,7 +204,7 @@
                                                         </tr>
                                                         <tr valign="top">
                                                             <td align="#{me.align}" nowrap="nowrap">
-                                                                <h:commandButton value="search"
+                                                                <h:commandButton value="#{bundle.search}"
                                                                                  action="#{handlePersonAction.search}"/>
                                                             </td>
 
@@ -229,48 +229,10 @@
                         </td>
                     </tr>
 
-                    <tr valign="top">
-                        <td nowrap="nowrap" align="#{me.align}" colspan="2">
-                            <p:outputPanel ajaxRendered="true" id="operationArea">
-                                <f:subview id="operationAreaSubview" rendered="#{handlePersonAction.selectRow}">
-                                    <table border="0" cellpadding="3" cellspacing="3" class="toolbar panelLikeTable">
-                                        <tr valign="top">
-                                            <td nowrap="nowrap" style="padding-left: 15px; padding-right: 15px">
-                                                <h:outputText escape="true" value="#{'سطر انتخاب شده:'}"/>
-                                                &#160;&#160;
-                                                <h:outputText escape="true"
-                                                              value="#{handlePersonAction.currentPerson.name}"/>
-                                                &#160;
-                                                <h:outputText escape="true"
-                                                              value="#{handlePersonAction.currentPerson.lastName}"/>
-                                            </td>
-                                            <td align="#{me.appositeAlign}" nowrap="nowrap" class="page_title_separator"
-                                                valign="bottom">
-                                            </td>
-
-
-                                        </tr>
-                                    </table>
-                                </f:subview>
-                            </p:outputPanel>
-                            <h:inputHidden value="#{handlePersonAction.cardData}" id="cardDataInput"/>
-                            <script type="text/javascript">
-                                function readCardData() {
-                                    try {
-                                        var txt = document.app.getCardData();
-                                        document.getElementById("frm:cardDataInput").value = txt;
-                                        alert(txt);
-                                    } catch (e) {
-                                        alert(e);
-                                    }
-                                }
-                            </script>
-                        </td>
-                    </tr>
 
                     <tr valign="top">
                         <td align="#{me.align}" nowrap="nowrap" colspan="2">
-                            <p:commandButton value="add person"
+                            <p:commandButton value="#{bundle.add}"
                                              action="#{handlePersonAction.add}"
                                              execute="@this"
                                              limitRender="true"
@@ -278,7 +240,7 @@
                                              rendered="#{me.hasPermission('ADD_PERSON')}"
                                              update="gallery, operationArea, handlePersonForm:handlePanel, pic_top, extrafiled1,extrafiled2,extrafiled3,extrafiled4"/>
                             &#160;&#160;
-                            <h:commandButton action="#{handlePersonAction.exportExcel}" value="export"/>
+                            <h:commandButton action="#{handlePersonAction.exportExcel}" value="#{bundle.export}"/>
 
                         </td>
                     </tr>
@@ -286,7 +248,7 @@
                         <td align="#{me.align}" nowrap="nowrap" colspan="2">
                             <h:inputText converter="persianConverter" value="#{handlePersonAction.simpleValue}"/>
                             &#160;&#160;
-                            <h:commandButton action="#{handlePersonAction.simpleSearch}" value="search"/>
+                            <h:commandButton action="#{handlePersonAction.simpleSearch}" value="#{bundle.search}"/>
 
                         </td>
                     </tr>
