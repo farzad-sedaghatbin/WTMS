@@ -12,6 +12,7 @@ import ir.university.toosi.wtms.web.action.user.HandleUserAction;
 import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.Role;
 import ir.university.toosi.tms.model.entity.WorkGroup;
+import ir.university.toosi.wtms.web.converter.WorkgroupConverter;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
@@ -212,17 +213,24 @@ public class HandleWorkGroupAction implements Serializable {
     public void onTransfer(TransferEvent event) {
         if (event.isAdd()) {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(true);
+                ((WorkGroup) item).setSelected(true);
                 selectWorkGroups.add((WorkGroup) item);
             }
         } else {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(false);
+                ((WorkGroup) item).setSelected(false);
                 selectWorkGroups.remove(item);
             }
         }
     }
 
+    public WorkGroup findForConverter(long value) {
+        return workGroupService.findById(value);
+    }
+
+    public WorkgroupConverter getConverter() {
+        return new WorkgroupConverter();
+    }
 
     public void edit(String currentPage) {
         setEditable("true");

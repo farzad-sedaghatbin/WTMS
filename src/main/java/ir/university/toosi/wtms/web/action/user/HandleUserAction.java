@@ -282,7 +282,7 @@ public class HandleUserAction implements Serializable {
         if (user != null) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/user/list-user.htm");
+            me.redirect("/user/users.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }

@@ -21,7 +21,7 @@ public class WorkGroupDAOImpl extends BaseDAOImpl<WorkGroup> {
     public WorkGroup findById(long id) {
         try {
             return (WorkGroup) em.createNamedQuery("Workgroup.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;
