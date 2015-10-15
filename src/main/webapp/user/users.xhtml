@@ -16,6 +16,8 @@
         <h:form id="form">
             <p:contextMenu for="users">
                 <p:menuitem value="#{bundle.view}" update="userDetail" icon="ui-icon-search" oncomplete="PF('userDialog').show()"
+                            actionListener="#{handleUserAction.viewMode}"/>
+                <p:menuitem value="#{bundle.edit}" update="userDetail" icon="ui-icon-search" oncomplete="PF('userDialog').show()"
                             actionListener="#{handleUserAction.edit}"/>
                 <p:menuitem value="#{bundle.assign_pc}" update="assignPCDetail" icon="ui-icon-search"
                             oncomplete="PF('assignPCDialog').show()"
@@ -168,6 +170,7 @@
                                             effect="bounce"
                                             itemValue="#{pc}" itemLabel="#{pc.name}"
                                             showSourceControls="true"
+                                            converter="#{pcConverter}"
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
                                             disabled="#{handleUserAction.disableFields}">
@@ -201,7 +204,7 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="Assign Person" widgetVar="assignPersonDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="Assign Person" widgetVar="assignPersonDialog" modal="true"  showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="assignPersonDetail" style="text-align:center;">
                 <p:dataTable id="assignPerson" var="person" value="#{handleUserAction.personList}"
@@ -210,7 +213,9 @@
                     <f:facet name="header">
                         Select Events
                     </f:facet>
-                    <p:ajax event="rowSelect" listener="#{handleUserAction.associatePerson}" update=":form:users"/>
+                    <p:ajax event="rowSelect" listener="#{handleUserAction.associatePerson}"
+                            oncomplete="PF('assignPersonDialog').hide()"
+                            update=":form:users"/>
                     <p:column headerText="Id">
                         <h:outputText value="#{person.name}"/>
                     </p:column>

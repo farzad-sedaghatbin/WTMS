@@ -17,10 +17,10 @@ import java.util.List;
 
 public class PCDAOImpl extends BaseDAOImpl<PC> {
 
-    public PC findById(String id) {
+    public PC findById(long id) {
         try {
             return (PC) em.createNamedQuery("PC.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id",id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

@@ -10,7 +10,7 @@
 
 
         <h:form>
-            <p:commandButton value="Add" id="add"
+            <p:commandButton value="Add" id="add" onclick="this.form.target='_blank'"
                              actionListener="#{handleMapAction.add}"
                              styleClass="ui-priority-primary"/>
             <p:dataTable id="mapTable"

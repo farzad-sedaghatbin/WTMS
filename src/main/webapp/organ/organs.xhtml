@@ -24,12 +24,11 @@
                 <p:menuitem value="Delete" update="organs" icon="ui-icon-close"
                             actionListener="#{handleOrganAction.doDelete}"/>
             </p:contextMenu>
-            <ui:repeat value="#{handleOrganAction.rootOrgans}" var="organs"/>
-            <p:tree id="tree" var="organ" dir="RTL" value="#{organs}"
+            <p:tree id="tree"  var="organ" dir="RTL" value="#{handleOrganAction.rootOrgans}"
                     orientation="horizontal">
-                <p:treeNode>
+                <p:treeNode >
 
-                    <h:outputText value="#{organ.name} - #{organ.code} - #{organ.organType.code} - #{organ.title}"/>
+                    <h:outputText value="#{organ}"/>
 
                 </p:treeNode>
             </p:tree>

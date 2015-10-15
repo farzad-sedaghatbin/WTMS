@@ -100,7 +100,7 @@ public class Initializer {
         gatewaySpecialStateScheduler.startService();
         fillPersons();
         //TODO : ADD SystemConfiguration
-        lang = languageService.loadLanguage("fa");
+//        lang = languageService.loadLanguage("fa");
         createSavedReportScheduler.startService();
         new Thread(new CameraManager(photoService, cameraService)).start();
     }

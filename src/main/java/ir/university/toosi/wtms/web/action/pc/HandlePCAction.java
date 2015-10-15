@@ -497,4 +497,8 @@ public class HandlePCAction implements Serializable {
     public void setDisableFields(boolean disableFields) {
         this.disableFields = disableFields;
     }
+
+    public PC findForConverter(long value) {
+        return pcService.findById(value);
+    }
 }

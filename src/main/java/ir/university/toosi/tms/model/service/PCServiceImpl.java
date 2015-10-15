@@ -31,7 +31,7 @@ public class PCServiceImpl<T extends PC> {
     @EJB
     private UserServiceImpl userService;
 
-    public T findById(String id) {
+    public T findById(long id) {
         try {
             return (T) pcdao.findById(id);
         } catch (Exception e) {
@@ -105,7 +105,7 @@ public class PCServiceImpl<T extends PC> {
             }
 
             EventLogManager.eventLog(eventLogService, null, BLookup.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
-            pcdao.delete(findById(String.valueOf(entity.getId())));
+            pcdao.delete(findById(entity.getId()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,7 +125,7 @@ public class PCServiceImpl<T extends PC> {
 
     public boolean editPC(T entity) {
         try {
-            PC old = findById(String.valueOf(entity.getId()));
+            PC old = findById(entity.getId());
             PC newPC = new PC();
             newPC.setName(old.getName());
             newPC.setIp(old.getIp());

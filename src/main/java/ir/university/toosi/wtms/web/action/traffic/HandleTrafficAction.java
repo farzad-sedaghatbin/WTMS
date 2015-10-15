@@ -85,7 +85,24 @@ public class HandleTrafficAction implements Serializable {
 
 
     public void search() {
-        eventLogList = new TrafficLazyDataModel(trafficLogService);
+        List<TrafficLogDataModel> logDataModels = new ArrayList<>();
+
+        for (TrafficLog log : new TrafficLazyDataModel(trafficLogService)) {
+            TrafficLogDataModel dataModel = new TrafficLogDataModel();
+            dataModel.setVideo(log.getVideo());
+            dataModel.setTime(LangUtil.getFarsiNumber(log.getTime()));
+            dataModel.setDate(log.getDate());
+            dataModel.setExit(log.isExit());
+            dataModel.setGate(log.getGateway().getName());
+            dataModel.setPictures(log.getPictures());
+            dataModel.setValid(log.isValid());
+            dataModel.setId(log.getId());
+            dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
+            logDataModels.add(dataModel);
+
+        }
+//        eventLogList = Lists.reverse(logDataModels) ;
+        dateFilter = "";
     }
 
     public void increase() {

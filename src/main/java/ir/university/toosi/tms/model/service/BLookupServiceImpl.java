@@ -99,23 +99,23 @@ public class BLookupServiceImpl<T extends BLookup> {
         try {
             entity.setId(getMaximumId());
              /**/
-            LanguageManagement languageManagement = new LanguageManagement();
-            languageManagement.setTitle(entity.getTitleText() == null ? "" : entity.getTitleText());
-            languageManagement.setType(entity.getCurrentLang());
-            languageManagementService.createLanguageManagement(languageManagement);
-
-            Set list = new HashSet();
-            list.add(languageManagement);
-
-            LanguageKeyManagement languageKeyManagement = new LanguageKeyManagement();
-            languageKeyManagement.setDescriptionKey(entity.getId() + BLookup.class.getSimpleName());
-            languageKeyManagement.setLanguageManagements(list);
-            entity.setTitle(entity.getId() + BLookup.class.getSimpleName());
-            languageKeyManagementService.createLanguageKeyManagement(languageKeyManagement);
+//            LanguageManagement languageManagement = new LanguageManagement();
+//            languageManagement.setTitle(entity.getTitleText() == null ? "" : entity.getTitleText());
+//            languageManagement.setType(entity.getCurrentLang());
+//            languageManagementService.createLanguageManagement(languageManagement);
+//
+//            Set list = new HashSet();
+//            list.add(languageManagement);
+//
+//            LanguageKeyManagement languageKeyManagement = new LanguageKeyManagement();
+//            languageKeyManagement.setDescriptionKey(entity.getId() + BLookup.class.getSimpleName());
+//            languageKeyManagement.setLanguageManagements(list);
+//            entity.setTitle(entity.getId() + BLookup.class.getSimpleName());
+//            languageKeyManagementService.createLanguageKeyManagement(languageKeyManagement);
 
             /**/
 
-            BLookup bLookup = new BLookup(entity.getId(), entity.getTitle(), entity.getLookup());
+            BLookup bLookup = new BLookup(entity.getId(), entity.getTitleText(), entity.getLookup());
             bLookup = (T) bLookupDAO.create(bLookup);
 
             EventLogManager.eventLog(eventLogService, String.valueOf(bLookup.getId()), BLookup.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());

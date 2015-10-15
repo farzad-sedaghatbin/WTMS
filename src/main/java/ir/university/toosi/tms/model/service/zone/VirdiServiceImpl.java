@@ -141,14 +141,9 @@ public class VirdiServiceImpl<T extends Virdi> {
     }
 
     public String deleteVirdi(T entity) {
-        try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), BLookup.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             virdiDAO.delete(findById(entity.getId()));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "FALSE";
-        }
+            return "operation.occurred";
     }
 
     public T createVirdi(T entity) {

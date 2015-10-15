@@ -100,9 +100,6 @@
     <!-- END:X3DOM -->
 </head>
 <h:body styleClass="#{me.direction == 'rtl' ? 'persianMode' : 'englishMode'}">
-    <link rel="stylesheet" href="#{request.contextPath}/css/public.css" type="text/css"/>
-    <link rel="stylesheet" href="#{request.contextPath}/css/common.css" type="text/css"/>
-    <link rel="stylesheet" href="#{request.contextPath}/css/#{handleSkinAction.skin}.css" type="text/css"/>
 
     <table border="0" cellpadding="0" cellspacing="0" width="100%" dir="RTL" class="header-repeat header-details">
         <tr valign="top">
@@ -121,7 +118,7 @@
     <p>
         <fieldset>
             <legend>
-                <h:outputText escape="true" value="#{me.getValue('mapEditor')}"/>
+                <h:outputText escape="true" value="mapEditor"/>
             </legend>
             <div class="panelLikeTable">
                 2D Image Map:=<input type="file" name="ImageMap" id="ImageMap" accept="image/jpeg, image/gif, image/png"

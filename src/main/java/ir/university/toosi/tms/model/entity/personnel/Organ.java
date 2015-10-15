@@ -7,9 +7,9 @@ import com.google.common.collect.Iterators;
 import ir.university.toosi.tms.model.entity.BLookup;
 import ir.university.toosi.tms.model.entity.BaseEntity;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
+import org.primefaces.model.TreeNode;
 
 import javax.persistence.*;
-import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -48,7 +48,7 @@ import java.util.Set;
                 query = "select o from Organ o where o.rulePackage.id=:id and o.deleted <> '1'"
         )
 })
-public class Organ extends BaseEntity implements javax.swing.tree.TreeNode {
+public class Organ extends BaseEntity implements TreeNode {
 
     @Id
     @GeneratedValue
@@ -81,7 +81,7 @@ public class Organ extends BaseEntity implements javax.swing.tree.TreeNode {
     private RulePackage rulePackage;
     @JsonIgnore
     @Transient
-    private List<Organ> children = new ArrayList<>();
+    private List<TreeNode> children = new ArrayList<>();
 
     public Organ() {
     }
@@ -164,7 +164,9 @@ public class Organ extends BaseEntity implements javax.swing.tree.TreeNode {
         for(Organ parentOrgan : organs){
             for(Organ childOrgan : organs){
                 if(childOrgan.getParentOrgan() != null && childOrgan.getParentOrgan().getId() == parentOrgan.getId()){
-                    parentOrgan.addChild(childOrgan);
+                    childOrgan.setParent(parentOrgan);
+                    parentOrgan.getChildren().add(childOrgan);
+
                 }
             }
             if(parentOrgan.getParentOrgan() == null){
@@ -173,56 +175,100 @@ public class Organ extends BaseEntity implements javax.swing.tree.TreeNode {
         }
         return finalOrgans;
     }
-    @JsonIgnore
-    public void addChild(Organ organ){
-        children.add(organ);
+
+    @Override
+    public void setParent(org.primefaces.model.TreeNode treeNode) {
+        this.parentOrgan= (Organ) treeNode;
     }
 
     @Override
-    @JsonIgnore
-    public TreeNode getChildAt(int childIndex) {
-        return children.get(childIndex);
+    public boolean isExpanded() {
+        return false;
     }
 
     @Override
-    @JsonIgnore
+    public void setExpanded(boolean b) {
+
+    }
+
+    @Override
     public int getChildCount() {
         return children.size();
     }
 
     @Override
-    @JsonIgnore
-    public TreeNode getParent() {
-        return parentOrgan;
-    }
-
-    @Override
-    @JsonIgnore
-    public int getIndex(TreeNode node) {
-        return children.indexOf(node);
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean getAllowsChildren() {
-        return true;
-    }
-
-    @Override
-    @JsonIgnore
     public boolean isLeaf() {
-        return children.isEmpty();
+        return children.size()==0;
     }
 
     @Override
-    @JsonIgnore
-    public Enumeration children() {
-        return Iterators.asEnumeration(children.iterator());
+    public boolean isSelected() {
+        return false;
     }
 
-    @JsonIgnore
-    public String getType(){
+    @Override
+    public void setSelected(boolean b) {
+
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return false;
+    }
+
+    @Override
+    public void setSelectable(boolean b) {
+
+    }
+
+    @Override
+    public boolean isPartialSelected() {
+        return false;
+    }
+
+    @Override
+    public void setPartialSelected(boolean b) {
+
+    }
+
+    @Override
+    public void setRowKey(String s) {
+
+    }
+
+    @Override
+    public String getRowKey() {
+        return null;
+    }
+
+    @Override
+    public void clearParent() {
+
+    }
+
+    @Override
+    public String getType() {
         return "organ";
+    }
+
+    @Override
+    public void setType(String s) {
+
+    }
+
+    @Override
+    public Object getData() {
+        return null;
+    }
+
+    @Override
+    public List<org.primefaces.model.TreeNode> getChildren() {
+        return children;
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return null;
     }
 
     public boolean isInheritance() {

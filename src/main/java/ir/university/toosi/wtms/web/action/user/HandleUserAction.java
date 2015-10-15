@@ -95,6 +95,7 @@ public class HandleUserAction implements Serializable {
     private Person currentPerson;
     private String searchOrganizationName;
     private String editable = "false";
+    private boolean view = false;
     private String selectedParticipant = "0";
     private String selectedWorkGroupId = "0";
     private String workgroup;
@@ -166,11 +167,11 @@ public class HandleUserAction implements Serializable {
     public void doDelete() {
         if (currentUser.getWorkGroups() != null && currentUser.getWorkGroups().size() > 0) {
             me.addInfoMessage("user.has.role");
-            me.redirect("/user/list-user.htm");
+            me.redirect("/user/users.xhtml");
         }
         if (currentUser.getUsername().equalsIgnoreCase(me.getUsername())) {
             me.addInfoMessage("delete.self");
-            me.redirect("/user/list-user.htm");
+            me.redirect("/user/users.xhtml");
         }
         String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
@@ -179,7 +180,7 @@ public class HandleUserAction implements Serializable {
 
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/user/list-user.htm");
+        me.redirect("/user/users.xhtml");
     }
 
     public void add() {
@@ -193,14 +194,19 @@ public class HandleUserAction implements Serializable {
         List<PC> targetPCs = new ArrayList<>();
 
         List<PC> pcs = pcService.getAllPCs();
-        for (PC pc : pcs) {
-            for (PC pc1 : currentUser.getPcs()) {
-                if (pc1.getId() == pc.getId()) {
-                    targetPCs.add(pc);
-                } else {
-                    sourcePCs.add(pc);
+        if(currentUser.getPcs()!=null && currentUser.getPcs().size()!=0) {
+            for (PC pc : pcs) {
+
+                for (PC pc1 : currentUser.getPcs()) {
+                    if (pc1.getId() == pc.getId()) {
+                        targetPCs.add(pc);
+                    } else {
+                        sourcePCs.add(pc);
+                    }
                 }
             }
+        }else{
+            sourcePCs.addAll(pcs);
         }
         pcList = new DualListModel<>(sourcePCs, targetPCs);
     }
@@ -208,7 +214,7 @@ public class HandleUserAction implements Serializable {
     public void onTransfer(TransferEvent event) {
         if (event.isAdd()) {
             for (Object item : event.getItems()) {
-                pcList.getSource().remove(item);
+                pcList.getSource().remove((PC)item);
                 pcList.getTarget().add((PC) item);
             }
         } else {
@@ -232,8 +238,8 @@ public class HandleUserAction implements Serializable {
 
     public void associatePerson() {
         currentUser.setPerson(selectedPerson);
-        currentUser.setFirstname("");
-        currentUser.setLastname("");
+        currentUser.setFirstname(selectedPerson.getName());
+        currentUser.setLastname(selectedPerson.getLastName());
 
         boolean condition = userService.editUser(currentUser);
         if (condition) {
@@ -337,6 +343,41 @@ public class HandleUserAction implements Serializable {
         handleWorkGroupAction.setWorkgroups(new DualListModel<WorkGroup>(sourceWorkgroups, targetWorkgroups));
 
     }
+    public void viewMode() {
+        view=true;
+        setDisableFields(true);
+        currentUser = userService.findById(currentUser.getId());
+        firstname = currentUser.getFirstname();
+        lastname = currentUser.getLastname();
+        username = currentUser.getUsername();
+        enabled = currentUser.getEnable().equalsIgnoreCase("true") ? true : false;
+
+        List<WorkGroup> sourceWorkgroups = new ArrayList<>();
+        List<WorkGroup> targetWorkgroups = new ArrayList<>();
+
+        List<WorkGroup> workGroups = null;
+        workGroups = workGroupService.getAllWorkGroup();
+        handleWorkGroupAction.setSelectWorkGroups(new HashSet<WorkGroup>());
+        for (WorkGroup workGroup : workGroups) {
+            workGroup.setDescText(me.getValue(workGroup.getDescription()));
+        }
+        for (WorkGroup currentWorkGroup : currentUser.getWorkGroups()) {
+            for (WorkGroup workGroup : workGroups) {
+                if ((currentWorkGroup.getId() == workGroup.getId())) {
+                    workGroup.setSelected(true);
+                    workGroup.setDescription(me.getValue(currentWorkGroup.getDescription()));
+                    handleWorkGroupAction.getSelectWorkGroups().add(workGroup);
+                    targetWorkgroups.add(workGroup);
+                } else {
+                    sourceWorkgroups.add(workGroup);
+                }
+            }
+        }
+
+        handleWorkGroupAction.setWorkGroupList(workGroups);
+        handleWorkGroupAction.setWorkgroups(new DualListModel<WorkGroup>(sourceWorkgroups, targetWorkgroups));
+
+    }
 
 
     public void doEdit() {
@@ -357,7 +398,7 @@ public class HandleUserAction implements Serializable {
             handleWorkGroupAction.setSelectWorkGroups(new HashSet<WorkGroup>());
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/user/list-user.htm");
+            me.redirect("/user/users.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -424,7 +465,7 @@ public class HandleUserAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/user/list-user.htm");
+            me.redirect("/user/users.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -917,5 +958,13 @@ public class HandleUserAction implements Serializable {
 
     public void setPersonList(List<Person> personList) {
         this.personList = personList;
+    }
+
+    public boolean isView() {
+        return view;
+    }
+
+    public void setView(boolean view) {
+        this.view = view;
     }
 }

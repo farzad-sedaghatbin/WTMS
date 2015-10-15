@@ -61,7 +61,7 @@ public class RoleServiceImpl<T extends Role> {
 
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Role.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             roleDAO.delete(findById(String.valueOf(entity.getId())));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }
@@ -72,21 +72,6 @@ public class RoleServiceImpl<T extends Role> {
         try {
             entity.setId(getMaximumId());
              /**/
-            LanguageManagement languageManagement = new LanguageManagement();
-            languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
-            languageManagement.setType(entity.getCurrentLang());
-            languageManagementService.createLanguageManagement(languageManagement);
-
-            Set list = new HashSet();
-            list.add(languageManagement);
-
-            LanguageKeyManagement languageKeyManagement = new LanguageKeyManagement();
-            languageKeyManagement.setDescriptionKey(entity.getId() + Role.class.getSimpleName());
-            languageKeyManagement.setLanguageManagements(list);
-            entity.setDescription(entity.getId() + Role.class.getSimpleName());
-            languageKeyManagementService.createLanguageKeyManagement(languageKeyManagement);
-
-            /**/
 
             Role role = new Role(entity.getId(), entity.getDescription(), entity.isEnabled(), new HashSet<Operation>(), new HashSet<Permission>());
             role = (T) roleDAO.create(role);
@@ -115,47 +100,6 @@ public class RoleServiceImpl<T extends Role> {
 
     public boolean editRole(T entity) {
         try {
-            LanguageKeyManagement languageKeyManagement = languageKeyManagementService.findByDescKey(entity.getDescription());
-            if (languageKeyManagement != null) {
-                Set<LanguageManagement> list = languageKeyManagement.getLanguageManagements();
-                boolean hasDesc = false;
-                for (LanguageManagement languageManagement : list) {
-                    hasDesc = true;
-                    if (languageManagement.getType().getName().equalsIgnoreCase(entity.getCurrentLang().getName())) {
-                        languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
-                        languageManagementService.editLanguageManagement(languageManagement);
-                    }
-                }
-
-                if (!hasDesc) {
-
-                    LanguageManagement languageManagement = new LanguageManagement();
-                    languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
-                    languageManagement.setType(entity.getCurrentLang());
-                    languageManagementService.createLanguageManagement(languageManagement);
-
-                    list.add(languageManagement);
-                    languageKeyManagement.getLanguageManagements().clear();
-                    languageKeyManagementService.editLanguageKeyManagement(languageKeyManagement);
-                    languageKeyManagement.getLanguageManagements().addAll(list);
-                    languageKeyManagementService.editLanguageKeyManagement(languageKeyManagement);
-                }
-            } else {
-
-                LanguageManagement languageManagement = new LanguageManagement();
-                languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
-                languageManagement.setType(entity.getCurrentLang());
-                languageManagementService.createLanguageManagement(languageManagement);
-
-                Set list = new HashSet();
-                list.add(languageManagement);
-
-                languageKeyManagement = new LanguageKeyManagement();
-                languageKeyManagement.setDescriptionKey(entity.getId() + Role.class.getSimpleName());
-                languageKeyManagement.setLanguageManagements(list);
-                entity.setDescription(entity.getId() + Role.class.getSimpleName());
-                languageKeyManagementService.createLanguageKeyManagement(languageKeyManagement);
-            }
             List<Operation> parentOperation = getParentOperationList(entity.getOperations());
             entity.getOperations().addAll(parentOperation);
             roleDAO.update(entity);

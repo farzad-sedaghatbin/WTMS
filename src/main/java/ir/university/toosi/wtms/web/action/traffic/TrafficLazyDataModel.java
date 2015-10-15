@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Created by o_javaheri on 10/11/2015.
  */
-public class TrafficLazyDataModel extends LazyDataModel<TrafficLogDataModel> {
+public class TrafficLazyDataModel extends LazyDataModel<TrafficLog> {
 
     private TrafficLogServiceImpl trafficLogService;
 
@@ -29,12 +29,12 @@ public class TrafficLazyDataModel extends LazyDataModel<TrafficLogDataModel> {
     }
 
     @Override
-    public List<TrafficLogDataModel> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<TrafficLog> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         EntityManager em = trafficLogService.getTrafficLogDAO().getEm();
         CriteriaBuilder builder = em.getCriteriaBuilder();
         Predicate predicate = builder.conjunction();
-        CriteriaQuery<TrafficLogDataModel> criteria = builder.createQuery(TrafficLogDataModel.class);
-        Root<TrafficLogDataModel> root = criteria.from(TrafficLogDataModel.class);
+        CriteriaQuery<TrafficLog> criteria = builder.createQuery(TrafficLog.class);
+        Root<TrafficLog> root = criteria.from(TrafficLog.class);
 
         for (Map.Entry<String,Object> e : filters.entrySet()) {
             predicate = builder.and(predicate, builder.like(root.<String>get(e.getKey()), "%" + e.getValue() + "%"));
@@ -55,7 +55,7 @@ public class TrafficLazyDataModel extends LazyDataModel<TrafficLogDataModel> {
         this.setRowCount(count);
 
         criteria.select(root).where(predicate);
-        TypedQuery<TrafficLogDataModel> typedQuery = em.createQuery(criteria);
+        TypedQuery<TrafficLog> typedQuery = em.createQuery(criteria);
 
         typedQuery.setFirstResult(first);
         typedQuery.setMaxResults(first + pageSize);
@@ -65,13 +65,13 @@ public class TrafficLazyDataModel extends LazyDataModel<TrafficLogDataModel> {
 
 
     @Override
-    public Object getRowKey(TrafficLogDataModel object) {
+    public Object getRowKey(TrafficLog object) {
         return object.getId();
     }
 
     @Override
-    public TrafficLogDataModel getRowData(String rowKey) {
+    public TrafficLog getRowData(String rowKey) {
 //        return trafficLogService.findById(Long.parseLong(rowKey));
-        return new TrafficLogDataModel();
+        return new TrafficLog();
     }
 }

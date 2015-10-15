@@ -87,7 +87,7 @@ public class HandleBLookupAction implements Serializable {
             String condition = bLookupService.deleteBLookup(currentBLookup);
             refresh();
             me.addInfoMessage(condition);
-            me.redirect("/bLookup/list-blookup.htm");
+            me.redirect("/bLookup/list-blookup.xhtml");
     }
 
     public void init() {
@@ -123,7 +123,7 @@ public class HandleBLookupAction implements Serializable {
             if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
-                me.redirect("/lookup/list-blookup.htm");
+                me.redirect("/lookup/list-blookup.xhtml");
             } else {
                 me.addInfoMessage("operation.not.occurred");
                 return;
@@ -141,14 +141,13 @@ public class HandleBLookupAction implements Serializable {
         newBLookup.setLookup(handleLookupAction.getCurrentLookup());
 
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createBLookup");
         BLookup insertedBLookup = null;
             insertedBLookup =bLookupService.createBLookup(newBLookup);
 
         if (insertedBLookup != null) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/lookup/list-blookup.htm");
+            me.redirect("/lookup/list-blookup.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
@@ -294,8 +293,8 @@ public class HandleBLookupAction implements Serializable {
     }
 
     public void setCurrentLookup(Lookup currentLookup) {
-        refresh();
         this.currentLookup = currentLookup;
+        refresh();
     }
 
     public SortOrder getbLookupDescriptionOrder() {

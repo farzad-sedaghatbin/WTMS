@@ -193,13 +193,8 @@ public class HandleMapAction implements Serializable {
         newMap.setEffectorUser(me.getUsername());
         newMap.setContent(content.getBytes());
         System.out.println(content);
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/saveMap");
         Map insertedMap = null;
-        try {
-            insertedMap = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newMap)), Map.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            insertedMap = mapService.createMap(newMap);
         if (insertedMap != null) {
 //            for (Gateway gateway1 : selecteGateway) {
 //                gateway1.getCameras().add(insertedMap);
@@ -212,7 +207,7 @@ public class HandleMapAction implements Serializable {
 //            }
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/map/list-map.htm");
+            me.redirect("/map/list-map.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }

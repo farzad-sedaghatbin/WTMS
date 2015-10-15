@@ -285,7 +285,7 @@ public class HandleVirdiAction implements Serializable {
         String condition = virdiService.deleteVirdi(currentVirdi);
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/virdi/virdis.xhtml");
+        me.redirect("/virdi/virdi.xhtml");
 
     }
 
@@ -324,7 +324,6 @@ public class HandleVirdiAction implements Serializable {
         gatewayId = String.valueOf(currentVirdi.getGateway().getId());
         selectedVirdi = currentVirdi;
         entrance = currentVirdi.isEntrance();
-        refresh();
     }
 
     public void view() {
@@ -380,7 +379,7 @@ public class HandleVirdiAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/virdi/virdis.xhtml");
+            me.redirect("/virdi/virdi.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -421,7 +420,7 @@ public class HandleVirdiAction implements Serializable {
         if (insertedVirdi != null) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/virdi/virdis.xhtml");
+            me.redirect("/virdi/virdi.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }

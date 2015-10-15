@@ -184,10 +184,9 @@ public class HandleRoleAction implements Serializable {
     public void doDelete() {
 
         currentRole.setEffectorUser(me.getUsername());
-        roleService.deleteRole(currentRole);
+        me.addInfoMessage(roleService.deleteRole(currentRole));
         refresh();
-        me.addInfoMessage("role was deleted successfully");
-        me.redirect("/role/list-role.htm");
+        me.redirect("/role/roles.xhtml");
     }
 
     public void init() {
@@ -207,6 +206,7 @@ public class HandleRoleAction implements Serializable {
 
     public void view() {
         setEditable("true");
+        setDisableFields(true);
         roleEnabled = currentRole.isEnabled();
         descText = me.getValue(currentRole.getDescription());
         name = currentRole.getName();
@@ -307,7 +307,7 @@ public class HandleRoleAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/role/list-role.htm");
+            me.redirect("/role/roles.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -343,7 +343,7 @@ public class HandleRoleAction implements Serializable {
 
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/role/list-role.htm");
+            me.redirect("/role/roles.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }

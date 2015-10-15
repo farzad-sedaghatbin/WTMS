@@ -67,7 +67,7 @@ Res.VTM3DMap.AfterDeleteElement=function(P){
 	};
 	return P;
 };
-Res.VTM3DMap.Initialize('/modena-1.0.1/restful/TMSService/viewMap',{}).Refresh('/kernel/restful/TMSService/alert');
+Res.VTM3DMap.Initialize('/modena-1.0.1/restful/TMSService/viewMap',{}).Refresh('/modena-1.0.1/restful/TMSService/alert');
 $('#VTMShape').bind("change", function (event) {
 	Res.VTM3DMap.SelectInsertX3DElement();	
 });

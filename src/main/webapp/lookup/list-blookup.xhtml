@@ -12,11 +12,11 @@
         <h:form>
 
             <p:contextMenu for="blookups">
-                <p:menuitem value="Edit" update="blookupDetail" icon="ui-icon-search" oncomplete="PF('blookupDialog').show()" actionListener="#{handleBLookupAction.edit}"/>
+                <p:menuitem value="Edit" update="blookupPanelId" icon="ui-icon-search" oncomplete="PF('blookupDialog').show()" actionListener="#{handleBLookupAction.edit}"/>
                 <p:menuitem value="Delete" update="blookups" icon="ui-icon-close" actionListener="#{handleBLookupAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="blookupDetail" actionListener="#{handleBLookupAction.add}" styleClass="ui-priority-primary" onclick="PF('blookupDialog').show()"/>
+            <p:commandButton value="Add" id="add" update="blookupPanelId" actionListener="#{handleBLookupAction.add}" styleClass="ui-priority-primary" onclick="PF('blookupDialog').show()"/>
 
             <p:dataTable id="blookups"
                             keepSaved="true"

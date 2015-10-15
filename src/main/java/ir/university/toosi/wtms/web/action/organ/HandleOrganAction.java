@@ -20,7 +20,9 @@ import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.tms.model.entity.rule.Rule;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.TreeNode;
 
 
 import javax.ejb.EJB;
@@ -79,7 +81,7 @@ public class HandleOrganAction implements Serializable {
     private String calendarName;
     private boolean antiPassBack, allowExit, allowExitGadget;
     private List<RulePackage> rulePackageList = null;
-    private List<Organ> rootOrgans;
+    private TreeNode rootOrgans;
     private boolean inheritance;
     private String name;
     private ArrayList<Rule> ruleArrayList = new ArrayList<>();
@@ -741,17 +743,20 @@ public class HandleOrganAction implements Serializable {
     }
 
 
-    public List<Organ> getRootOrgans() {
+    public TreeNode getRootOrgans() {
+        TreeNode root = new DefaultTreeNode("Root",null);
         if (rootOrgans == null) {
             List<Organ> organs = organService.getAllOrgan();
-                rootOrgans = Organ.prepareHierarchy(organs);
+                organs= Organ.prepareHierarchy(organs);
+            for (Organ organ : organs) {
+                if(organ.getParent()==null){
+                    TreeNode subRoot= new DefaultTreeNode(organ.getName(),root);
+                }
+            }
         }
-        return rootOrgans;
+        return root;
     }
 
-    public void setRootOrgans(List<Organ> rootOrgans) {
-        this.rootOrgans = rootOrgans;
-    }
 
     public UserManagementAction getMe() {
         return me;
