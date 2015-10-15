@@ -47,11 +47,20 @@ public class RoleServiceImpl<T extends Role> {
     public List<T> getAllRole() {
         try {
 
-    return (List<T>) roleDAO.findAll("Role.list", true);
-} catch (Exception e) {
-        return null;
+            return (List<T>) roleDAO.findAll("Role.list", true);
+        } catch (Exception e) {
+            return null;
         }
+    }
+
+    public List<T> getAllRoleForWorkgroupEdit(Set<Role> roles) {
+        try {
+
+            return (List<T>) roleDAO.findAllForWorkgroupEdit("Role.listForWorkgroupEdit", roles);
+        } catch (Exception e) {
+            return new ArrayList<>();
         }
+    }
 
     public String deleteRole(T entity) {
         try {

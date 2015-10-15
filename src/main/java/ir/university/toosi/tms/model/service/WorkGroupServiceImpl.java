@@ -68,12 +68,12 @@ public class WorkGroupServiceImpl<T extends WorkGroup> {
         try {
             List<User> users = userService.findByWorkGroup(entity.getId());
             if (users != null && users.size() != 0)
-                return new ObjectMapper().writeValueAsString("REL_USER_WORKGROUP");
+                return "There is a user for this workgroup";
             entity.getRoles().clear();
             editWorkGroup(entity);
             EventLogManager.eventLog(eventLogService, null, WorkGroup.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             workGroupDAO.delete(findById(entity.getId()));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "Workgroup deleted successfully";
         } catch (Exception e) {
             return "FALSE";
         }
@@ -82,28 +82,28 @@ public class WorkGroupServiceImpl<T extends WorkGroup> {
 
     public T createWorkGroup(T entity) {
         try {
-            entity.setId(getMaximumId());
+//            entity.setId(getMaximumId());
               /**/
-            LanguageManagement languageManagement = new LanguageManagement();
-            languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
-            languageManagement.setType(entity.getCurrentLang());
-            languageManagementService.createLanguageManagement(languageManagement);
-
-            Set list = new HashSet();
-            list.add(languageManagement);
-
-            LanguageKeyManagement languageKeyManagement = new LanguageKeyManagement();
-            languageKeyManagement.setDescriptionKey(entity.getId() + WorkGroup.class.getSimpleName());
-            languageKeyManagement.setLanguageManagements(list);
-            entity.setDescription(entity.getId() + WorkGroup.class.getSimpleName());
-            languageKeyManagementService.createLanguageKeyManagement(languageKeyManagement);
+//            LanguageManagement languageManagement = new LanguageManagement();
+//            languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
+//            languageManagement.setType(entity.getCurrentLang());
+//            languageManagementService.createLanguageManagement(languageManagement);
+//
+//            Set list = new HashSet();
+//            list.add(languageManagement);
+//
+//            LanguageKeyManagement languageKeyManagement = new LanguageKeyManagement();
+//            languageKeyManagement.setDescriptionKey(entity.getId() + WorkGroup.class.getSimpleName());
+//            languageKeyManagement.setLanguageManagements(list);
+//            entity.setDescription(entity.getId() + WorkGroup.class.getSimpleName());
+//            languageKeyManagementService.createLanguageKeyManagement(languageKeyManagement);
 
             /**/
-            WorkGroup workGroup = new WorkGroup(entity.getId(), entity.getDescription(), entity.getEnabled(), new HashSet<Role>());
-            workGroup = workGroupDAO.create((T) workGroup);
-            workGroup.getRoles().addAll(entity.getRoles());
-            workGroupDAO.update(workGroup);
-            EventLogManager.eventLog(eventLogService, String.valueOf(workGroup.getId()), WorkGroup.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
+//            WorkGroup workGroup = new WorkGroup(entity.getId(), entity.getDescription(), entity.getEnabled(), new HashSet<Role>());
+            WorkGroup workGroup = workGroupDAO.create(entity);
+//            workGroup.getRoles().addAll(entity.getRoles());
+//            workGroupDAO.update(workGroup);
+//            EventLogManager.eventLog(eventLogService, String.valueOf(workGroup.getId()), WorkGroup.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
             return (T) workGroup;
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,48 +114,48 @@ public class WorkGroupServiceImpl<T extends WorkGroup> {
 
     public boolean editWorkGroup(T entity) {
         try {
-            LanguageKeyManagement languageKeyManagement = languageKeyManagementService.findByDescKey(entity.getDescription());
-            if (languageKeyManagement != null) {
-                Set<LanguageManagement> list = languageKeyManagement.getLanguageManagements();
-                boolean hasDesc = false;
-                for (LanguageManagement languageManagement : list) {
-                    hasDesc = true;
-                    if (languageManagement.getType().getName().equalsIgnoreCase(entity.getCurrentLang().getName())) {
-                        languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
-                        languageManagementService.editLanguageManagement(languageManagement);
-                    }
-                }
-
-                if (!hasDesc) {
-
-                    LanguageManagement languageManagement = new LanguageManagement();
-                    languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
-                    languageManagement.setType(entity.getCurrentLang());
-                    languageManagementService.createLanguageManagement(languageManagement);
-
-                    list.add(languageManagement);
-                    languageKeyManagement.getLanguageManagements().clear();
-                    languageKeyManagementService.editLanguageKeyManagement(languageKeyManagement);
-                    languageKeyManagement.getLanguageManagements().addAll(list);
-                    languageKeyManagementService.editLanguageKeyManagement(languageKeyManagement);
-                }
-            } else {
-
-                LanguageManagement languageManagement = new LanguageManagement();
-                languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
-                languageManagement.setType(entity.getCurrentLang());
-                languageManagementService.createLanguageManagement(languageManagement);
-
-                Set list = new HashSet();
-                list.add(languageManagement);
-
-                languageKeyManagement = new LanguageKeyManagement();
-                languageKeyManagement.setDescriptionKey(entity.getId() + WorkGroup.class.getSimpleName());
-                languageKeyManagement.setLanguageManagements(list);
-                entity.setDescription(entity.getId() + WorkGroup.class.getSimpleName());
-                languageKeyManagementService.createLanguageKeyManagement(languageKeyManagement);
-            }
-
+//            LanguageKeyManagement languageKeyManagement = languageKeyManagementService.findByDescKey(entity.getDescription());
+//            if (languageKeyManagement != null) {
+//                Set<LanguageManagement> list = languageKeyManagement.getLanguageManagements();
+//                boolean hasDesc = false;
+//                for (LanguageManagement languageManagement : list) {
+//                    hasDesc = true;
+//                    if (languageManagement.getType().getName().equalsIgnoreCase(entity.getCurrentLang().getName())) {
+//                        languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
+//                        languageManagementService.editLanguageManagement(languageManagement);
+//                    }
+//                }
+//
+//                if (!hasDesc) {
+//
+//                    LanguageManagement languageManagement = new LanguageManagement();
+//                    languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
+//                    languageManagement.setType(entity.getCurrentLang());
+//                    languageManagementService.createLanguageManagement(languageManagement);
+//
+//                    list.add(languageManagement);
+//                    languageKeyManagement.getLanguageManagements().clear();
+//                    languageKeyManagementService.editLanguageKeyManagement(languageKeyManagement);
+//                    languageKeyManagement.getLanguageManagements().addAll(list);
+//                    languageKeyManagementService.editLanguageKeyManagement(languageKeyManagement);
+//                }
+//            } else {
+//
+//                LanguageManagement languageManagement = new LanguageManagement();
+//                languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());
+//                languageManagement.setType(entity.getCurrentLang());
+//                languageManagementService.createLanguageManagement(languageManagement);
+//
+//                Set list = new HashSet();
+//                list.add(languageManagement);
+//
+//                languageKeyManagement = new LanguageKeyManagement();
+//                languageKeyManagement.setDescriptionKey(entity.getId() + WorkGroup.class.getSimpleName());
+//                languageKeyManagement.setLanguageManagements(list);
+//                entity.setDescription(entity.getId() + WorkGroup.class.getSimpleName());
+//                languageKeyManagementService.createLanguageKeyManagement(languageKeyManagement);
+//            }
+//
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), WorkGroup.class.getSimpleName(), EventLogType.EDIT, entity.getEffectorUser());
             workGroupDAO.update(entity);
             return true;

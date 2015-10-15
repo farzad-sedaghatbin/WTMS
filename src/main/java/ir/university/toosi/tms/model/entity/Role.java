@@ -17,6 +17,10 @@ import java.util.Set;
                 query = "select r from Role r where r.deleted='0' "
         ),
         @NamedQuery(
+                name = "Role.listForWorkgroupEdit",
+                query = "select r from Role r where r.deleted='0' and r not in :roles"
+        ),
+        @NamedQuery(
                 name = "Role.findById",
                 query = "select r from Role r where r.id=:id"
 

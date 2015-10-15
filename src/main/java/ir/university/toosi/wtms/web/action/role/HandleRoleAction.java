@@ -237,13 +237,13 @@ public class HandleRoleAction implements Serializable {
     public void onTransfer(TransferEvent event) {
         if (event.isAdd()) {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(true);
+                ((Role) item).setSelected(true);
                 getSelectionGrid().add((Role) item);
                 selectedRoles.add((Role) item);
             }
         } else {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(false);
+                ((Role) item).setSelected(false);
                 getSelectionGrid().remove(item);
                 selectedRoles.remove(item);
             }
@@ -347,6 +347,10 @@ public class HandleRoleAction implements Serializable {
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
+    }
+
+    public Role findById(String id){
+        return roleService.findById(id);
     }
 
 //    public Filter<?> getRoleDescriptionFilterImpl() {

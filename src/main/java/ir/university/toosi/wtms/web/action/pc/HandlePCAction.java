@@ -124,7 +124,7 @@ public class HandlePCAction implements Serializable {
         pcService.deletePC(currentPC);
         refresh();
         me.addInfoMessage("delete was successful");
-        me.redirect("/pc/list-pc.htm");
+        me.redirect("/pc/pc.xhtml");
     }
 
     public void init() {
@@ -182,7 +182,7 @@ public class HandlePCAction implements Serializable {
             if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
-                me.redirect("/pc/list-pc.htm");
+                me.redirect("/pc/pc.xhtml");
             } else {
                 me.addInfoMessage("operation.not.occurred");
                 return;
@@ -210,7 +210,7 @@ public class HandlePCAction implements Serializable {
         if (insertedPC != null) {
             refresh();
 //            me.addInfoMessage("operation.occurred");
-            me.redirect("/pc/list-pc.htm");
+            me.redirect("/pc/pc.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }

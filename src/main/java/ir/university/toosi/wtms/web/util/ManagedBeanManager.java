@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class ManagedBeanManager {
 
-    private final static String BEAN_MANAGER_PATH = Configuration.getProperty("BEAN_MANAGER_PATH");
+    private final static String BEAN_MANAGER_PATH = Configuration.getProperty("java:comp/BeanManager");
 
     private static BeanManager getBeanManager() {
         try {

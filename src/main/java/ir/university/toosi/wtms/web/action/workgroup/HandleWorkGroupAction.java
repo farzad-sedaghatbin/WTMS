@@ -126,7 +126,7 @@ public class HandleWorkGroupAction implements Serializable {
         String condition = workGroupService.deleteWorkGroup(currentWorkGroup);
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/workgroup/list-workgroup.htm");
+        me.redirect("/workgroup/workgroups.xhtml");
 
 
     }
@@ -185,14 +185,7 @@ public class HandleWorkGroupAction implements Serializable {
 
         Set<Role> selectedRole = new HashSet<>();
         for (Role role : roleSelectionGrid) {
-
-            if (role.isSelected()) {
-                selectedRole.add(role);
-            }
-        }
-        if ((selectedRole.size() == 0)) {
-            me.addErrorMessage("no_role_selected");
-            return;
+            selectedRole.add(role);
         }
 
         newWorkgroup.setRoles(selectedRole);
@@ -203,7 +196,7 @@ public class HandleWorkGroupAction implements Serializable {
 
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/workgroup/list-workgroup.htm");
+            me.redirect("/workgroup/workgroups.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
@@ -232,47 +225,33 @@ public class HandleWorkGroupAction implements Serializable {
         return new WorkgroupConverter();
     }
 
-    public void edit(String currentPage) {
+    public void edit() {
         setEditable("true");
         setDisableFields(false);
         currentWorkGroup = workGroupService.findById(currentWorkGroup.getId());  //To change body of catch statement use File | Settings | File Templates.
 
         workGroupEnabled = Boolean.valueOf(currentWorkGroup.getEnabled());
-        descText = me.getValue(currentWorkGroup.getDescription());
+        descText = currentWorkGroup.getDescription();
         status = currentWorkGroup.getEnabled();
         name = currentWorkGroup.getName();
-        List<Role> roles = null;
-        roles = roleService.getAllRole();
-        for (Role role : roles) {
-            role.setDescText(me.getValue(role.getDescription()));
-        }
-        handleRoleAction.setSelectedRoles(new HashSet<Role>());
-        for (Role role : roles) {
-            role.setDescription((me.getValue(role.getDescription())));
-        }
-        List<Role> sourceRoles = new ArrayList<>();
-        List<Role> targetRoles = new ArrayList<>();
 
-        for (Role currentRole : currentWorkGroup.getRoles()) {
-            for (Role role : roles) {
-                if ((currentRole.getId() == role.getId())) {
-                    role.setSelected(true);
-                    handleRoleAction.getSelectedRoles().add(role);
-                    sourceRoles.add(role);
-                } else {
-                    targetRoles.add(role);
-                }
-            }
+        List<Role> roles;
+        if (currentWorkGroup.getRoles() == null || currentWorkGroup.getRoles().isEmpty()) {
+            roles = roleService.getAllRole();
+        } else {
+            roles = roleService.getAllRoleForWorkgroupEdit(currentWorkGroup.getRoles());
         }
 
-        handleRoleAction.setRoleList(roles);
-        handleRoleAction.setRoles(new DualListModel<Role>(sourceRoles, targetRoles));
+        handleRoleAction.getSelectedRoles().clear();
+        handleRoleAction.getSelectedRoles().addAll(currentWorkGroup.getRoles());
+
+        handleRoleAction.setRoles(new DualListModel<>(roles, new ArrayList<>(currentWorkGroup.getRoles())));
     }
 
     public void doEdit() {
         currentWorkGroup.setDescText(descText);
         currentWorkGroup.setEnabled(status);
-        currentWorkGroup.setRoles(handleRoleAction.getSelectedRoles());
+        currentWorkGroup.setRoles(new HashSet<>(handleRoleAction.getRoles().getTarget()));
         currentWorkGroup.setEffectorUser(me.getUsername());
         currentWorkGroup.setCurrentLang(me.getLanguages());
         currentWorkGroup.setName(name);
@@ -282,7 +261,7 @@ public class HandleWorkGroupAction implements Serializable {
             refresh();
             handleRoleAction.setSelectedRoles(new HashSet<Role>());
             me.addInfoMessage("operation.occurred");
-            me.redirect("/workgroup/list-workgroup.htm");
+            me.redirect("/workgroup/workgroups.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -329,6 +308,10 @@ public class HandleWorkGroupAction implements Serializable {
         } else
             status = "false";
 
+    }
+
+    public WorkGroup findById(String id) {
+        return workGroupService.findById(Long.parseLong(id));
     }
 
 //    public Filter<?> getWorkGroupDescriptionFilterImpl() {
