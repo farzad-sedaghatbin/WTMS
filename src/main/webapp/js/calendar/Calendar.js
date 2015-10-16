@@ -153,7 +153,7 @@ function strtotime(text, now) {
             },
             test: function (url, params) {
 
-                Methods.CurrentYear = '2014';
+                Methods.CurrentYear = '2015';
 
                 var InitJson = {};
                 $.ajax({
@@ -183,7 +183,7 @@ function strtotime(text, now) {
             },
             Ajax: function (ServerURL, Year, Parameter) {
                 if (!Year) {
-                    Year = 2014;
+                    Year = 2015;
                 }
                 ;
                 Methods.CurrentYear = String(Year);
@@ -214,7 +214,7 @@ function strtotime(text, now) {
                 return Methods;
             },
             Ajax2: function (url, Year, Parameter) {
-                Methods.CurrentYear = '2014';
+                Methods.CurrentYear = '2015';
 
                 var InitJson = {};
                 $.ajax({
@@ -404,7 +404,7 @@ function strtotime(text, now) {
             Initialize: function (Year, Data, Header, Body, Footer) {
                 console.log('Initialize');
                 if (!Year) {
-                    Year = 2014;
+                    Year = 2015;
                 }
                 ;
                 if (!Data) {

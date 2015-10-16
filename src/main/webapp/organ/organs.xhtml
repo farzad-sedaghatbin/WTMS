@@ -17,10 +17,8 @@
                 <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
                             oncomplete="PF('assignRuleDialog').show()"
                             actionListener="#{handleOrganAction.assignRule}"/>
-                <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
-                            oncomplete="PF('editRuleDialog').show()" actionListener="#{handleOrganAction.editRule}"/>
                 <p:menuitem value="Persons" update="personTable" icon="ui-icon-search"
-                            oncomplete="PF('PersonDialog').show()" actionListener="#{handleOrganAction.listPerson}"/>
+                            oncomplete="PF('PersonDialog').show()" actionListener="#{handleOrganAction.viewPerson}"/>
                 <p:menuitem value="Delete" update="organs" icon="ui-icon-close"
                             actionListener="#{handleOrganAction.doDelete}"/>
             </p:contextMenu>
@@ -67,7 +65,7 @@
                       resizable="false">
                 <p:outputPanel id="organDetail" style="text-align:center;">
                     <f:facet name="header">
-                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
+
                     </f:facet>
                     <table>
                         <tr>
@@ -222,7 +220,7 @@
                         <f:facet name="header">
                             Select Events
                         </f:facet>
-                        <p:ajax event="rowSelect" listener="#{handleOrganAction.doAssignRule}" update=":form:organs"/>
+                        <p:ajax event="rowSelect" listener="#{handleOrganAction.doAssignRule}" oncomplete="PF('assignRuleDialog').hide()" update=":form:organs"/>
                         <p:column headerText="rule name">
                             <h:outputText value="#{rule.name}"/>
                         </p:column>
@@ -245,10 +243,6 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="Edit Rule" widgetVar="editRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="false">
-                <ui:include src="../rule/organ-rule-edit.xhtml"/>
-            </p:dialog>
         </h:form>
     </ui:define>
 
