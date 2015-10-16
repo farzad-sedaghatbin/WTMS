@@ -238,6 +238,9 @@ public class HandleOrganAction implements Serializable {
             doEdit();
         }
     }
+    public void viewPerson(){
+        personList=personService.findByOrgan(currentOrgan.getId());
+    }
 
     private void doEdit() {
         currentOrgan.setOrganType(getOrganType());

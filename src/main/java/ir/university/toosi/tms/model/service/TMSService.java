@@ -18,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 @ApplicationPath("restful")
 @Path("/TMSService")
 public class TMSService extends Application {
+    @EJB
     private CalendarServiceImpl calendarService;
     @EJB
     private MapServiceImpl mapService;
