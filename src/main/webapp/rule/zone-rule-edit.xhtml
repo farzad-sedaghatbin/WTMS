@@ -6,61 +6,49 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html">
     <h:form id="ruleFrm">
-        <p:outputPanel id="handleRulePanel" ajaxRendered="true">
-            <fieldset dir="#{me.direction}">
-                <legend>
-
-                    <h:outputText escape="true" value="#{me.getValue('rule_edit')}"/>
-                </legend>
-                <table border="0" cellpadding="3" cellspacing="3" width="290" dir="#{me.direction}">
+       <p:outputPanel id="handleRulePanel">
+                <table border="0" cellpadding="3" cellspacing="3" width="290">
                     <tr valign="top">
                         <td nowrap="nowrap">
-                            <h:outputText escape="true"
-                                          value="#{me.getValue('rule_name')}:"/>
+                            <h:outputText value="rule name:"/>
                             &#160;&#160;&#160;&#160;&#160;
-                            <h:inputText id="ruleName"
+                            <p:inputText id="ruleName"
                                          converter="persianConverter"
-                                         styleClass="inputRequiredField"
-                                         required="true"
-                                         tabindex="1"
-                                         value="#{handleZoneAction.name}"
-                                         dir="#{me.direction}"/>
-                            <p:message ajaxRendered="true" id="messageName" for="ruleName" showSummary="true"
-                                       showDetail="false" errorClass="errorMsg"/>
+                                         value="#{handleZoneAction.name}"/>
                         </td>
                     </tr>
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="#{me.getValue('rule_date')}:"/>
+                                          value="rule date:"/>
                             &#160;&#160;&#160;&#160;&#160;
-                            <h:selectOneMenu value="#{handleZoneAction.selectedCalendarIdTemp}" tabindex="2">
+                            <p:selectOneMenu value="#{handleZoneAction.selectedCalendarIdTemp}" tabindex="2">
                                 <f:selectItems value="#{handleZoneAction.calendarItems}"/>
-                            </h:selectOneMenu>
+                            </p:selectOneMenu>
                         </td>
                     </tr>
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="#{me.getValue('antiPassBack')}:" styleClass="textColor"/>
+                                          value="anti pass back:" styleClass="textColor"/>
                             &#160;&#160;&#160;
-                            <h:selectBooleanCheckbox value="#{handleZoneAction.ruleAniPassBack}" tabindex="3"/>
+                            <p:selectBooleanCheckbox value="#{handleZoneAction.ruleAniPassBack}" tabindex="3"/>
                         </td>
                     </tr>
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="#{me.getValue('allowExit')}:" styleClass="textColor"/>
+                                          value="allow exit:" styleClass="textColor"/>
                             &#160;&#160;&#160;
-                            <h:selectBooleanCheckbox value="#{handleZoneAction.ruleAllowExit}" tabindex="4"/>
+                            <p:selectBooleanCheckbox value="#{handleZoneAction.ruleAllowExit}" tabindex="4"/>
                         </td>
                     </tr>
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="#{me.getValue('allowExitGadget')}:" styleClass="textColor"/>
+                                          value="allow exit gadget:" styleClass="textColor"/>
                             &#160;&#160;&#160;
-                            <h:selectBooleanCheckbox value="#{handleZoneAction.ruleAllowExitGadget}" tabindex="5"/>
+                            <p:selectBooleanCheckbox value="#{handleZoneAction.ruleAllowExitGadget}" tabindex="5"/>
                         </td>
                     </tr>
 
@@ -68,44 +56,41 @@
                         <td nowrap="nowrap" colspan="2">
                             <p:dataTable id="ruleTempTable"
                                          value="#{handleZoneAction.ruleListTemp}"
-                                         keepSaved="true"
-                                         noDataLabel="#{me.getValue('no_result_found')}"
                                          sortMode="single"
                                          var="ruleTemp"
                                          rows="10"
-                                         style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                         rowClasses="ROW1,ROW2">
+                                         style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('rule_dayType')}"/>
+                                        <h:outputText escape="true" value="rule day type"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.dayType.title}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('rule_startTime')}"/>
+                                        <h:outputText escape="true" value="rule start time"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.startTime}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('rule_endTime')}"/>
+                                        <h:outputText escape="true" value="rule end time"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.endTime}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('allowExitGadget')}"/>
+                                        <h:outputText escape="true" value="allow exit gadget"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.entranceCount}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('rule_exitCount')}"/>
+                                        <h:outputText escape="true" value="rule exit count"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.exitCount}"/>
                                 </p:column>
@@ -118,19 +103,14 @@
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('delete')}"/>
+                                        <h:outputText escape="true" value="delete"/>
                                     </f:facet>
                                     <p:commandButton image="/images/delete.png"
-                                                     title="#{me.getValue('delete')}"
+                                                     title="delete"
                                                      update="ruleTempTable"
                                                      action="#{handleZoneAction.remove}"
                                             />
                                 </p:column>
-                                <f:facet name="footer">
-                                    <p:dataScroller limitRender="true" execute="@this"
-                                                    render="ruleTempTable"
-                                                    page="#{handleZoneAction.pageInPopup}"/>
-                                </f:facet>
                             </p:dataTable>
                         </td>
                     </tr>
@@ -140,30 +120,29 @@
                         <td nowrap="nowrap">
                             <p:commandButton image="/images/add.png"
                                              action="#{handleZoneAction.addNewRule}"
-                                             title="#{me.getValue('rule_add')}"
-                                             execute="@this"
+                                             title="rule add"
                                              update="newRuleDetailPanel"/>
                         </td>
                     </tr>
 
                     <tr valign="top">
                         <td nowrap="nowrap">
-                            <p:outputPanel ajaxRendered="true" id="newRuleDetailPanel">
+                            <p:outputPanel id="newRuleDetailPanel">
                                 <f:subview id="newRuleDetail" rendered="#{handleZoneAction.addNewRuleFlag}">
                                     <table border="0" cellpadding="3" cellspacing="3" width="50%">
                                         <tr valign="middle">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_dayType')}"/>
+                                                <h:outputText escape="true" value="rule day type"/>
                                             </td>
                                             <td nowrap="nowrap">
-                                                <h:selectOneMenu value="#{handleZoneAction.dayTypeIdTemp}">
+                                                <p:selectOneMenu value="#{handleZoneAction.dayTypeIdTemp}">
                                                     <f:selectItems value="#{handleZoneAction.dayTypeItems}"/>
-                                                </h:selectOneMenu>
+                                                </p:selectOneMenu>
                                             </td>
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_startTime')}"/>
+                                                <h:outputText escape="true" value="rule start time"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleZoneAction.startSecond}"
@@ -180,7 +159,7 @@
 
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_endTime')}"/>
+                                                <h:outputText escape="true" value="rule end time"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleZoneAction.endSecond}"
@@ -195,10 +174,10 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_entranceCount')}"/>
+                                                <h:outputText escape="true" value="rule enterance count"/>
                                             </td>
                                             <td nowrap="nowrap">
-                                                <p:spinner dir="#{me.direction}"
+                                                <p:spinner
                                                            value="#{handleZoneAction.ruleEntranceCount}"
                                                            stepFactor="1" max="99" size="1" min="0"/>
 
@@ -206,10 +185,10 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_exitCount')}"/>
+                                                <h:outputText escape="true" value="rule exit count"/>
                                             </td>
                                             <td nowrap="nowrap">
-                                                <p:spinner dir="#{me.direction}"
+                                                <p:spinner
                                                            value="#{handleZoneAction.ruleExitCount}"
                                                            stepFactor="1" max="99" size="1" min="0"/>
 
@@ -217,16 +196,16 @@
                                         </tr>
                                         <tr>
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('deny')}:" styleClass="textColor"/>
+                                                <h:outputText escape="true" value="deny:" styleClass="textColor"/>
                                             </td>
                                             <td nowrap="nowrap">
-                                                <h:selectBooleanCheckbox value="#{handleZoneAction.ruleDeny}"/>
+                                                <p:selectBooleanCheckbox value="#{handleZoneAction.ruleDeny}"/>
                                             </td>
                                         </tr>
                                         <tr valign="top">
                                             <td nowrap="nowrap">
                                                 <p:commandButton action="#{handleZoneAction.doAddNewRule}"
-                                                                 value="#{me.getValue('rule_add')}"
+                                                                 value="add rule"
                                                                  title="افزودن قانون"
                                                                  tabindex="6"
                                                                  update="handleRulePanel"/>
@@ -240,17 +219,16 @@
 
 
                     <tr valign="top">
-                        <td nowrap="nowrap" align="#{me.align}" colspan="2">
+                        <td nowrap="nowrap" colspan="2">
                             <p:commandButton id="saveRuleId"
-                                             value="#{me.getValue('save')}"
+                                             value="save"
                                              action="#{handleZoneAction.doEditZoneRule}"/>
                             <p:commandButton id="resetRuleId"
                                              action="#{handleZoneAction.init}"
-                                             value="#{me.getValue('revert')}"/>
+                                             value="revert"/>
                         </td>
                     </tr>
                 </table>
-            </fieldset>
         </p:outputPanel>
     </h:form>
 </ui:composition>

@@ -28,7 +28,7 @@
                          selection="#{handleZoneAction.currentZone}" selectionMode="single"
                          paginator="true" rows="10"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                         rowsPerPageTemplate="5,10,15" lazy="true"
+                         rowsPerPageTemplate="5,10,15"
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
@@ -50,9 +50,6 @@
             <p:dialog header="Zone Info" widgetVar="zoneDialog" modal="true" showEffect="fade"
                       hideEffect="fade" resizable="false">
                 <p:outputPanel id="zoneDetail" style="text-align:center;">
-                    <f:facet name="header">
-                        <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
-                    </f:facet>
                     <table>
                         <tr>
                             <td>
@@ -133,7 +130,7 @@
                         <f:facet name="header">
                             Select Events
                         </f:facet>
-                        <p:ajax event="rowSelect" listener="#{handleZoneAction.selectNewRuleForZone}" update=":form:zones"/>
+                        <p:ajax event="rowSelect" listener="#{handleZoneAction.selectNewRuleForZone}" update=":form:zones" oncomplete="PF('assignRuleDialog').hide()"/>
                         <p:column headerText="rule name">
                             <h:outputText value="#{rule.name}"/>
                         </p:column>

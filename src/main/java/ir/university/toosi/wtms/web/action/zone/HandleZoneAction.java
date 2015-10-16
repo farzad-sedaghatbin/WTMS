@@ -340,7 +340,7 @@ public class HandleZoneAction implements Serializable {
     public void add() {
         init();
         handleGatewayAction.refresh();
-        handleGatewayAction.setGatewayDualsForZone(new DualListModel<Gateway>(handleGatewayAction.getGateways(),new ArrayList<Gateway>()));
+        handleGatewayAction.setGatewayDualsForZone(new DualListModel<>(handleGatewayAction.getGateways(),new ArrayList<Gateway>()));
         setEditable("false");
         setDisableFields(false);
     }

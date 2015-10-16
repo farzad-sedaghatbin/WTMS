@@ -316,12 +316,6 @@ public class HandleGatewayAction implements Serializable {
     public void refresh() {
 
         gateways = gatewayService.getAllGateway();
-        for (Gateway gateway : gateways) {
-            gateway.setSelected(false);
-//                gateway.setDescription(me.getValue(gateway.getDescription()));
-//                gateway.setName(gatewayName);
-//                gateway.setEnabled(gatewayEnabled);
-        }
         gatewayList = gateways;
         persons = personService.getAllPersonModel();
     }
