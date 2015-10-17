@@ -261,4 +261,7 @@ public class GatewayServiceImpl<T extends Gateway> {
         readerWrapper.UnLockTerminal((int) virdiService.findByIp(ip).getId());
     }
 
+    public List<Gateway> getAllGatewayForZone(List<Gateway> gatewayList) {
+        return GatewayDAO.getAllGatewayForZone(gatewayList);
+    }
 }

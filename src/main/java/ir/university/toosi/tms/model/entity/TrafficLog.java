@@ -144,6 +144,8 @@ public class TrafficLog extends BaseEntity {
     }
 
     public Person getPerson() {
+        if (person == null)
+            person = new Person();
         return person;
     }
 
@@ -160,6 +162,8 @@ public class TrafficLog extends BaseEntity {
     }
 
     public Gateway getGateway() {
+        if (gateway == null)
+            gateway = new Gateway();
         return gateway;
     }
 

@@ -1510,4 +1510,8 @@ public class HandleGatewayAction implements Serializable {
     public void setDayTypeHashtable(Hashtable<String, DayType> dayTypeHashtable) {
         this.dayTypeHashtable = dayTypeHashtable;
     }
+
+    public Gateway findForConverter(String s) {
+        return gatewayService.findById(Long.parseLong(s));
+    }
 }

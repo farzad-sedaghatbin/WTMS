@@ -73,4 +73,14 @@ public class GatewayDAOImpl extends BaseDAOImpl<Gateway> {
             return null;
         }
     }
+
+    public List<Gateway> getAllGatewayForZone(List<Gateway> gatewayList) {
+        try {
+            return (List<Gateway>) em.createNamedQuery("Gateway.listForZone")
+                    .setParameter("gateways", gatewayList)
+                    .getResultList();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
 }

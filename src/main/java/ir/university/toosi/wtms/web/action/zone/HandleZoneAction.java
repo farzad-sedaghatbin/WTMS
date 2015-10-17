@@ -1,26 +1,21 @@
 package ir.university.toosi.wtms.web.action.zone;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.university.toosi.tms.model.entity.Operation;
+import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
 import ir.university.toosi.tms.model.entity.calendar.DayType;
 import ir.university.toosi.tms.model.entity.rule.Rule;
+import ir.university.toosi.tms.model.entity.rule.RulePackage;
+import ir.university.toosi.tms.model.entity.zone.Gateway;
+import ir.university.toosi.tms.model.entity.zone.HardwareTree;
+import ir.university.toosi.tms.model.entity.zone.Zone;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.ZoneServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.tms.model.entity.MenuType;
-import ir.university.toosi.tms.model.entity.rule.RulePackage;
-import ir.university.toosi.tms.model.entity.zone.Gateway;
-import ir.university.toosi.tms.model.entity.zone.HardwareTree;
-import ir.university.toosi.tms.model.entity.zone.Zone;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
-
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -30,7 +25,6 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -58,6 +52,7 @@ public class HandleZoneAction implements Serializable {
     private RulePackageServiceImpl rulePackageService;
     @EJB
     private RuleServiceImpl ruleService;
+
 
 
     private String editable = "false";
@@ -190,7 +185,7 @@ public class HandleZoneAction implements Serializable {
     public void onTransfer(TransferEvent event) {
         if (event.isAdd()) {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(true);
+                ((Gateway) item).setSelected(true);
                 handleGatewayAction.getSelectedGateways().add((Gateway) item);
                 if (handleGatewayAction.getGatewayDualsForZone().getTarget() != null)
                     handleGatewayAction.getGatewayDualsForZone().getTarget().add((Gateway) item);
@@ -199,7 +194,7 @@ public class HandleZoneAction implements Serializable {
             }
         } else {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(false);
+                ((Gateway) item).setSelected(false);
                 handleGatewayAction.getSelectedGateways().remove(item);
                 if (handleGatewayAction.getGatewayDualsForZone().getTarget() != null)
                     handleGatewayAction.getGatewayDualsForZone().getTarget().remove(item);
@@ -326,7 +321,6 @@ public class HandleZoneAction implements Serializable {
     public void editOrganRule(RulePackage rulePackage) {
         rulePackageList = new ArrayList<>();
         ruleListTemp = ruleService.getByRulePackageId(rulePackage.getId());
-        ruleListTemp = ruleArrayList;
         name = rulePackage.getName();
         ruleAllowExitGadget = rulePackage.isAllowExitGadget();
         ruleAniPassBack = rulePackage.isAniPassBack();
@@ -340,7 +334,7 @@ public class HandleZoneAction implements Serializable {
     public void add() {
         init();
         handleGatewayAction.refresh();
-        handleGatewayAction.setGatewayDualsForZone(new DualListModel<>(handleGatewayAction.getGateways(),new ArrayList<Gateway>()));
+        handleGatewayAction.setGatewayDualsForZone(new DualListModel<>(handleGatewayAction.getGateways(), new ArrayList<Gateway>()));
         setEditable("false");
         setDisableFields(false);
     }
@@ -367,36 +361,8 @@ public class HandleZoneAction implements Serializable {
     }
 
     public void view() {
+        edit();
         setDisableFields(true);
-        handleGatewayAction.refresh();
-        zoneEnabled = currentZone.isEnabled();
-        descText = currentZone.getDescText();
-        zoneName = currentZone.getName();
-        truePassControl = currentZone.isTruePass();
-        List<Gateway> gatewayList = null;
-        currentZone = zoneService.findById(currentZone.getId());
-
-        gatewayList = gatewayService.findByZone(currentZone);
-        Set<Gateway> selectedList = new HashSet<>();
-
-        List<Gateway> sourceGateways = new ArrayList<>();
-        List<Gateway> targetGateways = new ArrayList<>();
-
-        for (Gateway gateway : handleGatewayAction.getGateways()) {
-            for (Gateway gateway1 : gatewayList) {
-                if (gateway1.getId() == gateway.getId()) {
-                    gateway.setSelected(true);
-                    selectedList.add(gateway);
-                    targetGateways.add(gateway);
-                }else {
-                    sourceGateways.add(gateway);
-                }
-
-            }
-        }
-        handleGatewayAction.setGatewayList(handleGatewayAction.getGateways());
-        handleGatewayAction.setSelectedGateways(selectedList);
-        handleGatewayAction.setGatewayDualsForZone(new DualListModel<Gateway>(sourceGateways,targetGateways));
     }
 
 
@@ -412,26 +378,16 @@ public class HandleZoneAction implements Serializable {
         currentZone = zoneService.findById(currentZone.getId());
 
         gatewayList = gatewayService.findByZone(currentZone);
-        Set<Gateway> selectedList = new HashSet<>();
 
-        List<Gateway> sourceGateways = new ArrayList<>();
-        List<Gateway> targetGateways = new ArrayList<>();
-
-        for (Gateway gateway : handleGatewayAction.getGateways()) {
-            for (Gateway gateway1 : gatewayList) {
-                if (gateway1.getId() == gateway.getId()) {
-                    gateway.setSelected(true);
-                    selectedList.add(gateway);
-                    targetGateways.add(gateway);
-                }else {
-                    sourceGateways.add(gateway);
-                }
-
-            }
+        List<Gateway> gateways;
+        if (gatewayList == null || gatewayList.isEmpty()) {
+            gateways = gatewayService.getAllGateway();
+        } else {
+            gateways = gatewayService.getAllGatewayForZone(gatewayList);
         }
         handleGatewayAction.setGatewayList(handleGatewayAction.getGateways());
-        handleGatewayAction.setSelectedGateways(selectedList);
-        handleGatewayAction.setGatewayDualsForZone(new DualListModel<Gateway>(sourceGateways,targetGateways));
+        handleGatewayAction.setSelectedGateways(new HashSet<>(gatewayList));
+        handleGatewayAction.setGatewayDualsForZone(new DualListModel<>(gateways, gatewayList));
     }
 
 

@@ -23,12 +23,12 @@
                     <p:columnToggler datasource="trafficLogTable" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="name" sortBy="#{trafficLog.name}" filterBy="#{trafficLog.name}">
-                    <h:outputText value="#{trafficLog.name}"/>
+                <p:column headerText="name">
+                    <h:outputText value="#{trafficLog.person.name}"/>
                 </p:column>
 
-                <p:column headerText="gate" sortBy="#{trafficLog.gate}" filterBy="#{trafficLog.gate}">
-                    <h:outputText value="#{trafficLog.gate}"/>
+                <p:column headerText="gate">
+                    <h:outputText value="#{trafficLog.gateway.name}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
@@ -38,15 +38,12 @@
                             value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
                 </p:column>
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="ptime"/>
-                    </f:facet>
-                    <h:outputText value="#{trafficLog.time}"/>
+                <p:column headerText="ptime" sortBy="#{trafficLog.traffic_time}" filterBy="#{trafficLog.traffic_time}">
+                    <h:outputText value="#{trafficLog.traffic_time}"/>
                 </p:column>
 
-                <p:column width="200" sortBy="#{trafficLog.date}" filterBy="#{trafficLog.date}">
-                    <h:outputText value="#{trafficLog.date}" converter="dateConverter"/>
+                <p:column width="200" sortBy="#{trafficLog.traffic_date}" filterBy="#{trafficLog.traffic_date}">
+                    <h:outputText value="#{trafficLog.traffic_date}" converter="dateConverter"/>
                 </p:column>
 
                 <p:column>

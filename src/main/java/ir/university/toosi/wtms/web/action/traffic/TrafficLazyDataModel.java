@@ -71,7 +71,6 @@ public class TrafficLazyDataModel extends LazyDataModel<TrafficLog> {
 
     @Override
     public TrafficLog getRowData(String rowKey) {
-//        return trafficLogService.findById(Long.parseLong(rowKey));
-        return new TrafficLog();
+        return trafficLogService.findById(Long.parseLong(rowKey));
     }
 }

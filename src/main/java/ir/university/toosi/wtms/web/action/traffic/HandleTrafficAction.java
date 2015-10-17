@@ -53,7 +53,7 @@ public class HandleTrafficAction implements Serializable {
     @EJB
     private TrafficLogServiceImpl trafficLogService;
     TrafficLogDataModel trafficLog;
-    private LazyDataModel<TrafficLogDataModel> eventLogList = null;
+    private LazyDataModel<TrafficLog> eventLogList = null;
     private SortOrder eventLogOperationOrder = SortOrder.DESCENDING;
     private SortOrder eventLogDateOrder = SortOrder.DESCENDING;
     private SortOrder eventLogUsernameOrder = SortOrder.DESCENDING;
@@ -65,7 +65,7 @@ public class HandleTrafficAction implements Serializable {
     private String toDate;
     private int page = 1;
     private int index = 0;
-    TrafficLogDataModel currentTrraficLog;
+    TrafficLog currentTrraficLog;
     private boolean selectRow = false;
 
     private SortOrder gatewayNameOrder = SortOrder.UNSORTED;
@@ -310,11 +310,11 @@ public class HandleTrafficAction implements Serializable {
     }
 
 
-    public LazyDataModel<TrafficLogDataModel> getEventLogList() {
+    public LazyDataModel<TrafficLog> getEventLogList() {
         return eventLogList;
     }
 
-    public void setEventLogList(LazyDataModel<TrafficLogDataModel> eventLogList) {
+    public void setEventLogList(LazyDataModel<TrafficLog> eventLogList) {
         this.eventLogList = eventLogList;
     }
 
@@ -390,11 +390,11 @@ public class HandleTrafficAction implements Serializable {
         this.accessControlAction = accessControlAction;
     }
 
-    public TrafficLogDataModel getCurrentTrraficLog() {
+    public TrafficLog getCurrentTrraficLog() {
         return currentTrraficLog;
     }
 
-    public void setCurrentTrraficLog(TrafficLogDataModel currentTrraficLog) {
+    public void setCurrentTrraficLog(TrafficLog currentTrraficLog) {
         this.currentTrraficLog = currentTrraficLog;
     }
 
