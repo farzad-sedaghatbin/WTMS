@@ -176,14 +176,14 @@
                                             <p:commandButton image="/images/delete.png"
                                                                title="delete"
                                                                execute="@this"
-                                                               render="specialStatusTable"
+                                                               update="specialStatusTable"
                                                                limitRender="true"
                                                                action="#{handleGatewayAction.removeSpecialStatus}"
                                                     />
                                         </p:column>
                                         <f:facet name="footer">
                                             <p:dataScroller limitRender="true" execute="@this"
-                                                               render="ruleTempTable"
+                                                               update="ruleTempTable"
                                                                page="#{handleGatewayAction.page}"/>
                                         </f:facet>
                                     </p:dataTable>
@@ -255,7 +255,7 @@
                                                        value="save"
                                                        execute="@form"
                                                        limitRender="true"
-                                                       render="specialStatusTable, globalMessages"
+                                                       update="specialStatusTable, globalMessages"
                                                        action="#{handleGatewayAction.doAssignSpecialStatus}"/>
                                     &#160;&#160;
                                     <p:commandButton id="close"

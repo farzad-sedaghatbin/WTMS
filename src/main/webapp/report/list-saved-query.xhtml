@@ -31,7 +31,7 @@
                     <h:outputText escape="true" value="#{query.type}"/>
                 </p:column>
                 <f:facet name="footer">
-                    <p:dataScroller limitRender="true" execute="@this" render="queryTable"
+                    <p:dataScroller limitRender="true" execute="@this" update="queryTable"
                                     page="#{handleCardReportAction.page4}"/>
                 </f:facet>
             </p:dataTable>

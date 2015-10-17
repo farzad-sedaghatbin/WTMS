@@ -34,7 +34,7 @@
                 <h:outputText value="#{calendar.description}"/>
             </p:column>
             <f:facet name="footer">
-                <p:dataScroller limitRender="true" execute="@this" render="calendarTable"
+                <p:dataScroller limitRender="true" execute="@this" update="calendarTable"
                                 page="#{handleCalendarAction.page}"/>
             </f:facet>
         </p:dataTable>

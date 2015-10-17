@@ -22,20 +22,37 @@ public class ImageLoaderServlet extends GenericServlet {
     private GeneralHelper generalHelper;
 
     public void service(ServletRequest req, ServletResponse res)
-            throws IOException, ServletException
+
     {
-        Person person = personService.findById(Long.parseLong(req.getParameter("id")));
-
-        ServletOutputStream stream = res.getOutputStream();
-
-        if (null != person.getPicture()) {
-            stream.write(person.getPicture());
-            stream.flush();
-        } else {
-            stream.write(generalHelper.getAnonymous());
-            stream.flush();
+        ServletOutputStream stream = null;
+        try {
+            stream = res.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        stream.close();
+
+        try {
+
+
+            Person person = personService.findById(Long.parseLong(req.getParameter("id")));
+
+
+            if (null != person.getPicture()) {
+                stream.write(person.getPicture());
+                stream.flush();
+            } else {
+                stream.write(generalHelper.getAnonymous());
+                stream.flush();
+            }
+            stream.close();
+        }catch (Exception e){
+            try {
+                stream.write(generalHelper.getAnonymous());
+                stream.flush();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
 

@@ -298,21 +298,21 @@ public class HandlePersonAction implements Serializable {
     private void fillSearchCombos() {
 
         preConditions = new SelectItem[3];
-        preConditions[0] = new SelectItem(" ", me.getValue("select_option"));
+        preConditions[0] = new SelectItem(" ", "select_option");
         preConditions[1] = new SelectItem("(", "(");
         preConditions[2] = new SelectItem("not", "not");
 
         postConditions = new SelectItem[4];
-        postConditions[0] = new SelectItem(" ", me.getValue("select_option"));
+        postConditions[0] = new SelectItem(" ", "select_option");
         postConditions[1] = new SelectItem(")", ")");
         postConditions[2] = new SelectItem("and", "and");
         postConditions[3] = new SelectItem("or", "or");
 
         attributeNames = new SelectItem[4];
-        attributeNames[0] = new SelectItem("name", me.getValue("name"));
-        attributeNames[1] = new SelectItem("lastname", me.getValue("lastname"));
-        attributeNames[2] = new SelectItem("personnelNo", me.getValue("personnelCode"));
-        attributeNames[3] = new SelectItem("nationalCode", me.getValue("nationalCode"));
+        attributeNames[0] = new SelectItem("name", "name");
+        attributeNames[1] = new SelectItem("lastname", "lastname");
+        attributeNames[2] = new SelectItem("personnelNo", "personnelCode");
+        attributeNames[3] = new SelectItem("nationalCode", "nationalCode");
     }
 
     private void fillDayTypeCombo() {
@@ -417,10 +417,10 @@ public class HandlePersonAction implements Serializable {
 
     public String exportExcel() {
         List<String> titles = new ArrayList<>();
-        titles.add(me.getValue("name"));
-        titles.add(me.getValue("lastname"));
-        titles.add(me.getValue("personnelCode"));
-        titles.add(me.getValue("nationalCode"));
+        titles.add("name");
+        titles.add("lastname");
+        titles.add("personnelCode");
+        titles.add("nationalCode");
         Workbook currentWorkbook = new HSSFWorkbook();
         Sheet sheet = currentWorkbook.createSheet("");
         sheet.autoSizeColumn(0);
@@ -1897,7 +1897,7 @@ public class HandlePersonAction implements Serializable {
         if (employeeTypes.size() == 0) {
             employeeTypes = bLookupService.getByLookupId(Lookup.EMPLOYEE_TYPE_ID);
             for (BLookup bLookup : employeeTypes) {
-                bLookup.setTitleText(me.getValue(bLookup.getCode()));
+                bLookup.setTitleText(bLookup.getCode());
             }
         }
         return employeeTypes;
@@ -1935,7 +1935,7 @@ public class HandlePersonAction implements Serializable {
         if (assistTypes.size() == 0) {
             assistTypes = bLookupService.getByLookupId(Lookup.ASSIST_TYPE_ID);
             for (BLookup bLookup : assistTypes) {
-                bLookup.setTitleText(me.getValue(bLookup.getCode()));
+                bLookup.setTitleText(bLookup.getCode());
             }
         }
         return assistTypes;
@@ -1958,7 +1958,7 @@ public class HandlePersonAction implements Serializable {
         if (postTypes.size() == 0) {
             postTypes = bLookupService.getByLookupId(Lookup.POST_TYPE_ID);
             for (BLookup bLookup : postTypes) {
-                bLookup.setTitleText(me.getValue(bLookup.getCode()));
+                bLookup.setTitleText(bLookup.getCode());
             }
         }
         return postTypes;

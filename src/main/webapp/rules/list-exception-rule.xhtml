@@ -27,7 +27,7 @@
                     <h:outputText id="editLink" value="#{exception.name}"/>
                 </p:column>
                 <f:facet name="footer">
-                    <p:dataScroller limitRender="true" execute="@this" render="ruleTable"
+                    <p:dataScroller limitRender="true" execute="@this" update="ruleTable"
                                        page="#{handleRuleExceptionAction.page}"/>
                 </f:facet>
             </p:dataTable>

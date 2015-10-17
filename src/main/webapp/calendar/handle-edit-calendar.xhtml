@@ -98,7 +98,7 @@
                 <h:commandButton value="#{me.getValue('save')}"
                                  execute="@form"
                                  rendered="#{me.hasPermission('ADD_CALENDAR')}"
-                                 render="calendarTable, calendarPanelId, textBoxcalendarTitle"
+                                 update="calendarTable, calendarPanelId, textBoxcalendarTitle"
                                  onclick="setData();"
                                  action="#{handleCalendarAction.saveOrUpdate}"/>
             </td>

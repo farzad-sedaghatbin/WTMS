@@ -323,7 +323,7 @@
                                         value="#{organ.name} - #{organ.code} - #{organ.organType.code} - #{organ.title}"
                                         execute="@this"
                                         limitRender="true"
-                                        render="organName"
+                                        update="organName"
                                         action="#{handlePersonAction.selectOrgan(organ.id)}"/>
                             </p:treeNode>
                         </p:tree>
@@ -346,7 +346,7 @@
                     <p:fileUpload id="upload"
                                      fileUploadListener="#{handlePersonAction.listener}"
                                      maxFilesQuantity="1"
-                                     render="personPicture"
+                                     update="personPicture"
                                      sizeExceededLabel="30"
                                      acceptedTypes="png,jpg,bmp"
                                      style="width:395px "

@@ -31,13 +31,13 @@
                 <p:column sortBy="#{card.name}"
                           sortOrder="#{handleCardAction.cardNameOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="card_name" render="cardTable"
+                        <p:commandLink value="card_name" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByCardName}"/>
                         <br/>
                         <h:inputText value="#{handleCardAction.cardNameFilter}">
-                            <p:ajax event="blur" render="cardTable" execute="@this"
+                            <p:ajax event="blur" update="cardTable" execute="@this"
                                     limitRender="true" onbeforesubmit="resetPage()"/>
                         </h:inputText>
                     </f:facet>
@@ -46,18 +46,18 @@
                 <p:column sortBy="#{card.code}"
                           sortOrder="#{handleCardAction.cardCodeOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="card_code" render="cardTable"
+                        <p:commandLink value="card_code" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByCardCode}"/>
                         <br/>
                         <h:inputText value="#{handleCardAction.cardCodeFilter}" size="10">
-                            <p:ajax event="blur" render="cardTable" execute="@this" limitRender="true"
+                            <p:ajax event="blur" update="cardTable" execute="@this" limitRender="true"
                                     onbeforesubmit="resetPage()"/>
                         </h:inputText>
                     </f:facet>
                     <p:commandLink id="editLink" value="#{card.code}"
-                                   render="operationArea"
+                                   update="operationArea"
                                    styleClass="withoutUnderlineLink"
                                    execute="@this"
                                    limitRender="true"
@@ -69,7 +69,7 @@
                         <h:outputText escape="true" value="card_type"/>
                         <br/>
                         <h:inputText value="#{handleCardAction.cardTypeCodeFilter}" size="10">
-                            <p:ajax event="blur" render="cardTable" execute="@this" limitRender="true"
+                            <p:ajax event="blur" update="cardTable" execute="@this" limitRender="true"
                                     onbeforesubmit="resetPage()"/>
                         </h:inputText>
                     </f:facet>
@@ -82,7 +82,7 @@
                         <h:outputText escape="true" value="card_status"/>
                         <br/>
                         <h:inputText value="#{handleCardAction.cardStatusCodeFilter}" size="10">
-                            <p:ajax event="blur" render="cardTable" execute="@this" limitRender="true"
+                            <p:ajax event="blur" update="cardTable" execute="@this" limitRender="true"
                                     onbeforesubmit="resetPage()"/>
                         </h:inputText>
                     </f:facet>
@@ -93,14 +93,14 @@
                 <p:column sortBy="#{card.startDate}"
                           sortOrder="#{handleCardAction.startDateOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="startDate" render="cardTable"
+                        <p:commandLink value="startDate" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByStartDate}"/>
                         <br/>
                         <h:inputText value="#{handleCardAction.startDateFilter}"
                                      id="startDateFilter" style="display: none">
-                            <p:ajax event="change" render="cardTable, dateFilterScript"
+                            <p:ajax event="change" update="cardTable, dateFilterScript"
                                     execute="@this"
                                     limitRender="true"/>
                         </h:inputText>
@@ -111,14 +111,14 @@
                 <p:column sortBy="#{card.expirationDate}"
                           sortOrder="#{handleCardAction.expirationDateOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="expirationDate" render="cardTable"
+                        <p:commandLink value="expirationDate" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByExpirationDate}"/>
                         <br/>
                         <h:inputText value="#{handleCardAction.expirationDateFilter}"
                                      id="endDateFilter" style="display: none">
-                            <p:ajax event="change" render="cardTable, dateFilterScript1"
+                            <p:ajax event="change" update="cardTable, dateFilterScript1"
                                     execute="@this"
                                     limitRender="true"/>
                         </h:inputText>
@@ -128,13 +128,13 @@
                 <p:column sortBy="#{card.person.name}"
                           sortOrder="#{handleCardAction.cardOwnerNameOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="name" render="cardTable"
+                        <p:commandLink value="name" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByCardOwnerName}"/>
                         <br/>
                         <h:inputText converter="persianConverter" value="#{handleCardAction.cardOwnerNameFilter}">
-                            <p:ajax event="blur" render="cardTable" execute="@this"
+                            <p:ajax event="blur" update="cardTable" execute="@this"
                                     limitRender="true" onbeforesubmit="resetPage()"/>
                         </h:inputText>
 
@@ -144,13 +144,13 @@
                 <p:column sortBy="#{card.person.lastName}"
                           sortOrder="#{handleCardAction.cardOwnerFamilyOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="lastname" render="cardTable"
+                        <p:commandLink value="lastname" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByCardOwnerFamily}"/>
                         <br/>
                         <h:inputText converter="persianConverter" value="#{handleCardAction.cardOwnerFamilyFilter}">
-                            <p:ajax event="blur" render="cardTable" execute="@this"
+                            <p:ajax event="blur" update="cardTable" execute="@this"
                                     limitRender="true" onbeforesubmit="resetPage()"/>
                         </h:inputText>
                     </f:facet>
@@ -159,20 +159,20 @@
                 <p:column sortBy="#{card.person.personnelNo}"
                           sortOrder="#{handleCardAction.cardPersonnelNoOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="personnelCode" render="cardTable"
+                        <p:commandLink value="personnelCode" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByCardPersonnelNo}"/>
                         <br/>
                         <h:inputText value="#{handleCardAction.cardPersonnelNoFilter}" size="10">
-                            <p:ajax event="blur" render="cardTable" execute="@this" limitRender="true"
+                            <p:ajax event="blur" update="cardTable" execute="@this" limitRender="true"
                                     onbeforesubmit="resetPage()"/>
                         </h:inputText>
                     </f:facet>
                     <h:outputText escape="true" value="#{card.person.personnelNo}"/>
                 </p:column>
                 <f:facet name="footer">
-                    <p:dataScroller limitRender="true" execute="@this" render="cardTable"
+                    <p:dataScroller limitRender="true" execute="@this" update="cardTable"
                                     page="#{handleCardAction.page}"/>
                 </f:facet>
             </p:dataTable>

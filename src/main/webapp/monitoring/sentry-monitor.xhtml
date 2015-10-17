@@ -55,7 +55,7 @@
                                                     sortMode="single"
                                                     var="trafficLog"
                                                     rows="#{handleMonitoringAction.sentryCount}"
-                                                    render="commentPanel commentPanel2"
+                                                    update="commentPanel commentPanel2"
                                                     onrowdblclick="highlight(#{p:element('editLink);#{p:component('CommentPanel.show();"
                                                     style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
                                                     rowClasses="ROW1,ROW2">
@@ -68,7 +68,7 @@
                                             <h:outputText escape="true" value="#{trafficLog.name}"/>
 
                                             <p:commandLink id="editLink" value="#{trafficLog.name}"
-                                                             render="operationArea, commentPanel"
+                                                             update="operationArea, commentPanel"
                                                              styleClass="withoutUnderlineLink"
                                                              execute="@this"
                                                              limitRender="true"

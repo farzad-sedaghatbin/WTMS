@@ -42,7 +42,7 @@
                     <h:outputText escape="true" value="#{blookup.code}"/>
                 </p:column>
                 <f:facet name="footer">
-                    <p:dataScroller limitRender="true" execute="@this" render="blookupTable"
+                    <p:dataScroller limitRender="true" execute="@this" update="blookupTable"
                                        page="#{handleBLookupAction.page}"/>
                 </f:facet>
             </p:dataTable>
@@ -75,7 +75,7 @@
                             <tr valign="top">
                                 <td nowrap="nowrap" align="center" colspan="2">
                                     <p:commandButton id="saveblookupId"
-                                                       render="blookupPanelId, globalMessages,blookupTable,blookupTables"
+                                                       update="blookupPanelId, globalMessages,blookupTable,blookupTables"
                                                        execute="@form"
                                                        value="save"
                                                        action="#{handleBLookupAction.saveOrUpdate}"/>

@@ -152,14 +152,14 @@
                                         <p:column sortBy="#{person.name}"
                                                   sortOrder="#{handlePersonAction.personnameOrder}">
                                             <f:facet name="header">
-                                                <p:commandLink value="name" render="personTable"
+                                                <p:commandLink value="name" update="personTable"
                                                                execute="@this"
                                                                limitRender="true"
                                                                action="#{handlePersonAction.sortByPersonname}"/>
                                                 <br/>
                                                 <h:inputText converter="persianConverter"
                                                              value="#{handlePersonAction.personnameFilter}">
-                                                    <p:ajax event="blur" render="personTable" execute="@this"
+                                                    <p:ajax event="blur" update="personTable" execute="@this"
                                                             limitRender="true"/>
                                                 </h:inputText>
                                             </f:facet>
@@ -169,14 +169,14 @@
                                         <p:column sortBy="#{person.lastName}"
                                                   sortOrder="#{handlePersonAction.personFamilyOrder}">
                                             <f:facet name="header">
-                                                <p:commandLink value="lastname" render="personTable"
+                                                <p:commandLink value="lastname" update="personTable"
                                                                execute="@this"
                                                                limitRender="true"
                                                                action="#{handlePersonAction.sortByPersonFamily}"/>
                                                 <br/>
                                                 <h:inputText converter="persianConverter"
                                                              value="#{handlePersonAction.personFamilyFilter}">
-                                                    <p:ajax event="blur" render="personTable" execute="@this"
+                                                    <p:ajax event="blur" update="personTable" execute="@this"
                                                             limitRender="true"/>
                                                 </h:inputText>
                                             </f:facet>
@@ -186,13 +186,13 @@
                                         <p:column sortBy="#{person.personnelNo}"
                                                   sortOrder="#{handlePersonAction.personnelNoOrder}">
                                             <f:facet name="header">
-                                                <p:commandLink value="personnelCode" render="personTable"
+                                                <p:commandLink value="personnelCode" update="personTable"
                                                                execute="@this"
                                                                limitRender="true"
                                                                action="#{handlePersonAction.sortByPersonnelNo}"/>
                                                 <br/>
                                                 <h:inputText value="#{handlePersonAction.personnelNoFilter}">
-                                                    <p:ajax event="blur" render="personTable" execute="@this"
+                                                    <p:ajax event="blur" update="personTable" execute="@this"
                                                             limitRender="true"/>
                                                 </h:inputText>
                                             </f:facet>
@@ -200,7 +200,7 @@
                                         </p:column>
 
                                         <f:facet name="footer">
-                                            <p:dataScroller limitRender="true" execute="@this" render="personTable"
+                                            <p:dataScroller limitRender="true" execute="@this" update="personTable"
                                                             page="#{handleOrganAction.personPage}"/>
                                         </f:facet>
                                     </p:dataTable>

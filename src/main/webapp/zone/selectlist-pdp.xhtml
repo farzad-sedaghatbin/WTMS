@@ -95,7 +95,7 @@
                                 </p:column>
 
                                 <f:facet name="footer">
-                                    <p:dataScroller limitRender="true" execute="@this" render="pdpTable"
+                                    <p:dataScroller limitRender="true" execute="@this" update="pdpTable"
                                                        page="#{handlePDPAction.page}"/>
                                 </f:facet>
                             </p:dataTable>
@@ -108,7 +108,7 @@
                                          execute="@this"
                                          limitRender="true"
                                          rendered="#{me.hasPermission('SYNCH')}"
-                                         render="pdpTable, pdpPanelId"
+                                         update="pdpTable, pdpPanelId"
                                          action="#{handlePDPAction.synchronizeOneByOne}"
                                          onclick="#{p:component('waitingPanel')}.show();"
                                          oncomplete="#{p:component('pdpSelect')}.hide();"/>

@@ -132,7 +132,7 @@
                                                             <td align="#{me.align}" nowrap="nowrap">
                                                                 <p:commandButton value="#{bundle.add_condition}"
                                                                                  action="#{handlePersonAction.addCondition}"
-                                                                                 render="conditionTable,advanceSearchID"/>
+                                                                                 update="conditionTable,advanceSearchID"/>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -188,7 +188,7 @@
                                                                         <p:commandButton image="/images/delete.png"
                                                                                          title="delete"
                                                                                          execute="@this"
-                                                                                         render="conditionTable,advanceSearchID"
+                                                                                         update="conditionTable,advanceSearchID"
                                                                                          limitRender="true"
                                                                                          action="#{handlePersonAction.removeCondition}"
                                                                                 />
@@ -196,7 +196,7 @@
                                                                     <f:facet name="footer">
                                                                         <p:dataScroller limitRender="true"
                                                                                         execute="@this"
-                                                                                        render="conditionTable"
+                                                                                        update="conditionTable"
                                                                                         page="#{handleRuleAction.page}"/>
                                                                     </f:facet>
                                                                 </p:dataTable>
