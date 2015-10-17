@@ -141,7 +141,7 @@
                                 <p:pickList id="rulePickList" value="#{handleRuleExceptionAction.rulePackageList}"
                                             var="ruleTemp"
                                             effect="bounce"
-                                            itemValue="#{ruleTemp}" itemLabel="#{ruleTemp.description}"
+                                            itemValue="#{ruleTemp}" itemLabel="#{ruleTemp.name}"
                                             showSourceControls="true"
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
@@ -152,7 +152,7 @@
                                     <p:ajax event="transfer" listener="#{handleRuleExceptionAction.onTransfer}"/>
 
                                     <p:column style="width:90%;">
-                                        <h:outputText value="#{ruleTemp.description}"/>
+                                        <h:outputText value="#{ruleTemp.name}"/>
                                     </p:column>
                                 </p:pickList>
                             </td>

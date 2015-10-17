@@ -82,7 +82,7 @@ public class WorkGroupServiceImpl<T extends WorkGroup> {
 
     public T createWorkGroup(T entity) {
         try {
-//            entity.setId(getMaximumId());
+            entity.setId(getMaximumId());
               /**/
 //            LanguageManagement languageManagement = new LanguageManagement();
 //            languageManagement.setTitle(entity.getDescText() == null ? "" : entity.getDescText());

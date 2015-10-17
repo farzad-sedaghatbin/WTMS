@@ -322,6 +322,7 @@ public class HandlePDPAction implements Serializable {
     }
 
     public void edit() {
+        refresh();
         setEditable("true");
         setDisableFields(false);
         pdpEnabled = currentPdp.isEnabled();
@@ -329,12 +330,12 @@ public class HandlePDPAction implements Serializable {
         descText = currentPdp.getDescText();
         pdpName = currentPdp.getNameText();
         currentPdp = pdpService.findById(currentPdp.getId());
-        if (currentPdp.getCamera() != null)
+        if (currentPdp.getCamera() != null) {
             cameraId = String.valueOf(currentPdp.getCamera().getId());
+        }
         gatewayId = String.valueOf(currentPdp.getGateway().getId());
         selectedPdp = currentPdp;
         entrance = currentPdp.isEntrance();
-        refresh();
     }
 
     public void view() {

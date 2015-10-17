@@ -422,7 +422,7 @@ public class HandlePersonAction implements Serializable {
         titles.add("personnelCode");
         titles.add("nationalCode");
         Workbook currentWorkbook = new HSSFWorkbook();
-        Sheet sheet = currentWorkbook.createSheet("");
+        Sheet sheet = currentWorkbook.createSheet("persons");
         sheet.autoSizeColumn(0);
 
         int rowCounter = 0;

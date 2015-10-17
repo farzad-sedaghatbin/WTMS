@@ -76,7 +76,7 @@ public class HandleDayTypeAction implements Serializable {
 
     private void refresh() {
         init();
-        List<DayType> dayTypeList = dayTypeService.getAllDayType();
+    dayTypeList = dayTypeService.getAllDayType();
     }
 
     public void add() {

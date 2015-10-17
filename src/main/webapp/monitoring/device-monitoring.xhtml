@@ -13,7 +13,7 @@
             <p:dataTable id="deviceTable"
                          value="#{handleDeviceAction.listModel}"
                          var="device"
-                         rowKey="#{device.id}"
+                         rowKey="#{device.ip}"
                          selectionMode="single"
                          paginator="true" rows="10"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"

@@ -83,7 +83,7 @@ public class HandleCalendarAction implements Serializable {
 
     private void refresh() {
         init();
-        List<Calendar> calendarList = calendarService.getAllCalendar();
+        calendarList = calendarService.getAllCalendar();
     }
 
     public void add() {

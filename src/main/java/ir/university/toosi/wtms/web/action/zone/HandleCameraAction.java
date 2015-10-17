@@ -337,7 +337,7 @@ public class HandleCameraAction implements Serializable {
         newCamera.setIp(ip);
         newCamera.setFrames(Long.valueOf(frames));
 
-            boolean condition =cameraService.existNotId(currentCamera.getIp());
+            boolean condition =cameraService.existNotId(newCamera.getIp());
             if (condition) {
 
                 me.addInfoMessage("camera.exist");
