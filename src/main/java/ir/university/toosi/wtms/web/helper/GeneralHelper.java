@@ -66,7 +66,7 @@ public class GeneralHelper implements Serializable {
     public GeneralHelper() {
         System.out.println("constractor");
 //        loadLanguage();
-//        anonymous = getImage2Base64();
+        anonymous = getImage2Base64();
     }
 
     @PostConstruct

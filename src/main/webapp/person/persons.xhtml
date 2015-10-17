@@ -132,7 +132,7 @@
                                                             <td align="#{me.align}" nowrap="nowrap">
                                                                 <p:commandButton value="#{bundle.add_condition}"
                                                                                  action="#{handlePersonAction.addCondition}"
-                                                                                 update="conditionTable,advanceSearchID"/>
+                                                                                 update="conditionTable"/>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -163,7 +163,7 @@
                                                                             <h:outputText escape="true" value=""/>
                                                                         </f:facet>
                                                                         <h:outputText escape="true"
-                                                                                      value="#{me.getValue(personSearch.attributeName)}"/>
+                                                                                      value="#{personSearch.attributeName}"/>
                                                                     </p:column>
 
                                                                     <p:column>
@@ -188,7 +188,7 @@
                                                                         <p:commandButton image="/images/delete.png"
                                                                                          title="delete"
                                                                                          execute="@this"
-                                                                                         update="conditionTable,advanceSearchID"
+                                                                                         update="conditionTable"
                                                                                          limitRender="true"
                                                                                          action="#{handlePersonAction.removeCondition}"
                                                                                 />

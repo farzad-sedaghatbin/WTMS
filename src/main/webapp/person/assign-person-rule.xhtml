@@ -78,14 +78,14 @@
                         <td nowrap="nowrap" align="center" colspan="4">
                             <p:commandButton id="saveId"
                                                tabindex="6"
-                                               value="#{me.getValue('save')}"
+                                               value="'save"
                                                action="#{handlePersonAction.doAssignRule}"/>
                             <p:commandButton id="resetId"
                                                limitRender="true"
                                                rendered="#{handlePersonAction.enabled eq 'true'}"
                                                tabindex="7"
                                                action="#{handlePersonAction.begin}"
-                                               value="#{me.getValue('revert')}"/>
+                                               value="'revert"/>
                         </td>
                     </tr>
                 </table>
@@ -99,7 +99,7 @@
             </legend>
             <p:dataTable id="personTableInPopup" value="#{handlePersonAction.rulePackageList}"
                             keepSaved="true"
-                            noDataLabel="#{me.getValue('no_result_found')}"
+                            noDataLabel="'no_result_found"
                             sortMode="single"
                             var="rulePackage"
                             rows="10"
@@ -107,7 +107,7 @@
                             rowClasses="ROW1,ROW2">
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText escape="true" value="#{me.getValue('package-name')}"/>
+                        <h:outputText escape="true" value="'package-name"/>
                     </f:facet>
                     <p:commandLink id="selectLink" value="#{rulePackage.name}"
                                      action="#{handlePersonAction.selectNewRuleForPerson}"
