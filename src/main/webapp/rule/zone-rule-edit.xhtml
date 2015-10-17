@@ -7,7 +7,7 @@
                 xmlns:h="http://java.sun.com/jsf/html">
     <h:form id="ruleFrm">
        <p:outputPanel id="handleRulePanel">
-                <table border="0" cellpadding="3" cellspacing="3" width="290">
+                <table border="0">
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText value="rule name:"/>
@@ -108,7 +108,7 @@
                                     <p:commandButton image="/images/delete.png"
                                                      title="delete"
                                                      update="ruleTempTable"
-                                                     action="#{handleZoneAction.remove}"
+                                                     action="#{handleZoneAction.remove(ruleTemp.id)}"
                                             />
                                 </p:column>
                             </p:dataTable>
@@ -129,7 +129,7 @@
                         <td nowrap="nowrap">
                             <p:outputPanel id="newRuleDetailPanel">
                                 <f:subview id="newRuleDetail" rendered="#{handleZoneAction.addNewRuleFlag}">
-                                    <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                                    <table>
                                         <tr valign="middle">
                                             <td nowrap="nowrap">
                                                 <h:outputText escape="true" value="rule day type"/>
@@ -146,14 +146,14 @@
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleZoneAction.startSecond}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" min="0" size="8"/>
                                                 &#160;
                                                 <p:spinner value="#{handleZoneAction.startMinute}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" min="0" size="8"/>
 
                                                 &#160;
                                                 <p:spinner value="#{handleZoneAction.startHour}"
-                                                           stepFactor="1" max="23" size="1" min="0"/>
+                                                           stepFactor="1" max="23" min="0" size="8"/>
                                             </td>
                                         </tr>
 
@@ -163,13 +163,13 @@
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleZoneAction.endSecond}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" size="8" min="0"/>
                                                 &#160;
                                                 <p:spinner value="#{handleZoneAction.endMinute}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" size="8" min="0"/>
                                                 &#160;
                                                 <p:spinner value="#{handleZoneAction.endHour}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" size="8" min="0"/>
                                             </td>
                                         </tr>
                                         <tr valign="bottom">
@@ -179,7 +179,7 @@
                                             <td nowrap="nowrap">
                                                 <p:spinner
                                                            value="#{handleZoneAction.ruleEntranceCount}"
-                                                           stepFactor="1" max="99" size="1" min="0"/>
+                                                           stepFactor="1" max="99" size="8" min="0"/>
 
                                             </td>
                                         </tr>
@@ -190,7 +190,7 @@
                                             <td nowrap="nowrap">
                                                 <p:spinner
                                                            value="#{handleZoneAction.ruleExitCount}"
-                                                           stepFactor="1" max="99" size="1" min="0"/>
+                                                           stepFactor="1" max="99" size="8" min="0" />
 
                                             </td>
                                         </tr>

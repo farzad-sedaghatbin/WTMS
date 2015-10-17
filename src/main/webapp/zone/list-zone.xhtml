@@ -122,7 +122,7 @@
             </p:dialog>
 
             <p:dialog header="Assign Rule" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="false">
+                      resizable="true">
                 <p:outputPanel id="assignRuleDetail" style="text-align:center;">
                     <p:dataTable id="assignRule" var="rule" value="#{handleZoneAction.rulePackageList}"
                                  selectionMode="single" selection="#{handleZoneAction.selectedRulePackage}"

@@ -54,7 +54,6 @@ public class HandleZoneAction implements Serializable {
     private RuleServiceImpl ruleService;
 
 
-
     private String editable = "false";
     private DataModel<Zone> zoneList = null;
     private String zoneName;
@@ -216,8 +215,8 @@ public class HandleZoneAction implements Serializable {
         editOrganRule(currentZone.getRulePackage());
     }
 
-    public void remove() {
-//        currentRule = ruleListTemp.getRowData();
+    public void remove(String id) {
+        currentRule = ruleService.findById(id);
         ruleArrayList.remove(currentRule);
         ruleListTemp = ruleArrayList;
     }
