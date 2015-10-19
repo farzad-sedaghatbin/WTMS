@@ -89,6 +89,16 @@
                     <h:graphicImage
                             value="#{ruleTemp.deny eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
                 </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText escape="true" value="delete"/>
+                    </f:facet>
+                    <p:commandButton image="/images/delete.png"
+                                     title="delete"
+                                     update="ruleTempTable"
+                                     action="#{handleRuleAction.remove}"
+                            />
+                </p:column>
                 <f:facet name="footer">
                     <p:dataScroller limitRender="true" execute="@this"
                                     update="ruleTempTable"
@@ -96,6 +106,113 @@
                 </f:facet>
 
             </p:dataTable>
+
+
+            <table border="0">
+
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <p:commandButton image="/images/add.png"
+                                         action="#{handleRuleAction.addNewRule}"
+                                         title="rule add"
+                                         update="newRuleDetailPanel"/>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <p:outputPanel id="newRuleDetailPanel">
+                            <f:subview id="newRuleDetail" rendered="#{handleRuleAction.addNewRuleFlag}">
+                                <table>
+                                    <tr valign="middle">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule day type"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:selectOneMenu value="#{handleRuleAction.dayTypeIdTemp}">
+                                                <f:selectItems value="#{handleRuleAction.dayTypeItems}"/>
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr valign="bottom">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule start time"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:spinner value="#{handleRuleAction.startSecond}"
+                                                       stepFactor="1" max="59" min="0" size="8"/>
+                                            &#160;
+                                            <p:spinner value="#{handleRuleAction.startMinute}"
+                                                       stepFactor="1" max="59" min="0" size="8"/>
+
+                                            &#160;
+                                            <p:spinner value="#{handleRuleAction.startHour}"
+                                                       stepFactor="1" max="23" min="0" size="8"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr valign="bottom">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule end time"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:spinner value="#{handleRuleAction.endSecond}"
+                                                       stepFactor="1" max="59" size="8" min="0"/>
+                                            &#160;
+                                            <p:spinner value="#{handleRuleAction.endMinute}"
+                                                       stepFactor="1" max="59" size="8" min="0"/>
+                                            &#160;
+                                            <p:spinner value="#{handleRuleAction.endHour}"
+                                                       stepFactor="1" max="59" size="8" min="0"/>
+                                        </td>
+                                    </tr>
+                                    <tr valign="bottom">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule enterance count"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:spinner
+                                                    value="#{handleRuleAction.ruleEntranceCount}"
+                                                    stepFactor="1" max="99" size="8" min="0"/>
+
+                                        </td>
+                                    </tr>
+                                    <tr valign="bottom">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule exit count"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:spinner
+                                                    value="#{handleRuleAction.ruleExitCount}"
+                                                    stepFactor="1" max="99" size="8" min="0"/>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="deny:" styleClass="textColor"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:selectBooleanCheckbox value="#{handleRuleAction.ruleDeny}"/>
+                                        </td>
+                                    </tr>
+                                    <tr valign="top">
+                                        <td nowrap="nowrap">
+                                            <p:commandButton action="#{handleRuleAction.doAddNewRule}"
+                                                             value="add rule"
+                                                             title="افزودن قانون"
+                                                             tabindex="6"
+                                                             update="`"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </f:subview>
+                        </p:outputPanel>
+                    </td>
+                </tr>
+
+
+            </table>
+
 
             <p:commandButton value="Submit"
                              update="rulePackageTable"
