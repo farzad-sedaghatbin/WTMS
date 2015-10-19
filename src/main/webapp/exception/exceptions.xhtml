@@ -8,15 +8,15 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="excs">
-                <p:menuitem value="View" update="excDetail" icon="ui-icon-search" oncomplete="PF('excDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="excDetail" icon="ui-icon-search" oncomplete="PF('excDialog').show()"
                             actionListener="#{handleRuleExceptionAction.view}"/>
-                <p:menuitem value="Edit" update="excDetail" icon="ui-icon-search" oncomplete="PF('excDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="excDetail" icon="ui-icon-search" oncomplete="PF('excDialog').show()"
                             actionListener="#{handleRuleExceptionAction.edit}"/>
-                <p:menuitem value="Delete" update="excs" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="excs" icon="ui-icon-close"
                             actionListener="#{handleRuleExceptionAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="excDetail" actionListener="#{handleRuleExceptionAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="excDetail" actionListener="#{handleRuleExceptionAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('excDialog').show()"/>
 
             <p:dataTable id="excs" var="currentExc" value="#{handleRuleExceptionAction.ruleExceptionList}"
@@ -28,11 +28,11 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="excs" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="name" sortBy="#{currentExc.name}" filterBy="#{currentExc.name}">
+                <p:column headerText="#{bundle.name}" sortBy="#{currentExc.name}" filterBy="#{currentExc.name}">
                     <h:outputText value="#{currentExc.name}"/>
                 </p:column>
             </p:dataTable>
@@ -46,7 +46,7 @@
                     <table border="0">
                         <tr>
                             <td>
-                                <h:outputText value="name:"/>
+                                <h:outputText value="#{bundle.name}"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleRuleExceptionAction.disableFields}"
@@ -146,8 +146,8 @@
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
                                             disabled="#{handleRuleExceptionAction.disableFields}">
-                                    <f:facet name="sourceCaption">Source</f:facet>
-                                    <f:facet name="targetCaption">Target</f:facet>
+                                    <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
+                                    <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
 
                                     <p:ajax event="transfer" listener="#{handleRuleExceptionAction.onTransfer}"/>
 
@@ -159,7 +159,7 @@
                         </tr>
                     </table>
 
-                    <p:commandButton value="Submit" id="edit" update="excs"
+                    <p:commandButton value="#{bundle.submit}" id="edit" update="excs"
                                      actionListener="#{handleRuleExceptionAction.saveOrUpdate}"
                                      oncomplete="PF('excDialog').hide()" styleClass="ui-priority-primary"
                                      rendered="#{not handleRuleExceptionAction.disableFields}"/>

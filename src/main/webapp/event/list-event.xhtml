@@ -20,7 +20,7 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="eventTable" trigger="toggler" />
                 </f:facet>
 
@@ -33,13 +33,13 @@
                 <p:column headerText="table name" sortBy="#{event.tableName}" filterBy="#{event.tableName}">
                     <h:outputText value="#{event.tableName}"/>
                 </p:column>
-                <p:column headerText="username" sortBy="#{event.username}" filterBy="#{event.username}">
+                <p:column headerText="#{bundle.username}" sortBy="#{event.username}" filterBy="#{event.username}">
                     <h:outputText value="#{event.username}"/>
                 </p:column>
-                <p:column headerText="date" sortBy="#{event.date}" filterBy="#{event.date}">
+                <p:column headerText="#{bundle.date}" sortBy="#{event.date}" filterBy="#{event.date}">
                     <h:outputText value="#{event.date}" converter="dateConverter"/>
                 </p:column>
-                <p:column headerText="time" sortBy="#{event.time}" filterBy="#{event.time}">
+                <p:column headerText="#{bundle.time}" sortBy="#{event.time}" filterBy="#{event.time}">
                     <h:outputText value="#{event.time}"/>
                 </p:column>
 

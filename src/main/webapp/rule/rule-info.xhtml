@@ -12,7 +12,7 @@
                     <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
                 </f:facet>
 
-                <h:outputText value="name:"/>
+                <h:outputText value="#{bundle.name}"/>
                 <p:inputText readonly="#{handleRuleAction.disableFields}" value="#{handleRuleAction.name}"/>
 
                 <h:outputText value="selectedCalendarIdTemp:"/>
@@ -38,7 +38,7 @@
             </p:panelGrid>
 
             <p:contextMenu for="ruleTempTable" rendered="#{not handleRuleAction.disableFields}">
-                <p:menuitem value="Delete" update="ruleTempTable" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="ruleTempTable" icon="ui-icon-close"
                             actionListener="#{handleRuleAction.remove}"/>
             </p:contextMenu>
 
@@ -91,7 +91,7 @@
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText escape="true" value="delete"/>
+                        <h:outputText escape="true" value="#{bundle.delete}"/>
                     </f:facet>
                     <p:commandButton image="/images/delete.png"
                                      title="delete"
@@ -214,7 +214,7 @@
             </table>
 
 
-            <p:commandButton value="Submit"
+            <p:commandButton value="#{bundle.submit}"
                              update="rulePackageTable"
                              actionListener="#{handleRuleAction.saveOrUpdate}"
                              oncomplete="PF('rulePackageDialog').hide()"

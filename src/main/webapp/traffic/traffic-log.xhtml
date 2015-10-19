@@ -19,26 +19,26 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="trafficLogTable" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="name">
+                <p:column headerText="#{bundle.name}">
                     <h:outputText value="#{trafficLog.person.name}"/>
                 </p:column>
 
-                <p:column headerText="gate">
+                <p:column headerText="#{bundle.gateway}">
                     <h:outputText value="#{trafficLog.gateway.name}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="pstatus"/>
+                        <h:outputText value="#{bundle.status}"/>
                     </f:facet>
                     <h:graphicImage
                             value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
                 </p:column>
 
-                <p:column headerText="ptime" sortBy="#{trafficLog.traffic_time}" filterBy="#{trafficLog.traffic_time}">
+                <p:column headerText="#{bundle.time}" sortBy="#{trafficLog.traffic_time}" filterBy="#{trafficLog.traffic_time}">
                     <h:outputText value="#{trafficLog.traffic_time}"/>
                 </p:column>
 
@@ -48,14 +48,14 @@
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="ptype"/>
+                        <h:outputText value="#{bundle.type}"/>
                     </f:facet>
                     <h:graphicImage
                             value="#{trafficLog.exit eq 'true' ? '/images/s_default.png':'/images/s_go.png'}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <p:commandLink value="ppicture"/>
+                        <p:commandLink value="#{bundle.picture}"/>
                     </f:facet>
 
                 </p:column>

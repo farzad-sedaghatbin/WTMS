@@ -8,12 +8,12 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="pcs">
-                <p:menuitem value="View" update="pcDetail" icon="ui-icon-search" oncomplete="PF('pcDialog').show()" actionListener="#{handlePCAction.view}"/>
-                <p:menuitem value="Edit" update="pcDetail" icon="ui-icon-search" oncomplete="PF('pcDialog').show()" actionListener="#{handlePCAction.edit}"/>
-                <p:menuitem value="Delete" update="pcs" icon="ui-icon-close" actionListener="#{handlePCAction.doDelete}"/>
+                <p:menuitem value="#{bundle.view}" update="pcDetail" icon="ui-icon-search" oncomplete="PF('pcDialog').show()" actionListener="#{handlePCAction.view}"/>
+                <p:menuitem value="#{bundle.edit}" update="pcDetail" icon="ui-icon-search" oncomplete="PF('pcDialog').show()" actionListener="#{handlePCAction.edit}"/>
+                <p:menuitem value="#{bundle.delete}" update="pcs" icon="ui-icon-close" actionListener="#{handlePCAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="pcDetail" actionListener="#{handlePCAction.add}" styleClass="ui-priority-primary" onclick="PF('pcDialog').show()"/>
+            <p:commandButton value="#{bundle.add}" id="add" update="pcDetail" actionListener="#{handlePCAction.add}" styleClass="ui-priority-primary" onclick="PF('pcDialog').show()"/>
 
             <p:dataTable id="pcs" var="currentPC" value="#{handlePCAction.pcList}" rowKey="#{currentPC.id}"
                          selection="#{handlePCAction.currentPC}" selectionMode="single"
@@ -22,33 +22,33 @@
                          rowsPerPageTemplate="5,10,15"
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
-                    RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <h:outputText value="#{bundle.pc_list}"/>
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="pcs" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="name" sortBy="#{currentPC.name}" filterBy="#{currentPC.name}">
+                <p:column headerText="#{bundle.name}" sortBy="#{currentPC.name}" filterBy="#{currentPC.name}">
                     <h:outputText value="#{currentPC.name}" />
                 </p:column>
-                <p:column headerText="ip" sortBy="#{currentPC.ip}" filterBy="#{currentPC.ip}">
+                <p:column headerText="#{bundle.ip}" sortBy="#{currentPC.ip}" filterBy="#{currentPC.ip}">
                     <h:outputText value="#{currentPC.ip}" />
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="PC Info" widgetVar="pcDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:dialog header="#{bundle.pc_inf}" widgetVar="pcDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                 <p:outputPanel id="pcDetail" style="text-align:center;">
                     <p:panelGrid  columns="2" columnClasses="label,value">
                         <f:facet name="header">
                             <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
                         </f:facet>
 
-                        <h:outputText value="name:" />
+                        <h:outputText value="#{bundle.name}" />
                         <p:inputText readonly="#{handlePCAction.disableFields}" value="#{handlePCAction.pcName}"/>
 
-                        <h:outputText value="Year" />
+                        <h:outputText value="#{bundle.ip}" />
                         <p:inputText readonly="#{handlePCAction.disableFields}" value="#{handlePCAction.pcIP}"/>
 
-                        <p:commandButton value="Submit" id="edit" update="pcs" actionListener="#{handlePCAction.saveOrUpdate}" oncomplete="PF('pcDialog').hide()" styleClass="ui-priority-primary" rendered="#{not handlePCAction.disableFields}"/>
+                        <p:commandButton value="#{bundle.submit}" id="edit" update="pcs" actionListener="#{handlePCAction.saveOrUpdate}" oncomplete="PF('pcDialog').hide()" styleClass="ui-priority-primary" rendered="#{not handlePCAction.disableFields}"/>
                     </p:panelGrid>
                 </p:outputPanel>
             </p:dialog>

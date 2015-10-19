@@ -8,17 +8,17 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="roles">
-                <p:menuitem value="View" update="roleDetail" icon="ui-icon-search" oncomplete="PF('roleDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="roleDetail" icon="ui-icon-search" oncomplete="PF('roleDialog').show()"
                             actionListener="#{handleRoleAction.view}"/>
-                <p:menuitem value="Edit" update="roleDetail" icon="ui-icon-search" oncomplete="PF('roleDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="roleDetail" icon="ui-icon-search" oncomplete="PF('roleDialog').show()"
                             actionListener="#{handleRoleAction.edit}"/>       
-                <p:menuitem value="Permissions" update="permissionDetail" icon="ui-icon-search" oncomplete="PF('permissionDialog').show()"
+                <p:menuitem value="#{bundle.permissions}" update="permissionDetail" icon="ui-icon-search" oncomplete="PF('permissionDialog').show()"
                             actionListener="#{handleRoleAction.assignPermission}"/>
-                <p:menuitem value="Delete" update="roles" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="roles" icon="ui-icon-close"
                             actionListener="#{handleRoleAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="roleDetail" actionListener="#{handleRoleAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="roleDetail" actionListener="#{handleRoleAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('roleDialog').show()"/>
 
             <p:dataTable id="roles" var="role" value="#{handleRoleAction.roleList}" rowKey="#{role.id}"
@@ -27,20 +27,20 @@
                          rowsPerPageTemplate="5,10,15" lazy="true"
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
-                    RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <h:outputText value="#{bundle.role_list}"/>
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="roles" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="name" sortBy="#{role.name}" filterBy="#{role.name}">
+                <p:column headerText="#{bundle.name}" sortBy="#{role.name}" filterBy="#{role.name}">
                     <h:outputText value="#{role.name}"/>
                 </p:column>
-                <p:column headerText="enabled">
+                <p:column headerText="#{bundle.enable}">
                     <p:graphicImage value="#{role.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="Role Info" widgetVar="roleDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.role_info}" widgetVar="roleDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="roleDetail" style="text-align:center;">
                     <f:facet name="header">
@@ -49,7 +49,7 @@
                     <table border="0" cellpadding="3" cellspacing="3" width="50%">
                         <tr>
                             <td>
-                                <h:outputText value="name:"/>
+                                <h:outputText value="#{bundle.name}"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleRoleAction.disableFields}"
@@ -58,7 +58,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="description:"/>
+                                <h:outputText value="#{bundle.description}"/>
                             </td>
                             <td>
                                 <p:inputTextarea readonly="#{handleRoleAction.disableFields}"
@@ -67,7 +67,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="enable:"/>
+                                <h:outputText value="#{bundle.enable}"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox readonly="#{handleRoleAction.disableFields}"
@@ -88,8 +88,8 @@
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
                                             converter="#{handleOperationAction.converter}"
                                             disabled="#{handleRoleAction.disableFields}">
-                                    <f:facet name="sourceCaption">Source</f:facet>
-                                    <f:facet name="targetCaption">Target</f:facet>
+                                    <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
+                                    <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
 
                                     <p:ajax event="transfer" listener="#{handleOperationAction.onTransfer}"/>
 
@@ -101,7 +101,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <p:commandButton value="Submit" id="edit" update="roles"
+                                <p:commandButton value="#{bundle.submit}" id="edit" update="roles"
                                                  actionListener="#{handleRoleAction.saveOrUpdate}"
                                                  oncomplete="PF('roleDialog').hide()" styleClass="ui-priority-primary"
                                                  rendered="#{not handleRoleAction.disableFields}"/>
@@ -110,7 +110,7 @@
                     </table>
                 </p:outputPanel>
             </p:dialog>
-            <p:dialog header="Permission Info" widgetVar="permissionDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.permission_info}" widgetVar="permissionDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
 
                 <p:outputPanel id="PermissionPanelId" ajaxRendered="true">
@@ -118,7 +118,7 @@
 
                                     value="#{handleRoleAction.pdpList}"
                                     rowKeyVar="rowIndex"
-                                    noDataLabel="no_result_found"
+                                    emptyMessage="#{bundle.empty_message}"
                                     sortMode="single"
                                     var="pdp"
                                     rows="10"
@@ -134,7 +134,7 @@
 
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText escape="true" value="name"/>
+                                <h:outputText escape="true" value="#{bundle.name}"/>
                             </f:facet>
                             <h:outputText escape="true" value="#{pdp.objectName}"
                                     />
@@ -147,7 +147,7 @@
                 </p:outputPanel>
 
                 <div align="center">
-                    <p:commandButton id="saveWorkGroupId" execute="@form" limitRender="true" action="#{handleRoleAction.doAssignPermission}" value="save"/>
+                    <p:commandButton id="saveWorkGroupId" execute="@form" limitRender="true" action="#{handleRoleAction.doAssignPermission}" value="#{bundle.save}"/>
                 </div>
             </p:dialog>
         </h:form>

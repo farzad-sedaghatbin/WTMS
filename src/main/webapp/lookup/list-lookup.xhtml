@@ -10,7 +10,7 @@
 
         <h:form>
             <p:contextMenu for="lookupTable">
-                <p:menuitem value="Edit"  icon="ui-icon-search"  action="#{handleLookupAction.edit}"/>
+                <p:menuitem value="#{bundle.edit}"  icon="ui-icon-search"  action="#{handleLookupAction.edit}"/>
             </p:contextMenu>
 
             <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
@@ -30,11 +30,11 @@
                                          draggableColumns="true" style="margin-bottom:20px">
                                 <f:facet name="header">
                                     RightClick to View Options
-                                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                                     <p:columnToggler datasource="lookupTable" trigger="toggler" />
                                 </f:facet>
 
-                                <p:column headerText="title" sortBy="#{lookup.title}" filterBy="#{lookup.title}">
+                                <p:column headerText="#{bundle.title}" sortBy="#{lookup.title}" filterBy="#{lookup.title}">
                                     <h:outputText value="#{lookup.titleText}"/>
                                 </p:column>
                                 <f:facet name="footer">

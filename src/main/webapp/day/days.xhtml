@@ -8,12 +8,12 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="days">
-                <p:menuitem value="View" update="dayDetail" icon="ui-icon-search" oncomplete="PF('dayDialog').show()" actionListener="#{handleDayTypeAction.view}"/>
-                <p:menuitem value="Edit" update="dayDetail" icon="ui-icon-search" oncomplete="PF('dayDialog').show()" actionListener="#{handleDayTypeAction.edit}"/>
-                <p:menuitem value="Delete" update="days" icon="ui-icon-close" actionListener="#{handleDayTypeAction.doDelete}"/>
+                <p:menuitem value="#{bundle.view}" update="dayDetail" icon="ui-icon-search" oncomplete="PF('dayDialog').show()" actionListener="#{handleDayTypeAction.view}"/>
+                <p:menuitem value="#{bundle.edit}" update="dayDetail" icon="ui-icon-search" oncomplete="PF('dayDialog').show()" actionListener="#{handleDayTypeAction.edit}"/>
+                <p:menuitem value="#{bundle.delete}" update="days" icon="ui-icon-close" actionListener="#{handleDayTypeAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="dayDetail" actionListener="#{handleDayTypeAction.add}" styleClass="ui-priority-primary" onclick="PF('dayDialog').show()"/>
+            <p:commandButton value="#{bundle.add}" id="add" update="dayDetail" actionListener="#{handleDayTypeAction.add}" styleClass="ui-priority-primary" onclick="PF('dayDialog').show()"/>
 
             <p:dataTable id="days" var="currentDay" value="#{handleDayTypeAction.dayTypeList}" rowKey="#{currentDay.id}"
                          selection="#{handleDayTypeAction.currentDayType}" selectionMode="single"
@@ -23,16 +23,16 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="days" trigger="toggler" />
                 </f:facet>
-                <p:column headerText="title" sortBy="#{currentDay.title}" filterBy="#{currentDay.title}">
+                <p:column headerText="#{bundle.title}" sortBy="#{currentDay.title}" filterBy="#{currentDay.title}">
                     <h:outputText value="#{currentDay.title}" />
                 </p:column>
                 <p:column headerText="color" sortBy="#{currentDay.color}" filterBy="#{currentDay.color}">
                     <h:outputText value="#{currentDay.color}" />
                 </p:column>
-                <p:column headerText="description" sortBy="#{currentDay.description}" filterBy="#{currentDay.description}">
+                <p:column headerText="#{bundle.description}" sortBy="#{currentDay.description}" filterBy="#{currentDay.description}">
                     <h:outputText value="#{currentDay.description}" />
                 </p:column>
             </p:dataTable>
@@ -53,7 +53,7 @@
                         <h:outputText value="Description:" />
                         <p:inputTextarea readonly="#{handleDayTypeAction.disableFields}" value="#{handleDayTypeAction.description}"/>
 
-                        <p:commandButton value="Submit" id="edit" update="days" actionListener="#{handleDayTypeAction.saveOrUpdate}" oncomplete="PF('dayDialog').hide()" styleClass="ui-priority-primary" rendered="#{not handleDayTypeAction.disableFields}"/>
+                        <p:commandButton value="#{bundle.submit}" id="edit" update="days" actionListener="#{handleDayTypeAction.saveOrUpdate}" oncomplete="PF('dayDialog').hide()" styleClass="ui-priority-primary" rendered="#{not handleDayTypeAction.disableFields}"/>
                     </p:panelGrid>
                 </p:outputPanel>
             </p:dialog>

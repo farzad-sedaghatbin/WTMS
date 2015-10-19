@@ -21,23 +21,23 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="deviceTable" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="name" sortBy="#{device.name}" filterBy="#{device.name}">
+                <p:column headerText="#{bundle.name}" sortBy="#{device.name}" filterBy="#{device.name}">
                     <h:outputText id="editLink" value="#{device.name}"/>
                 </p:column>
 
-                <p:column headerText="description" sortBy="#{device.description}" filterBy="#{device.description}">
+                <p:column headerText="#{bundle.description}" sortBy="#{device.description}" filterBy="#{device.description}">
                     <h:outputText value="#{device.description}"/>
                 </p:column>
-                <p:column headerText="ip" sortBy="#{device.ip}" filterBy="#{device.ip}">
+                <p:column headerText="#{bundle.ip}" sortBy="#{device.ip}" filterBy="#{device.ip}">
                     <h:outputText value="#{device.ip}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="status"/>
+                        <h:outputText value="#{bundle.status}"/>
                     </f:facet>
                     <h:outputLabel rendered="#{device.enabled eq 'true'}" styleClass="icon-done" />
                     <h:outputLabel rendered="#{device.enabled eq 'false'}" styleClass="icon-delete2" />

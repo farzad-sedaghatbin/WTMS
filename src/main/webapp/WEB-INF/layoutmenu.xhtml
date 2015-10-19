@@ -11,32 +11,32 @@
                 <p:submenu id="usermanagemen" label="user Management" icon="icon-user">
                     <p:menuitem id="rm_dashboard" value="Dashboard" icon="icon-dvr"/>
 
-                    <p:menuitem id="rm_user" value="user" icon="icon-verified_user" action="#{handleUserAction.begin}"/>
-                    <p:menuitem id="rm_person" value="person" icon="icon-verified_user" action="#{handlePersonAction.begin}"/>
-                    <p:menuitem id="rm_role" value="role" icon="icon-party_mode" action="#{handleRoleAction.begin}"/>
-                    <p:menuitem id="rm_workgroup" value="workgroup" icon="icon-group"
+                    <p:menuitem id="rm_user" value="#{bundle.user}" icon="icon-verified_user" action="#{handleUserAction.begin}"/>
+                    <p:menuitem id="rm_person" value="#{bundle.person}" icon="icon-verified_user" action="#{handlePersonAction.begin}"/>
+                    <p:menuitem id="rm_role" value="#{bundle.role}" icon="icon-party_mode" action="#{handleRoleAction.begin}"/>
+                    <p:menuitem id="rm_workgroup" value="#{bundle.workgroup}" icon="icon-group"
                                 action="#{handleWorkGroupAction.begin}"/>
-                    <p:menuitem id="rm_pc" value="pc" icon="icon-computer" actionListener="#{handlePCAction.begin}"/>
+                    <p:menuitem id="rm_pc" value="#{bundle.pc}" icon="icon-computer" actionListener="#{handlePCAction.begin}"/>
                 </p:submenu>
 
-                <p:submenu id="authorize" label="authorize" icon="icon-authorize">
-                    <p:menuitem id="rm_authorize" value="authorize" icon="icon-person"
+                <p:submenu id="authorize" label="#{bundle.authorize}" icon="icon-authorize">
+                    <p:menuitem id="rm_authorize" value="#{bundle.authorize}" icon="icon-person"
                                 action="#{handleCommentAction.beginAuthorize}"/>
-                    <p:menuitem id="rm_comment" value="comment" icon="icon-comment"
+                    <p:menuitem id="rm_comment" value="#{bundle.comment}" icon="icon-comment"
                                 action="#{handleCommentAction.begin}"/>
                 </p:submenu>
-                <p:submenu id="zone" label="zone" icon="icon-color_lens">
+                <p:submenu id="zone" label="#{bundle.zone}" icon="icon-color_lens">
 
-                    <p:menuitem id="rm_zone" value="zone" icon="icon-control"
+                    <p:menuitem id="rm_zone" value="#{bundle.zone}" icon="icon-control"
                                 actionListener="#{handleZoneAction.begin}"/>
-                    <p:menuitem id="rm_gate" value="gateway" icon="icon-gate"
+                    <p:menuitem id="rm_gate" value="#{bundle.gateway}" icon="icon-gate"
                                 actionListener="#{handleGatewayAction.begin}"/>
                 </p:submenu>
 
-                <p:submenu id="device" label="device" icon="icon-device">
-                    <p:menuitem id="rm_camera" value="camera" icon="icon-camera2"
+                <p:submenu id="device" label="#{bundle.device}" icon="icon-device">
+                    <p:menuitem id="rm_camera" value="#{bundle.camera}" icon="icon-camera2"
                                 actionListener="#{handleCameraAction.begin}"/>
-                    <p:menuitem id="rm_pdp" value="pdp" icon="icon-zone" actionListener="#{handlePDPAction.begin}"/>
+                    <p:menuitem id="rm_pdp" value="#{bundle.pdp}" icon="icon-zone" actionListener="#{handlePDPAction.begin}"/>
                     <p:menuitem id="rm_deviceMonitor" value="devicemonitor" icon="icon-device"
                                 actionListener="#{handleDeviceAction.beginDevice}"/>
 
@@ -61,27 +61,27 @@
                 </p:submenu>
 
                 <p:submenu id="others" label="Schedule" icon="icon-timer">
-                    <p:menuitem id="rm_card" value="card" icon="icon-device_hub"
+                    <p:menuitem id="rm_card" value="#{bundle.card}" icon="icon-device_hub"
                                 actionListener="#{handleCardAction.begin}"/>
                     <p:menuitem id="rm_day" value="day" icon="icon-device_hub"
                                 actionListener="#{handleDayTypeAction.begin}"/>
-                    <p:menuitem id="rm_event" value="event" icon="icon-device_hub"
+                    <p:menuitem id="rm_event" value="#{bundle.event}" icon="icon-device_hub"
                                 actionListener="#{handleEventAction.begin}"/>
                     <p:menuitem id="rm_exception" value="exception" icon="icon-device_hub"
                                 actionListener="#{handleRuleExceptionAction.begin}"/>
                     <p:menuitem id="rm_lookup" value="lookup" icon="icon-device_hub"
                                 actionListener="#{handleLookupAction.begin}"/>
-                    <p:menuitem id="rm_map" value="map" icon="icon-device_hub"
+                    <p:menuitem id="rm_map" value="#{bundle.map}" icon="icon-device_hub"
                                 actionListener="#{handleMapAction.begin}"/>
-                    <p:menuitem id="rm_organ" value="organ" icon="icon-device_hub"
+                    <p:menuitem id="rm_organ" value="#{bundle.organ}" icon="icon-device_hub"
                                 actionListener="#{handleOrganAction.begin}"/>
                     <p:menuitem id="rm_traffic" value="traffic" icon="icon-device_hub"
                                 actionListener="#{handleTrafficAction.begin}"/>
                     <p:menuitem id="rm_traffic_chart" value="traffic chart" icon="icon-device_hub"
                                 actionListener="#{handleTrafficLogChartAction.begin}"/>
-                    <p:menuitem id="rm_virdi" value="virdi" icon="icon-device_hub"
+                    <p:menuitem id="rm_virdi" value="#{bundle.virdi}" icon="icon-device_hub"
                                 actionListener="#{handleVirdiAction.begin}"/>
-                    <p:menuitem id="rm_calendar" value="calendar" icon="icon-device_hub"
+                    <p:menuitem id="rm_calendar" value="#{bundle.calendar}" icon="icon-device_hub"
                                 actionListener="#{handleCalendarAction.begin}"/>
 
 

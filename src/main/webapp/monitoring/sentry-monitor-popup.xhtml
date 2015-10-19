@@ -41,7 +41,7 @@
 
                                     <p:dataTable value="#{item}"
                                                     keepSaved="true"
-                                                    noDataLabel="no_result_found"
+                                                    emptyMessage="#{bundle.empty_message}"
                                                     sortMode="single"
                                                     var="trafficLog"
                                                     rows="#{handleMonitoringAction.sentryCount}"
@@ -52,7 +52,7 @@
 
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="person"/>
+                                                <h:outputText escape="true" value="#{bundle.person}"/>
                                             </f:facet>
 
                                             <h:outputText escape="true" value="#{trafficLog.name}"/>
@@ -60,20 +60,20 @@
                                         </p:column>
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="pdp"/>
+                                                <h:outputText escape="true" value="#{bundle.pdp}"/>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{trafficLog.pdpName}"/>
 
                                         </p:column>
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="time"/>
+                                                <h:outputText escape="true" value="#{bundle.time}"/>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{trafficLog.time}"/>
                                         </p:column>
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="status"/>
+                                                <h:outputText escape="true" value="#{bundle.status}"/>
                                             </f:facet>
                                             <h:graphicImage
                                                     value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>

@@ -27,11 +27,11 @@
                                  draggableColumns="true" style="margin-bottom:20px">
                         <f:facet name="header">
                             RightClick to View Options
-                            <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                            <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                             <p:columnToggler datasource="personTable" trigger="toggler" />
                         </f:facet>
 
-                        <p:column headerText="name" sortBy="#{person.name}" filterBy="#{person.name}">
+                        <p:column headerText="#{bundle.name}" sortBy="#{person.name}" filterBy="#{person.name}">
                             <h:outputText id="selectLink"
                                            value="#{person.name}"/>
                         </p:column>
@@ -58,7 +58,7 @@
     <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
         <tr valign="top">
             <td nowrap="nowrap" width="60">
-                <h:outputText escape="true" value="gateway:"/>
+                <h:outputText escape="true" value="#{bundle.gateway}"/>
             </td>
             <td nowrap="nowrap">
                 <h:selectOneMenu value="#{handleMonitoringAction.gatewayId}">
@@ -74,7 +74,7 @@
                     </legend>
                     <p:dataTable id="personTable1" value="#{handleMonitoringAction.personList}"
                                     keepSaved="true"
-                                    noDataLabel="no_result_found"
+                                    emptyMessage="#{bundle.empty_message}"
                                     sortMode="single"
                                     var="person"
                                     rows="10"
@@ -83,7 +83,7 @@
                         <p:column sortBy="#{person.name}"
                                      sortOrder="#{handlePersonAction.personnameOrder}">
                             <f:facet name="header">
-                                <p:commandLink value="name" update="personTable1"
+                                <p:commandLink value="#{bundle.name}" update="personTable1"
                                                  execute="@this"
                                                  limitRender="true"
                                                  action="#{handlePersonAction.sortByPersonname}"/>
@@ -104,7 +104,7 @@
                         <p:column sortBy="#{person.lastName}"
                                      sortOrder="#{handlePersonAction.personFamilyOrder}">
                             <f:facet name="header">
-                                <p:commandLink value="lastname" update="personTable1"
+                                <p:commandLink value="#{bundle.lastname}" update="personTable1"
                                                  execute="@this"
                                                  limitRender="true"
                                                  action="#{handlePersonAction.sortByPersonFamily}"/>
@@ -122,7 +122,7 @@
                         <p:column sortBy="#{person.personnelNo}"
                                      sortOrder="#{handlePersonAction.personnelNoOrder}">
                             <f:facet name="header">
-                                <p:commandLink value="personnelCode" update="personTable1"
+                                <p:commandLink value="#{bundle.personnelCode}" update="personTable1"
                                                  execute="@this"
                                                  limitRender="true"
                                                  action="#{handlePersonAction.sortByPersonnelNo}"/>
@@ -188,7 +188,7 @@
                     <p:dataTable id="personTable2"
                                     value="#{handleMonitoringAction.personList}"
                                     keepSaved="true"
-                                    noDataLabel="no_result_found"
+                                    emptyMessage="#{bundle.empty_message}"
                                     sortMode="single"
                                     var="person"
                                     rows="10"
@@ -197,7 +197,7 @@
                         <p:column sortBy="#{person.name}"
                                      sortOrder="#{handlePersonAction.personnameOrder}">
                             <f:facet name="header">
-                                <p:commandLink value="name" update="personTable2"
+                                <p:commandLink value="#{bundle.name}" update="personTable2"
                                                  execute="@this"
                                                  limitRender="true"
                                                  action="#{handlePersonAction.sortByPersonname}"/>
@@ -218,7 +218,7 @@
                         <p:column sortBy="#{person.lastName}"
                                      sortOrder="#{handlePersonAction.personFamilyOrder}">
                             <f:facet name="header">
-                                <p:commandLink value="lastname" update="personTable2"
+                                <p:commandLink value="#{bundle.lastname}" update="personTable2"
                                                  execute="@this"
                                                  limitRender="true"
                                                  action="#{handlePersonAction.sortByPersonFamily}"/>
@@ -234,7 +234,7 @@
                         <p:column sortBy="#{person.personnelNo}"
                                      sortOrder="#{handlePersonAction.personnelNoOrder}">
                             <f:facet name="header">
-                                <p:commandLink value="personnelCode" update="personTable2"
+                                <p:commandLink value="#{bundle.personnelCode}" update="personTable2"
                                                  execute="@this"
                                                  limitRender="true"
                                                  action="#{handlePersonAction.sortByPersonnelNo}"/>

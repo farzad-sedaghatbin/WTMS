@@ -8,19 +8,19 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="zones">
-                <p:menuitem value="View" update="zoneDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.view}" update="zoneDetail" icon="ui-icon-search"
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.view}"/>
-                <p:menuitem value="Edit" update="zoneDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="zoneDetail" icon="ui-icon-search"
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.edit}"/>
                 <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleZoneAction.assignRule}"/>
                 <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleZoneAction.editRule}"/>
-                <p:menuitem value="Delete" update="zones" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="zones" icon="ui-icon-close"
                             actionListener="#{handleZoneAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="zoneDetail" actionListener="#{handleZoneAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="zoneDetail" actionListener="#{handleZoneAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('zoneDialog').show()"/>
 
             <p:dataTable id="zones" var="currentZone" value="#{handleZoneAction.zoneList}"
@@ -32,17 +32,17 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="zones" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="name" sortBy="#{currentZone.name}" filterBy="#{currentZone.name}">
+                <p:column headerText="#{bundle.name}" sortBy="#{currentZone.name}" filterBy="#{currentZone.name}">
                     <h:outputText value="#{currentZone.name}"/>
                 </p:column>
-                <p:column headerText="description" sortBy="#{currentZone.description}" filterBy="#{currentZone.description}">
+                <p:column headerText="#{bundle.description}" sortBy="#{currentZone.description}" filterBy="#{currentZone.description}">
                     <h:outputText value="#{currentZone.description}"/>
                 </p:column>
-                <p:column headerText="enabled">
+                <p:column headerText="#{bundle.enable}">
                     <p:graphicImage value="#{currentZone.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
                 </p:column>
             </p:dataTable>
@@ -53,7 +53,7 @@
                     <table>
                         <tr>
                             <td>
-                                <h:outputText value="name:"/>
+                                <h:outputText value="#{bundle.name}"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleZoneAction.disableFields}"
@@ -62,7 +62,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="description:"/>
+                                <h:outputText value="#{bundle.description}"/>
                             </td>
                             <td>
                                 <p:inputTextarea readonly="#{handleZoneAction.disableFields}"
@@ -71,7 +71,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="true pass:"/>
+                                <h:outputText value="#{bundle.true_pass}"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox value="#{handleZoneAction.truePassControl}" disabled="#{handleZoneAction.disableFields}"/>
@@ -79,7 +79,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="enabled:"/>
+                                <h:outputText value="#{bundle.enable}"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox value="#{handleZoneAction.zoneEnabled}" disabled="#{handleZoneAction.disableFields}" valueChangeListener="#{handleZoneAction.changeZones}"/>
@@ -97,8 +97,8 @@
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
                                             disabled="#{handleZoneAction.disableFields}">
-                                    <f:facet name="sourceCaption">Source</f:facet>
-                                    <f:facet name="targetCaption">Target</f:facet>
+                                    <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
+                                    <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
 
                                     <p:ajax event="transfer" listener="#{handleZoneAction.onTransfer}"/>
 
@@ -110,7 +110,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <p:commandButton value="Submit" id="edit" update="zones"
+                                <p:commandButton value="#{bundle.submit}" id="edit" update="zones"
                                                  actionListener="#{handleZoneAction.saveOrUpdate}"
                                                  oncomplete="PF('zoneDialog').hide()"
                                                  styleClass="ui-priority-primary"
@@ -128,7 +128,7 @@
                                  selectionMode="single" selection="#{handleZoneAction.selectedRulePackage}"
                                  rowKey="#{rule.id}">
                         <f:facet name="header">
-                            Select Events
+                            <h:outputText value="#{person.select_events}"/>
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{handleZoneAction.selectNewRuleForZone}" update=":form:zones" oncomplete="PF('assignRuleDialog').hide()"/>
                         <p:column headerText="rule name">

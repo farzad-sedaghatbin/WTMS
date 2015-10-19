@@ -10,7 +10,7 @@
 
 
         <h:form>
-            <p:commandButton value="Add" id="add" onclick="this.form.target='_blank'"
+            <p:commandButton value="#{bundle.add}" id="add" onclick="this.form.target='_blank'"
                              actionListener="#{handleMapAction.add}"
                              styleClass="ui-priority-primary"/>
             <p:dataTable id="mapTable"
@@ -26,7 +26,7 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="mapTable" trigger="toggler" />
                 </f:facet>
 

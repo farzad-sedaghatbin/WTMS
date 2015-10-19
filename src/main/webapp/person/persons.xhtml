@@ -86,7 +86,7 @@
                                 <table cellpadding="3" cellspacing="3" class="panelLikeTable">
                                     <tr>
                                         <td align="#{me.align}" nowrap="nowrap" valign="top" width="90%">
-                                            <p:panel header="Toggleable" toggleable="true" closable="true"
+                                            <p:panel header="" toggleable="true" closable="true"
                                                      toggleSpeed="500" closeSpeed="500" widgetVar="panel"
                                                      style="margin-bottom:20px" dir="#{me.direction}"
                                                      collapsed="#{view.viewId eq '/list-person.xhtml'}">
@@ -144,7 +144,7 @@
                                                                 <p:dataTable id="conditionTable"
                                                                              value="#{handlePersonAction.personSearches}"
                                                                              keepSaved="true"
-                                                                             noDataLabel="no result found"
+                                                                             emptyMessage="#{bundle.empty_message}"
                                                                              sortMode="single"
                                                                              var="personSearch"
                                                                              rows="10"

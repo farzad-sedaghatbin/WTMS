@@ -12,11 +12,11 @@
 
         <h:form id="trafficLogList">
             <h:inputHidden id="logs" value="#{handleMonitoringAction.trafficLogsbygate}"/>
-            <p:socket onMessage="handleMessage" channel="/notify"  />
+            <p:socket onMessage="handleMessage" channel="/notify"/>
 
             <script type="text/javascript">
                 function handleMessage(trafficlog) {
-                    document.getElementById('trafficLogList:logs').value=trafficlog;
+                    document.getElementById('trafficLogList:logs').value = trafficlog;
                 }
             </script>
 
@@ -28,12 +28,12 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <p:commandButton value="maximize"
-                                               execute="@this"
-                                               limitRender="true"
-                                               immediate="true"
-                                               oncomplete="newWindow('/WTMS/monitoring/sentry-monitor-popup.htm','بزرگنمایی',window.screen.width ,window.screen.height,'yes','no','no','no','no','no','no');">
+                                             execute="@this"
+                                             limitRender="true"
+                                             immediate="true"
+                                             oncomplete="newWindow('/WTMS/monitoring/sentry-monitor-popup.htm','بزرگنمایی',window.screen.width ,window.screen.height,'yes','no','no','no','no','no','no');">
                                 <p:tooltip layout="block"
-                                              styleClass="pTitleText">maximize</p:tooltip>
+                                           styleClass="pTitleText">maximize</p:tooltip>
                             </p:commandButton>
                         </td>
                     </tr>
@@ -42,59 +42,57 @@
                         <ui:repeat value="#{handleMonitoringAction.trafficLogsbygate}" var="item">
                             <td align="#{me.align}" width="#{handleMonitoringAction.width}" style="position: relative;">
                                 <h:commandButton image="/images/confirm.png"
-                                                   action="#{handleMonitoringAction.forceOpen(item)}"/>
+                                                 action="#{handleMonitoringAction.forceOpen(item)}"/>
                                 <br/>
                                 <fieldset dir="#{me.direction}">
                                     <legend>
-                                        <h:outputText escape="true" value="#{item.rowAvailable ? item.rowData.pdpName:''}"/>
+                                        <h:outputText escape="true"
+                                                      value="#{item.rowAvailable ? item.rowData.pdpName:''}"/>
                                     </legend>
 
                                     <p:dataTable value="#{item}"
-                                                    keepSaved="true"
-                                                    noDataLabel="no_result_found"
-                                                    sortMode="single"
-                                                    var="trafficLog"
-                                                    rows="#{handleMonitoringAction.sentryCount}"
-                                                    update="commentPanel commentPanel2"
-                                                    onrowdblclick="highlight(#{p:element('editLink);#{p:component('CommentPanel.show();"
-                                                    style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                                    rowClasses="ROW1,ROW2">
+                                                 keepSaved="true"
+                                                 emptyMessage="#{bundle.empty_message}"
+                                                 sortMode="single"
+                                                 var="trafficLog"
+                                                 rows="#{handleMonitoringAction.sentryCount}"
+                                                 update="commentPanel commentPanel2"
+                                                 onrowdblclick="highlight(#{p:element('editLink);#{p:component('CommentPanel.show();"
+                                                 style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                                 rowClasses="ROW1,ROW2">
 
 
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="person"/>
+                                                <h:outputText escape="true" value="#{bundle.person}"/>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{trafficLog.name}"/>
 
                                             <p:commandLink id="editLink" value="#{trafficLog.name}"
-                                                             update="operationArea, commentPanel"
-                                                             styleClass="withoutUnderlineLink"
-                                                             execute="@this"
-                                                             limitRender="true"
-                                                             style="displa  public static String getCdiPushTopic() {
-
-        return CDI_PUSH_TOPIC;
-    }y: none"
-                                                             action="#{handleMonitoringAction.selectForComment(trafficLog)}"/>
+                                                           update="operationArea, commentPanel"
+                                                           styleClass="withoutUnderlineLink"
+                                                           execute="@this"
+                                                           limitRender="true"
+                                                           style="display: none"
+                                                           action="#{handleMonitoringAction.selectForComment(trafficLog)}"/>
 
                                         </p:column>
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="pdp"/>
+                                                <h:outputText escape="true" value="#{bundle.pdp}"/>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{trafficLog.pdpName}"/>
 
                                         </p:column>
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="time"/>
+                                                <h:outputText escape="true" value="#{bundle.time}"/>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{trafficLog.time}"/>
                                         </p:column>
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="status"/>
+                                                <h:outputText escape="true" value="#{bundle.status}"/>
                                             </f:facet>
                                             <h:graphicImage
                                                     value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>

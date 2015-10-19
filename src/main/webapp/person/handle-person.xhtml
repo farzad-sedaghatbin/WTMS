@@ -19,9 +19,9 @@
 
     <fieldset dir="#{me.direction}">
         <legend>
-            <h:outputText escape="true" value="#{me.getValue('person_add')}"
+            <h:outputText escape="true" value="person_add"
                           rendered="#{handlePersonAction.editable eq 'false'}"/>
-            <h:outputText escape="true" value="#{me.getValue('person_edit')}"
+            <h:outputText escape="true" value="person_edit"
                           rendered="#{handlePersonAction.editable eq 'true'}"/>
         </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360"
@@ -37,7 +37,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('firstname')}:"
+                                        value="firstname:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -54,7 +54,7 @@
 
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('lastname')}:"
+                                        value="lastname:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -72,7 +72,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('email')}:"
+                                        value="email:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -86,7 +86,7 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('mobile')}:"
+                                        value="mobile:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -100,7 +100,7 @@
                         <tr>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('personnelCode')}:"
+                                        value="personnelCode:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -115,7 +115,7 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('nationalCode')}:"
+                                        value="nationalCode:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -134,7 +134,7 @@
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
                                         rendered="#{not handlePersonAction.editable}"
-                                        value="#{me.getValue('password')}:"
+                                        value="password:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -147,7 +147,7 @@
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
                                         rendered="#{not handlePersonAction.editable}"
-                                        value="#{me.getValue('confirm-password')}:"
+                                        value="confirm-password:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -162,7 +162,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('address')}:"
+                                        value="address:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -173,7 +173,7 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('workStation')}:"
+                                        value="workStation:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -194,7 +194,7 @@
 
     <fieldset dir="#{me.direction}">
         <legend>
-            <h:outputText escape="true" value="#{me.getValue('job')}"/>
+            <h:outputText escape="true" value="job"/>
         </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
 
@@ -205,7 +205,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('employeeNo')}:" styleClass="textColor"/>
+                                        value="employeeNo:" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
@@ -215,13 +215,13 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('employeeType')}:"
+                                        value="employeeType:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap" align="#{me.align}">
                                 <h:selectOneMenu value="#{handlePersonAction.employeeType.id}"
                                                  valueChangeListener="#{handlePersonAction.selectEmployType}">
-                                    <f:selectItems itemLabel="#{me.getValue(employeeType.code)}"
+                                    <f:selectItems itemLabel="#{employeeType.code}"
                                                    itemValue="#{employeeType.id}" var="employeeType"
                                                    value="#{handlePersonAction.employeeTypes}"/>
                                 </h:selectOneMenu>
@@ -230,7 +230,7 @@
                         </tr>
                         <tr valign="top">
                             <td nowrap="nowrap">
-                                <h:outputText escape="true" value="#{me.getValue('folderNo')}:" styleClass="textColor"/>
+                                <h:outputText escape="true" value="folderNo:" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
@@ -240,7 +240,7 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('intenalTel')}:" styleClass="textColor"/>
+                                        value="intenalTel:" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
@@ -254,25 +254,25 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('post')}:"
+                                        value="post:"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap" align="#{me.align}">
                                 <h:selectOneMenu value="#{handlePersonAction.postType.id}"
                                                  valueChangeListener="#{handlePersonAction.selectPostType}">
-                                    <f:selectItems itemLabel="#{me.getValue(postType.code)}"
+                                    <f:selectItems itemLabel="#{postType.code}"
                                                    itemValue="#{postType.id}" var="postType"
                                                    value="#{handlePersonAction.postTypes}"/>
                                 </h:selectOneMenu>
                             </td>
                             <td nowrap="nowrap">
-                                <h:outputText escape="true" value="#{me.getValue('assistType')}:"
+                                <h:outputText escape="true" value="assistType:"
                                               styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap" align="#{me.align}">
                                 <h:selectOneMenu value="#{handlePersonAction.assistType.id}"
                                                  valueChangeListener="#{handlePersonAction.selectAssistType}">
-                                    <f:selectItems itemLabel="#{me.getValue(assistType.code)}"
+                                    <f:selectItems itemLabel="#{assistType.code}"
                                                    itemValue="#{assistType.id}" var="assistType"
                                                    value="#{handlePersonAction.assistTypes}"/>
                                 </h:selectOneMenu>
@@ -282,7 +282,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="#{me.getValue('description')}:" styleClass="textColor"/>
+                                        value="description:" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:inputTextarea dir="#{me.direction}"
@@ -302,7 +302,7 @@
 
     <fieldset dir="#{me.direction}">
         <legend>
-            <h:outputText escape="true" value="#{me.getValue('organ')}"/>
+            <h:outputText escape="true" value="organ"/>
         </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
             <tr valign="top">
@@ -334,11 +334,11 @@
     </fieldset>
 </p:tab>
 
-<p:tab header="#{me.getValue('picture')}">
+<p:tab header="picture">
 
     <fieldset dir="#{me.direction}">
         <legend>
-            <h:outputText escape="true" value="#{me.getValue('picture')}"/>
+            <h:outputText escape="true" value="#{bundle.picture}"/>
         </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
             <tr>
@@ -354,12 +354,12 @@
                                      limitRender="true"
                                      immediateUpload="true"
                                      listHeight="60px"
-                                     addLabel="#{empty handlePersonAction.currentPerson.picture ? me.getValue('add') : me.getValue('edit')}"
-                                     doneLabel="#{me.getValue('done')}"
-                                     clearAllLabel="#{me.getValue('delete-picture')}"
-                                     clearLabel="#{me.getValue('delete-picture')}"
-                                     deleteLabel="#{me.getValue('delete-picture')}"
-                                     ontyperejected="alert('#{me.getValue('file_type_is_incorrect')}')"
+                                     addLabel="#{empty handlePersonAction.currentPerson.picture ?'add' : 'edit'} "
+                                     doneLabel="done"
+                                     clearAllLabel="delete-picture"
+                                     clearLabel="delete-picture"
+                                     deleteLabel="delete-picture"
+                                     ontyperejected="alert('file_type_is_incorrect')"
                                      onfileselect="removeLastUploadedFiles(this)"/>
 
                 </td>
@@ -370,13 +370,13 @@
                         <f:param value="#{handlePersonAction.time}" name="time"/>
                     </p:graphicImage>
                     <br/>
-                    <p:commandLink value="#{me.getValue('delete-picture')}"
+                    <p:commandLink value="delete-picture"
                                      rendered="#{handlePersonAction.havePicture and handlePersonAction.editable}"
                                      action="#{handlePersonAction.deletePicture}"
                                      update="personPicture"/>
                 </td>
                 <td>
-                    <p:commandButton value="#{me.getValue('unload')}" rendered="false"
+                    <p:commandButton value="unload" rendered="false"
                                        action="#{handlePersonAction.unsetPicture}"
                                        update="handlePanel"/>
                 </td>
@@ -385,11 +385,11 @@
     </fieldset>
 </p:tab>
 
-<p:tab header="#{me.getValue('extraFeild')}">
+<p:tab header="extraFeild">
 
     <fieldset dir="#{me.direction}">
         <legend>
-            <h:outputText escape="true" value="#{me.getValue('extraFeild')}"/>
+            <h:outputText escape="true" value="extraFeild"/>
         </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
             <tr valign="top">
@@ -453,11 +453,11 @@
     </fieldset>
 </p:tab>
 
-<p:tab header="#{me.getValue('cards')}" rendered="#{handlePersonAction.editable eq 'true'}">
+<p:tab header="cards" rendered="#{handlePersonAction.editable eq 'true'}">
     <table border="0" cellpadding="3" cellspacing="3" align="#{me.align}">
         <tr valign="top">
             <td nowrap="nowrap">
-                <h:outputText escape="true" value="#{me.getValue('finger')}:" styleClass="textColor"/>
+                <h:outputText escape="true" value="finger:" styleClass="textColor"/>
             </td>
             <td nowrap="nowrap">
                 <h:graphicImage
@@ -469,7 +469,7 @@
                 <td nowrap="nowrap" colspan="2">
                     <fieldset dir="#{me.direction}">
                         <legend>
-                            <h:outputText escape="true" value="#{me.getValue('card')}"
+                            <h:outputText escape="true" value="card"
                                           styleClass="textColor"/>
                         </legend>
                         <table border="0" cellpadding="3" cellspacing="3"
@@ -478,7 +478,7 @@
 
                             <tr valign="top">
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="#{me.getValue('card')}:"
+                                    <h:outputText escape="true" value="card:"
                                                   styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
@@ -492,13 +492,13 @@
                             </tr>
                             <tr valign="top">
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="#{me.getValue('card_status')}" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="card_status" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
                                     <h:outputText escape="true" value="#{me.getValue(card.cardStatus.code)}" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="#{me.getValue('card_type')}" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="card_type" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
                                     <h:outputText escape="true" value="#{me.getValue(card.cardType.code)}" styleClass="textColor"/>
@@ -506,14 +506,14 @@
                             </tr>
                             <tr valign="top">
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="#{me.getValue('startDate')}" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="startDate" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
                                     <h:outputText escape="true" value="#{card.startDate}" converter="dateConverter"
                                                   styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="#{me.getValue('expirationDate')}" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="expirationDate" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
                                     <h:outputText escape="true" value="#{card.expirationDate}"
@@ -533,12 +533,12 @@
 <tr valign="top">
     <td nowrap="nowrap" colspan="4">
         <p:commandButton id="saveId"
-                           value="#{me.getValue('save')}"
+                           value="save"
                            action="#{handlePersonAction.saveOrUpdate}"/>
         <h:commandButton id="resetId"
                          rendered="#{handlePersonAction.enabled eq 'true'}"
                          action="#{handlePersonAction.begin}"
-                         value="#{me.getValue('revert')}"/>
+                         value="#{bundle.revert}"/>
 
 
     </td>

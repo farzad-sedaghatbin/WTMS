@@ -22,17 +22,17 @@ import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.wtms.web.util.CalendarUtil;
-import ir.university.toosi.wtms.web.util.LangUtils;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import ir.university.toosi.wtms.web.util.*;
 import ir.university.toosi.wtms.web.util.ReportUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -45,6 +45,7 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -314,6 +315,21 @@ public class HandlePersonAction implements Serializable {
         attributeNames[2] = new SelectItem("personnelNo", "personnelCode");
         attributeNames[3] = new SelectItem("nationalCode", "nationalCode");
     }
+    public void listener(FileUploadEvent event) throws Exception {
+        UploadedFile item = event.getFile();
+        BufferedImage sourceBufferedImage = ImageUtils.convertByteArrayToBufferedImage(item.getContents());
+        float scaleRatio = ImageUtils.calculateScaleRatio(sourceBufferedImage.getWidth(), 200);//todo from properties
+        if (scaleRatio > 0 && scaleRatio < 1) {
+            try {
+                sourceBufferedImage = ImageUtils.scaleImage(sourceBufferedImage, scaleRatio);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        setPicture(ImageUtils.imageToByteArray(sourceBufferedImage));
+        havePicture = true;
+    }
+
 
     private void fillDayTypeCombo() {
 

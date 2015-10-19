@@ -9,18 +9,18 @@
     <ui:define name="content">
         <h:form>
             <p:contextMenu for="cardTable">
-            <p:menuitem value="View" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardDialog').show()"
+            <p:menuitem value="#{bundle.view}" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardDialog').show()"
                         actionListener="#{handleCardAction.view}"/>
-            <p:menuitem value="Edit" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardDialog').show()"
+            <p:menuitem value="#{bundle.edit}" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardDialog').show()"
                         actionListener="#{handleCardAction.edit}"/>
-            <p:menuitem value="Delete" update="cards" icon="ui-icon-close"
+            <p:menuitem value="#{bundle.delete}" update="cards" icon="ui-icon-close"
                         actionListener="#{handleCardAction.doDelete}"/>
         </p:contextMenu>
             <p:dataTable id="cardTable"
                          keepSaved="true"
                          value="#{handleCardAction.cardList}"
                          rowKeyVar="rowIndex"
-                         noDataLabel="no_result_found"
+                         emptyMessage="#{bundle.empty_message}"
                          sortMode="single"
                          var="card"
                          rows="10"
@@ -128,7 +128,7 @@
                 <p:column sortBy="#{card.person.name}"
                           sortOrder="#{handleCardAction.cardOwnerNameOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="name" update="cardTable"
+                        <p:commandLink value="#{bundle.name}" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByCardOwnerName}"/>
@@ -144,7 +144,7 @@
                 <p:column sortBy="#{card.person.lastName}"
                           sortOrder="#{handleCardAction.cardOwnerFamilyOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="lastname" update="cardTable"
+                        <p:commandLink value="#{bundle.lastname}" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByCardOwnerFamily}"/>
@@ -159,7 +159,7 @@
                 <p:column sortBy="#{card.person.personnelNo}"
                           sortOrder="#{handleCardAction.cardPersonnelNoOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="personnelCode" update="cardTable"
+                        <p:commandLink value="#{bundle.personnelCode}" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByCardPersonnelNo}"/>
@@ -185,7 +185,7 @@
                     <table>
                         <tr>
                             <td>
-                                <h:outputText value="name:"/>
+                                <h:outputText value="#{bundle.name}"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleCardAction.disableFields}"
@@ -194,7 +194,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="code:"/>
+                                <h:outputText value="#{bundle.code}"/>
                             </td>
                             <td>
                                 <h:outputText value="#{handleCardAction.card.code}"/>
@@ -202,7 +202,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="person name:"/>
+                                <h:outputText value="#{bundle.name}"/>
                             </td>
                             <td>
                                 <h:outputText
@@ -211,7 +211,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="personnel No:"/>
+                                <h:outputText value="#{bundle.person_no}"/>
                             </td>
                             <td>
                                 <h:outputText value="#{handleCardAction.card.person.personnelNo}"/>
@@ -219,7 +219,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="card type:"/>
+                                <h:outputText value="#{bundle.card_type}"/>
                             </td>
                             <td>
                                 <p:selectOneMenu disabled="#{handleCardAction.disableFields}"
@@ -232,7 +232,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="card status:"/>
+                                <h:outputText value="#{bundle.card_status}"/>
                             </td>
                             <td>
                                 <p:selectOneMenu disabled="#{handleCardAction.disableFields}"
@@ -245,7 +245,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="visible:"/>
+                                <h:outputText value="#{bundle.visible}"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox value="#{handleCardAction.card.visible}"
@@ -254,7 +254,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="start date:"/>
+                                <h:outputText value="#{bundle.start_date}"/>
                             </td>
                             <td>
                                 <p:calendar value="#{handleCardAction.card.startDate}"
@@ -263,7 +263,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="expiration date:"/>
+                                <h:outputText value="#{bundle.expiration_date}"/>
                             </td>
                             <td>
                                 <p:calendar value="#{handleCardAction.card.expirationDate}"
@@ -272,7 +272,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:commandButton value="Submit" id="edit" update="cards"
+                                <p:commandButton value="#{bundle.submit}" id="edit" update="cards"
                                                  actionListener="#{handleCardAction.doEdit}"
                                                  oncomplete="PF('cardDialog').hide()" styleClass="ui-priority-primary"
                                                  rendered="#{not handleCardAction.disableFields}"/>

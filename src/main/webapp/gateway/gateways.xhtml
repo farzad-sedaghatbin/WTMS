@@ -8,21 +8,21 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="gateways">
-                <p:menuitem value="View" update="gatewayDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.view}" update="gatewayDetail" icon="ui-icon-search"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.view}"/>
-                <p:menuitem value="Edit" update="gatewayDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="gatewayDetail" icon="ui-icon-search"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.edit}"/>
                 <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleGatewayAction.assignRule}"/>
                 <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleGatewayAction.editRule}"/>
-                <p:menuitem value="Edit" update="specialStatusTable" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="specialStatusTable" icon="ui-icon-search"
                             oncomplete="PF('gatewayStatus').show()" actionListener="#{handleGatewayAction.assignSpecialStatus}"/>
-                <p:menuitem value="Delete" update="gateways" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="gateways" icon="ui-icon-close"
                             actionListener="#{handleGatewayAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="gatewayDetail" actionListener="#{handleGatewayAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="gatewayDetail" actionListener="#{handleGatewayAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('gatewayDialog').show()"/>
 
             <p:dataTable id="gateways" var="currentGateway" value="#{handleGatewayAction.gatewayList}"
@@ -34,17 +34,17 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="gateways" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="name" sortBy="#{currentGateway.name}" filterBy="#{currentGateway.name}">
+                <p:column headerText="#{bundle.name}" sortBy="#{currentGateway.name}" filterBy="#{currentGateway.name}">
                     <h:outputText value="#{currentGateway.name}"/>
                 </p:column>
-                <p:column headerText="description" sortBy="#{currentGateway.description}" filterBy="#{currentGateway.description}">
+                <p:column headerText="#{bundle.description}" sortBy="#{currentGateway.description}" filterBy="#{currentGateway.description}">
                     <h:outputText value="#{currentGateway.description}"/>
                 </p:column>
-                <p:column headerText="enabled">
+                <p:column headerText="#{bundle.enable}">
                     <p:graphicImage value="#{currentGateway.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
                 </p:column>
             </p:dataTable>
@@ -58,7 +58,7 @@
                     <table>
                         <tr>
                             <td>
-                                <h:outputText value="name:"/>
+                                <h:outputText value="#{bundle.name}"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleGatewayAction.disableFields}"
@@ -67,7 +67,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="description:"/>
+                                <h:outputText value="#{bundle.description}"/>
                             </td>
                             <td>
                                 <p:inputTextarea readonly="#{handleGatewayAction.disableFields}"
@@ -76,7 +76,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="enabled:"/>
+                                <h:outputText value="#{bundle.enable}"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox value="#{handleGatewayAction.gatewayEnabled}"
@@ -95,8 +95,8 @@
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
                                             disabled="#{handleGatewayAction.disableFields}">
-                                    <f:facet name="sourceCaption">Source</f:facet>
-                                    <f:facet name="targetCaption">Target</f:facet>
+                                    <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
+                                    <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
 
                                     <p:ajax event="transfer" listener="#{handleGatewayAction.onTransferForPreRequire}"/>
 
@@ -108,7 +108,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <p:commandButton value="Submit" id="edit" update="gateways"
+                                <p:commandButton value="#{bundle.submit}" id="edit" update="gateways"
                                                  actionListener="#{handleGatewayAction.saveOrUpdate}"
                                                  oncomplete="PF('gatewayDialog').hide()"
                                                  styleClass="ui-priority-primary"
@@ -132,7 +132,7 @@
                                     <p:dataTable id="specialStatusTable"
                                                     value="#{handleGatewayAction.gatewaySpecialStateList}"
                                                     keepSaved="true"
-                                                    noDataLabel="no_result_found"
+                                                    emptyMessage="#{bundle.empty_message}"
                                                     sortMode="single"
                                                     var="specialStatus"
                                                     rows="10"
@@ -148,20 +148,20 @@
 
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="status_time"/>
+                                                <h:outputText escape="true" value="#{bundle.status_time}"/>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{specialStatus.time}"/>
                                         </p:column>
 
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="status_state"/>
+                                                <h:outputText escape="true" value="#{bundle.status_state}"/>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{specialStatus.gateWayStatus.description}"/>
                                         </p:column>
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="delete"/>
+                                                <h:outputText escape="true" value="#{bundle.delete}"/>
                                             </f:facet>
                                             <p:commandButton image="/images/delete.png"
                                                                title="delete"
@@ -195,7 +195,7 @@
                                                 </tr>
                                                 <tr valign="bottom">
                                                     <td nowrap="nowrap" width="60px">
-                                                        <h:outputText escape="true" value="status_time"/>
+                                                        <h:outputText escape="true" value="#{bundle.status_time}"/>
                                                     </td>
                                                     <td nowrap="nowrap">
                                                         <p:spinner value="#{handleGatewayAction.statusSecond}"
@@ -224,7 +224,7 @@
                                                 </tr>
                                                 <tr valign="middle">
                                                     <td nowrap="nowrap" width="60pxp">
-                                                        <h:outputText escape="true" value="status_state"/>
+                                                        <h:outputText escape="true" value="#{bundle.status_state}"/>
                                                     </td>
                                                     <td nowrap="nowrap">
                                                         <h:selectOneMenu value="#{handleGatewayAction.statusStateName}">
@@ -242,7 +242,7 @@
                             <tr valign="top">
                                 <td nowrap="nowrap" align="center" colspan="2">
                                     <p:commandButton id="save"
-                                                       value="save"
+                                                       value="#{bundle.save}"
                                                        execute="@form"
                                                        limitRender="true"
                                                        update="specialStatusTable"
@@ -252,7 +252,7 @@
                                                        limitRender="true"
                                                        action="#{handleGatewayAction.init}"
                                                        execute="@this"
-                                                       value="revert"
+                                                       value="#{bundle.revert}"
                                                      oncomplete="PF('gatewayStatus').hide()"/>
                                 </td>
                             </tr>
@@ -268,7 +268,7 @@
                                  selectionMode="single" selection="#{handleGatewayAction.selectedRulePackage}"
                                  rowKey="#{rule.id}">
                         <f:facet name="header">
-                            Select Events
+                            <h:outputText value="#{person.select_events}"/>
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{handleGatewayAction.selectNewRuleForZone}" update=":form:gateways"/>
                         <p:column headerText="rule name">

@@ -10,13 +10,13 @@
             <fieldset dir="#{me.direction}">
                 <legend>
 
-                    <h:outputText escape="true" value="#{me.getValue('rule_edit')}"/>
+                    <h:outputText escape="true" value="rule_edit"/>
                 </legend>
                 <table border="0" cellpadding="3" cellspacing="3" width="290" dir="#{me.direction}">
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="#{me.getValue('rule_name')}:"/>
+                                          value="rule_name:"/>
                             &#160;&#160;&#160;&#160;&#160;
                             <h:inputText id="ruleName"
                                          converter="persianConverter"
@@ -32,7 +32,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="#{me.getValue('rule_date')}:"/>
+                                          value="rule_date:"/>
                             &#160;&#160;&#160;&#160;&#160;
                             <h:selectOneMenu value="#{handleOrganAction.selectedCalendarIdTemp}" tabindex="2">
                                 <f:selectItems value="#{handleOrganAction.calendarItems}"/>
@@ -42,7 +42,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="#{me.getValue('antiPassBack')}:" styleClass="textColor"/>
+                                          value="antiPassBack:" styleClass="textColor"/>
                             &#160;&#160;&#160;
                             <h:selectBooleanCheckbox value="#{handleOrganAction.ruleAniPassBack}" tabindex="3"/>
                         </td>
@@ -50,7 +50,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="#{me.getValue('allowExit')}:" styleClass="textColor"/>
+                                          value="allowExit:" styleClass="textColor"/>
                             &#160;&#160;&#160;
                             <h:selectBooleanCheckbox value="#{handleOrganAction.ruleAllowExit}" tabindex="4"/>
                         </td>
@@ -58,7 +58,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="#{me.getValue('allowExitGadget')}:" styleClass="textColor"/>
+                                          value="allowExitGadget:" styleClass="textColor"/>
                             &#160;&#160;&#160;
                             <h:selectBooleanCheckbox value="#{handleOrganAction.ruleAllowExitGadget}" tabindex="5"/>
                         </td>
@@ -69,7 +69,7 @@
                             <p:dataTable id="ruleTempTable"
                                          value="#{handleOrganAction.ruleListTemp}"
                                          keepSaved="true"
-                                         noDataLabel="#{me.getValue('no_result_found')}"
+                                         emptyMessage="#{bundle.empty_message}"
                                          sortMode="single"
                                          var="ruleTemp"
                                          rows="10"
@@ -77,35 +77,35 @@
                                          rowClasses="ROW1,ROW2">
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('rule_dayType')}"/>
+                                        <h:outputText escape="true" value="rule_dayType"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.dayType.title}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('rule_startTime')}"/>
+                                        <h:outputText escape="true" value="rule_startTime"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.startTime}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('rule_endTime')}"/>
+                                        <h:outputText escape="true" value="rule_endTime"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.endTime}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('allowExitGadget')}"/>
+                                        <h:outputText escape="true" value="allowExitGadget"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.entranceCount}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('rule_exitCount')}"/>
+                                        <h:outputText escape="true" value="rule_exitCount"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.exitCount}"/>
                                 </p:column>
@@ -118,10 +118,10 @@
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="#{me.getValue('delete')}"/>
+                                        <h:outputText escape="true" value="#{bundle.delete}"/>
                                     </f:facet>
                                     <p:commandButton image="/images/delete.png"
-                                                     title="#{me.getValue('delete')}"
+                                                     title="delete"
                                                      update="ruleTempTable"
                                                      action="#{handleOrganAction.remove}"
                                             />
@@ -140,7 +140,7 @@
                         <td nowrap="nowrap">
                             <p:commandButton image="/images/add.png"
                                              action="#{handleOrganAction.addNewRule}"
-                                             title="#{me.getValue('rule_add')}"
+                                             title="rule_add"
                                              execute="@this"
                                              update="newRuleDetailPanel"/>
                         </td>
@@ -153,7 +153,7 @@
                                     <table border="0" cellpadding="3" cellspacing="3" width="50%">
                                         <tr valign="middle">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_dayType')}"/>
+                                                <h:outputText escape="true" value="rule_dayType"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <h:selectOneMenu value="#{handleOrganAction.dayTypeIdTemp}">
@@ -163,7 +163,7 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_startTime')}"/>
+                                                <h:outputText escape="true" value="rule_startTime"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleOrganAction.startSecond}"
@@ -180,7 +180,7 @@
 
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_endTime')}"/>
+                                                <h:outputText escape="true" value="rule_endTime"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleOrganAction.endSecond}"
@@ -195,7 +195,7 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_entranceCount')}"/>
+                                                <h:outputText escape="true" value="rule_entranceCount"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner dir="#{me.direction}"
@@ -206,7 +206,7 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('rule_exitCount')}"/>
+                                                <h:outputText escape="true" value="rule_exitCount"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner dir="#{me.direction}"
@@ -217,7 +217,7 @@
                                         </tr>
                                         <tr>
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="#{me.getValue('deny')}:" styleClass="textColor"/>
+                                                <h:outputText escape="true" value="deny:" styleClass="textColor"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <h:selectBooleanCheckbox value="#{handleOrganAction.ruleDeny}"/>
@@ -226,7 +226,7 @@
                                         <tr valign="top">
                                             <td nowrap="nowrap">
                                                 <p:commandButton action="#{handleOrganAction.doAddNewRule}"
-                                                                 value="#{me.getValue('rule_add')}"
+                                                                 value="rule_add"
                                                                  title="افزودن قانون"
                                                                  tabindex="6"
                                                                  update="handleRulePanel"/>
@@ -242,11 +242,11 @@
                     <tr valign="top">
                         <td nowrap="nowrap" align="#{me.align}" colspan="2">
                             <p:commandButton id="saveRuleId"
-                                             value="#{me.getValue('save')}"
+                                             value="save"
                                              action="#{handleOrganAction.doEditOrganRule}"/>
                             <p:commandButton id="resetRuleId"
                                              action="#{handleOrganAction.init}"
-                                             value="#{me.getValue('revert')}"/>
+                                             value="#{bundle.revert}"/>
                         </td>
                     </tr>
                 </table>

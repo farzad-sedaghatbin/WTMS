@@ -27,7 +27,7 @@
                                          draggableColumns="true" style="margin-bottom:20px">
                                 <f:facet name="header">
                                     RightClick to View Options
-                                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                                     <p:columnToggler datasource="trafficLogTable" trigger="toggler" />
                                 </f:facet>
 
@@ -46,10 +46,10 @@
                                 <p:column headerText="gateway name" sortBy="#{trafficLog.gateway.name}" filterBy="#{trafficLog.gateway.name}">
                                     <h:outputText escape="true" value="#{trafficLog.gateway.name}"/>
                                 </p:column>
-                                <p:column headerText="time" sortBy="#{trafficLog.time}" filterBy="#{trafficLog.time}">
+                                <p:column headerText="#{bundle.time}" sortBy="#{trafficLog.time}" filterBy="#{trafficLog.time}">
                                     <h:outputText escape="true" value="#{trafficLog.time}"/>
                                 </p:column>
-                                <p:column headerText="date" sortBy="#{trafficLog.date}" filterBy="#{trafficLog.date}">
+                                <p:column headerText="#{bundle.date}" sortBy="#{trafficLog.date}" filterBy="#{trafficLog.date}">
                                     <h:outputText escape="true" value="#{trafficLog.date}" converter="dateConverter"/>
                                 </p:column>
 

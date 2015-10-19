@@ -8,14 +8,14 @@
     <h:form id="pdpFrm">
         <p:outputPanel id="selectPdpList">
             <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
-                <tr valign="top" style="display: ''">
+                <tr valign="top" >
                     <td nowrap="nowrap" align="#{me.align}">
-                        <h:outputText escape="true"  value="finger"/>
+                        <h:outputText escape="true" value="#{bundle.finger}"/>
                         <h:selectBooleanCheckbox
                                                  value="#{handlePDPAction.fingers}">
                         </h:selectBooleanCheckbox>
                         &#160;&#160;
-                        <h:outputText escape="true" value="picture" />
+                        <h:outputText escape="true" value="#{bundle.picture}" />
                         <h:selectBooleanCheckbox
                                                  value="#{handlePDPAction.pictures}">
                         </h:selectBooleanCheckbox>
@@ -58,7 +58,7 @@
                                 <p:column sortBy="#{pdp.name}"
                                              sortOrder="#{handlePDPAction.pdpNameOrder}">
                                     <f:facet name="header">
-                                        <p:commandLink value="name" update="pdpTable"
+                                        <p:commandLink value="#{bundle.name}" update="pdpTable"
                                                          action="#{handlePDPAction.sortByPdpName}"/>
                                         <br/>
                                         <p:inputText converter="persianConverter" value="#{handlePDPAction.pdpNameFilter}">

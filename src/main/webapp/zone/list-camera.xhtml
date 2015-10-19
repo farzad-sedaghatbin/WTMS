@@ -8,15 +8,15 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="cameras">
-                <p:menuitem value="View" update="cameraDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.view}" update="cameraDetail" icon="ui-icon-search"
                             oncomplete="PF('cameraDialog').show()" actionListener="#{handleCameraAction.view}"/>
-                <p:menuitem value="Edit" update="cameraDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="cameraDetail" icon="ui-icon-search"
                             oncomplete="PF('cameraDialog').show()" actionListener="#{handleCameraAction.edit}"/>
-                <p:menuitem value="Delete" update="cameras" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="cameras" icon="ui-icon-close"
                             actionListener="#{handleCameraAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="cameraDetail" actionListener="#{handleCameraAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="cameraDetail" actionListener="#{handleCameraAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('cameraDialog').show()"/>
 
             <p:dataTable id="cameras" var="currentCamera" value="#{handleCameraAction.cameraList}"
@@ -28,16 +28,16 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="cameras" trigger="toggler" />
                 </f:facet>
-                <p:column headerText="name" sortBy="#{currentCamera.name}" filterBy="#{currentCamera.name}">
+                <p:column headerText="#{bundle.name}" sortBy="#{currentCamera.name}" filterBy="#{currentCamera.name}">
                     <h:outputText value="#{currentCamera.name}"/>
                 </p:column>
-                <p:column headerText="ip" sortBy="#{currentCamera.ip}" filterBy="#{currentCamera.ip}">
+                <p:column headerText="#{bundle.ip}" sortBy="#{currentCamera.ip}" filterBy="#{currentCamera.ip}">
                     <h:outputText value="#{currentCamera.ip}"/>
                 </p:column>
-                <p:column headerText="description" sortBy="#{currentCamera.description}" filterBy="#{currentCamera.description}">
+                <p:column headerText="#{bundle.description}" sortBy="#{currentCamera.description}" filterBy="#{currentCamera.description}">
                     <h:outputText value="#{currentCamera.description}"/>
                 </p:column>
             </p:dataTable>
@@ -51,7 +51,7 @@
                         <table border="0" cellpadding="3" cellspacing="3" width="50%">
                             <tr>
                                 <td>
-                                    <h:outputText value="name:"/>
+                                    <h:outputText value="#{bundle.name}"/>
                                 </td>
                                 <td>
                                     <p:inputText readonly="#{handleCameraAction.disableFields}"
@@ -60,7 +60,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h:outputText value="name:"/>
+                                    <h:outputText value="#{bundle.name}"/>
                                 </td>
                                 <td>
                                     <p:inputText readonly="#{handleCameraAction.disableFields}"
@@ -69,7 +69,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h:outputText value="name:"/>
+                                    <h:outputText value="#{bundle.name}"/>
                                 </td>
                                 <td>
                                     <p:inputTextarea readonly="#{handleCameraAction.disableFields}"
@@ -78,7 +78,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h:outputText value="frame:"/>
+                                    <h:outputText value="#{bundle.frame}"/>
                                 </td>
                                 <td>
                                     <p:spinner readonly="#{handleCameraAction.disableFields}"
@@ -87,7 +87,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h:outputText value="enabled:"/>
+                                    <h:outputText value="#{bundle.enable}"/>
                                 </td>
                                 <td>
                                     <p:selectBooleanCheckbox readonly="#{handleCameraAction.disableFields}"
@@ -108,8 +108,8 @@
                                                 showSourceFilter="true" showTargetFilter="true"
                                                 filterMatchMode="contains"
                                                 disabled="#{handleCameraAction.disableFields}">
-                                        <f:facet name="sourceCaption">Source</f:facet>
-                                        <f:facet name="targetCaption">Target</f:facet>
+                                        <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
+                                        <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
 
                                         <p:ajax event="transfer" listener="#{handleGatewayAction.onTransfer}"/>
 
@@ -121,7 +121,7 @@
                             </tr>
                         </table>
 
-                        <p:commandButton value="Submit" id="edit" update="cameras"
+                        <p:commandButton value="#{bundle.submit}" id="edit" update="cameras"
                                          actionListener="#{handleCameraAction.saveOrUpdate}"
                                          oncomplete="PF('cameraDialog').hide()" styleClass="ui-priority-primary"
                                          rendered="#{not handleCameraAction.disableFields}"/>

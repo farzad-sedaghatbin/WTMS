@@ -25,7 +25,7 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     <h:outputLabel value="#{bundle.workgroup_list}"/>
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="groups" trigger="toggler" />
                 </f:facet>
                 <p:column headerText="#{bundle.name}">
@@ -36,7 +36,7 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="Group Info" widgetVar="groupDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.workgroup_info}" widgetVar="groupDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="groupDetail" style="text-align:center;">
                     <f:facet name="header">

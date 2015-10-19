@@ -12,11 +12,11 @@
         <h:form>
 
             <p:contextMenu for="blookups">
-                <p:menuitem value="Edit" update="blookupPanelId" icon="ui-icon-search" oncomplete="PF('blookupDialog').show()" actionListener="#{handleBLookupAction.edit}"/>
-                <p:menuitem value="Delete" update="blookups" icon="ui-icon-close" actionListener="#{handleBLookupAction.doDelete}"/>
+                <p:menuitem value="#{bundle.edit}" update="blookupPanelId" icon="ui-icon-search" oncomplete="PF('blookupDialog').show()" actionListener="#{handleBLookupAction.edit}"/>
+                <p:menuitem value="#{bundle.delete}" update="blookups" icon="ui-icon-close" actionListener="#{handleBLookupAction.doDelete}"/>
             </p:contextMenu>
 
-            <p:commandButton value="Add" id="add" update="blookupPanelId" actionListener="#{handleBLookupAction.add}" styleClass="ui-priority-primary" onclick="PF('blookupDialog').show()"/>
+            <p:commandButton value="#{bundle.add}" id="add" update="blookupPanelId" actionListener="#{handleBLookupAction.add}" styleClass="ui-priority-primary" onclick="PF('blookupDialog').show()"/>
 
             <p:dataTable id="blookups"
                             keepSaved="true"
@@ -31,11 +31,11 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="blookups" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="title" sortBy="#{blookup.title}" filterBy="#{blookup.title}">
+                <p:column headerText="#{bundle.title}" sortBy="#{blookup.title}" filterBy="#{blookup.title}">
                     <f:facet name="header">
                         <h:outputText escape="true" value="title"/>
                     </f:facet>
@@ -77,7 +77,7 @@
                                     <p:commandButton id="saveblookupId"
                                                        update="blookupPanelId,blookupTable,blookupTables"
                                                        execute="@form"
-                                                       value="save"
+                                                       value="#{bundle.save}"
                                                        action="#{handleBLookupAction.saveOrUpdate}"/>
                                 </td>
                             </tr>

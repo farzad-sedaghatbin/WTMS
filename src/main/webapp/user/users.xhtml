@@ -40,7 +40,7 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     <h:outputLabel value="#{bundle.user_list}"/>
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="users" trigger="toggler" />
                 </f:facet>
                 <p:column headerText="#{bundle.username}" sortBy="#{user.username}" filterBy="#{user.username}">
@@ -57,7 +57,7 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="User Info" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.user_info}" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="userDetail" style="text-align:center;">
                     <f:facet name="header">
@@ -133,8 +133,8 @@
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
                                             disabled="#{handleUserAction.disableFields}">
-                                    <f:facet name="sourceCaption">Source</f:facet>
-                                    <f:facet name="targetCaption">Target</f:facet>
+                                    <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
+                                    <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
 
                                     <p:ajax event="transfer" listener="#{handleWorkGroupAction.onTransfer}"/>
 
@@ -156,7 +156,7 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="Assign PC" widgetVar="assignPCDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.assign_pc}" widgetVar="assignPCDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="assignPCDetail" style="text-align:center;">
                     <f:facet name="header">
@@ -174,8 +174,8 @@
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
                                             disabled="#{handleUserAction.disableFields}">
-                                    <f:facet name="sourceCaption">Source</f:facet>
-                                    <f:facet name="targetCaption">Target</f:facet>
+                                    <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
+                                    <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
 
                                     <p:ajax event="transfer" listener="#{handleUserAction.onTransfer}"/>
 
@@ -204,22 +204,22 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="Assign Person" widgetVar="assignPersonDialog" modal="true"  showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.assign_person}" widgetVar="assignPersonDialog" modal="true"  showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="assignPersonDetail" style="text-align:center;">
                 <p:dataTable id="assignPerson" var="person" value="#{handleUserAction.personList}"
                              selectionMode="single" selection="#{handleUserAction.selectedPerson}"
                              rowKey="#{person.id}">
                     <f:facet name="header">
-                        Select Events
+                        <h:outputText value="#{person.select_events}"/>
                     </f:facet>
                     <p:ajax event="rowSelect" listener="#{handleUserAction.associatePerson}"
                             oncomplete="PF('assignPersonDialog').hide()"
                             update=":form:users"/>
-                    <p:column headerText="Id">
+                    <p:column headerText="#{bundle.name}">
                         <h:outputText value="#{person.name}"/>
                     </p:column>
-                    <p:column headerText="Year">
+                    <p:column headerText="#{bundle.lastName}">
                         <h:outputText value="#{person.lastName}"/>
                     </p:column>
                 </p:dataTable>

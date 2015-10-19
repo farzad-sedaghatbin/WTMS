@@ -8,18 +8,18 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="organs">
-                <p:menuitem value="View" update="organDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.view}" update="organDetail" icon="ui-icon-search"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.view}"/>
-                <p:menuitem value="Edit" update="organDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="organDetail" icon="ui-icon-search"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.edit}"/>
                 <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
                             oncomplete="PF('assignRuleDialog').show()"
                             actionListener="#{handleOrganAction.assignRule}"/>
-                <p:menuitem value="Persons" update="personTable" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.persons}" update="personTable" icon="ui-icon-search"
                             oncomplete="PF('PersonDialog').show()" actionListener="#{handleOrganAction.viewPerson}"/>
-                <p:menuitem value="Delete" update="organs" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="organs" icon="ui-icon-close"
                             actionListener="#{handleOrganAction.doDelete}"/>
             </p:contextMenu>
             <p:tree id="tree"  var="organ" dir="RTL" value="#{handleOrganAction.rootOrgans}"
@@ -31,7 +31,7 @@
                 </p:treeNode>
             </p:tree>
 
-            <p:commandButton value="Add" id="add" update="organDetail" actionListener="#{handleOrganAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="organDetail" actionListener="#{handleOrganAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('organDialog').show()"/>
 
             <p:dataTable id="organs" var="currentOrgan" value="#{handleOrganAction.organList}"
@@ -43,20 +43,20 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="organs" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="name" sortBy="#{currentOrgan.name}" filterBy="#{currentOrgan.name}">
+                <p:column headerText="#{bundle.name}" sortBy="#{currentOrgan.name}" filterBy="#{currentOrgan.name}">
                     <h:outputText value="#{currentOrgan.name}"/>
                 </p:column>
                 <p:column headerText="code" sortBy="#{currentOrgan.code}" filterBy="#{currentOrgan.code}">
                     <h:outputText value="#{currentOrgan.code}"/>
                 </p:column>
-                <p:column headerText="type" sortBy="#{currentOrgan.organType.titleText}" filterBy="#{currentOrgan.organType.titleText}">
+                <p:column headerText="#{bundle.type}" sortBy="#{currentOrgan.organType.titleText}" filterBy="#{currentOrgan.organType.titleText}">
                     <h:outputText value="#{currentOrgan.organType.titleText}"/>
                 </p:column>
-                <p:column headerText="title" sortBy="#{currentOrgan.title}" filterBy="#{currentOrgan.title}">
+                <p:column headerText="#{bundle.title}" sortBy="#{currentOrgan.title}" filterBy="#{currentOrgan.title}">
                     <h:outputText value="#{currentOrgan.title}"/>
                 </p:column>
             </p:dataTable>
@@ -70,7 +70,7 @@
                     <table>
                         <tr>
                             <td>
-                                <h:outputText value="name:"/>
+                                <h:outputText value="#{bundle.name}"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleOrganAction.disableFields}"
@@ -79,7 +79,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="code:"/>
+                                <h:outputText value="#{bundle.code}"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleOrganAction.disableFields}"
@@ -97,7 +97,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="type:"/>
+                                <h:outputText value="#{bundle.type}"/>
                             </td>
                             <td>
                                 <p:selectOneMenu value="#{handleOrganAction.organType.id}"
@@ -121,7 +121,7 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <p:commandButton value="Submit" id="edit" update="organs"
+                                <p:commandButton value="#{bundle.submit}" id="edit" update="organs"
                                                  actionListener="#{handleOrganAction.saveOrUpdate}"
                                                  oncomplete="PF('organDialog').hide()" styleClass="ui-priority-primary"
                                                  rendered="#{not handleOrganAction.disableFields}"/>
@@ -143,7 +143,7 @@
                                     </legend>
                                     <p:dataTable id="personTable" value="#{handleOrganAction.personList}"
                                                  keepSaved="true"
-                                                 noDataLabel="no_result_found"
+                                                 emptyMessage="#{bundle.empty_message}"
                                                  sortMode="single"
                                                  var="person"
                                                  rows="10"
@@ -152,7 +152,7 @@
                                         <p:column sortBy="#{person.name}"
                                                   sortOrder="#{handlePersonAction.personnameOrder}">
                                             <f:facet name="header">
-                                                <p:commandLink value="name" update="personTable"
+                                                <p:commandLink value="#{bundle.name}" update="personTable"
                                                                execute="@this"
                                                                limitRender="true"
                                                                action="#{handlePersonAction.sortByPersonname}"/>
@@ -169,7 +169,7 @@
                                         <p:column sortBy="#{person.lastName}"
                                                   sortOrder="#{handlePersonAction.personFamilyOrder}">
                                             <f:facet name="header">
-                                                <p:commandLink value="lastname" update="personTable"
+                                                <p:commandLink value="#{bundle.lastname}" update="personTable"
                                                                execute="@this"
                                                                limitRender="true"
                                                                action="#{handlePersonAction.sortByPersonFamily}"/>
@@ -186,7 +186,7 @@
                                         <p:column sortBy="#{person.personnelNo}"
                                                   sortOrder="#{handlePersonAction.personnelNoOrder}">
                                             <f:facet name="header">
-                                                <p:commandLink value="personnelCode" update="personTable"
+                                                <p:commandLink value="#{bundle.personnelCode}" update="personTable"
                                                                execute="@this"
                                                                limitRender="true"
                                                                action="#{handlePersonAction.sortByPersonnelNo}"/>
@@ -218,7 +218,7 @@
                                  selectionMode="single" selection="#{handleOrganAction.selectedRulePackage}"
                                  rowKey="#{rule.id}">
                         <f:facet name="header">
-                            Select Events
+                            <h:outputText value="#{person.select_events}"/>
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{handleOrganAction.doAssignRule}" oncomplete="PF('assignRuleDialog').hide()" update=":form:organs"/>
                         <p:column headerText="rule name">

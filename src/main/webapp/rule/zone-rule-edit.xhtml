@@ -103,7 +103,7 @@
                                 </p:column>
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="delete"/>
+                                        <h:outputText escape="true" value="#{bundle.delete}"/>
                                     </f:facet>
                                     <p:commandButton image="/images/delete.png"
                                                      title="delete"
@@ -221,11 +221,11 @@
                     <tr valign="top">
                         <td nowrap="nowrap" colspan="2">
                             <p:commandButton id="saveRuleId"
-                                             value="save"
+                                             value="#{bundle.save}"
                                              action="#{handleZoneAction.doEditZoneRule}"/>
                             <p:commandButton id="resetRuleId"
                                              action="#{handleZoneAction.init}"
-                                             value="revert"/>
+                                             value="#{bundle.revert}"/>
                         </td>
                     </tr>
                 </table>

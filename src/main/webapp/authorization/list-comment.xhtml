@@ -20,20 +20,20 @@
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
                     RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="Columns" style="float:right" icon="ui-icon-calculator" />
+                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="commentTable" trigger="toggler" />
                 </f:facet>
 
-                    <p:column headerText="effector user" sortBy="#{comment.effectorUser}" filterBy="#{comment.effectorUser}">
+                    <p:column headerText="#{bundle.effector_user}" sortBy="#{comment.effectorUser}" filterBy="#{comment.effectorUser}">
                         <h:outputText value="#{comment.effectorUser}"/>
                     </p:column>
-                    <p:column headerText="message" sortBy="#{comment.message}" filterBy="#{comment.message}">
+                    <p:column headerText="#{bundle.message}" sortBy="#{comment.message}" filterBy="#{comment.message}">
                         <h:outputText value="#{comment.message}"/>
 
                     </p:column>
                     <p:column>
                         <f:facet name="header">
-                            <h:outputText value="person"/>
+                            <h:outputText value="#{bundle.person}"/>
                         </f:facet>
                         <h:outputText value="#{comment.trafficLog.person.name}"/>
                         &#160;&#160;
@@ -41,13 +41,13 @@
                     </p:column>
                     <p:column>
                         <f:facet name="header">
-                            <h:outputText value="date"/>
+                            <h:outputText value="#{bundle.date}" />
                         </f:facet>
                         <h:outputText value="#{comment.trafficLog.date}" converter="dateConverter"/>
                     </p:column>
                     <p:column>
                         <f:facet name="header">
-                            <h:outputText value="time"/>
+                            <h:outputText value="#{bundle.time}"/>
                         </f:facet>
                         <h:outputText value="#{comment.trafficLog.time}"/>
                     </p:column>
