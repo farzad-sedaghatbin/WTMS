@@ -7,6 +7,7 @@ import ir.university.toosi.tms.model.entity.TrafficLog;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -185,6 +186,18 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
             return trafficLogs;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public List<Object[]> searchForChart(String fromTime, String toTime) {
+        try {
+
+            return em.createNamedQuery("TrafficLog.searchForChart")
+                    .setParameter("fromTime", fromTime)
+                    .setParameter("toTime",toTime)
+                    .getResultList();
+        } catch (Exception e) {
+            return new ArrayList<>();
         }
     }
 

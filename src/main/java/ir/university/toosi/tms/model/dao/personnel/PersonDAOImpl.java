@@ -179,6 +179,15 @@ public class PersonDAOImpl extends BaseDAOImpl<Person> {
         }
     }
 
+    public Long countOfAll() {
+        try {
+            return (Long) em.createNamedQuery("Person.countOfAll")
+                    .getSingleResult();
+        } catch (Exception e) {
+            return 0l;
+        }
+    }
+
     public List<Person> deleted() {
         try {
             return (List<Person>) em.createNamedQuery("Person.deleted")

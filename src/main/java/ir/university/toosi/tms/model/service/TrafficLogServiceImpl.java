@@ -288,4 +288,8 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
     public TrafficLogDAOImpl getTrafficLogDAO() {
         return TrafficLogDAO;
     }
+
+    public List<Object[]> searchForChart(String fromTime,String toTime) {
+        return TrafficLogDAO.searchForChart(fromTime,toTime);
+    }
 }

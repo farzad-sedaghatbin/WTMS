@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panel id="panel" header="Search Form" style="margin-bottom:10px;">
+                <h:outputText value="from time"/>
+                <p:spinner value="#{handleTrafficLogChartAction.fromHour}"
+                           step="1" maxValue="23" size="6" minValue="0"/>
+                :
+                <p:spinner value="#{handleTrafficLogChartAction.fromMin}"
+                           step="1" maxValue="59" size="6" minValue="0"/>
+                :
+                <p:spinner value="#{handleTrafficLogChartAction.fromSec}"
+                           step="1" maxValue="59" size="6" minValue="0"/>
+                <br/>
+                <h:outputText value="to time"/>
+                <p:spinner value="#{handleTrafficLogChartAction.toHour}"
+                           step="1" maxValue="23" size="6" minValue="0"/>
+                :
+                <p:spinner value="#{handleTrafficLogChartAction.toMin}"
+                           step="1" maxValue="59" size="6" minValue="0"/>
+                :
+                <p:spinner value="#{handleTrafficLogChartAction.toSec}"
+                           step="1" maxValue="59" size="6" minValue="0"/>
+
+                <br/>
+                <p:commandButton value="search" actionListener="#{handleTrafficLogChartAction.search}"
+                                 update="chartPanel"/>
+            </p:panel>
+            <p:panelGrid id="chartPanel" columns="2" columnClasses="left,right" style="width:100%">
+                <p:chart id="line" type="line" model="#{handleTrafficLogChartAction.lineModel}"
+                         style="height:300px;"/>
+                <p:chart id="bar" type="bar" model="#{handleTrafficLogChartAction.barChartModel}"
+                         style="height:300px;"/>
+            </p:panelGrid>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

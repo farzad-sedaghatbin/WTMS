@@ -38,6 +38,10 @@ import java.util.List;
                 query = "select p from Person p where p.id=:id and p.deleted = '0'"
         ),
         @NamedQuery(
+                name = "Person.countOfAll",
+                query = "select count(p.id) from Person p where p.deleted = '0'"
+        ),
+        @NamedQuery(
                 name = "Person.findByName",
                 query = "select p from Person p where p.name =:name and p.deleted = '0'"
         ),

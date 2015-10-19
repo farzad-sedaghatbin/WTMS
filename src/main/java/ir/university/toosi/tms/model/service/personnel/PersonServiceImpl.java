@@ -270,4 +270,8 @@ public class PersonServiceImpl<T extends Person> {
         return personDAO.getAllPerson(first,pageIndex);
     }
 
+    public Long countOfAll(){
+        return personDAO.countOfAll();
+    }
+
 }
