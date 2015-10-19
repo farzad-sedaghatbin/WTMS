@@ -25,6 +25,10 @@ import java.util.List;
                 query = "select g from Gateway g where g.deleted='0' "
         ),
         @NamedQuery(
+                name = "Gateway.listExceptThese",
+                query = "select g from Gateway g where g.deleted='0' and g not in (:gatewayIds)"
+        ),
+        @NamedQuery(
                 name = "Gateway.listForZone",
                 query = "select g from Gateway g where g.deleted='0' and g not in (:gateways)"
         ),

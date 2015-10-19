@@ -83,4 +83,14 @@ public class GatewayDAOImpl extends BaseDAOImpl<Gateway> {
             return new ArrayList<>();
         }
     }
+
+    public List<Gateway> getAllGatewayExceptThese(List<Gateway> gateways) {
+        try {
+            return (List<Gateway>) em.createNamedQuery("Gateway.listExceptThese")
+                    .setParameter("gatewayIds", gateways)
+                    .getResultList();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
 }

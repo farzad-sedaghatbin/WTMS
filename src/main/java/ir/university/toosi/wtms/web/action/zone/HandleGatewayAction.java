@@ -1,9 +1,17 @@
 package ir.university.toosi.wtms.web.action.zone;
 
-import ir.university.toosi.tms.model.entity.*;
-import ir.university.toosi.tms.model.entity.calendar.*;
+import ir.university.toosi.tms.model.entity.GatewayPerson;
+import ir.university.toosi.tms.model.entity.GatewaySpecialState;
+import ir.university.toosi.tms.model.entity.GatewayStatus;
+import ir.university.toosi.tms.model.entity.Operation;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
+import ir.university.toosi.tms.model.entity.calendar.DayType;
+import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.tms.model.entity.rule.Rule;
+import ir.university.toosi.tms.model.entity.rule.RulePackage;
+import ir.university.toosi.tms.model.entity.zone.Camera;
+import ir.university.toosi.tms.model.entity.zone.Gateway;
+import ir.university.toosi.tms.model.entity.zone.PreRequestGateway;
 import ir.university.toosi.tms.model.service.GatewayPersonServiceImpl;
 import ir.university.toosi.tms.model.service.GatewaySpecialStateScheduler;
 import ir.university.toosi.tms.model.service.GatewaySpecialStateServiceImpl;
@@ -15,15 +23,9 @@ import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PreRequestGatewayServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
-import ir.university.toosi.tms.model.entity.personnel.Person;
-import ir.university.toosi.tms.model.entity.rule.RulePackage;
-import ir.university.toosi.tms.model.entity.zone.Camera;
-import ir.university.toosi.tms.model.entity.zone.Gateway;
-import ir.university.toosi.tms.model.entity.zone.PreRequestGateway;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
-
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -323,7 +325,7 @@ public class HandleGatewayAction implements Serializable {
     public void add() {
         init();
         preRequier = gateways;
-        gatewayDuals = new DualListModel<>(gatewayService.getAllGateway(),new ArrayList<Gateway>());
+        gatewayDuals = new DualListModel<>(gatewayService.getAllGateway(), new ArrayList<Gateway>());
         setEditable("false");
         setDisableFields(false);
     }
@@ -363,40 +365,9 @@ public class HandleGatewayAction implements Serializable {
     }
 
     public void view() {
+        edit();
         setEditable("true");
         setDisableFields(true);
-        gatewayEnabled = currentGetway.isEnabled();
-        description = currentGetway.getDescription();
-        gatewayName = currentGetway.getName();
-        preRequestGatewayIds = currentGetway.getPreRequestGateways();
-        preRequestGateways = new ArrayList<>();
-        for (Long preRequestGatewayId : preRequestGatewayIds) {
-            PreRequestGateway preGateway = new PreRequestGateway();
-            preGateway = preRequestGatewayService.findById(preRequestGatewayId);
-            preRequestGateways.add(preGateway.getPreGateway());
-        }
-        Gateway removed = null;
-        ArrayList<Gateway> list = new ArrayList<>(gateways);
-
-        List<Gateway> sourceGateways = new ArrayList<>();
-        List<Gateway> targetGateways = new ArrayList<>();
-
-        for (Gateway gateway : list) {
-            if (gateway.getId() == currentGetway.getId())
-                removed = gateway;
-            for (Gateway innerGateway : preRequestGateways) {
-                if (gateway.getId() == innerGateway.getId()) {
-                    gateway.setSelected(true);
-                    targetGateways.add(gateway);
-                } else {
-                    sourceGateways.add(gateway);
-                }
-            }
-        }
-        list.remove(removed);
-        preRequier = list;
-        currentGetway = gatewayService.findById(currentGetway.getId());
-        gatewayDuals = new DualListModel<>(sourceGateways,targetGateways);
 
     }
 
@@ -407,34 +378,23 @@ public class HandleGatewayAction implements Serializable {
         description = currentGetway.getDescription();
         gatewayName = currentGetway.getName();
         preRequestGatewayIds = currentGetway.getPreRequestGateways();
+
         preRequestGateways = new ArrayList<>();
         for (Long preRequestGatewayId : preRequestGatewayIds) {
             PreRequestGateway preGateway = new PreRequestGateway();
             preGateway = preRequestGatewayService.findById(preRequestGatewayId);
             preRequestGateways.add(preGateway.getPreGateway());
         }
-        Gateway removed = null;
-        ArrayList<Gateway> list = new ArrayList<>(gateways);
 
-        List<Gateway> sourceGateways = new ArrayList<>();
-        List<Gateway> targetGateways = new ArrayList<>();
-
-        for (Gateway gateway : list) {
-            if (gateway.getId() == currentGetway.getId())
-                removed = gateway;
-            for (Gateway innerGateway : preRequestGateways) {
-                if (gateway.getId() == innerGateway.getId()) {
-                    gateway.setSelected(true);
-                    targetGateways.add(gateway);
-                } else {
-                    sourceGateways.add(gateway);
-                }
-            }
+        List<Gateway> gateways;
+        if (currentGetway.getPreRequestGateways() == null || currentGetway.getPreRequestGateways().isEmpty()) {
+            gateways = gatewayService.getAllGateway();
+        } else {
+            gateways = gatewayService.getAllGatewayExceptThese(preRequestGateways);
         }
-        list.remove(removed);
-        preRequier = list;
+
         currentGetway = gatewayService.findById(currentGetway.getId());
-        gatewayDuals = new DualListModel<>(sourceGateways,targetGateways);
+        gatewayDuals = new DualListModel<>(gateways, preRequestGateways);
 
     }
 
@@ -607,13 +567,17 @@ public class HandleGatewayAction implements Serializable {
     public void onTransferForPreRequire(TransferEvent event) {
         if (event.isAdd()) {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(true);
+                ((Gateway) item).setSelected(true);
                 preRequestGatewayIds.add(((Gateway) item).getId());
+                gatewayDuals.getSource().remove(item);
+                gatewayDuals.getTarget().add((Gateway) item);
             }
         } else {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(false);
-                preRequestGatewayIds.remove(((Gateway)item).getId());
+                ((Gateway) item).setSelected(false);
+                preRequestGatewayIds.remove(((Gateway) item).getId());
+                gatewayDuals.getSource().add((Gateway) item);
+                gatewayDuals.getTarget().remove(item);
             }
         }
     }
@@ -972,7 +936,6 @@ public class HandleGatewayAction implements Serializable {
     }
 
 
-
     public List<Person> getPersons() {
         return persons;
     }
@@ -1176,7 +1139,6 @@ public class HandleGatewayAction implements Serializable {
     }
 
 
-
     public List<Long> getPreRequestGatewayIds() {
         return preRequestGatewayIds;
     }
@@ -1258,7 +1220,7 @@ public class HandleGatewayAction implements Serializable {
     }
 
     public DualListModel<Gateway> getGatewayDualList() {
-        if(gatewayDualList == null)
+        if (gatewayDualList == null)
             gatewayDualList = new DualListModel<>();
         return gatewayDualList;
     }

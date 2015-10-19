@@ -50,7 +50,7 @@
             </p:dataTable>
 
             <p:dialog header="Description Info" widgetVar="gatewayDialog" modal="true" showEffect="fade"
-                      hideEffect="fade" resizable="false">
+                      hideEffect="fade" resizable="true">
                 <p:outputPanel id="gatewayDetail" style="text-align:center;">
                     <f:facet name="header">
                         <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
@@ -91,7 +91,7 @@
                                             var="gateway"
                                             effect="bounce"
                                             itemValue="#{gateway}" itemLabel="#{gateway.name}"
-                                            showSourceControls="true"
+                                            showSourceControls="true" converter="#{gatewayConverter}"
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
                                             disabled="#{handleGatewayAction.disableFields}">
@@ -102,16 +102,6 @@
 
                                     <p:column style="width:90%;">
                                         <h:outputText value="#{gateway.name}"/>
-                                    </p:column>
-                                    <p:column style="width:90%;">
-                                        <h:outputText value="#{gateway.description}"/>
-                                    </p:column>
-                                    <p:column style="width:90%;">
-                                        <h:outputText value="#{gateway.cameraName}"/>
-                                    </p:column>
-                                    <p:column style="width:90%;">
-                                        <p:graphicImage
-                                                value="#{gateway.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
                                     </p:column>
                                 </p:pickList>
                             </td>
@@ -129,7 +119,7 @@
                 </p:outputPanel>
             </p:dialog>
             <p:dialog header="Status Info" widgetVar="gatewayStatus" modal="true" showEffect="fade"
-                      hideEffect="fade" resizable="false">
+                      hideEffect="fade" resizable="true">
                 <p:outputPanel id="AssignSpecialStatus" ajaxRendered="true">
                     <fieldset dir="#{me.direction}">
                         <legend>
@@ -272,7 +262,7 @@
             </p:dialog>
 
             <p:dialog header="Assign Rule" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="false">
+                      resizable="true">
                 <p:outputPanel id="assignRuleDetail" style="text-align:center;">
                     <p:dataTable id="assignRule" var="rule" value="#{handleGatewayAction.rulePackageList}"
                                  selectionMode="single" selection="#{handleGatewayAction.selectedRulePackage}"
@@ -305,7 +295,7 @@
 
 
             <p:dialog header="Edit Rule" widgetVar="editRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="false">
+                      resizable="true">
                 <ui:include src="../rule/gateway-rule-edit.xhtml"/>
             </p:dialog>
 

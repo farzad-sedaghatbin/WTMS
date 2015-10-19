@@ -6,13 +6,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html">
     <h:form id="ruleFrm">
-        <p:outputPanel id="handleRulePanel" ajaxRendered="true">
-            <fieldset dir="#{me.direction}">
-                <legend>
-
-                    <h:outputText escape="true" value="#{me.getValue('rule_edit')}"/>
-                </legend>
-                <table border="0" cellpadding="3" cellspacing="3" width="290" dir="#{me.direction}">
+        <p:outputPanel id="handleRulePanel">
+                <table>
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
@@ -21,7 +16,6 @@
                             <h:inputText id="ruleName"
                                          converter="persianConverter"
                                          styleClass="inputRequiredField"
-                                         required="true"
                                          tabindex="1"
                                          value="#{handleGatewayAction.name}"
                                          dir="#{me.direction}"/>
@@ -167,14 +161,14 @@
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleGatewayAction.startSecond}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" size="8" min="0"/>
                                                 &#160;
                                                 <p:spinner value="#{handleGatewayAction.startMinute}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" size="8" min="0"/>
 
                                                 &#160;
                                                 <p:spinner value="#{handleGatewayAction.startHour}"
-                                                           stepFactor="1" max="23" size="1" min="0"/>
+                                                           stepFactor="1" max="23" size="8" min="0"/>
                                             </td>
                                         </tr>
 
@@ -184,13 +178,13 @@
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleGatewayAction.endSecond}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" size="8" min="0"/>
                                                 &#160;
                                                 <p:spinner value="#{handleGatewayAction.endMinute}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" size="8" min="0"/>
                                                 &#160;
                                                 <p:spinner value="#{handleGatewayAction.endHour}"
-                                                           stepFactor="1" max="59" size="1" min="0"/>
+                                                           stepFactor="1" max="59" size="8" min="0"/>
                                             </td>
                                         </tr>
                                         <tr valign="bottom">
@@ -200,7 +194,7 @@
                                             <td nowrap="nowrap">
                                                 <p:spinner dir="#{me.direction}"
                                                            value="#{handleGatewayAction.ruleEntranceCount}"
-                                                           stepFactor="1" max="99" size="1" min="0"/>
+                                                           stepFactor="1" max="99" size="8" min="0"/>
 
                                             </td>
                                         </tr>
@@ -211,7 +205,7 @@
                                             <td nowrap="nowrap">
                                                 <p:spinner dir="#{me.direction}"
                                                            value="#{handleGatewayAction.ruleExitCount}"
-                                                           stepFactor="1" max="99" size="1" min="0"/>
+                                                           stepFactor="1" max="99" size="8" min="0"/>
 
                                             </td>
                                         </tr>
@@ -229,7 +223,7 @@
                                                                  value="#{me.getValue('rule_add')}"
                                                                  title="افزودن قانون"
                                                                  tabindex="6"
-                                                                 update="handleRulePanel"/>
+                                                                 update="form:ruleFrm:handleRulePanel"/>
                                             </td>
                                         </tr>
                                     </table>
@@ -250,7 +244,6 @@
                         </td>
                     </tr>
                 </table>
-            </fieldset>
         </p:outputPanel>
     </h:form>
 </ui:composition>

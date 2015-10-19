@@ -264,4 +264,8 @@ public class GatewayServiceImpl<T extends Gateway> {
     public List<Gateway> getAllGatewayForZone(List<Gateway> gatewayList) {
         return GatewayDAO.getAllGatewayForZone(gatewayList);
     }
+
+    public List<Gateway> getAllGatewayExceptThese(List<Gateway> gateways) {
+        return GatewayDAO.getAllGatewayExceptThese(gateways);
+    }
 }
