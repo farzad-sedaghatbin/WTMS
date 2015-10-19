@@ -31,10 +31,10 @@
                                  update="chartPanel"/>
             </p:panel>
             <p:panelGrid id="chartPanel" columns="2" columnClasses="left,right" style="width:100%">
-                <p:chart id="line" type="line" model="#{handleTrafficLogChartAction.lineModel}"
-                         style="height:300px;"/>
-                <p:chart id="bar" type="bar" model="#{handleTrafficLogChartAction.barChartModel}"
-                         style="height:300px;"/>
+                <p:chart type="line" model="#{handleTrafficLogChartAction.lineModel}"
+                         style="height:400px;"/>
+                <p:chart type="bar" model="#{handleTrafficLogChartAction.barChartModel}"
+                         style="height:400px;"/>
             </p:panelGrid>
         </h:form>
 

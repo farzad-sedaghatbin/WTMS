@@ -42,29 +42,47 @@ public class TrafficLogChart implements Serializable {
 
     public void begin() {
         refineTimes();
-        List<Object[]> trafficParams = trafficLogService.searchForChart("000000", "235959");
-        prepareChart(trafficParams);
+        List<Object[]> activeTraffics = trafficLogService.searchForChart("000000", "235959", true);
+        List<Object[]> deActiveTraffics = trafficLogService.searchForChart("000000", "235959", false);
+        prepareChart(activeTraffics, deActiveTraffics);
         me.redirect("/charts/traffic-log-chart.xhtml");
     }
 
     public void search() {
         refineTimes();
-        List<Object[]> trafficParams = trafficLogService.searchForChart(fromHour + fromMin + fromSec, toHour + toMin + toSec);
-        prepareChart(trafficParams);
+        List<Object[]> activeTraffics = trafficLogService.searchForChart(fromHour + fromMin + fromSec, toHour + toMin + toSec, true);
+        List<Object[]> deActiveTraffics = trafficLogService.searchForChart(fromHour + fromMin + fromSec, toHour + toMin + toSec, false);
+        prepareChart(activeTraffics, deActiveTraffics);
     }
 
-    private void prepareChart(List<Object[]> trafficParams) {
+    private void prepareChart(List<Object[]> activeTraffics, List<Object[]> deActiveTraffics) {
         lineModel = new LineChartModel();
         barChartModel = new BarChartModel();
-        ChartSeries chartSeries = new ChartSeries();
-        chartSeries.setLabel("traffic log");
-        for (Object[] param : trafficParams) {
+        ChartSeries barChartSeriesForActive = new ChartSeries();
+        ChartSeries barChartSeriesForDeActive = new ChartSeries();
+        LineChartSeries lineChartSeriesForActive = new LineChartSeries();
+        LineChartSeries lineChartSeriesForDeActive = new LineChartSeries();
+        barChartSeriesForActive.setLabel("Active Logs");
+        lineChartSeriesForActive.setLabel("Active Logs");
+        barChartSeriesForDeActive.setLabel("DeActive Logs");
+        lineChartSeriesForDeActive.setLabel("DeActive Logs");
+        for (Object[] param : activeTraffics) {
             Gateway gateway = gatewayService.findById((Long) param[0]);
-            chartSeries.set(gateway.getName(), (Number) param[1]);
+            lineChartSeriesForActive.set(gateway.getName(), (Number) param[1]);
+            barChartSeriesForActive.set(gateway.getName(), (Number) param[1]);
         }
 
-        lineModel.addSeries(chartSeries);
-        barChartModel.addSeries(chartSeries);
+        for (Object[] param : deActiveTraffics) {
+            Gateway gateway = gatewayService.findById((Long) param[0]);
+            lineChartSeriesForDeActive.set(gateway.getName(), (Number) param[1]);
+            barChartSeriesForDeActive.set(gateway.getName(), (Number) param[1]);
+        }
+
+        lineModel.addSeries(lineChartSeriesForActive);
+        lineModel.addSeries(lineChartSeriesForDeActive);
+        barChartModel.addSeries(barChartSeriesForActive);
+        barChartModel.addSeries(barChartSeriesForDeActive);
+
         lineModel.setTitle("Linear Chart");
         barChartModel.setTitle("Bar Chart");
         lineModel.setLegendPosition("se");
@@ -85,45 +103,45 @@ public class TrafficLogChart implements Serializable {
         yAxis.setMax(personService.countOfAll());
     }
 
-    private void refineTimes(){
-        if (fromHour == null || fromHour.equals("")){
+    private void refineTimes() {
+        if (fromHour == null || fromHour.equals("")) {
             fromHour = "00";
         }
-        if (fromHour.length() == 1){
-            fromHour = "0"+fromHour;
+        if (fromHour.length() == 1) {
+            fromHour = "0" + fromHour;
         }
-        if (fromMin == null || fromMin.equals("")){
+        if (fromMin == null || fromMin.equals("")) {
             fromMin = "00";
         }
-        if (fromMin.length() == 1){
-            fromMin = "0"+fromMin;
+        if (fromMin.length() == 1) {
+            fromMin = "0" + fromMin;
         }
-        if (fromSec == null || fromSec.equals("")){
+        if (fromSec == null || fromSec.equals("")) {
             fromSec = "00";
         }
-        if (fromSec.length() == 1){
-            fromSec = "0"+fromSec;
+        if (fromSec.length() == 1) {
+            fromSec = "0" + fromSec;
         }
 
-        if (toHour == null || toHour.equals("")){
+        if (toHour == null || toHour.equals("")) {
             toHour = "00";
         }
-        if (toHour.length() == 1){
-            toHour = "0"+toHour;
+        if (toHour.length() == 1) {
+            toHour = "0" + toHour;
         }
 
-        if (toMin == null || toMin.equals("")){
+        if (toMin == null || toMin.equals("")) {
             toMin = "00";
         }
-        if (toMin.length() == 1){
-            toMin = "0"+toMin;
+        if (toMin.length() == 1) {
+            toMin = "0" + toMin;
         }
 
-        if (toSec == null || toSec.equals("")){
+        if (toSec == null || toSec.equals("")) {
             toSec = "00";
         }
-        if (toSec.length() == 1){
-            toSec = "0"+toSec;
+        if (toSec.length() == 1) {
+            toSec = "0" + toSec;
         }
 
     }

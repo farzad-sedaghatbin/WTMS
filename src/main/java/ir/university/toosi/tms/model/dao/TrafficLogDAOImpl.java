@@ -189,12 +189,13 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
         }
     }
 
-    public List<Object[]> searchForChart(String fromTime, String toTime) {
+    public List<Object[]> searchForChart(String fromTime, String toTime,boolean valid) {
         try {
 
             return em.createNamedQuery("TrafficLog.searchForChart")
                     .setParameter("fromTime", fromTime)
                     .setParameter("toTime",toTime)
+                    .setParameter("valid",valid)
                     .getResultList();
         } catch (Exception e) {
             return new ArrayList<>();
