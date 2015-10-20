@@ -17,13 +17,6 @@
 
 <p:tab title="Person">
 
-    <fieldset dir="#{me.direction}">
-        <legend>
-            <h:outputText escape="true" value="person_add"
-                          rendered="#{handlePersonAction.editable eq 'false'}"/>
-            <h:outputText escape="true" value="person_edit"
-                          rendered="#{handlePersonAction.editable eq 'true'}"/>
-        </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360"
                dir="#{me.direction}">
 
@@ -187,15 +180,10 @@
                 </td>
             </tr>
         </table>
-    </fieldset>
 </p:tab>
 
 <p:tab title="Job">
 
-    <fieldset dir="#{me.direction}">
-        <legend>
-            <h:outputText escape="true" value="job"/>
-        </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
 
             <tr>
@@ -295,15 +283,9 @@
                 </td>
             </tr>
         </table>
-    </fieldset>
 </p:tab>
 
 <p:tab title="Organ">
-
-    <fieldset dir="#{me.direction}">
-        <legend>
-            <h:outputText escape="true" value="organ"/>
-        </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
             <tr valign="top">
                 <td nowrap="nowrap">
@@ -331,15 +313,10 @@
                 </td>
             </tr>
         </table>
-    </fieldset>
 </p:tab>
 
 <p:tab header="picture">
 
-    <fieldset dir="#{me.direction}">
-        <legend>
-            <h:outputText escape="true" value="#{bundle.picture}"/>
-        </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
             <tr>
                 <td dir="ltr">
@@ -382,15 +359,10 @@
                 </td>
             </tr>
         </table>
-    </fieldset>
 </p:tab>
 
 <p:tab header="extraFeild">
 
-    <fieldset dir="#{me.direction}">
-        <legend>
-            <h:outputText escape="true" value="extraFeild"/>
-        </legend>
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
             <tr valign="top">
                 <td nowrap="nowrap">
@@ -450,7 +422,6 @@
                 </td>
             </tr>
         </table>
-    </fieldset>
 </p:tab>
 
 <p:tab header="cards" rendered="#{handlePersonAction.editable eq 'true'}">
@@ -467,11 +438,6 @@
         <ui:repeat value="#{handlePersonAction.cards}" var="card">
             <tr valign="top">
                 <td nowrap="nowrap" colspan="2">
-                    <fieldset dir="#{me.direction}">
-                        <legend>
-                            <h:outputText escape="true" value="card"
-                                          styleClass="textColor"/>
-                        </legend>
                         <table border="0" cellpadding="3" cellspacing="3"
                                align="#{me.align}">
 
@@ -521,7 +487,6 @@
                                 </td>
                             </tr>
                         </table>
-                    </fieldset>
                 </td>
             </tr>
         </ui:repeat>

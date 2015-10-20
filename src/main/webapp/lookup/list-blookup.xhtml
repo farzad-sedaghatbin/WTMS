@@ -47,8 +47,6 @@
             </p:dataTable>
             <p:dialog header="blookup Info" widgetVar="blookupDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                 <p:outputPanel id="blookupPanelId" ajaxRendered="true">
-                    <fieldset dir="#{me.direction}">
-                        <legend>
                             <h:outputText escape="true" value="add"
                                           rendered="#{handlePCAction.editable eq 'false'}"/>
                             <h:outputText escape="true" value="edit"
@@ -81,7 +79,6 @@
                                 </td>
                             </tr>
                         </table>
-                    </fieldset>
                 </p:outputPanel>
                     </p:dialog>
         </h:form>

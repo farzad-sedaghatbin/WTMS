@@ -136,10 +136,6 @@
                     <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
                         <tr valign="top">
                             <td nowrap="nowrap">
-                                <fieldset>
-                                    <legend>
-                                        <h:outputText escape="true" value="person_list"/>
-                                    </legend>
                                     <p:dataTable id="personTable" value="#{handleOrganAction.personList}"
                                                  keepSaved="true"
                                                  emptyMessage="#{bundle.empty_message}"
@@ -203,7 +199,6 @@
                                                             page="#{handleOrganAction.personPage}"/>
                                         </f:facet>
                                     </p:dataTable>
-                                </fieldset>
                             </td>
                         </tr>
                     </table>

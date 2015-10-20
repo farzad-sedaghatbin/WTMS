@@ -5,252 +5,246 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html">
-<h:form id="ruleFrm">
-<p:outputPanel id="handleRulePanel" ajaxRendered="true">
-<fieldset dir="#{me.direction}">
-<legend>
+    <h:form id="ruleFrm">
+        <p:outputPanel id="handleRulePanel" ajaxRendered="true">
+            <table border="0" cellpadding="3" cellspacing="3" width="290" dir="#{me.direction}">
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <h:outputText escape="true"
+                                      value="rule_name:"/>
+                        &#160;&#160;&#160;&#160;&#160;
+                        <h:inputText id="ruleName"
+                                     converter="persianConverter"
+                                     styleClass="inputRequiredField"
+                                     required="true"
+                                     tabindex="1"
+                                     value="#{handlePersonAction.name}"
+                                     dir="#{me.direction}"/>
+                        <p:message ajaxRendered="true" id="messageName" for="ruleName" showSummary="true"
+                                   showDetail="false" errorClass="errorMsg"/>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <h:outputText escape="true"
+                                      value="rule_date:"/>
+                        &#160;&#160;&#160;&#160;&#160;
+                        <h:selectOneMenu value="#{handlePersonAction.selectedCalendarIdTemp}" tabindex="2">
+                            <f:selectItems value="#{handlePersonAction.calendarItems}"/>
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <h:outputText escape="true"
+                                      value="antiPassBack:" styleClass="textColor"/>
+                        &#160;&#160;&#160;
+                        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAniPassBack}" tabindex="3"/>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <h:outputText escape="true"
+                                      value="allowExit:" styleClass="textColor"/>
+                        &#160;&#160;&#160;
+                        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExit}" tabindex="4"/>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <h:outputText escape="true"
+                                      value="allowExitGadget:" styleClass="textColor"/>
+                        &#160;&#160;&#160;
+                        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExitGadget}" tabindex="5"/>
+                    </td>
+                </tr>
 
-    <h:outputText escape="true" value="rule_edit"/>
-</legend>
-<table border="0" cellpadding="3" cellspacing="3" width="290" dir="#{me.direction}">
-<tr valign="top">
-    <td nowrap="nowrap">
-        <h:outputText escape="true"
-                value="rule_name:"/>
-        &#160;&#160;&#160;&#160;&#160;
-        <h:inputText id="ruleName"
-                     converter="persianConverter"
-                     styleClass="inputRequiredField"
-                     required="true"
-                     tabindex="1"
-                     value="#{handlePersonAction.name}"
-                     dir="#{me.direction}"/>
-        <p:message ajaxRendered="true" id="messageName" for="ruleName" showSummary="true"
-                      showDetail="false" errorClass="errorMsg"/>
-    </td>
-</tr>
-<tr valign="top">
-    <td nowrap="nowrap">
-        <h:outputText escape="true"
-                value="rule_date:"/>
-        &#160;&#160;&#160;&#160;&#160;
-        <h:selectOneMenu value="#{handlePersonAction.selectedCalendarIdTemp}" tabindex="2">
-            <f:selectItems value="#{handlePersonAction.calendarItems}"/>
-        </h:selectOneMenu>
-    </td>
-</tr>
-<tr valign="top">
-    <td nowrap="nowrap">
-        <h:outputText escape="true"
-                value="antiPassBack:" styleClass="textColor"/>
-        &#160;&#160;&#160;
-        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAniPassBack}" tabindex="3"/>
-    </td>
-</tr>
-<tr valign="top">
-    <td nowrap="nowrap">
-        <h:outputText escape="true"
-                value="allowExit:" styleClass="textColor"/>
-        &#160;&#160;&#160;
-        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExit}" tabindex="4"/>
-    </td>
-</tr>
-<tr valign="top">
-    <td nowrap="nowrap">
-        <h:outputText escape="true"
-                value="allowExitGadget:" styleClass="textColor"/>
-        &#160;&#160;&#160;
-        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExitGadget}" tabindex="5"/>
-    </td>
-</tr>
+                <tr valign="top">
+                    <td nowrap="nowrap" colspan="2">
+                        <p:dataTable id="ruleTempTable"
+                                     value="#{handlePersonAction.ruleListTemp}"
+                                     keepSaved="true"
+                                     emptyMessage="#{bundle.empty_message}"
+                                     sortMode="single"
+                                     var="ruleTemp"
+                                     rows="10"
+                                     style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                     rowClasses="ROW1,ROW2">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="rule_dayType"/>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{ruleTemp.dayType.title}"/>
+                            </p:column>
 
-<tr valign="top">
-    <td nowrap="nowrap" colspan="2">
-        <p:dataTable id="ruleTempTable"
-                        value="#{handlePersonAction.ruleListTemp}"
-                        keepSaved="true"
-                        emptyMessage="#{bundle.empty_message}"
-                        sortMode="single"
-                        var="ruleTemp"
-                        rows="10"
-                        style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                        rowClasses="ROW1,ROW2">
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText escape="true" value="rule_dayType"/>
-                </f:facet>
-                <h:outputText escape="true" value="#{ruleTemp.dayType.title}"/>
-            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="rule_startTime"/>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{ruleTemp.startTime}"/>
+                            </p:column>
 
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText escape="true" value="rule_startTime"/>
-                </f:facet>
-                <h:outputText escape="true" value="#{ruleTemp.startTime}"/>
-            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="rule_endTime"/>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{ruleTemp.endTime}"/>
+                            </p:column>
 
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText escape="true" value="rule_endTime"/>
-                </f:facet>
-                <h:outputText escape="true" value="#{ruleTemp.endTime}"/>
-            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="allowExitGadget"/>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{ruleTemp.entranceCount}"/>
+                            </p:column>
 
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText escape="true" value="allowExitGadget"/>
-                </f:facet>
-                <h:outputText escape="true" value="#{ruleTemp.entranceCount}"/>
-            </p:column>
-
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText escape="true" value="rule_exitCount"/>
-                </f:facet>
-                <h:outputText escape="true" value="#{ruleTemp.exitCount}"/>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText escape="true" value="#{'انکار'}"/>
-                </f:facet>
-                <h:graphicImage
-                        value="#{ruleTemp.deny eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText escape="true" value="#{bundle.delete}"/>
-                </f:facet>
-                <p:commandButton image="/images/delete.png"
-                                   title="delete"
-                                   update="ruleTempTable"
-                                   action="#{handlePersonAction.remove}"
-                        />
-            </p:column>
-            <f:facet name="footer">
-                <p:dataScroller limitRender="true" execute="@this"
-                                   update="ruleTempTable"
-                                   page="#{handlePersonAction.pageInPopup}"/>
-            </f:facet>
-        </p:dataTable>
-    </td>
-</tr>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="rule_exitCount"/>
+                                </f:facet>
+                                <h:outputText escape="true" value="#{ruleTemp.exitCount}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="#{'انکار'}"/>
+                                </f:facet>
+                                <h:graphicImage
+                                        value="#{ruleTemp.deny eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText escape="true" value="#{bundle.delete}"/>
+                                </f:facet>
+                                <p:commandButton image="/images/delete.png"
+                                                 title="delete"
+                                                 update="ruleTempTable"
+                                                 action="#{handlePersonAction.remove}"
+                                        />
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:dataScroller limitRender="true" execute="@this"
+                                                update="ruleTempTable"
+                                                page="#{handlePersonAction.pageInPopup}"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </td>
+                </tr>
 
 
-<tr valign="top">
-    <td nowrap="nowrap">
-        <p:commandButton image="/images/add.png"
-                           action="#{handlePersonAction.addNewRule}"
-                           title="rule_add"
-                           execute="@this"
-                           update="newRuleDetailPanel"/>
-    </td>
-</tr>
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <p:commandButton image="/images/add.png"
+                                         action="#{handlePersonAction.addNewRule}"
+                                         title="rule_add"
+                                         execute="@this"
+                                         update="newRuleDetailPanel"/>
+                    </td>
+                </tr>
 
-<tr valign="top">
-    <td nowrap="nowrap">
-        <p:outputPanel ajaxRendered="true" id="newRuleDetailPanel">
-            <f:subview id="newRuleDetail" rendered="#{handlePersonAction.addNewRuleFlag}">
-                <table border="0" cellpadding="3" cellspacing="3" width="50%">
-                    <tr valign="middle">
-                        <td nowrap="nowrap">
-                            <h:outputText escape="true" value="rule_dayType"/>
-                        </td>
-                        <td nowrap="nowrap">
-                            <h:selectOneMenu value="#{handlePersonAction.dayTypeIdTemp}">
-                                <f:selectItems value="#{handlePersonAction.dayTypeItems}"/>
-                            </h:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr valign="bottom">
-                        <td nowrap="nowrap">
-                            <h:outputText escape="true" value="rule_startTime"/>
-                        </td>
-                        <td nowrap="nowrap">
-                            <p:spinner value="#{handlePersonAction.startSecond}"
-                                                     stepFactor="1" max="59" size="1" min="0"/>
-                            &#160;
-                            <p:spinner value="#{handlePersonAction.startMinute}"
-                                                     stepFactor="1" max="59" size="1" min="0"/>
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <p:outputPanel ajaxRendered="true" id="newRuleDetailPanel">
+                            <f:subview id="newRuleDetail" rendered="#{handlePersonAction.addNewRuleFlag}">
+                                <table border="0" cellpadding="3" cellspacing="3" width="50%">
+                                    <tr valign="middle">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule_dayType"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <h:selectOneMenu value="#{handlePersonAction.dayTypeIdTemp}">
+                                                <f:selectItems value="#{handlePersonAction.dayTypeItems}"/>
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr valign="bottom">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule_startTime"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:spinner value="#{handlePersonAction.startSecond}"
+                                                       stepFactor="1" max="59" size="1" min="0"/>
+                                            &#160;
+                                            <p:spinner value="#{handlePersonAction.startMinute}"
+                                                       stepFactor="1" max="59" size="1" min="0"/>
 
-                            &#160;
-                            <p:spinner value="#{handlePersonAction.startHour}"
-                                                     stepFactor="1" max="23" size="1" min="0"/>
-                        </td>
-                    </tr>
+                                            &#160;
+                                            <p:spinner value="#{handlePersonAction.startHour}"
+                                                       stepFactor="1" max="23" size="1" min="0"/>
+                                        </td>
+                                    </tr>
 
-                    <tr valign="bottom">
-                        <td nowrap="nowrap">
-                            <h:outputText escape="true" value="rule_endTime"/>
-                        </td>
-                        <td nowrap="nowrap">
-                            <p:spinner value="#{handlePersonAction.endSecond}"
-                                                     stepFactor="1" max="59" size="1" min="0"/>
-                            &#160;
-                            <p:spinner value="#{handlePersonAction.endMinute}"
-                                                     stepFactor="1" max="59" size="1" min="0"/>
-                            &#160;
-                            <p:spinner value="#{handlePersonAction.endHour}"
-                                                     stepFactor="1" max="59" size="1" min="0"/>
-                        </td>
-                    </tr>
-                    <tr valign="bottom">
-                        <td nowrap="nowrap">
-                            <h:outputText escape="true" value="rule_entranceCount"/>
-                        </td>
-                        <td nowrap="nowrap">
-                            <p:spinner dir="#{me.direction}"
-                                                     value="#{handlePersonAction.ruleEntranceCount}"
-                                                     stepFactor="1" max="99" size="1" min="0"/>
+                                    <tr valign="bottom">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule_endTime"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:spinner value="#{handlePersonAction.endSecond}"
+                                                       stepFactor="1" max="59" size="1" min="0"/>
+                                            &#160;
+                                            <p:spinner value="#{handlePersonAction.endMinute}"
+                                                       stepFactor="1" max="59" size="1" min="0"/>
+                                            &#160;
+                                            <p:spinner value="#{handlePersonAction.endHour}"
+                                                       stepFactor="1" max="59" size="1" min="0"/>
+                                        </td>
+                                    </tr>
+                                    <tr valign="bottom">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule_entranceCount"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:spinner dir="#{me.direction}"
+                                                       value="#{handlePersonAction.ruleEntranceCount}"
+                                                       stepFactor="1" max="99" size="1" min="0"/>
 
-                        </td>
-                    </tr>
-                    <tr valign="bottom">
-                        <td nowrap="nowrap">
-                            <h:outputText escape="true" value="rule_exitCount"/>
-                        </td>
-                        <td nowrap="nowrap">
-                            <p:spinner dir="#{me.direction}"
-                                                     value="#{handlePersonAction.ruleExitCount}"
-                                                     stepFactor="1" max="99" size="1" min="0"/>
+                                        </td>
+                                    </tr>
+                                    <tr valign="bottom">
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="rule_exitCount"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <p:spinner dir="#{me.direction}"
+                                                       value="#{handlePersonAction.ruleExitCount}"
+                                                       stepFactor="1" max="99" size="1" min="0"/>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td nowrap="nowrap">
-                            <h:outputText escape="true" value="deny:" styleClass="textColor"/>
-                        </td>
-                        <td nowrap="nowrap">
-                            <h:selectBooleanCheckbox value="#{handlePersonAction.ruleDeny}"/>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <td nowrap="nowrap">
-                            <p:commandButton action="#{handlePersonAction.doAddNewRule}"
-                                               value="rule_add"
-                                               title="افزودن قانون"
-                                               tabindex="6"
-                                               update="handleRulePanel"/>
-                        </td>
-                    </tr>
-                </table>
-            </f:subview>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td nowrap="nowrap">
+                                            <h:outputText escape="true" value="deny:" styleClass="textColor"/>
+                                        </td>
+                                        <td nowrap="nowrap">
+                                            <h:selectBooleanCheckbox value="#{handlePersonAction.ruleDeny}"/>
+                                        </td>
+                                    </tr>
+                                    <tr valign="top">
+                                        <td nowrap="nowrap">
+                                            <p:commandButton action="#{handlePersonAction.doAddNewRule}"
+                                                             value="rule_add"
+                                                             title="افزودن قانون"
+                                                             tabindex="6"
+                                                             update="handleRulePanel"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </f:subview>
+                        </p:outputPanel>
+                    </td>
+                </tr>
+
+
+                <tr valign="top">
+                    <td nowrap="nowrap" align="#{me.align}" colspan="2">
+                        <p:commandButton id="saveRuleId"
+                                         value="save"
+                                         action="#{handlePersonAction.doEditPersonRule}"/>
+                        <p:commandButton id="resetRuleId"
+                                         action="#{handlePersonAction.init}"
+                                         value="#{bundle.revert}"/>
+                    </td>
+                </tr>
+            </table>
         </p:outputPanel>
-    </td>
-</tr>
-
-
-<tr valign="top">
-    <td nowrap="nowrap" align="#{me.align}" colspan="2">
-        <p:commandButton id="saveRuleId"
-                           value="save"
-                           action="#{handlePersonAction.doEditPersonRule}"/>
-        <p:commandButton id="resetRuleId"
-                           action="#{handlePersonAction.init}"
-                           value="#{bundle.revert}"/>
-    </td>
-</tr>
-</table>
-</fieldset>
-</p:outputPanel>
-</h:form>
+    </h:form>
 </ui:composition>

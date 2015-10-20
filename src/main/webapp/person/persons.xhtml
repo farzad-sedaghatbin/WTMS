@@ -73,11 +73,6 @@
         <br/>
 
         <h:form dir="#{me.direction}" id="frm">
-            <fieldset dir="#{me.direction}">
-
-                <legend>
-                    <h:outputText escape="true" value="#{bundle.person_list}"/>
-                </legend>
                 <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
 
                     <tr valign="top">
@@ -90,11 +85,6 @@
                                                      toggleSpeed="500" closeSpeed="500" widgetVar="panel"
                                                      style="margin-bottom:20px" dir="#{me.direction}"
                                                      collapsed="#{view.viewId eq '/list-person.xhtml'}">
-                                                <fieldset dir="#{me.direction}">
-
-                                                    <legend>
-                                                        <h:outputText escape="true" value="#{bundle.advance_search}"/>
-                                                    </legend>
                                                     <table border="0" cellpadding="3" align="#{me.appositeAlign}"
                                                            cellspacing="3"
                                                            class="panelLikeTable">
@@ -210,7 +200,6 @@
 
                                                         </tr>
                                                     </table>
-                                                </fieldset>
                                             </p:panel>
                                         </td>
                                         <td align="center" valign="bottom" nowrap="nowrap">
@@ -339,7 +328,6 @@
                         </td>
                     </tr>
                 </table>
-            </fieldset>
 
         </h:form>
     </ui:define>

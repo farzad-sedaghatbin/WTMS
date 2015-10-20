@@ -13,10 +13,6 @@
             <table border="0" cellpadding="3" cellspacing="3" width="90%" dir="#{me.direction}">
                 <tr valign="top">
                     <td nowrap="nowrap" align="#{me.align}">
-                        <fieldset dir="#{me.direction}">
-                            <legend>
-                                <h:outputText escape="true" value="trafficLog"/>
-                            </legend>
                             <p:dataTable id="trafficLogTable" value="#{handleMonitoringAction.eventLogList}"
                                          var="trafficLog"
                                          rowKey="#{trafficLog.id}"
@@ -58,7 +54,6 @@
                                 </f:facet>
                             </p:dataTable>
                           
-                        </fieldset>
                     </td>
                 </tr>
             </table>
