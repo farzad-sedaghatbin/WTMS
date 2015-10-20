@@ -144,6 +144,8 @@ public class Card extends BaseEntity {
     }
 
     public BLookup getCardType() {
+        if (cardType == null)
+            cardType = new BLookup();
         return cardType;
     }
 
