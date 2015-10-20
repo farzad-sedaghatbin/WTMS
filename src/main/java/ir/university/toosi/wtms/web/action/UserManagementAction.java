@@ -200,13 +200,13 @@ public class UserManagementAction implements Serializable {
     }
 
 
-    public String authenticate() {
+    public void authenticate() {
         permissionHash = new Hashtable<>();
         try {
             HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             if ((username == null) || (username.isEmpty()) || (password == null) || (password.isEmpty())) {
                 addErrorMessage("invalid.login.username.password");
-                return "login";
+//                return "login";
             }
             user = new User();
             user.setUsername(username);
@@ -234,7 +234,7 @@ public class UserManagementAction implements Serializable {
                 }
                 session.setAttribute(INVALID_TRY, invalidTry);
 //                addErrorMessage("invalid.login");
-                return "login";
+//                return "login";
             }
             /*else if ((user.getEnable().equalsIgnoreCase("false")) || (user.getWorkGroups().getEnabled().equalsIgnoreCase("false"))) {
                 addErrorMessage("invalid.login.userDisable");
@@ -258,11 +258,11 @@ public class UserManagementAction implements Serializable {
 
             if (!allowed) {
                 addErrorMessage("invalid.pc");
-                return "login";
+//                return "login";
             }
             if (user.getEnable().equalsIgnoreCase("false")) {
                 addErrorMessage("user.disabled");
-                return "login";
+//                return "login";
             }
             accessControlAction.setWorkGroup(user.getWorkGroups());
 //            getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOperation");
@@ -303,7 +303,8 @@ public class UserManagementAction implements Serializable {
 //        fillSystemConfiguration();
 //        initParameter();
         //generalHelper.initial();
-        return "home";
+        redirect("/user/users.xhtml");
+//        return "home";
 
     }
 

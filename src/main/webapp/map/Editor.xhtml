@@ -3,7 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <title>ظˆغŒط±ط§غŒط´ع¯ط± ظ†ظ‚ط´ظ‡</title>
+    <title>نقشه</title>
     <!-- BEGIN:X3DOM -->
     <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge"/>
     <link rel="stylesheet" type="text/css" href="#{request.contextPath}/js/libs/x3dom-master/src/x3dom.css"/>
@@ -128,26 +128,24 @@
             </select>
 
                 <div>
-
-                    ظ†ط­ظˆظ‡ ظ†ظ…ط§غŒط´
+نوع اطلاع رسانی
                     <select id="VTMAlert">
 
                     </select>
 
-                    ظ…ط¯ظ„
-                    <select id="VTMShape">
+مدل                    <select id="VTMShape">
 
                     </select>
                 </div>
                 <h:form id="frm">
                     <h:commandButton id="saveMap" action="#{handleMapAction.saveOrUpdate}"
-                                     value="ط°ط®غŒط±ظ‡ ط³ط§ط²غŒ"/>
+                                     value="ذخیره"/>
                     <h:inputHidden value="#{handleMapAction.content}" id="calendarData"/>
                 </h:form>
                 &nbsp;
-                <input type="button" value="ط«ط§ط¨طھ ظ†ع¯ظ‡ ط¯ط§ط´طھظ† ط¯ظˆط±ط¨غŒظ†" onclick="setMode();"/>
+                <input type="button" value="ثبت دوربین" onclick="setMode();"/>
                 &nbsp;
-                <input type="button" id="removeElement" value="ط­ط°ظپ"/>
+                <input type="button" id="removeElement" value="حذف"/>
 
                 <br/>
 

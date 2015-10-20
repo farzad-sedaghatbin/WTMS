@@ -25,12 +25,11 @@
                          rowsPerPageTemplate="5,10,15" lazy="true"
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
-                    RightClick to View Options
-                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
+لیست                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
                     <p:columnToggler datasource="mapTable" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="code" sortBy="#{map.code}" filterBy="#{map.code}">
+                <p:column headerText="#{bundle.code}" sortBy="#{map.code}" filterBy="#{map.code}">
                     <p:commandLink value="#{map.code}"/>
                 </p:column>
 
