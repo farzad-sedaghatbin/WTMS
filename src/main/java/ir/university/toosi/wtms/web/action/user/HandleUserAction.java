@@ -157,7 +157,7 @@ public class HandleUserAction implements Serializable {
         personLastNameFilter = "";
     }
 
-    private void refresh() {
+    public void refresh() {
         init();
         userList = new UserLazyDataModel(userService);
 

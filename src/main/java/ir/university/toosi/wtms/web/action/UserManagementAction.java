@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.service.SystemConfigurationServiceImpl;
 import ir.university.toosi.tms.model.service.UserServiceImpl;
 import ir.university.toosi.tms.model.service.calendar.CalendarServiceImpl;
+import ir.university.toosi.wtms.web.action.user.HandleUserAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
@@ -51,6 +52,8 @@ public class UserManagementAction implements Serializable {
     private GeneralHelper generalHelper;
     @Inject
     private AccessControlAction accessControlAction;
+    @Inject
+    private HandleUserAction handleUserAction;
 
     @EJB
     private UserServiceImpl userService;
@@ -116,7 +119,7 @@ public class UserManagementAction implements Serializable {
     }
 
     public void initParameter() {
-            SENTRY_COUNT = configurationService.findByParameter(SystemParameterType.SENTRY_COUNT).getValue();
+        SENTRY_COUNT = configurationService.findByParameter(SystemParameterType.SENTRY_COUNT).getValue();
 
     }
 
@@ -124,6 +127,7 @@ public class UserManagementAction implements Serializable {
         Boolean hasPermission = permissionHash.get(checkedOperation);
         return hasPermission == null ? false : hasPermission;
     }
+
     public ResourceBundle getBundle() {
         return ResourceBundle.getBundle(BUNDLE_NAME, getLocale());
     }
@@ -140,6 +144,7 @@ public class UserManagementAction implements Serializable {
             return bundleKey;
         }
     }
+
     public void changeLocale() {
         FacesContext context = FacesContext.getCurrentInstance();
         String language = context.getViewRoot().getLocale().getLanguage();
@@ -211,7 +216,7 @@ public class UserManagementAction implements Serializable {
             user = new User();
             user.setUsername(username);
             user.setPassword(password);
-            user =userService.authenticate(username,password);
+            user = userService.authenticate(username, password);
 //            if (!generalHelper.getLastLanguages().isRtl()) {
 //                direction = "ltr";
 //                align = "left";
@@ -303,6 +308,7 @@ public class UserManagementAction implements Serializable {
 //        fillSystemConfiguration();
 //        initParameter();
         //generalHelper.initial();
+        handleUserAction.refresh();
         redirect("/user/users.xhtml");
 //        return "home";
 
@@ -310,10 +316,10 @@ public class UserManagementAction implements Serializable {
 
 
     public void fillSystemConfiguration() {
-            List<SystemConfiguration> systemConfigurations = configurationService.getAllConfiguration();
-            for (SystemConfiguration systemConfiguration : systemConfigurations) {
-                systemParameter.put(systemConfiguration.getParameter(), systemConfiguration.getValue());
-            }
+        List<SystemConfiguration> systemConfigurations = configurationService.getAllConfiguration();
+        for (SystemConfiguration systemConfiguration : systemConfigurations) {
+            systemParameter.put(systemConfiguration.getParameter(), systemConfiguration.getValue());
+        }
     }
 
     public String goHome() {
@@ -357,7 +363,6 @@ public class UserManagementAction implements Serializable {
         return "home";
 
     }
-
 
 
     public Languages getLanguages() {
@@ -575,7 +580,6 @@ public class UserManagementAction implements Serializable {
     public Hashtable<String, LanguageManagement> getLanguage() {
         return language;
     }
-
 
 
     public String getDirection() {
