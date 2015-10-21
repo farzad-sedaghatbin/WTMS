@@ -235,12 +235,15 @@ public class HandlePDPAction implements Serializable {
 //        me.setActiveMenu(MenuType.SEND_RECEIVE);
         finger = false;
         refresh();
+        me.redirect("person/selectlist-pdp.xhtml");
+
     }
 
-    public void finger() {
+    public void fingerPage() {
 //        me.setActiveMenu(MenuType.SEND_RECEIVE);
         finger = true;
         refresh();
+        me.redirect("person/selectlist-pdp.xhtml");
     }
 
     public void synchronize() {

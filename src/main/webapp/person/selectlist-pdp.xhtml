@@ -4,33 +4,34 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
 
-    <h:form id="pdpFrm">
-        <p:outputPanel id="selectPdpList">
-            <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
-                <tr valign="top">
-                    <td nowrap="nowrap" align="#{me.align}">
-                        <h:outputText escape="true" value="#{bundle.finger}"/>
-                        <h:selectBooleanCheckbox
-                                                 value="#{handlePDPAction.fingers}">
-                        </h:selectBooleanCheckbox>
-                        &#160;&#160;
-                        <h:outputText escape="true" value="#{bundle.picture}" />
-                        <h:selectBooleanCheckbox
-                                                 value="#{handlePDPAction.pictures}">
-                        </h:selectBooleanCheckbox>
+        <h:form id="pdpFrm">
+            <p:outputPanel id="selectPdpList">
+                <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
+                    <tr valign="top">
+                        <td nowrap="nowrap" align="#{me.align}">
+                            <h:outputText escape="true" value="#{bundle.finger}"/>
+                            <h:selectBooleanCheckbox
+                                    value="#{handlePDPAction.fingers}">
+                            </h:selectBooleanCheckbox>
+                            &#160;&#160;
+                            <h:outputText escape="true" value="#{bundle.picture}"/>
+                            <h:selectBooleanCheckbox
+                                    value="#{handlePDPAction.pictures}">
+                            </h:selectBooleanCheckbox>
 
 
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <td nowrap="nowrap" align="#{me.align}">
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td nowrap="nowrap" align="#{me.align}">
                             <p:dataTable id="pdpTable"
-                                            value="#{handlePDPAction.pdpList}"
-                                            sortMode="single"
-                                            var="pdp"
-                                            rows="10"
-                                            style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
+                                         value="#{handlePDPAction.pdpList}"
+                                         sortMode="single"
+                                         var="pdp"
+                                         rows="10"
+                                         style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText escape="true" value="row number"/>
@@ -52,12 +53,13 @@
                                 </p:column>
 
                                 <p:column sortBy="#{pdp.name}"
-                                             sortOrder="#{handlePDPAction.pdpNameOrder}">
+                                          sortOrder="#{handlePDPAction.pdpNameOrder}">
                                     <f:facet name="header">
                                         <p:commandLink value="#{bundle.name}" update="pdpTable"
-                                                         action="#{handlePDPAction.sortByPdpName}"/>
+                                                       action="#{handlePDPAction.sortByPdpName}"/>
                                         <br/>
-                                        <p:inputText converter="persianConverter" value="#{handlePDPAction.pdpNameFilter}">
+                                        <p:inputText converter="persianConverter"
+                                                     value="#{handlePDPAction.pdpNameFilter}">
                                             <p:ajax event="blur" update="pdpTable"/>
                                         </p:inputText>
                                     </f:facet>
@@ -65,10 +67,10 @@
                                 </p:column>
 
                                 <p:column sortBy="#{pdp.description}"
-                                             sortOrder="#{handlePDPAction.pdpDescriptionOrder}">
+                                          sortOrder="#{handlePDPAction.pdpDescriptionOrder}">
                                     <f:facet name="header">
                                         <p:commandLink value="description" update="pdpTable"
-                                                         action="#{handlePDPAction.sortByPdpDescription}"/>
+                                                       action="#{handlePDPAction.sortByPdpDescription}"/>
                                         <br/>
                                         <p:inputText value="#{handlePDPAction.pdpDescriptionFilter}">
                                             <p:ajax event="blur" update="pdpTable"/>
@@ -77,11 +79,11 @@
                                     <h:outputText escape="true" value="#{pdp.description}"/>
                                 </p:column>
                                 <p:column sortBy="#{pdp.ip}"
-                                             sortOrder="#{handlePDPAction.ipOrder}">
+                                          sortOrder="#{handlePDPAction.ipOrder}">
                                     <f:facet name="header">
                                         <p:commandLink value="ip"
-                                                         update="pdpTable"
-                                                         action="#{handlePDPAction.sortByIp}"/>
+                                                       update="pdpTable"
+                                                       action="#{handlePDPAction.sortByIp}"/>
                                         <br/>
                                         <p:inputText value="#{handlePDPAction.pdpIPFilter}">
                                             <p:ajax event="blur" update="pdpTable"/>
@@ -92,24 +94,25 @@
 
                                 <f:facet name="footer">
                                     <p:dataScroller limitRender="true" execute="@this" update="pdpTable"
-                                                       page="#{handlePDPAction.page}"/>
+                                                    page="#{handlePDPAction.page}"/>
                                 </f:facet>
                             </p:dataTable>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <td align="center" nowrap="nowrap">
-                        <h:commandButton value="synch"
-                                         execute="@this"
-                                         limitRender="true"
-                                         rendered="#{me.hasPermission('SYNCH')}"
-                                         update="pdpTable, pdpPanelId"
-                                         action="#{handlePDPAction.synchronize}"
-                                         onclick="#{p:component('waitingPanel')}.show();"
-                                         oncomplete="#{p:component('pdpSelect')}.hide();"/>
-                    </td>
-                </tr>
-            </table>
-        </p:outputPanel>
-    </h:form>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td align="center" nowrap="nowrap">
+                            <h:commandButton value="synch"
+                                             execute="@this"
+                                             limitRender="true"
+                                             rendered="#{me.hasPermission('SYNCH')}"
+                                             update="pdpTable, pdpPanelId"
+                                             action="#{handlePDPAction.synchronize}"
+                                             onclick="#{p:component('waitingPanel')}.show();"
+                                             oncomplete="#{p:component('pdpSelect')}.hide();"/>
+                        </td>
+                    </tr>
+                </table>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
 </ui:composition>
