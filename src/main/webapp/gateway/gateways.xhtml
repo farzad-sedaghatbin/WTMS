@@ -16,7 +16,7 @@
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleGatewayAction.assignRule}"/>
                 <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleGatewayAction.editRule}"/>
-                <p:menuitem value="#{bundle.edit}" update="specialStatusTable" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.special_status}" update="specialStatusTable" icon="ui-icon-search"
                             oncomplete="PF('gatewayStatus').show()" actionListener="#{handleGatewayAction.assignSpecialStatus}"/>
                 <p:menuitem value="#{bundle.delete}" update="gateways" icon="ui-icon-close"
                             actionListener="#{handleGatewayAction.doDelete}"/>

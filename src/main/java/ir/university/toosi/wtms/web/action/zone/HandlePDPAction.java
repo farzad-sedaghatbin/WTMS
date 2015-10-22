@@ -2,6 +2,8 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.IReaderWrapperService;
+import ir.ReaderWrapperService;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
@@ -22,8 +24,12 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -239,11 +245,23 @@ public class HandlePDPAction implements Serializable {
 
     }
 
-    public void fingerPage() {
+    public void fingerPage() throws MalformedURLException {
 //        me.setActiveMenu(MenuType.SEND_RECEIVE);
         finger = true;
-        refresh();
-        me.redirect("person/selectlist-pdp.xhtml");
+        URL url = new URL("http://192.168.1.6:8081/ws?wsdl");
+
+        //1st argument service URI, refer to wsdl document above
+        //2nd argument is service name, refer to wsdl document above
+        QName qname = new QName("http://ir/", "ReaderWrapperServiceService");
+
+        Service service = Service.create(url, qname);
+
+        IReaderWrapperService readerWrapperService = service.getPort(IReaderWrapperService.class);
+
+       readerWrapperService.getUserList(1);
+
+//        refresh();
+//        me.redirect("person/selectlist-pdp.xhtml");
     }
 
     public void synchronize() {

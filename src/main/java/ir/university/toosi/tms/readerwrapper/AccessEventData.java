@@ -9,115 +9,125 @@
 
 package ir.university.toosi.tms.readerwrapper;
 
-@net.sf.jni4net.attributes.ClrType
-public class AccessEventData extends system.Object {
-    
-    //<generated-proxy>
-    private static system.Type staticType;
-    
-    protected AccessEventData(net.sf.jni4net.inj.INJEnv __env, long __handle) {
-            super(__env, __handle);
+import java.io.Serializable;
+
+public class AccessEventData implements Serializable {
+    int userID;
+    String dateTime;
+//    byte virduAuthMode;
+//    byte authType;
+    boolean authorized;
+    String rfid;
+    int picLenght;
+    byte[] pictureData;
+    int totalNumber;
+    int currentIndex;
+    int errorCode;
+    String fingerImageFormat;
+    int fingerImageLenght;
+    byte[] fingerImageData;
+
+    public int getUserID() {
+        return userID;
     }
-    
-    @net.sf.jni4net.attributes.ClrConstructor("()V")
-    public AccessEventData() {
-            super(((net.sf.jni4net.inj.INJEnv)(null)), 0);
-        AccessEventData.__ctorAccessEventData0(this);
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
-    
-    @net.sf.jni4net.attributes.ClrMethod("()V")
-    private native static void __ctorAccessEventData0(net.sf.jni4net.inj.IClrProxy thiz);
-    
-    @net.sf.jni4net.attributes.ClrMethod("()I")
-    public native int getUserID();
-    
-    @net.sf.jni4net.attributes.ClrMethod("(I)V")
-    public native void setUserID(int value);
-    
-    @net.sf.jni4net.attributes.ClrMethod("()LSystem/DateTime;")
-    public native system.DateTime getDateTime();
-    
-    @net.sf.jni4net.attributes.ClrMethod("(LSystem/DateTime;)V")
-    public native void setDateTime(system.DateTime value);
-    
-    @net.sf.jni4net.attributes.ClrMethod("()LReaderWrapper/VirdiAuthMode;")
-    public native VirdiAuthMode getVirdiAuthMode();
-    
-    @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/VirdiAuthMode;)V")
-    public native void setVirdiAuthMode(VirdiAuthMode value);
-    
-    @net.sf.jni4net.attributes.ClrMethod("()LReaderWrapper/EntryType;")
-    public native EntryType getAuthType();
-    
-    @net.sf.jni4net.attributes.ClrMethod("(LReaderWrapper/EntryType;)V")
-    public native void setAuthType(EntryType value);
-    
-    @net.sf.jni4net.attributes.ClrMethod("()Z")
-    public native boolean isAuthorized();
-    
-    @net.sf.jni4net.attributes.ClrMethod("(Z)V")
-    public native void setIsAuthorized(boolean value);
-    
-    @net.sf.jni4net.attributes.ClrMethod("()LSystem/String;")
-    public native String getRFID();
 
-    @net.sf.jni4net.attributes.ClrMethod("(LSystem/String;)V")
-    public native void setRFID(String value);
-
-    @net.sf.jni4net.attributes.ClrMethod("()I")
-    public native int getPictureDataLength();
-
-    @net.sf.jni4net.attributes.ClrMethod("(I)V")
-    public native void setPictureDataLength(int value);
-
-    @net.sf.jni4net.attributes.ClrMethod("()LSystem/Object;")
-    public native system.Object getPictureData();
-
-    @net.sf.jni4net.attributes.ClrMethod("(LSystem/Object;)V")
-    public native void setPictureData(system.Object value);
-
-    @net.sf.jni4net.attributes.ClrMethod("()I")
-    public native int getTotalNumber();
-
-    @net.sf.jni4net.attributes.ClrMethod("(I)V")
-    public native void setTotalNumber(int value);
-
-    @net.sf.jni4net.attributes.ClrMethod("()I")
-    public native int getCurrentIndex();
-
-    @net.sf.jni4net.attributes.ClrMethod("(I)V")
-    public native void setCurrentIndex(int value);
-
-    @net.sf.jni4net.attributes.ClrMethod("()I")
-    public native int getErrorCode();
-
-    @net.sf.jni4net.attributes.ClrMethod("(I)V")
-    public native void setErrorCode(int value);
-
-    @net.sf.jni4net.attributes.ClrMethod("()LSystem/String;")
-    public native String getFingerImageFormat();
-
-    @net.sf.jni4net.attributes.ClrMethod("(LSystem/String;)V")
-    public native void setFingerImageFormat(String value);
-    
-    @net.sf.jni4net.attributes.ClrMethod("()I")
-    public native int getFingerImageLength();
-    
-    @net.sf.jni4net.attributes.ClrMethod("(I)V")
-    public native void setFingerImageLength(int value);
-    
-    @net.sf.jni4net.attributes.ClrMethod("()LSystem/Object;")
-    public native system.Object getFingerImageData();
-    
-    @net.sf.jni4net.attributes.ClrMethod("(LSystem/Object;)V")
-    public native void setFingerImageData(system.Object value);
-    
-    public static system.Type typeof() {
-        return AccessEventData.staticType;
+    public String getDateTime() {
+        return dateTime;
     }
-    
-    private static void InitJNI(net.sf.jni4net.inj.INJEnv env, system.Type staticType) {
-        AccessEventData.staticType = staticType;
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
-    //</generated-proxy>
+
+//    public byte getVirduAuthMode() {
+//        return virduAuthMode;
+//    }
+//
+//    public void setVirduAuthMode(byte virduAuthMode) {
+//        this.virduAuthMode = virduAuthMode;
+//    }
+//
+    public boolean isAuthorized() {
+        return authorized;
+    }
+
+    public void setAuthorized(boolean authorized) {
+        this.authorized = authorized;
+    }
+
+    public String getRfid() {
+        return rfid;
+    }
+
+    public void setRfid(String rfid) {
+        this.rfid = rfid;
+    }
+
+    public int getPicLenght() {
+        return picLenght;
+    }
+
+    public void setPicLenght(int picLenght) {
+        this.picLenght = picLenght;
+    }
+
+    public byte[] getPictureData() {
+        return pictureData;
+    }
+
+    public void setPictureData(byte[] pictureData) {
+        this.pictureData = pictureData;
+    }
+
+    public int getTotalNumber() {
+        return totalNumber;
+    }
+
+    public void setTotalNumber(int totalNumber) {
+        this.totalNumber = totalNumber;
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = currentIndex;
+    }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public String getFingerImageFormat() {
+        return fingerImageFormat;
+    }
+
+    public void setFingerImageFormat(String fingerImageFormat) {
+        this.fingerImageFormat = fingerImageFormat;
+    }
+
+    public int getFingerImageLenght() {
+        return fingerImageLenght;
+    }
+
+    public void setFingerImageLenght(int fingerImageLenght) {
+        this.fingerImageLenght = fingerImageLenght;
+    }
+
+    public byte[] getFingerImageData() {
+        return fingerImageData;
+    }
+
+    public void setFingerImageData(byte[] fingerImageData) {
+        this.fingerImageData = fingerImageData;
+    }
 }

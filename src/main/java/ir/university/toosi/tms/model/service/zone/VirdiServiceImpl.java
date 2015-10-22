@@ -203,11 +203,11 @@ public class VirdiServiceImpl<T extends Virdi> {
         for (int i = 0; i < persons.size(); i++) {
 
             ir.university.toosi.tms.readerwrapper.Person p= new ir.university.toosi.tms.readerwrapper.Person();
-            p.setUserIdforTerminal((int) persons.get(i).getId());
-            p.setFingerprints(persons.get(i).getFinger());
-            p.setEmploymentCode(persons.get(i).getPersonnelNo());
-            p.setPasswordForTerminal(persons.get(i).getPassword());
-            p.setPicture(persons.get(i).getPicture());
+//            p.setUserIdforTerminal((int) persons.get(i).getId());
+//            p.setFingerprints(persons.get(i).getFinger());
+//            p.setEmploymentCode(persons.get(i).getPersonnelNo());
+//            p.setPasswordForTerminal(persons.get(i).getPassword());
+//            p.setPicture(persons.get(i).getPicture());
             p.setUserName(persons.get(i).getName()+" "+persons.get(i).getLastName());
             personVirdi[i]=p;
 
@@ -242,11 +242,11 @@ public class VirdiServiceImpl<T extends Virdi> {
         ir.university.toosi.tms.readerwrapper.Person[] personVirdi= new ir.university.toosi.tms.readerwrapper.Person[1];
 
             ir.university.toosi.tms.readerwrapper.Person p= new ir.university.toosi.tms.readerwrapper.Person();
-            p.setUserIdforTerminal((int) persons.getId());
-            p.setFingerprints(persons.getFinger());
-            p.setEmploymentCode(persons.getPersonnelNo());
-            p.setPasswordForTerminal(persons.getPassword());
-            p.setPicture(persons.getPicture());
+//            p.setUserIdforTerminal((int) persons.getId());
+//            p.setFingerprints(persons.getFinger());
+//            p.setEmploymentCode(persons.getPersonnelNo());
+//            p.setPasswordForTerminal(persons.getPassword());
+//            p.setPicture(persons.getPicture());
             p.setUserName(persons.getName()+" "+persons.getLastName());
             personVirdi[0]=p;
 
@@ -274,7 +274,7 @@ public class VirdiServiceImpl<T extends Virdi> {
                         readerWrapper.GetUserInfo((int) virdi.getId(), (int) outPerson.getId(), new GetUserInfoCompletedCallBackDelegate() {
                             @Override
                             public void Invoke(int terminalId, ir.university.toosi.tms.readerwrapper.Person person, boolean isSucceed, String failedMessage) {
-                                outPerson.setFinger(person.getFingerprints());
+//                                outPerson.setFinger(person.getFingerprints());
                             }
                         });
                         if (outPerson.getFinger() != null) {

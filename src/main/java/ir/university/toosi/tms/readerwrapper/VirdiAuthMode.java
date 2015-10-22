@@ -9,7 +9,6 @@
 
 package ir.university.toosi.tms.readerwrapper;
 
-@net.sf.jni4net.attributes.ClrType
 public class VirdiAuthMode extends system.Enum {
     
     //<generated-proxy>

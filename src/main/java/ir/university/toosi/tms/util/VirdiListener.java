@@ -9,6 +9,7 @@ import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
 import ir.university.toosi.tms.readerwrapper.*;
+import net.sf.jni4net.Bridge;
 import org.primefaces.push.EventBus;
 import org.primefaces.push.EventBusFactory;
 
@@ -16,6 +17,7 @@ import javax.faces.application.FacesMessage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,11 +31,23 @@ public class VirdiListener {
     private static CrossingServiceImpl crossingService;
     private static CardServiceImpl cardService;
     private static TrafficLogServiceImpl trafficLogService;
-    static ReaderWrapper readerWrapper = new ReaderWrapper();
+    static ReaderWrapper readerWrapper;
 
     private final static String CHANNEL = "/notify";
 
-    public static void accessControl() {
+    public static void accessControl() throws IOException, URISyntaxException {
+        Bridge.setVerbose(true);
+        Bridge.init(new File("D:\\lib"));
+        Bridge.setDebug(true);
+
+        Bridge.LoadAndRegisterAssemblyFrom(new File("D:\\lib\\ReaderWrapper.j4n.dll"));
+        System.load("d:\\lib\\Interop.UCSAPICOMLib.dll");
+        System.load("d:\\lib\\jni4net.n-0.8.8.0.dll");
+        System.load("d:\\lib\\log4net.dll");
+        System.load("d:\\lib\\ReaderWrapper.dll");
+        System.load("d:\\lib\\ReaderWrapper.j4n.dll");
+        System.load("d:\\lib\\UNIONCOMM.SDK.UCBioBSP.dll");
+        readerWrapper = new ReaderWrapper();
         readerWrapper.addOnVerifyFinger1To1(new VerifyFinger1To1Delegate() {
             @Override
             public void Invoke(int terminalId, int userId, VirdiAuthMode authMode, byte[] fingerData) {
@@ -42,8 +56,8 @@ public class VirdiListener {
 
                 TrafficLog trafficLog = null;
                 Person person = new Person();
-                person.setFingerprints(personEntity.getFinger());
-                person.setUserIdforTerminal(userId);
+//                person.setFingerprints(personEntity.getFinger());
+//                person.setUserIdforTerminal(userId);
                 if (readerWrapper.Verify(person, fingerData)) {
                     try {
                         trafficLog = crossingService.authorize(virdiService.findById(terminalId), String.valueOf(userId), String.valueOf(authMode.GetHashCode()));
@@ -124,10 +138,10 @@ public class VirdiListener {
 
             }
         });
-
+        readerWrapper.StartService(9870);
     }
 
-    public static void VirdiHealth(){
+    public static void VirdiHealth() {
         readerWrapper.addOnTerminalConnected(new TerminalConnectedDelegate() {
             @Override
             public void Invoke(int terminalId, String terminalIP) {
@@ -190,6 +204,7 @@ public class VirdiListener {
 
 
     }
+
     public static void send(TrafficLog trafficLog) {
         EventBus eventBus = EventBusFactory.getDefault().eventBus();
         eventBus.publish(CHANNEL, trafficLog);

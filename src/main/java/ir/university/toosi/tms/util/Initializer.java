@@ -18,6 +18,7 @@ import javax.ejb.Startup;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.util.*;
 
 @Singleton
@@ -99,6 +100,7 @@ public class Initializer {
         gatewaySpecialStateScheduler.stopService();
         gatewaySpecialStateScheduler.startService();
         fillPersons();
+
         //TODO : ADD SystemConfiguration
 //        lang = languageService.loadLanguage("fa");
         createSavedReportScheduler.startService();
