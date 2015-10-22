@@ -61,8 +61,10 @@ public class Virdi extends BaseEntity implements TreeNode {
     @Column(name = "healthStatus")
     @JsonProperty
     private boolean healthStatus;
-    @Column(name = "entrance")
 
+    @Column(name = "terminalId")
+    private int terminalId;
+    @Column(name = "entrance")
     @JsonProperty
     private boolean entrance;
     @JsonProperty
@@ -259,5 +261,13 @@ public class Virdi extends BaseEntity implements TreeNode {
 
     public void setHealthStatus(boolean healthStatus) {
         this.healthStatus = healthStatus;
+    }
+
+    public int getTerminalId() {
+        return terminalId;
+    }
+
+    public void setTerminalId(int terminalId) {
+        this.terminalId = terminalId;
     }
 }

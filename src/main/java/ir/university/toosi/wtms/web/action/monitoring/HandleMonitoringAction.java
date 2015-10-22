@@ -232,6 +232,7 @@ public class HandleMonitoringAction implements Serializable {
         personAndGate = false;
         personAndTime = false;
         personList = personService.getAllPersonModel();
+        me.redirect("/monitoring/track-person.xhtml");
 
     }
 
@@ -292,7 +293,7 @@ public class HandleMonitoringAction implements Serializable {
             gatewayItems[i++] = new SelectItem(gateway1.getId(), gateway1.getName());
         }
         gatewayId = gatewayItems[0].getValue().toString();
-
+        me.redirect("/monitoring/track-person.xhtml");
     }
 
     public void dotrackByPersonAndGate() {
@@ -319,8 +320,8 @@ public class HandleMonitoringAction implements Serializable {
         endHour = "0";
         endMinute = "0";
         endSecond = "0";
-        List<Person> innerPersonList = null;
         personList = personService.getAllPersonModel();
+        me.redirect("/monitoring/track-person.xhtml");
     }
 
     public void dotrackByPersonAndTime() {

@@ -17,7 +17,7 @@ import java.util.List;
 @LocalBean
 
 public class RulePackageDAOImpl extends BaseDAOImpl<RulePackage> {
-    public List<RulePackage> findByCalendarID(String calendarId) {
+    public List<RulePackage> findByCalendarID(long calendarId) {
         try {
             return (List<RulePackage>) em.createNamedQuery("RulePackage.findByCalendarId")
                     .setParameter("id", calendarId)

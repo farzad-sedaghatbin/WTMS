@@ -32,7 +32,7 @@ public class CalendarDateServiceImpl<T extends CalendarDate> {
     private EventLogServiceImpl eventLogService;
 
 
-    public List<T> findByCalendarID(String calendarID) {
+    public List<T> findByCalendarID(long calendarID) {
         try {
             return (List<T>) calendarDateDAO.findByCalendarID(calendarID);
         } catch (Exception e) {

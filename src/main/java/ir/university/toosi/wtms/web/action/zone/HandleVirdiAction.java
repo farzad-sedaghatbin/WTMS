@@ -1,5 +1,6 @@
 package ir.university.toosi.wtms.web.action.zone;
 
+import ir.ReaderWrapperService;
 import ir.university.toosi.tms.model.entity.zone.*;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
@@ -43,7 +44,8 @@ public class HandleVirdiAction implements Serializable {
     private GatewayServiceImpl gatewayService;
     @EJB
     private RulePackageServiceImpl rulePackageService;
-
+    @EJB
+    private ReaderWrapperService readerWrapperService;
 
     private String editable = "false";
 
@@ -82,6 +84,7 @@ public class HandleVirdiAction implements Serializable {
     private String virdiDescriptionFilter;
     private String virdiIPFilter;
     private boolean disableFields;
+    private int terminalId;
 
 
     public void begin() {
@@ -311,6 +314,17 @@ public class HandleVirdiAction implements Serializable {
         virdiNameFilter = "";
     }
 
+    public void fetch() {
+        readerWrapperService.getUserList(currentVirdi.getTerminalId());
+        me.addInfoMessage("fetch_from_virdi_completed");
+        me.redirect("/virdi/virdi.xhtml");
+    }
+    public void synchSetUsers() {
+//        readerWrapperService.se(currentVirdi.getTerminalId());
+        me.addInfoMessage("sync_to_virdi_completed");
+        me.redirect("/virdi/virdi.xhtml");
+    }
+
     public void edit() {
         setEditable("true");
         setDisableFields(false);
@@ -318,6 +332,7 @@ public class HandleVirdiAction implements Serializable {
         ip = currentVirdi.getIp();
         descText = currentVirdi.getDescText();
         virdiName = currentVirdi.getNameText();
+        terminalId = currentVirdi.getTerminalId();
         currentVirdi = virdiService.findById(currentVirdi.getId());
         if (currentVirdi.getCamera() != null)
             cameraId = String.valueOf(currentVirdi.getCamera().getId());
@@ -332,6 +347,7 @@ public class HandleVirdiAction implements Serializable {
         virdiEnabled = currentVirdi.isEnabled();
         ip = currentVirdi.getIp();
         descText = currentVirdi.getDescText();
+        terminalId = currentVirdi.getTerminalId();
         virdiName = currentVirdi.getNameText();
         currentVirdi = virdiService.findById(currentVirdi.getId());
         if (currentVirdi.getCamera() != null)
@@ -356,6 +372,7 @@ public class HandleVirdiAction implements Serializable {
         selectedVirdi.setDescription(descText);
         selectedVirdi.setName(virdiName);
         selectedVirdi.setIp(ip);
+        selectedVirdi.setTerminalId(terminalId);
         selectedVirdi.setEnabled(virdiEnabled);
         selectedVirdi.setEntrance(entrance);
         selectedVirdi.setEffectorUser(me.getUsername());
@@ -396,6 +413,7 @@ public class HandleVirdiAction implements Serializable {
         newVirdi.setEnabled(virdiEnabled);
         newVirdi.setStatus("c");
         newVirdi.setIp(ip);
+        newVirdi.setTerminalId(terminalId);
         newVirdi.setOnline(online);
         newVirdi.setEntrance(entrance);
         newVirdi.setEffectorUser(me.getUsername());
@@ -788,6 +806,10 @@ public class HandleVirdiAction implements Serializable {
 
     public void setDisableFields(boolean disableFields) {
         this.disableFields = disableFields;
+    }
+
+    public int getTerminalId() {
+        return terminalId;
     }
 }
 

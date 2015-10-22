@@ -230,7 +230,7 @@ public class PDPServiceImpl<T extends PDP> {
                 content = "";
                 if (rulePackage.getCalendar() == null)
                     continue;
-                List<CalendarDate> calendarDates = calendarDateService.findByCalendarID(String.valueOf(rulePackage.getCalendar().getId()));
+                List<CalendarDate> calendarDates = calendarDateService.findByCalendarID(rulePackage.getCalendar().getId());
                 if (calendarDates != null)
                     for (CalendarDate calendarDate : calendarDates) {
                         List<Rule> rules = ruleService.findByRulePackageIdAndType(rulePackage.getId(), calendarDate.getDayType().getId());
@@ -396,7 +396,7 @@ public class PDPServiceImpl<T extends PDP> {
                     String content = "";
                     if (gateway.getRulePackage() == null || gateway.getRulePackage().getCalendar() == null)
                         continue;
-                    List<CalendarDate> calendarDates = calendarDateService.findByCalendarID(String.valueOf(gateway.getRulePackage().getCalendar().getId()));
+                    List<CalendarDate> calendarDates = calendarDateService.findByCalendarID(gateway.getRulePackage().getCalendar().getId());
                     if (calendarDates != null)
                         for (CalendarDate calendarDate : calendarDates) {
                             List<Rule> rules = ruleService.findByRulePackageIdAndType(gateway.getRulePackage().getId(), calendarDate.getDayType().getId());

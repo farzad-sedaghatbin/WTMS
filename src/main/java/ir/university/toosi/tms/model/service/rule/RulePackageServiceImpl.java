@@ -69,7 +69,7 @@ public class RulePackageServiceImpl<T extends RulePackage> {
         }
     }
 
-    public List<T> findByCalendarID(String calendarID) {
+    public List<T> findByCalendarID(long calendarID) {
         try {
             return (List<T>) rulePackageDAO.findByCalendarID(calendarID);
         } catch (Exception e) {

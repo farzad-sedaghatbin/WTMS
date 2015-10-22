@@ -6,7 +6,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.calendar.CalendarDateServiceImpl;
 import ir.university.toosi.tms.model.service.calendar.CalendarServiceImpl;
+import ir.university.toosi.tms.model.service.calendar.DayTypeServiceImpl;
+import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -48,6 +51,13 @@ public class HandleCalendarAction implements Serializable {
 
     @EJB
     private CalendarServiceImpl calendarService;
+    @EJB
+    private DayTypeServiceImpl dayTypeService;
+    @EJB
+    private CalendarDateServiceImpl calendarDateService;
+    @EJB
+    private RulePackageServiceImpl rulePackageService;
+
     private List<Calendar> calendarList = null;
     private String editable = "false";
     private String name;
@@ -102,73 +112,51 @@ public class HandleCalendarAction implements Serializable {
         calendar.setStatus("c");
         calendar.setEffectorUser(me.getUsername());
         Calendar insertedCalendar = null;
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findCalendarDateByCalendarId");
         List<CalendarDate> calendarDates = null;
-        try {
-            calendarDates = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentCalendar.getId())), new TypeReference<List<CalendarDate>>() {
-            });
+        calendarDates = calendarDateService.findByCalendarID(currentCalendar.getId());
 
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/createCalendar");
-
-            insertedCalendar = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(calendar)), Calendar.class);
-            CalendarDate calendarDate = null;
-            for (CalendarDate innerCalendarDate : calendarDates) {
-                calendarDate = new CalendarDate();
-                calendarDate.setEffectorUser(me.getUsername());
-                calendarDate.setCalendar(insertedCalendar);
-                calendarDate.setDayType(innerCalendarDate.getDayType());
-                calendarDate.setEndDate(innerCalendarDate.getEndDate());
-                calendarDate.setStartDate(innerCalendarDate.getStartDate());
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createCalendarDate");
-                new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(calendarDate)), CalendarDate.class);
-            }
-
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/findRulePackageByCalendarID");
-            List<RulePackage> rulePackages = null;
-            rulePackages = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(currentCalendar.getId())), new TypeReference<List<RulePackage>>() {
-            });
-
-            RulePackage rulePackage = null;
-            for (RulePackage innerRulePackage : rulePackages) {
-                rulePackage = new RulePackage();
-                rulePackage.setCalendar(calendar);
-                rulePackage.setEffectorUser(me.getUsername());
-                rulePackage.setName(innerRulePackage.getName() + "_copy");
-                rulePackage.setAllowExit(innerRulePackage.isAllowExit());
-                rulePackage.setAllowExitGadget(innerRulePackage.isAllowExitGadget());
-                rulePackage.setAniPassBack(innerRulePackage.isAniPassBack());
-                rulePackage.setEffectorUser(me.getUsername());
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/createRulePackage");
-                new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(rulePackage)), RulePackage.class);
-            }
-            if (insertedCalendar != null) {
-                refresh();
-                me.addInfoMessage("operation.occurred");
-            }
-            me.redirect("/calendar/list-calendar.htm");
-
-        } catch (JsonParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (JsonGenerationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (JsonMappingException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        insertedCalendar = calendarService.createCalendar(calendar);
+        CalendarDate calendarDate = null;
+        for (CalendarDate innerCalendarDate : calendarDates) {
+            calendarDate = new CalendarDate();
+            calendarDate.setEffectorUser(me.getUsername());
+            calendarDate.setCalendar(insertedCalendar);
+            calendarDate.setDayType(innerCalendarDate.getDayType());
+            calendarDate.setEndDate(innerCalendarDate.getEndDate());
+            calendarDate.setStartDate(innerCalendarDate.getStartDate());
+            calendarDateService.createCalendarDate(calendarDate);
         }
+
+        List<RulePackage> rulePackages = null;
+        rulePackages = rulePackageService.findByCalendarID(currentCalendar.getId());
+
+        RulePackage rulePackage = null;
+        for (RulePackage innerRulePackage : rulePackages) {
+            rulePackage = new RulePackage();
+            rulePackage.setCalendar(calendar);
+            rulePackage.setEffectorUser(me.getUsername());
+            rulePackage.setName(innerRulePackage.getName() + "_copy");
+            rulePackage.setAllowExit(innerRulePackage.isAllowExit());
+            rulePackage.setAllowExitGadget(innerRulePackage.isAllowExitGadget());
+            rulePackage.setAniPassBack(innerRulePackage.isAniPassBack());
+            rulePackage.setEffectorUser(me.getUsername());
+            rulePackageService.createRulePackage(rulePackage);
+        }
+        if (insertedCalendar != null) {
+            refresh();
+            me.addInfoMessage("operation.occurred");
+        }
+        me.redirect("/calendar/list-calendar.xhtml");
+
+
     }
 
     public void doDelete() {
         currentCalendar.setEffectorUser(me.getUsername());
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteCalendar");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentCalendar)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/calendar/list-calendar.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String condition = calendarService.deleteCalendar(currentCalendar);
+        refresh();
+        me.addInfoMessage(condition);
+        me.redirect("/calendar/list-calendar.xhtml");
     }
 
     public void init() {
@@ -185,9 +173,9 @@ public class HandleCalendarAction implements Serializable {
 
     public void edit() {
         setEditable("true");
-//        name = currentCalendar.getName();
-//        code = currentCalendar.getCode();
-//        description = currentCalendar.getDescription();
+        name = currentCalendar.getName();
+        code = currentCalendar.getCode();
+        description = currentCalendar.getDescription();
         me.redirect("/calendar/handle-edit-calendar.xhtml");
 
     }
@@ -225,13 +213,8 @@ public class HandleCalendarAction implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createCalendar");
         Calendar insertedCalendar = null;
-        try {
-            insertedCalendar = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newCalendar)), Calendar.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        insertedCalendar = calendarService.createCalendar(newCalendar);
         CalendarInfo.Month[] month = calendarInfo.getYear()[0].getMonth();
         CalendarDate calendarDate;
         int lastType = -1;
@@ -267,12 +250,7 @@ public class HandleCalendarAction implements Serializable {
             for (int j = 1; j <= yearMonth.get(i - 1).size(); j++) {
                 calendarDate = new CalendarDate();
                 calendarDate.setCalendar(insertedCalendar);
-                try {
-                    me.getGeneralHelper().getWebServiceInfo().setServiceName("/findDayTypeById");
-                    dayType = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(Integer.valueOf(yearMonth.get(i - 1).get(j - 1).get(0).get_id()) + 1)), DayType.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                dayType = dayTypeService.findById(Integer.valueOf(yearMonth.get(i - 1).get(j - 1).get(0).get_id()) + 1);
                 int start = 0;
                 int end = 0;
                 calendarDate.setDayType(dayType);
@@ -285,36 +263,25 @@ public class HandleCalendarAction implements Serializable {
                 }
                 calendarDate.setStartDate(start);
                 calendarDate.setEndDate(end);
-                try {
-                    me.getGeneralHelper().getWebServiceInfo().setServiceName("/createCalendarDate");
-                    new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(calendarDate)), CalendarDate.class);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                calendarDateService.createCalendarDate(calendarDate);
             }
         }
 
         if (insertedCalendar != null) {
-            try {
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/findRulePackageByCalendarID");
-                List<RulePackage> rulePackages = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(insertedCalendar.getId())), new TypeReference<List<RulePackage>>() {
-                });
-                for (RulePackage rulePackage : rulePackages) {
-                    rulePackage.setCalendar(insertedCalendar);
-                    me.getGeneralHelper().getWebServiceInfo().setServiceName("/pureEditRulePackage");
-                    String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(rulePackage)), String.class);
+            List<RulePackage> rulePackages = rulePackageService.findByCalendarID(insertedCalendar.getId());
+            for (RulePackage rulePackage : rulePackages) {
+                rulePackage.setCalendar(insertedCalendar);
+                rulePackageService.editRulePackage(rulePackage);
 
-                }
-                me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteCalendar");
-
-                String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentCalendar)), String.class);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+            String condition = calendarService.deleteCalendar(currentCalendar);
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/calendar/list-calendar.htm");
-        } else {
+            me.redirect("/calendar/list-calendar.xhtml");
+        } else
+
+        {
             me.addInfoMessage("operation.not.occurred");
         }
 
@@ -345,13 +312,7 @@ public class HandleCalendarAction implements Serializable {
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/createCalendar");
-            Calendar insertedCalendar = null;
-            try {
-                insertedCalendar = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(newCalendar)), Calendar.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Calendar insertedCalendar = calendarService.createCalendar(newCalendar);
             CalendarInfo.Month[] month = calendarInfo.getYear()[0].getMonth();
             CalendarDate calendarDate;
             int lastType = -1;
@@ -387,12 +348,7 @@ public class HandleCalendarAction implements Serializable {
                 for (int j = 1; j <= yearMonth.get(i - 1).size(); j++) {
                     calendarDate = new CalendarDate();
                     calendarDate.setCalendar(insertedCalendar);
-                    try {
-                        me.getGeneralHelper().getWebServiceInfo().setServiceName("/findDayTypeById");
-                        dayType = new ObjectMapper().readValue(new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), String.valueOf(Integer.valueOf(yearMonth.get(i - 1).get(j - 1).get(0).get_id()))), DayType.class);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    dayType = dayTypeService.findById(Long.valueOf(yearMonth.get(i - 1).get(j - 1).get(0).get_id()));
                     int start = 0;
                     int end = 0;
                     calendarDate.setDayType(dayType);
@@ -405,26 +361,21 @@ public class HandleCalendarAction implements Serializable {
                     }
                     calendarDate.setStartDate(start);
                     calendarDate.setEndDate(end);
-                    try {
-                        me.getGeneralHelper().getWebServiceInfo().setServiceName("/createCalendarDate");
-                        new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(calendarDate)), CalendarDate.class);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    calendarDateService.createCalendarDate(calendarDate);
                 }
             }
 
             if (insertedCalendar != null) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
-                me.redirect("/calendar/list-calendar.htm");
+                me.redirect("/calendar/list-calendar.xhtml");
             } else {
                 me.addInfoMessage("operation.not.occurred");
             }
         } catch (Exception ex) {
             refresh();
             me.addInfoMessage("operation.not.occurred");
-            me.redirect("/calendar/list-calendar.htm");
+            me.redirect("/calendar/list-calendar.xhtml");
         }
 
     }

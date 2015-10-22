@@ -89,10 +89,10 @@ public class CalendarServiceImpl<T extends Calendar> {
 
     public String deleteCalendar(T entity) {
         try {
-            List<RulePackage> rulePackages = rulePackageService.findByCalendarID(String.valueOf(entity.getId()));
+            List<RulePackage> rulePackages = rulePackageService.findByCalendarID(entity.getId());
             if (rulePackages != null && rulePackages.size() != 0)
                 return new ObjectMapper().writeValueAsString("REL_CALENDAR_RULEPACKAGE");
-            List<CalendarDate> calendarDates = calendarDateService.findByCalendarID(String.valueOf(entity.getId()));
+            List<CalendarDate> calendarDates = calendarDateService.findByCalendarID(entity.getId());
             for (CalendarDate calendarDate : calendarDates) {
                 calendarDateService.deleteCalendarDate(calendarDate);
             }

@@ -17,10 +17,10 @@ import java.util.List;
 @LocalBean
 public class CalendarDateDAOImpl extends BaseDAOImpl<CalendarDate> {
 
-    public List<CalendarDate> findByCalendarID(String calendarId) {
+    public List<CalendarDate> findByCalendarID(long calendarId) {
         try {
             return (List<CalendarDate>) em.createNamedQuery("CalendarDate.findByCalendarId")
-                    .setParameter("id", Long.valueOf(calendarId))
+                    .setParameter("id", calendarId)
                     .getResultList();
         } catch (Exception e) {
             return null;

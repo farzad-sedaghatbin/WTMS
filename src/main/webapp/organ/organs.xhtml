@@ -8,6 +8,9 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="organs">
+                <p:menuitem value="#{bundle.add}" update="organDetail" icon="ui-icon-search"
+                            oncomplete="PF('organDialog').show()"
+                            actionListener="#{handleOrganAction.addChild}"/>
                 <p:menuitem value="#{bundle.view}" update="organDetail" icon="ui-icon-search"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.view}"/>
@@ -26,7 +29,7 @@
                     orientation="horizontal">
                 <p:treeNode >
 
-                    <h:outputText value="#{organ}"/>
+                    <h:outputText value="#{organ.name}"/>
 
                 </p:treeNode>
             </p:tree>
@@ -34,7 +37,7 @@
             <p:commandButton value="#{bundle.add}" id="add" update="organDetail" actionListener="#{handleOrganAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('organDialog').show()"/>
 
-            <p:dataTable id="organs" var="currentOrgan" value="#{handleOrganAction.organList}"
+            <p:treeTable id="organs" var="currentOrgan" value="#{handleOrganAction.rootOrgans}"
                          rowKey="#{currentOrgan.id}"
                          selection="#{handleOrganAction.currentOrgan}" selectionMode="single"
                          paginator="true" rows="10"
@@ -58,7 +61,7 @@
                 <p:column headerText="#{bundle.title}" sortBy="#{currentOrgan.title}" filterBy="#{currentOrgan.title}">
                     <h:outputText value="#{currentOrgan.title}"/>
                 </p:column>
-            </p:dataTable>
+            </p:treeTable>
 
             <p:dialog header="Organ Info" widgetVar="organDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">

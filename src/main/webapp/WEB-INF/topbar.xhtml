@@ -1,11 +1,11 @@
-<ui:composition 
+<ui:composition
 
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets">
-    
-    
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
     <!-- TOPBAR START -->
     <div id="layout-topbar">
         <a id="mobile-menu-button">
@@ -14,57 +14,71 @@
             <span class="ButtonLine" id="ButtonLine3"></span>
         </a>
         <a href="/modena-1.0.1/dashboard.xhtml" id="logo">
-            <h:graphicImage name="images/arm-small.png"  styleClass="Fleft" library="modena-layout" />
+            <h:graphicImage name="images/arm-small.png" styleClass="Fleft" library="modena-layout"/>
         </a>
-        
-        <a id="show-top-menu" class="ShowOnMobile ripplelink"><i class="icon-more_vert" id="active"></i><i class="icon-close DispNone" id="passive"></i> </a>
-        
-        <ul id="top-menu">
-            <li>
-                <a class="ripplelink"><i class="icon-search"></i> <span class="ShowOnMobile">Search Here</span></a>
-                <ul>
-                    <li>
-                        <a href="#"><i class="icon-search"></i><input type="text"/> </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a class="ripplelink"><i class="icon-archive"></i> <span class="ShowOnMobile">Task Manager</span></a>
-                <ul>
-                    <li><a href="#"><i class="icon-alarm_on"></i> Completed Tasks</a></li>
-                    <li><a href="#"><i class="icon-alarm_add"></i> New Tasks</a></li>
-                    <li><a href="#"><i class="icon-event_available"></i> Clear All Tasks</a></li>
-                </ul>
-            </li>
-            <li>
-                <a class="ripplelink"><i class="icon-notifications_none"></i> <span class="ShowOnMobile">Notifications</span></a>
-                <ul>
-                    <li><a href="#"><span class="Orange">ملاقات با آقای صادقی</span><br/><span class="Gray Fs14 FontRobotoLight">امروز - 13:40 <br/>در محل اجلاس</span></a></li>
-                    <li><a href="#"><span class="Blue">ارسال گزارش</span><br/><span class="Gray Fs14 FontRobotoLight">امروز - 17:10 <br/>به مهندس غلامی</span></a></li>
-                    <li><a href="#"><span class="Blue">بررسی ترددهای ناموفق</span><br/><span class="Gray Fs14 FontRobotoLight">امروز - 18:30 </span></a></li>
-                    <li class="TexAlCenter"><i class="icon-keyboard_control Gray Fs30"></i></li>
-                    <li><a href="#"><span class="Red"><i class="icon-alarm_add Fs20 Fleft"></i> یادآوری جدید</span></a></li>
-                </ul>
-            </li>
-            <li>
-                <a class="ripplelink"><i class="icon-cog"></i> <span class="ShowOnMobile">Settings</span></a>
-                <ul>
-                    <li><a href="#"><i class="icon-flag2"></i> تنظیمات زبان</a></li>
-                    <li><a href="#"><i class="icon-settings"></i> تنظیمات سامانه</a></li>
-                    <li><a href="#"><i class="icon-verified_user"></i> تنظیمات امنیتی</a></li>
-                    <li><a href="#"><i class="icon-assignment_ind"></i>تنظیمات کاربران</a></li>
-                </ul>
-            </li>
-            <li>
-                <a class="ripplelink"><i class="icon-power"></i> <span class="ShowOnMobile">System</span></a>
-                <ul>
-                    <li><a href="#"><span class="Blue"><i class="icon-airline_seat_individual_suite Fs30 DispBlock"></i> Sleep Mode</span></a></li>
-                    <li><a href="#"><span class="Orange"><i class="icon-track_changes Fs30 DispBlock"></i> Restart System</span></a></li>
-                    <li><a href="#"><span class="Red"><i class="icon-vpn_key Fs30 DispBlock"></i> Logout</span></a></li>
-                </ul>
-            </li>
-        </ul>
+
+        <a id="show-top-menu" class="ShowOnMobile ripplelink"><i class="icon-more_vert" id="active"></i><i
+                class="icon-close DispNone" id="passive"></i> </a>
+        <h:form>
+            <ul id="top-menu">
+                <li>
+                    <a class="ripplelink"><i class="icon-search"></i> <span class="ShowOnMobile">Search Here</span></a>
+                    <ul>
+                        <li>
+                            <a href="#"><i class="icon-search"></i><input type="text"/> </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="ripplelink"><i class="icon-archive"></i> <span
+                            class="ShowOnMobile">Task Manager</span></a>
+                    <ul>
+                        <li><a href="#"><i class="icon-alarm_on"></i> Completed Tasks</a></li>
+                        <li><a href="#"><i class="icon-alarm_add"></i> New Tasks</a></li>
+                        <li><a href="#"><i class="icon-event_available"></i> Clear All Tasks</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="ripplelink"><i class="icon-notifications_none"></i> <span
+                            class="ShowOnMobile">Notifications</span></a>
+                    <ul>
+                        <li><a href="#"><span class="Orange">ملاقات با آقای صادقی</span><br/><span
+                                class="Gray Fs14 FontRobotoLight">امروز - 13:40 <br/>در محل اجلاس</span></a></li>
+                        <li><a href="#"><span class="Blue">ارسال گزارش</span><br/><span
+                                class="Gray Fs14 FontRobotoLight">امروز - 17:10 <br/>به مهندس غلامی</span></a></li>
+                        <li><a href="#"><span class="Blue">بررسی ترددهای ناموفق</span><br/><span
+                                class="Gray Fs14 FontRobotoLight">امروز - 18:30 </span></a></li>
+                        <li class="TexAlCenter"><i class="icon-keyboard_control Gray Fs30"></i></li>
+                        <li><a href="#"><span class="Red"><i class="icon-alarm_add Fs20 Fleft"></i> یادآوری جدید</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="ripplelink"><i class="icon-cog"></i> <span class="ShowOnMobile">Settings</span></a>
+                    <ul>
+                        <li><a href="#"><i class="icon-flag2"></i> تنظیمات زبان</a></li>
+                        <li><a href="#"><i class="icon-settings"></i> تنظیمات سامانه</a></li>
+                        <li><a href="#"><i class="icon-verified_user"></i> تنظیمات امنیتی</a></li>
+                        <li><a href="#"><i class="icon-assignment_ind"></i>تنظیمات کاربران</a></li>
+                    </ul>
+                </li>
+                <li>
+
+                    <a class="ripplelink"><i class="icon-power"></i> <span class="ShowOnMobile">System</span></a>
+                    <ul>
+                        <li><a href="#"><span class="Blue"><i
+                                class="icon-airline_seat_individual_suite Fs30 DispBlock"></i> Sleep Mode</span></a>
+                        </li>
+                        <li><a href="#"><span class="Orange"><i class="icon-track_changes Fs30 DispBlock"></i> Restart System</span></a>
+                        </li>
+                        <li><h:commandLink action="#{logoutAction.logout}"><span class="Red"><i
+                                class="icon-vpn_key Fs30 DispBlock"></i> <h:outputText
+                                value="#{bundle.logout}"/> </span></h:commandLink></li>
+                    </ul>
+                </li>
+            </ul>
+        </h:form>
     </div>
     <!-- TOPBAR END -->
-    
+
 </ui:composition>

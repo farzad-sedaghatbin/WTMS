@@ -12,6 +12,8 @@
                             actionListener="#{handleVirdiAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="virdiDetail" icon="ui-icon-search" oncomplete="PF('virdiDialog').show()"
                             actionListener="#{handleVirdiAction.edit}"/>
+                <p:menuitem value="#{bundle.fetch}" update="virdiDetail" icon="ui-icon-search" actionListener="#{handleVirdiAction.fetch}"/>
+                <p:menuitem value="#{bundle.synch}" update="virdiDetail" icon="ui-icon-search" actionListener="#{handleVirdiAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="virdis" icon="ui-icon-close"
                             actionListener="#{handleVirdiAction.doDelete}"/>
             </p:contextMenu>
@@ -38,6 +40,9 @@
                 </p:column>
                 <p:column headerText="#{bundle.ip}" sortBy="#{currentVirdi.ip}" filterBy="#{currentVirdi.ip}">
                     <h:outputText value="#{currentVirdi.ip}"/>
+                </p:column>
+                <p:column headerText="#{bundle.terminalId}" sortBy="#{currentVirdi.terminalId}" filterBy="#{currentVirdi.terminalId}">
+                    <h:outputText value="#{currentVirdi.terminalId}"/>
                 </p:column>
                 <p:column headerText="#{bundle.enable}">
                     <p:graphicImage value="#{currentVirdi.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
@@ -78,6 +83,14 @@
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleVirdiAction.disableFields}" value="#{handleVirdiAction.ip}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="#{bundle.terminalId}"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleVirdiAction.disableFields}" value="#{handleVirdiAction.terminalId}"/>
                             </td>
                         </tr>
                         <tr>

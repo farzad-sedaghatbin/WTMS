@@ -64,6 +64,7 @@ public class HandleOrganAction implements Serializable {
     private List<Organ> organList = null;
     private List<Person> personList = null;
     private Organ parentOrgan = null;
+    private boolean addChild = false;
     private String editable = "false";
     private String organName;
     private String organTitle;
@@ -168,6 +169,14 @@ public class HandleOrganAction implements Serializable {
         setDisableFields(false);
     }
 
+    public void addChild() {
+        init();
+        setEditable("false");
+        setDisableFields(false);
+        addChild = true;
+        parentOrgan=currentOrgan;
+    }
+
     public void doDelete() {
         currentOrgan.setEffectorUser(me.getUsername());
         String condition = organService.deleteOrgan(currentOrgan);
@@ -178,6 +187,7 @@ public class HandleOrganAction implements Serializable {
 
     public void init() {
         organName = "";
+        addChild = false;
         organTitle = "";
         organCode = "";
         organType = null;
@@ -188,7 +198,7 @@ public class HandleOrganAction implements Serializable {
         currentOrgan = null;
         organNameFilter = "";
         organDescriptionFilter = "";
-
+        parentOrgan = null;
         setSelectRow(false);
     }
 
@@ -238,8 +248,9 @@ public class HandleOrganAction implements Serializable {
             doEdit();
         }
     }
-    public void viewPerson(){
-        personList=personService.findByOrgan(currentOrgan.getId());
+
+    public void viewPerson() {
+        personList = personService.findByOrgan(currentOrgan.getId());
     }
 
     private void doEdit() {
@@ -301,7 +312,7 @@ public class HandleOrganAction implements Serializable {
         if (insertedOrgan != null) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/organ/list-organ.htm");
+            me.redirect("/organ/organs.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
@@ -476,7 +487,7 @@ public class HandleOrganAction implements Serializable {
             if (condition) {
                 refresh();
                 me.addInfoMessage("operation.occurred");
-                me.redirect("/organ/list-organ.htm");
+                me.redirect("/organ/organs.xhtml");
             } else {
                 me.addInfoMessage("operation.not.occurred");
                 return;
@@ -641,7 +652,7 @@ public class HandleOrganAction implements Serializable {
 
     public List<BLookup> getOrganTypes() {
         if (organTypes == null) {
-                organTypes = bLookupService.getByLookupId(Lookup.ORGAN_TYPE_ID);
+            organTypes = bLookupService.getByLookupId(Lookup.ORGAN_TYPE_ID);
             for (BLookup bLookup : organTypes) {
                 bLookup.setTitleText(me.getValue(bLookup.getCode()));
             }
@@ -747,13 +758,13 @@ public class HandleOrganAction implements Serializable {
 
 
     public TreeNode getRootOrgans() {
-        TreeNode root = new DefaultTreeNode("Root",null);
+        TreeNode root = new DefaultTreeNode(new Organ(), null);
         if (rootOrgans == null) {
             List<Organ> organs = organService.getAllOrgan();
-                organs= Organ.prepareHierarchy(organs);
+            organs = Organ.prepareHierarchy(organs);
             for (Organ organ : organs) {
-                if(organ.getParent()==null){
-                    TreeNode subRoot= new DefaultTreeNode(organ.getName(),root);
+                if (organ.getParent() == null) {
+                    TreeNode subRoot = new DefaultTreeNode(organ, root);
                 }
             }
         }

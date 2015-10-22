@@ -102,8 +102,8 @@ public class HandleMapAction implements Serializable {
         init();
 
         handleGatewayAction.setSelectedGateways(new HashSet<Gateway>());
-            List<Map> maps =mapService.getAllMap();
-            mapList = maps;
+        List<Map> maps = mapService.getAllMap();
+        mapList = maps;
     }
 
 
@@ -116,15 +116,10 @@ public class HandleMapAction implements Serializable {
 
     public void doDelete() {
 
-        me.getGeneralHelper().getWebServiceInfo().setServiceName("/deleteMap");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(currentMap)), String.class);
-            refresh();
-            me.addInfoMessage(condition);
-            me.redirect("/map/list-map.htm");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        refresh();
+        me.addInfoMessage(mapService.deleteMap(currentMap));
+        me.redirect("/map/list-map.xhtml");
     }
 
 
@@ -194,7 +189,7 @@ public class HandleMapAction implements Serializable {
         newMap.setContent(content.getBytes());
         System.out.println(content);
         Map insertedMap = null;
-            insertedMap = mapService.createMap(newMap);
+        insertedMap = mapService.createMap(newMap);
         if (insertedMap != null) {
 //            for (Gateway gateway1 : selecteGateway) {
 //                gateway1.getCameras().add(insertedMap);

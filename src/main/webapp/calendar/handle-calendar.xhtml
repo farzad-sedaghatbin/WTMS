@@ -44,7 +44,7 @@
     }
 </style>
 <ul class="Menu">
-    <li><select class="selectBox" id="dayTypeSelection">
+    <li><select class="SelectBox" id="dayTypeSelection">
     </select></li>
     <!-- <li><a><img src="/WTMS/images/SelectAllIcon.png" width="20" alt=""/></a></li>
      <li><a><img src="/WTMS/images/DeselectAllIcon.png" width="20" alt=""/></a></li>
@@ -60,7 +60,7 @@
 
 <tr valign="top">
     <td nowrap="nowrap">
-        <h:outputText escape="true" value="#{'نام'}:" styleClass="textColor"/>
+        <h:outputText escape="true" value="#{bundle.name}:" styleClass="textColor"/>
     </td>
     <td nowrap="nowrap">
         <h:inputText id="textBoxCalendarName"
@@ -75,7 +75,7 @@
 </tr>
 <tr valign="top">
     <td nowrap="nowrap">
-        <h:outputText escape="true" value="#{'توضیح'}:"
+        <h:outputText escape="true" value="#{bundle.description}:"
                       styleClass="textColor"/>
     </td>
     <td nowrap="nowrap">
@@ -92,7 +92,7 @@
 </tr>
 <tr>
     <td nowrap="nowrap" align="center" colspan="2">
-        <h:commandButton value="save}"
+        <h:commandButton value="#{bundle.save}"
                          action="#{handleCalendarAction.saveOrUpdate}"
                          onclick="setData();"/>
     </td>

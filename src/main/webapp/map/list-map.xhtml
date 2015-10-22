@@ -10,6 +10,11 @@
 
 
         <h:form>
+            <p:contextMenu for="mapTable">
+                <p:menuitem value="#{bundle.view}" icon="ui-icon-search" actionListener="#{handleMapAction.view}"/>
+                <p:menuitem value="#{bundle.delete}" update="mapTable" icon="ui-icon-close"
+                            actionListener="#{handleMapAction.doDelete}"/>
+            </p:contextMenu>
             <p:commandButton value="#{bundle.add}" id="add" onclick="this.form.target='_blank'"
                              actionListener="#{handleMapAction.add}"
                              styleClass="ui-priority-primary"/>

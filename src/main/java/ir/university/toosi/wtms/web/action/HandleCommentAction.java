@@ -44,7 +44,7 @@ public class HandleCommentAction implements Serializable {
     }
 
     public void begin() {
-        me.setActiveMenu(MenuType.SENTRY);
+//        me.setActiveMenu(MenuType.SENTRY);
         refresh();
         me.redirect("/authorization/list-comment.xhtml");
     }

@@ -49,7 +49,7 @@ public class LogoutAction implements Serializable {
         return true;
     }
 
-    public String logout() {
+    public void logout() {
 
         if (removeCookie())
             setCookie(FacesContext.getCurrentInstance().getViewRoot().getLocale().toString());
@@ -60,6 +60,6 @@ public class LogoutAction implements Serializable {
         session.removeAttribute(UserManagementAction.INVALID_TRY);
         session.invalidate();
 
-        return "login";
+       me.redirect("login.xhtml");
     }
 }
