@@ -72,6 +72,7 @@ public class HandleOrganAction implements Serializable {
     private BLookup organType;
     private List<BLookup> organTypes;
     private Organ currentOrgan = null;
+    private DefaultTreeNode selectedNode = null;
     private String currentPage;
     private int page = 1;
     private int pageInPopup = 1;
@@ -174,7 +175,8 @@ public class HandleOrganAction implements Serializable {
         setEditable("false");
         setDisableFields(false);
         addChild = true;
-        parentOrgan=currentOrgan;
+        currentOrgan = (Organ) selectedNode.getData();
+        parentOrgan = currentOrgan;
     }
 
     public void doDelete() {
@@ -758,17 +760,32 @@ public class HandleOrganAction implements Serializable {
 
 
     public TreeNode getRootOrgans() {
-        TreeNode root = new DefaultTreeNode(new Organ(), null);
+        HashMap<Long, Boolean> hashMap = new HashMap();
+        TreeNode root = new DefaultTreeNode(new Organ("*****",null,null,null), null);
         if (rootOrgans == null) {
             List<Organ> organs = organService.getAllOrgan();
             organs = Organ.prepareHierarchy(organs);
             for (Organ organ : organs) {
                 if (organ.getParent() == null) {
-                    TreeNode subRoot = new DefaultTreeNode(organ, root);
+                    recurciveNodes(new DefaultTreeNode(organ, root));
                 }
             }
         }
         return root;
+    }
+
+    private TreeNode recurciveNodes(TreeNode organ) {
+
+        if (((Organ)organ.getData())==null || ((Organ)organ.getData()).getChildren() == null || ((Organ)organ.getData()).getChildren().size() == 0) {
+            return organ;
+        } else {
+            for (TreeNode treeNode : ((Organ)organ.getData()).getChildren()) {
+                new DefaultTreeNode(recurciveNodes( treeNode), organ);
+            }
+
+        }
+        return organ;
+
     }
 
 
@@ -1116,5 +1133,13 @@ public class HandleOrganAction implements Serializable {
 
     public void setPersonList(List<Person> personList) {
         this.personList = personList;
+    }
+
+    public DefaultTreeNode getSelectedNode() {
+        return selectedNode;
+    }
+
+    public void setSelectedNode(DefaultTreeNode selectedNode) {
+        this.selectedNode = selectedNode;
     }
 }

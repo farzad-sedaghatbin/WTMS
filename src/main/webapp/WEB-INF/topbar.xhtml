@@ -7,20 +7,22 @@
 
 
     <!-- TOPBAR START -->
-    <div id="layout-topbar">
-        <a id="mobile-menu-button">
-            <span class="ButtonLine" id="ButtonLine1"></span>
-            <span class="ButtonLine" id="ButtonLine2"></span>
-            <span class="ButtonLine" id="ButtonLine3"></span>
-        </a>
-        <a href="/modena-1.0.1/dashboard.xhtml" id="logo">
-            <h:graphicImage name="images/arm-small.png" styleClass="Fleft" library="modena-layout"/>
-        </a>
+    <h:form>
+        <div id="layout-topbar">
+            <a id="mobile-menu-button">
+                <span class="ButtonLine" id="ButtonLine1"></span>
+                <span class="ButtonLine" id="ButtonLine2"></span>
+                <span class="ButtonLine" id="ButtonLine3"></span>
+            </a>
+            <a href="/modena-1.0.1/dashboard.xhtml" id="logo">
+                <h:graphicImage name="images/arm-small.png" styleClass="Fleft" library="modena-layout"/>
+            </a>
 
-        <a id="show-top-menu" class="ShowOnMobile ripplelink"><i class="icon-more_vert" id="active"></i><i
-                class="icon-close DispNone" id="passive"></i> </a>
-        <h:form>
+            <a id="show-top-menu" class="ShowOnMobile ripplelink"><i class="icon-more_vert" id="active"></i><i
+                    class="icon-close DispNone" id="passive"></i> </a>
             <ul id="top-menu">
+
+
                 <li>
                     <a class="ripplelink"><i class="icon-search"></i> <span class="ShowOnMobile">Search Here</span></a>
                     <ul>
@@ -77,8 +79,8 @@
                     </ul>
                 </li>
             </ul>
-        </h:form>
-    </div>
-    <!-- TOPBAR END -->
 
+        </div>
+        <!-- TOPBAR END -->
+    </h:form>
 </ui:composition>

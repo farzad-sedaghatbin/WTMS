@@ -60,6 +60,6 @@ public class LogoutAction implements Serializable {
         session.removeAttribute(UserManagementAction.INVALID_TRY);
         session.invalidate();
 
-       me.redirect("login.xhtml");
+       me.redirect("/login.xhtml");
     }
 }

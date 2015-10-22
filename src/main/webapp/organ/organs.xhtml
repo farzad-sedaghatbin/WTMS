@@ -17,7 +17,7 @@
                 <p:menuitem value="#{bundle.edit}" update="organDetail" icon="ui-icon-search"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.edit}"/>
-                <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search"
                             oncomplete="PF('assignRuleDialog').show()"
                             actionListener="#{handleOrganAction.assignRule}"/>
                 <p:menuitem value="#{bundle.persons}" update="personTable" icon="ui-icon-search"
@@ -37,17 +37,10 @@
             <p:commandButton value="#{bundle.add}" id="add" update="organDetail" actionListener="#{handleOrganAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('organDialog').show()"/>
 
-            <p:treeTable id="organs" var="currentOrgan" value="#{handleOrganAction.rootOrgans}"
-                         rowKey="#{currentOrgan.id}"
-                         selection="#{handleOrganAction.currentOrgan}" selectionMode="single"
-                         paginator="true" rows="10"
-                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                         rowsPerPageTemplate="5,10,15" lazy="true"
-                         draggableColumns="true" style="margin-bottom:20px">
-                <f:facet name="header">
-لیست                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
-                    <p:columnToggler datasource="organs" trigger="toggler" />
-                </f:facet>
+            <p:treeTable id="organs" var="currentOrgan" value="#{handleOrganAction.rootOrgans}" dataLocale="#{me.locale}" style="margin-top: 0"
+
+                         selection="#{handleOrganAction.selectedNode}" selectionMode="single"
+                         >
 
                 <p:column headerText="#{bundle.name}" sortBy="#{currentOrgan.name}" filterBy="#{currentOrgan.name}">
                     <h:outputText value="#{currentOrgan.name}"/>
