@@ -12,8 +12,8 @@
                             actionListener="#{handleVirdiAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="virdiDetail" icon="ui-icon-search" oncomplete="PF('virdiDialog').show()"
                             actionListener="#{handleVirdiAction.edit}"/>
-                <p:menuitem value="#{bundle.fetch}" update="virdiDetail" icon="ui-icon-search" actionListener="#{handleVirdiAction.fetch}"/>
-                <p:menuitem value="#{bundle.synch}" update="virdiDetail" icon="ui-icon-search" actionListener="#{handleVirdiAction.edit}"/>
+                <p:menuitem value="#{bundle.fetch}"  icon="ui-icon-search" actionListener="#{handleVirdiAction.fetch}"/>
+                <p:menuitem value="#{bundle.synch}"  icon="ui-icon-search" actionListener="#{handleVirdiAction.synch}"/>
                 <p:menuitem value="#{bundle.delete}" update="virdis" icon="ui-icon-close"
                             actionListener="#{handleVirdiAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
