@@ -30,7 +30,7 @@
                                                               style="float:right" icon="ui-icon-calculator"/>
                                         <p:columnToggler datasource="personTable" trigger="toggler"/>
                                     </f:facet>
-
+                                    <p:ajax event="rowSelect" listener="#{handleMonitoringAction.dotrackByPerson}"/>
                                     <p:column headerText="#{bundle.name}" sortBy="#{person.name}"
                                               filterBy="#{person.name}">
                                         <h:outputText id="selectLink"
@@ -84,6 +84,8 @@
                                              rows="10"
                                              style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
                                              rowClasses="ROW1,ROW2">
+                                    <p:ajax event="rowSelect"
+                                            listener="#{handleMonitoringAction.dotrackByPersonAndGate}"/>
                                     <p:column sortBy="#{person.name}"
                                               sortOrder="#{handlePersonAction.personnameOrder}">
                                         <f:facet name="header">
@@ -97,13 +99,9 @@
                                                         limitRender="true"/>
                                             </h:inputText>
                                         </f:facet>
-                                        <h:commandLink id="selectLink1"
-                                                       value="#{person.name}"
-                                                       action="#{handleMonitoringAction.dotrackByPersonAndGate}"
-                                                       execute="@this"
-                                                       styleClass="withoutUnderlineLink"
-                                                       limitRender="true"
-                                                       update="userTable"/>
+                                        <h:outputText
+                                                value="#{person.name}"
+                                                />
                                     </p:column>
                                     <p:column sortBy="#{person.lastName}"
                                               sortOrder="#{handlePersonAction.personFamilyOrder}">
@@ -189,7 +187,8 @@
                             <fieldset>
                                 <legend>
                                     <h:outputText escape="true" value="#{bunlde.person_list}"/>
-                                </legend>0
+                                </legend>
+                                0
                                 <p:dataTable id="personTable2"
                                              value="#{handleMonitoringAction.personList}"
                                              keepSaved="true"
@@ -199,6 +198,8 @@
                                              rows="10"
                                              style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
                                              rowClasses="ROW1,ROW2">
+                                    <p:ajax event="rowSelect"
+                                            listener="#{handleMonitoringAction.dotrackByPersonAndTime}"/>
                                     <p:column sortBy="#{person.name}"
                                               sortOrder="#{handlePersonAction.personnameOrder}">
                                         <f:facet name="header">
@@ -212,13 +213,8 @@
                                                         limitRender="true"/>
                                             </h:inputText>
                                         </f:facet>
-                                        <h:commandLink value="#{person.name}"
-                                                       id="selectLink2"
-                                                       action="#{handleMonitoringAction.dotrackByPersonAndTime}"
-                                                       execute="@this"
-                                                       styleClass="withoutUnderlineLink"
-                                                       limitRender="true"
-                                                       update="userTable"/>
+                                        <h:outputText value="#{person.name}"
+                                                />
                                     </p:column>
                                     <p:column sortBy="#{person.lastName}"
                                               sortOrder="#{handlePersonAction.personFamilyOrder}">

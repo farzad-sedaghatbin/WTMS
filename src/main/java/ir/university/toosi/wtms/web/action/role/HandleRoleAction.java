@@ -205,7 +205,6 @@ public class HandleRoleAction implements Serializable {
     }
 
     public void view() {
-        setEditable("true");
         setDisableFields(true);
         roleEnabled = currentRole.isEnabled();
         descText = me.getValue(currentRole.getDescription());
