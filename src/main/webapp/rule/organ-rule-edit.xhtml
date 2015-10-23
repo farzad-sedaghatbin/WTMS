@@ -7,7 +7,6 @@
                 xmlns:h="http://java.sun.com/jsf/html">
     <h:form id="ruleFrm">
         <p:outputPanel id="handleRulePanel" ajaxRendered="true">
-                </legend>
                 <table border="0" cellpadding="3" cellspacing="3" width="290" dir="#{me.direction}">
                     <tr valign="top">
                         <td nowrap="nowrap">
@@ -132,20 +131,10 @@
                     </tr>
 
 
-                    <tr valign="top">
-                        <td nowrap="nowrap">
-                            <p:commandButton image="/images/add.png"
-                                             action="#{handleOrganAction.addNewRule}"
-                                             title="rule_add"
-                                             execute="@this"
-                                             update="newRuleDetailPanel"/>
-                        </td>
-                    </tr>
 
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <p:outputPanel ajaxRendered="true" id="newRuleDetailPanel">
-                                <f:subview id="newRuleDetail" rendered="#{handleOrganAction.addNewRuleFlag}">
                                     <table border="0" cellpadding="3" cellspacing="3" width="50%">
                                         <tr valign="middle">
                                             <td nowrap="nowrap">
@@ -229,7 +218,6 @@
                                             </td>
                                         </tr>
                                     </table>
-                                </f:subview>
                             </p:outputPanel>
                         </td>
                     </tr>

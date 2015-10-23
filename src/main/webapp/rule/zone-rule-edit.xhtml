@@ -115,20 +115,9 @@
                         </td>
                     </tr>
 
-
-                    <tr valign="top">
-                        <td nowrap="nowrap">
-                            <p:commandButton image="/images/add.png"
-                                             action="#{handleZoneAction.addNewRule}"
-                                             title="rule add"
-                                             update="newRuleDetailPanel"/>
-                        </td>
-                    </tr>
-
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <p:outputPanel id="newRuleDetailPanel">
-                                <f:subview id="newRuleDetail" rendered="#{handleZoneAction.addNewRuleFlag}">
                                     <table>
                                         <tr valign="middle">
                                             <td nowrap="nowrap">
@@ -212,7 +201,6 @@
                                             </td>
                                         </tr>
                                     </table>
-                                </f:subview>
                             </p:outputPanel>
                         </td>
                     </tr>
