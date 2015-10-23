@@ -137,7 +137,13 @@
             <artifactId>jni4net</artifactId>
             <version>0.8.8</version>
         </dependency>
-
+            <dependency>
+                <groupId>com.sun</groupId>
+                <artifactId>tools</artifactId>
+                <version>1.7</version>
+                <scope>system</scope>
+                <systemPath>C:/Program Files/jdk7/lib/tools.jar</systemPath>
+            </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.faces</artifactId>

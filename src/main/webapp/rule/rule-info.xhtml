@@ -109,19 +109,9 @@
 
 
             <table border="0">
-
-                <tr valign="top">
-                    <td nowrap="nowrap">
-                        <p:commandButton image="/images/add.png"
-                                         action="#{handleRuleAction.addNewRule}"
-                                         title="rule add"
-                                         update="newRuleDetailPanel"/>
-                    </td>
-                </tr>
                 <tr valign="top">
                     <td nowrap="nowrap">
                         <p:outputPanel id="newRuleDetailPanel">
-                            <f:subview id="newRuleDetail" rendered="#{handleRuleAction.addNewRuleFlag}">
                                 <table>
                                     <tr valign="middle">
                                         <td nowrap="nowrap">
@@ -201,11 +191,10 @@
                                                              value="add rule"
                                                              title="افزودن قانون"
                                                              tabindex="6"
-                                                             update="`"/>
+                                                             update="ruleTempTable"/>
                                         </td>
                                     </tr>
                                 </table>
-                            </f:subview>
                         </p:outputPanel>
                     </td>
                 </tr>
