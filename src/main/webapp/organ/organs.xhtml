@@ -23,8 +23,16 @@
                 <p:menuitem value="#{bundle.persons}" update="personTable" icon="ui-icon-search"
                             oncomplete="PF('PersonDialog').show()" actionListener="#{handleOrganAction.viewPerson}"/>
                 <p:menuitem value="#{bundle.delete}" update="organs" icon="ui-icon-close"
-                            actionListener="#{handleOrganAction.doDelete}"/>
+                            actionListener="#{handleOrganAction.doDelete}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                </p:menuitem>
             </p:contextMenu>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
             <p:tree id="tree"  var="organ" dir="RTL" value="#{handleOrganAction.rootOrgans}"
                     orientation="horizontal">
                 <p:treeNode >
@@ -133,60 +141,18 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                     <p:dataTable id="personTable" value="#{handleOrganAction.personList}"
-                                                 keepSaved="true"
-                                                 emptyMessage="#{bundle.empty_message}"
-                                                 sortMode="single"
-                                                 var="person"
-                                                 rows="10"
-                                                 style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                                 rowClasses="ROW1,ROW2">
-                                        <p:column sortBy="#{person.name}"
-                                                  sortOrder="#{handlePersonAction.personnameOrder}">
-                                            <f:facet name="header">
-                                                <p:commandLink value="#{bundle.name}" update="personTable"
-                                                               execute="@this"
-                                                               limitRender="true"
-                                                               action="#{handlePersonAction.sortByPersonname}"/>
-                                                <br/>
-                                                <h:inputText converter="persianConverter"
-                                                             value="#{handlePersonAction.personnameFilter}">
-                                                    <p:ajax event="blur" update="personTable" execute="@this"
-                                                            limitRender="true"/>
-                                                </h:inputText>
-                                            </f:facet>
+                                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                                 rowsPerPageTemplate="5,10,15"
+                                                 draggableColumns="true" style="margin-bottom:20px">
+                                        <p:column sortBy="#{person.name}" filterBy="#{person.name}">
                                             <h:outputText escape="true" value="#{person.name}"/>
                                         </p:column>
 
-                                        <p:column sortBy="#{person.lastName}"
-                                                  sortOrder="#{handlePersonAction.personFamilyOrder}">
-                                            <f:facet name="header">
-                                                <p:commandLink value="#{bundle.lastname}" update="personTable"
-                                                               execute="@this"
-                                                               limitRender="true"
-                                                               action="#{handlePersonAction.sortByPersonFamily}"/>
-                                                <br/>
-                                                <h:inputText converter="persianConverter"
-                                                             value="#{handlePersonAction.personFamilyFilter}">
-                                                    <p:ajax event="blur" update="personTable" execute="@this"
-                                                            limitRender="true"/>
-                                                </h:inputText>
-                                            </f:facet>
+                                        <p:column sortBy="#{person.lastName}" filterBy="#{person.lastName}">
                                             <h:outputText escape="true" value="#{person.lastName}"/>
                                         </p:column>
 
-                                        <p:column sortBy="#{person.personnelNo}"
-                                                  sortOrder="#{handlePersonAction.personnelNoOrder}">
-                                            <f:facet name="header">
-                                                <p:commandLink value="#{bundle.personnelCode}" update="personTable"
-                                                               execute="@this"
-                                                               limitRender="true"
-                                                               action="#{handlePersonAction.sortByPersonnelNo}"/>
-                                                <br/>
-                                                <h:inputText value="#{handlePersonAction.personnelNoFilter}">
-                                                    <p:ajax event="blur" update="personTable" execute="@this"
-                                                            limitRender="true"/>
-                                                </h:inputText>
-                                            </f:facet>
+                                        <p:column sortBy="#{person.personnelNo}" filterBy="#{person.personnelNo}">
                                             <h:outputText escape="true" value="#{person.personnelNo}"/>
                                         </p:column>
 

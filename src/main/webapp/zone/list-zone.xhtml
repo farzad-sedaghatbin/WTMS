@@ -17,8 +17,15 @@
                 <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleZoneAction.editRule}"/>
                 <p:menuitem value="#{bundle.delete}" update="zones" icon="ui-icon-close"
-                            actionListener="#{handleZoneAction.doDelete}"/>
+                            actionListener="#{handleZoneAction.doDelete}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                </p:menuitem>
             </p:contextMenu>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
             <p:commandButton value="#{bundle.add}" id="add" update="zoneDetail" actionListener="#{handleZoneAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('zoneDialog').show()"/>

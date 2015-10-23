@@ -11,8 +11,15 @@
                 <p:menuitem value="#{bundle.edit}" update="groupDetail" icon="ui-icon-search" oncomplete="PF('groupDialog').show()"
                             actionListener="#{handleWorkGroupAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="groups" icon="ui-icon-close"
-                            actionListener="#{handleWorkGroupAction.doDelete}"/>
+                            actionListener="#{handleWorkGroupAction.doDelete}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                </p:menuitem>
             </p:contextMenu>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
             <p:commandButton value="#{bundle.add}" id="add" update="groupDetail" actionListener="#{handleWorkGroupAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('groupDialog').show()"/>

@@ -13,8 +13,15 @@
                 <p:menuitem value="#{bundle.edit}" update="cameraDetail" icon="ui-icon-search"
                             oncomplete="PF('cameraDialog').show()" actionListener="#{handleCameraAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="cameras" icon="ui-icon-close"
-                            actionListener="#{handleCameraAction.doDelete}"/>
+                            actionListener="#{handleCameraAction.doDelete}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                </p:menuitem>
             </p:contextMenu>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
             <p:commandButton value="#{bundle.add}" id="add" update="cameraDetail" actionListener="#{handleCameraAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('cameraDialog').show()"/>

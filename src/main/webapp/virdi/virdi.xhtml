@@ -15,8 +15,15 @@
                 <p:menuitem value="#{bundle.fetch}" update="virdiDetail" icon="ui-icon-search" actionListener="#{handleVirdiAction.fetch}"/>
                 <p:menuitem value="#{bundle.synch}" update="virdiDetail" icon="ui-icon-search" actionListener="#{handleVirdiAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="virdis" icon="ui-icon-close"
-                            actionListener="#{handleVirdiAction.doDelete}"/>
+                            actionListener="#{handleVirdiAction.doDelete}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                </p:menuitem>
             </p:contextMenu>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
             <p:commandButton value="#{bundle.add}" id="add" update="virdiDetail" actionListener="#{handleVirdiAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('virdiDialog').show()"/>

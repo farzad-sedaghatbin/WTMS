@@ -13,8 +13,15 @@
                 <p:menuitem value="#{bundle.edit}" update="pdpDetail" icon="ui-icon-search" oncomplete="PF('pdpDialog').show()"
                             actionListener="#{handlePDPAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="pdps" icon="ui-icon-close"
-                            actionListener="#{handlePDPAction.doDelete}"/>
+                            actionListener="#{handlePDPAction.doDelete}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                </p:menuitem>
             </p:contextMenu>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
             <p:commandButton value="#{bundle.add}" id="add" update="pdpDetail" actionListener="#{handlePDPAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('pdpDialog').show()"/>

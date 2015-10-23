@@ -1,8 +1,8 @@
 <ui:composition
 
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
         xmlns:ui="http://java.sun.com/jsf/facelets">
 
 
@@ -58,6 +58,7 @@
                 <li>
                     <a class="ripplelink"><i class="icon-cog"></i> <span class="ShowOnMobile">Settings</span></a>
                     <ul>
+                        <li><a href="#" onclick="PF('changePassDialog').show()"><i class="icon-security"></i>  #{bundle.changePass}</a></li>
                         <li><a href="#"><i class="icon-flag2"></i> تنظیمات زبان</a></li>
                         <li><a href="#"><i class="icon-settings"></i> تنظیمات سامانه</a></li>
                         <li><a href="#"><i class="icon-verified_user"></i> تنظیمات امنیتی</a></li>
@@ -82,5 +83,44 @@
 
         </div>
         <!-- TOPBAR END -->
+        <p:dialog header="#{bundle.changePass}" widgetVar="changePassDialog" modal="true"  showEffect="fade" hideEffect="fade"
+                  resizable="false">
+            <table>
+                <tr>
+                    <td>
+                        <h:outputText value="#{bundle.oldPass}"/>
+                    </td>
+                    <td>
+                        <p:password value="#{handleUserAction.oldPass}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h:outputText value="#{bundle.newPass}"/>
+                    </td>
+                    <td>
+                        <p:password value="#{handleUserAction.newPass}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h:outputText value="#{bundle.reNewPass}"/>
+                    </td>
+                    <td>
+                        <p:password value="#{handleUserAction.retypedNewPass}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p:commandButton value="#{bundle.submit}"
+                                         actionListener="#{handleUserAction.changePassword}"
+                                         oncomplete="PF('changePassDialog').hide()"
+                                         styleClass="ui-priority-primary"/>
+                    </td>
+                </tr>
+            </table>
+
+        </p:dialog>
+
     </h:form>
 </ui:composition>

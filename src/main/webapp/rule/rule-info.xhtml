@@ -39,8 +39,15 @@
 
             <p:contextMenu for="ruleTempTable" rendered="#{not handleRuleAction.disableFields}">
                 <p:menuitem value="#{bundle.delete}" update="ruleTempTable" icon="ui-icon-close"
-                            actionListener="#{handleRuleAction.remove}"/>
+                            actionListener="#{handleRuleAction.remove}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                </p:menuitem>
             </p:contextMenu>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
             <p:dataTable id="ruleTempTable"
                          var="ruleTemp"

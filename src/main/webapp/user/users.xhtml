@@ -26,8 +26,18 @@
                             oncomplete="PF('assignPersonDialog').show()"
                             actionListener="#{handleUserAction.assignPerson}"/>
                 <p:menuitem value="#{bundle.delete}" update="users" icon="ui-icon-close"
-                            actionListener="#{handleUserAction.doDelete}"/>
+                            actionListener="#{handleUserAction.doDelete}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                            </p:menuitem>
+                <p:menuitem value="#{bundle.resetPass}" update="users" icon="ui-icon-close" actionListener="#{handleUserAction.resetPass}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                </p:menuitem>
             </p:contextMenu>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
             <p:commandButton value="#{bundle.add}" id="add" update="userDetail" actionListener="#{handleUserAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('userDialog').show()"/>
@@ -209,22 +219,26 @@
                 <p:outputPanel id="assignPersonDetail" style="text-align:center;">
                 <p:dataTable id="assignPerson" var="person" value="#{handleUserAction.personList}"
                              selectionMode="single" selection="#{handleUserAction.selectedPerson}"
-                             rowKey="#{person.id}">
+                             rowKey="#{person.id}"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15"
+                             draggableColumns="true" style="margin-bottom:20px">
                     <f:facet name="header">
                         <h:outputText value="#{person.select_events}"/>
                     </f:facet>
                     <p:ajax event="rowSelect" listener="#{handleUserAction.associatePerson}"
                             oncomplete="PF('assignPersonDialog').hide()"
                             update=":form:users"/>
-                    <p:column headerText="#{bundle.name}">
+                    <p:column headerText="#{bundle.name}" sortBy="#{person.name}" filterBy="#{person.name}">
                         <h:outputText value="#{person.name}"/>
                     </p:column>
-                    <p:column headerText="#{bundle.lastName}">
+                    <p:column headerText="#{bundle.lastName}" sortBy="#{person.lastName}" filterBy="#{person.lastName}">
                         <h:outputText value="#{person.lastName}"/>
                     </p:column>
                 </p:dataTable>
                 </p:outputPanel>
             </p:dialog>
+
         </h:form>
     </ui:define>
 

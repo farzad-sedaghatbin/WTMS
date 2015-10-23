@@ -124,6 +124,9 @@ public class HandleUserAction implements Serializable {
     private SortOrder personNameOrder = SortOrder.UNSORTED;
     private SortOrder personLastNameOrder = SortOrder.UNSORTED;
     private DualListModel<PC> pcList;
+    private String oldPass;
+    private String newPass;
+    private String retypedNewPass;
 
     private boolean disableFields;
 
@@ -140,10 +143,10 @@ public class HandleUserAction implements Serializable {
         username = "";
         password = "";
         password = "";
-        newPassword = "";
-        rePassword = "";
-        oldPassword = "";
         enabled = true;
+        password = "";
+        newPass = "";
+        retypedNewPass="";
         roleEnabled = true;
         selectedWorkGroup = null;
         page = 1;
@@ -403,6 +406,40 @@ public class HandleUserAction implements Serializable {
             me.addInfoMessage("operation.not.occurred");
             return;
         }
+    }
+
+    public void changePassword(){
+        if (oldPass == null || oldPass.equals("")){
+            init();
+            me.addErrorMessage("enter.old.pass");
+            me.redirect("/dashboard.xhtml");
+        }
+        if (!newPass.equals(me.getUser().getPassword())){
+            init();
+            me.addErrorMessage("oldPass.is.wrong");
+            me.redirect("/dashboard.xhtml");
+        }
+        if (newPass == null || newPass.equals("") || retypedNewPass ==null || retypedNewPass.equals("")){
+            init();
+            me.addErrorMessage("enter.newPass.or.reNewPass");
+            me.redirect("/dashboard.xhtml");
+        }
+        if (!newPass.equals(retypedNewPass)){
+            init();
+            me.addErrorMessage("newPass.oldPass.not.match");
+            me.redirect("/dashboard.xhtml");
+        }
+
+        currentUser.setPassword(newPass);
+        userService.editUser(currentUser);
+        me.addInfoMessage("pass.successfully.changed");
+        me.redirect("/dashboard.xhtml");
+    }
+
+    public void resetPass(){
+        currentUser.setPassword("password");
+        me.addInfoMessage("pass.reset");
+        me.redirect("/user/users.xhtml");
     }
 
     public void saveOrUpdate() {
@@ -966,5 +1003,29 @@ public class HandleUserAction implements Serializable {
 
     public void setView(boolean view) {
         this.view = view;
+    }
+
+    public String getOldPass() {
+        return oldPass;
+    }
+
+    public void setOldPass(String oldPass) {
+        this.oldPass = oldPass;
+    }
+
+    public String getNewPass() {
+        return newPass;
+    }
+
+    public void setNewPass(String newPass) {
+        this.newPass = newPass;
+    }
+
+    public String getRetypedNewPass() {
+        return retypedNewPass;
+    }
+
+    public void setRetypedNewPass(String retypedNewPass) {
+        this.retypedNewPass = retypedNewPass;
     }
 }

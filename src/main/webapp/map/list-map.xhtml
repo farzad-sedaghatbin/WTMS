@@ -13,8 +13,16 @@
             <p:contextMenu for="mapTable">
                 <p:menuitem value="#{bundle.view}" icon="ui-icon-search" actionListener="#{handleMapAction.view}"/>
                 <p:menuitem value="#{bundle.delete}" update="mapTable" icon="ui-icon-close"
-                            actionListener="#{handleMapAction.doDelete}"/>
+                            actionListener="#{handleMapAction.doDelete}">
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                </p:menuitem>
             </p:contextMenu>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
             <p:commandButton value="#{bundle.add}" id="add" onclick="this.form.target='_blank'"
                              actionListener="#{handleMapAction.add}"
                              styleClass="ui-priority-primary"/>
