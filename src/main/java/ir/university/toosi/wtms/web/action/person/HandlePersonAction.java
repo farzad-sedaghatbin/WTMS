@@ -641,7 +641,8 @@ public class HandlePersonAction implements Serializable {
         }
     }
 
-    public void doDelete() {
+    public void doDelete(String personId) {
+        currentPerson = personService.findById(Long.parseLong(personId));
         String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         currentPerson.setCreateDate(currentDate);
@@ -801,11 +802,11 @@ public class HandlePersonAction implements Serializable {
         }
     }
 
-    public void edit() {
+    public void edit(String personId) {
+        currentPerson = personService.findById(Long.parseLong(personId));
         detail();
         setEditable("true");
         havePicture = true;
-        currentPerson = personService.findById(currentPerson.getId());
         personname = currentPerson.getName();
         lastname = currentPerson.getLastName();
         email = currentPerson.getEmail();
@@ -941,8 +942,8 @@ public class HandlePersonAction implements Serializable {
         rulePackageList = new ListDataModel<>(rulePackages);
     }
 
-    public void editRule() {
-        currentPerson = personService.findById(currentPerson.getId());
+    public void editRule(String personId) {
+        currentPerson = personService.findById(Long.parseLong(personId));
         if (currentPerson.getRulePackage() == null) {
             refresh();
             me.addErrorMessage("has.not.rulePackage");
@@ -1583,7 +1584,8 @@ public class HandlePersonAction implements Serializable {
         return System.currentTimeMillis();
     }
 
-    public void downloadJnlp() throws IOException {
+    public void downloadJnlp(String personId) throws IOException {
+        currentPerson = personService.findById(Long.parseLong(personId));
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
         String base = "http://" + Configuration.getProperty("server.ip") + ":" + Configuration.getProperty("server.port") + ((HttpServletRequest) ec.getRequest()).getServletContext().getContextPath() + "/jnlp";

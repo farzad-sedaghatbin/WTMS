@@ -72,7 +72,6 @@
                                 <h:inputText dir="#{me.direction}"
                                              id="email"
                                              value="#{handlePersonAction.email}"
-                                             validator="#{handleValidationAction.validateEmailFormat}"
                                              maxlength="25"/>
                                 <p:message ajaxRendered="true" for="email" showSummary="true"
                                               showDetail="false" errorClass="errorMsg"/>
@@ -116,7 +115,6 @@
                                              id="_nationalCode"
                                              required="true"
                                              value="#{handlePersonAction.nationalCode}"
-                                             validator="nationalCodeValidator"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
                                 <p:message ajaxRendered="true" for="_nationalCode" showSummary="true"

@@ -259,14 +259,14 @@ public class CalendarUtil {
         Calendar calendar;
 
         if (locale != null && locale.equals(LangUtil.LOCALE_FARSI)) {
-//            calendar = new PersianCalendar(locale);
-//            calendar.setTime(date);
+            calendar = new PersianCalendar(locale);
+            calendar.setTime(date);
 //
-//            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
+            sdf = (SimpleDateFormat) calendar.getDateTimeFormat(STYLES[1], STYLES[1], locale);
             sdf.applyPattern(pattern);
 
-//            return sdf.format(calendar.getTime());
-            return "";
+            return sdf.format(calendar.getTime());
+//            return "";
         } else {
             sdf = new SimpleDateFormat(pattern);
             return sdf.format(date);
