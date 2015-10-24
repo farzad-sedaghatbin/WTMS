@@ -13,29 +13,29 @@ import java.util.List;
 /**
  * Created by Rahman on 10/21/15.
  */
-//@WebService
+@WebService
 public interface IReaderWrapperService {
 
-    //@WebMethod
+    @WebMethod
     public  void forceOpenDoor(int terminalId);
-    //@WebMethod
+    @WebMethod
     public  void lockDoor(int terminalId);
 
-    //@WebMethod
+    @WebMethod
     public  void unLockDoor(int terminalId);
 
-    //@WebMethod
+    @WebMethod
     public  void lockTerminal(int terminalId);
 
-    //@WebMethod
+    @WebMethod
     public  void unLockTerminal(int terminalId);
 
-    //@WebMethod
+    @WebMethod
     public void getUserList(int terminalId);
 
-    //@WebMethod
+    @WebMethod
     public void setUserList(int terminalId,List<Person> personList,boolean isSucceed,String failedMessage);
 
-    //@WebMethod
+    @WebMethod
     public void addOnGetAccessEventData(int terminalId, AccessEventData value);
 }

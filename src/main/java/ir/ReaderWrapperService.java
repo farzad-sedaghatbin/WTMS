@@ -15,9 +15,9 @@ import java.util.List;
  * Created by farzad on 10/21/2015.
  */
 @Stateless
-/*@Remote(IReaderWrapperService.class)
+@Remote(IReaderWrapperService.class)
 @WebService
-@SOAPBinding(style = SOAPBinding.Style.RPC)*/
+@SOAPBinding(style = SOAPBinding.Style.RPC)
 public class ReaderWrapperService implements IReaderWrapperService {
 
 
