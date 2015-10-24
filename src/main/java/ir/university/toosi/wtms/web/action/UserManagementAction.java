@@ -4,9 +4,15 @@ package ir.university.toosi.wtms.web.action;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.personnel.Card;
+import ir.university.toosi.tms.model.entity.zone.Zone;
 import ir.university.toosi.tms.model.service.SystemConfigurationServiceImpl;
 import ir.university.toosi.tms.model.service.UserServiceImpl;
 import ir.university.toosi.tms.model.service.calendar.CalendarServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
+import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
+import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
+import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
 import ir.university.toosi.wtms.web.action.user.HandleUserAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.*;
@@ -19,6 +25,8 @@ import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.FacesUtil;
 import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.push.EventBus;
+import org.primefaces.push.EventBusFactory;
 //import org.richfaces.component.Mode;
 //import org.richfaces.component.Positioning;
 
@@ -54,6 +62,8 @@ public class UserManagementAction implements Serializable {
     private AccessControlAction accessControlAction;
     @Inject
     private HandleUserAction handleUserAction;
+    @Inject
+    private HandleMonitoringAction monitoringAction;
 
     @EJB
     private UserServiceImpl userService;
@@ -61,6 +71,15 @@ public class UserManagementAction implements Serializable {
     private SystemConfigurationServiceImpl configurationService;
     @EJB
     private CalendarServiceImpl calendarService;
+
+
+    @EJB
+    GatewayServiceImpl gatewayService;
+
+    @EJB
+    PDPServiceImpl pdpService;
+    @EJB
+    PersonServiceImpl personService;
 
     public static String SENTRY_COUNT = "10";
     public static final String INVALID_TRY = "invalid_try";
@@ -718,4 +737,28 @@ public class UserManagementAction implements Serializable {
         this.activeMenu = activeMenu;
     }
 
+    public void test() {
+        TrafficLog trafficLog = new TrafficLog();
+        trafficLog.setId(1);
+        trafficLog.setTime(String.valueOf(new Date().getTime()));
+        trafficLog.setDate(new Date().toString());
+        trafficLog.setExit(true);
+        trafficLog.setValid(true);
+        trafficLog.setGateway(gatewayService.findById(7));
+        trafficLog.setPdp(pdpService.findById(8));
+        trafficLog.setPerson(personService.findById(5));
+        trafficLog.setCard(new Card());
+        trafficLog.setFinger(true);
+        trafficLog.setLast(true);
+        trafficLog.setOffline(false);
+        trafficLog.setPictures("");
+        trafficLog.setDeleted("0");
+        trafficLog.setStatus("c");
+        trafficLog.setEffectorUser("admin");
+        trafficLog.setZone(new Zone());
+        trafficLog.setCurrentLang(new Languages());
+        trafficLog.setVideo("");
+        monitoringAction.sendMessage(trafficLog);
+
+    }
 }

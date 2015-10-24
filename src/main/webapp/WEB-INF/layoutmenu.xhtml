@@ -11,9 +11,11 @@
                 <p:submenu id="test" label="test" icon="icon-menu">
 
                     <p:menuitem id="finger" value="finger" icon="icon-verified_user"
-                                action="#{handlePDPAction.fingerPage}"/>
-                    <p:menuitem id="synch" value="synch" icon="icon-verified_user"
-                                action="#{handlePDPAction.synch}"/>
+                                action="#{me.test}"/>
+                    <p:menuitem id="sent" value="sentry" icon="icon-verified_user"
+                                action="#{handleMonitoringAction.beginSentry}"/>
+                    <p:menuitem id="cont" value="count" icon="icon-verified_user"
+                                action="#{counterView.beginCount}"/>
                 </p:submenu>
                 <p:submenu id="usermanagemen" label="user Management" icon="icon-menu">
                     <p:menuitem id="rm_dashboard" value="Dashboard" icon="icon-dvr"/>

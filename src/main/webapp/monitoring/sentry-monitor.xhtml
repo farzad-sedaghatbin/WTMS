@@ -9,103 +9,97 @@
 
     <ui:define name="content">
 
-
         <h:form id="trafficLogList">
-            <h:inputHidden id="logs" value="#{handleMonitoringAction.trafficLogsbygate}"/>
-            <p:socket onMessage="handleMessage" channel="/notify"/>
-
-            <script type="text/javascript">
-                function handleMessage(trafficlog) {
-                    document.getElementById('trafficLogList:logs').value = trafficlog;
+            <script type="application/javascript">
+                function removeRow(id) {
+                    document.getElementById(id).deleteRow(0);
                 }
+
             </script>
+            <p:socket channel="/notify">
 
-            <p:outputPanel ajaxRendered="true" id="messages">
+                <p:ajax update="test" onstart="removeRow('containertable')" event="message"/>
+            </p:socket>
 
-                <table border="0" cellpadding="3" cellspacing="3" width="90%" dir="#{me.direction}" id="container">
+            <table border="0" cellpadding="3" cellspacing="3" width="90%" dir="#{me.direction}" id="containertable">
 
 
-                    <tr valign="top">
-                        <td nowrap="nowrap">
-                            <p:commandButton value="maximize"
-                                             execute="@this"
-                                             limitRender="true"
-                                             immediate="true"
-                                             oncomplete="newWindow('/WTMS/monitoring/sentry-monitor-popup.htm','بزرگنمایی',window.screen.width ,window.screen.height,'yes','no','no','no','no','no','no');">
-                                <p:tooltip layout="block"
-                                           styleClass="pTitleText">maximize</p:tooltip>
-                            </p:commandButton>
-                        </td>
-                    </tr>
-                    <tr valign="top">
+                <tr valign="top">
+                    <td nowrap="nowrap">
+                        <p:commandButton value="maximize"
+                                         execute="@this"
+                                         immediate="true"
+                                         oncomplete="newWindow('/WTMS/monitoring/sentry-monitor-popup.htm','بزرگنمایی',window.screen.width ,window.screen.height,'yes','no','no','no','no','no','no');">
+                            <p:tooltip layout="block"
+                                       styleClass="pTitleText">maximize</p:tooltip>
+                        </p:commandButton>
+                    </td>
+                </tr>
+                <tr valign="top">
 
+                    <p:outputPanel id="test">
                         <ui:repeat value="#{handleMonitoringAction.trafficLogsbygate}" var="item">
-                            <td align="#{me.align}" width="#{handleMonitoringAction.width}" style="position: relative;">
-                                <h:commandButton image="/images/confirm.png"
-                                                 action="#{handleMonitoringAction.forceOpen(item)}"/>
-                                <br/>
+                            <td>
+                            <h:commandButton image="/images/confirm.png"
+                                             action="#{handleMonitoringAction.forceOpen(item)}"/>
 
-                                    <p:dataTable value="#{item}"
-                                                 keepSaved="true"
-                                                 emptyMessage="#{bundle.empty_message}"
-                                                 sortMode="single"
-                                                 var="trafficLog"
-                                                 rows="#{handleMonitoringAction.sentryCount}"
-                                                 update="commentPanel commentPanel2"
-                                                 onrowdblclick="highlight(#{p:element('editLink);#{p:component('CommentPanel.show();"
-                                                 style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                                 rowClasses="ROW1,ROW2">
+                            <p:dataTable value="#{item}"
+                                         keepSaved="true"
+                                         emptyMessage="#{bundle.empty_message}"
+                                         sortMode="single"
+                                         var="trafficLog"
+                                         rows="#{handleMonitoringAction.sentryCount}"
+                                         onrowdblclick="PF('CommentPanel').show()"
+                                         style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
+                                         rowClasses="ROW1,ROW2">
 
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="#{bundle.person}"/>
+                                    </f:facet>
+                                    <h:outputText escape="true" value="#{trafficLog.name}"/>
 
-                                        <p:column>
-                                            <f:facet name="header">
-                                                <h:outputText escape="true" value="#{bundle.person}"/>
-                                            </f:facet>
-                                            <h:outputText escape="true" value="#{trafficLog.name}"/>
+                                    <p:commandLink id="editLink" value="#{trafficLog.name}"
+                                                   styleClass="withoutUnderlineLink"
+                                                   execute="@this"
+                                                   limitRender="true"
+                                                   style="display: none"
+                                                   action="#{handleMonitoringAction.selectForComment(trafficLog)}"/>
 
-                                            <p:commandLink id="editLink" value="#{trafficLog.name}"
-                                                           update="operationArea, commentPanel"
-                                                           styleClass="withoutUnderlineLink"
-                                                           execute="@this"
-                                                           limitRender="true"
-                                                           style="display: none"
-                                                           action="#{handleMonitoringAction.selectForComment(trafficLog)}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="#{bundle.pdp}"/>
+                                    </f:facet>
+                                    <h:outputText escape="true" value="#{trafficLog.pdpName}"/>
 
-                                        </p:column>
-                                        <p:column>
-                                            <f:facet name="header">
-                                                <h:outputText escape="true" value="#{bundle.pdp}"/>
-                                            </f:facet>
-                                            <h:outputText escape="true" value="#{trafficLog.pdpName}"/>
-
-                                        </p:column>
-                                        <p:column>
-                                            <f:facet name="header">
-                                                <h:outputText escape="true" value="#{bundle.time}"/>
-                                            </f:facet>
-                                            <h:outputText escape="true" value="#{trafficLog.time}"/>
-                                        </p:column>
-                                        <p:column>
-                                            <f:facet name="header">
-                                                <h:outputText escape="true" value="#{bundle.status}"/>
-                                            </f:facet>
-                                            <h:graphicImage
-                                                    value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                                        </p:column>
-                                        <p:column>
-                                            <f:facet name="header">
-                                                <h:outputText escape="true" value="type"/>
-                                            </f:facet>
-                                            <h:graphicImage
-                                                    value="#{trafficLog.exit eq 'true' ? '/images/s_default.png':'/images/s_go.png'}"/>
-                                        </p:column>
-                                    </p:dataTable>
-
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="#{bundle.time}"/>
+                                    </f:facet>
+                                    <h:outputText escape="true" value="#{trafficLog.time}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="#{bundle.status}"/>
+                                    </f:facet>
+                                    <h:graphicImage
+                                            value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText escape="true" value="type"/>
+                                    </f:facet>
+                                    <h:graphicImage
+                                            value="#{trafficLog.exit eq 'true' ? '/images/s_default.png':'/images/s_go.png'}"/>
+                                </p:column>
+                            </p:dataTable>
                             </td>
                         </ui:repeat>
-                    </tr>
-                </table>
-            </p:outputPanel>
+                    </p:outputPanel>
+                </tr>
+            </table>
         </h:form>
     </ui:define>
 </ui:composition>

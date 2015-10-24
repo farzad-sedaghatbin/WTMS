@@ -1,10 +1,6 @@
 package ir.university.toosi.wtms.web.action.monitoring;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ir.university.toosi.tms.model.service.CommentServiceImpl;
 import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
@@ -23,6 +19,8 @@ import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.LangUtil;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.push.EventBus;
+import org.primefaces.push.EventBusFactory;
 import org.primefaces.push.annotation.OnMessage;
 import org.primefaces.push.annotation.PushEndpoint;
 import org.primefaces.push.impl.JSONEncoder;
@@ -33,6 +31,7 @@ import org.primefaces.push.impl.JSONEncoder;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -45,9 +44,8 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.*;
 
-@PushEndpoint("/notify")
 @Named(value = "handleMonitoringAction")
-@ApplicationScoped
+@SessionScoped
 public class HandleMonitoringAction implements Serializable {
 
     @Inject
@@ -59,10 +57,6 @@ public class HandleMonitoringAction implements Serializable {
     private HandleCommentAction handleCommentAction;
     @Inject
     private HandlePersonAction handlePersonAction;
-
-
-    //    @Push(topic = CDI_PUSH_TOPIC)
-    private Event<SentryDataModel> pushEvent;
 
 
     @EJB
@@ -84,6 +78,7 @@ public class HandleMonitoringAction implements Serializable {
     private int personPage;
     private int page;
     private List<TrafficLog> eventLogList = null;
+    private List<Integer> loops= new ArrayList<>();
     private List<List<DataModel<SentryDataModel>>> trafficLogs = null;
     private SentryDataModel currentSentryDataModel;
     private TrafficLog currentTrafficLog;
@@ -102,14 +97,13 @@ public class HandleMonitoringAction implements Serializable {
     private String endMinute;
     private String endSecond;
     private Hashtable<Long, LinkedList<SentryDataModel>> sentries = new Hashtable<>();
-    private List<List<SentryDataModel>> trafficLogsbygate = new ArrayList<>();
+    private volatile  List<List<SentryDataModel>> trafficLogsbygate = new ArrayList<>();
+    private volatile  List<List<SentryDataModel>> cachedTrafficLogsbygate = new ArrayList<>();
     private long sentryCount;
 
     @PostConstruct
     public void init() {
         try {
-//            TopicsContext topicsContext = TopicsContext.lookup();
-//            topicsContext.getOrCreateTopic(new TopicKey(CDI_PUSH_TOPIC));
             sentryCount = Long.valueOf(me.SENTRY_COUNT);
 
         } catch (Exception e) {
@@ -117,10 +111,10 @@ public class HandleMonitoringAction implements Serializable {
         }
     }
 
-    @OnMessage
-    public List<List<SentryDataModel>> sendMessage(TrafficLog log) {
+
+    public void sendMessage(TrafficLog log) {
         if (log == null || log.getGateway() == null || log.getPerson() == null)
-            return trafficLogsbygate;
+            return;
 
         LinkedList<SentryDataModel> sentryDataModels = sentries.get(log.getPdp().getId());
         if (sentryDataModels != null) {
@@ -138,13 +132,20 @@ public class HandleMonitoringAction implements Serializable {
             sentryDataModels.addFirst(dataModel);
             sentries.put(log.getPdp().getId(), sentryDataModels);
             trafficLogsbygate = new ArrayList<>();
+            loops=new ArrayList<>();
+            int i=0;
             for (Queue<SentryDataModel> dataModels : sentries.values()) {
                 trafficLogsbygate.add(new ArrayList<>(dataModels));
+                loops.add(i++);
             }
 
         }
 
-        return trafficLogsbygate;
+
+        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+        eventBus.publish("/notify", new Boolean(true));
+        ;
+        cachedTrafficLogsbygate= new ArrayList<>(trafficLogsbygate);
     }
 
     public void forceOpen(DataModel<SentryDataModel> gate) {
@@ -218,10 +219,10 @@ public class HandleMonitoringAction implements Serializable {
         return "monitoring";
     }
 
-    public String beginSentry() {
+    public void beginSentry() {
         me.setActiveMenu(MenuType.SENTRY);
         initialize();
-        return "sentry";
+        me.redirect("/monitoring/sentry-monitor.xhtml");
     }
 
     public void trackByPerson() {
@@ -391,14 +392,6 @@ public class HandleMonitoringAction implements Serializable {
 
     public void setGeneralHelper(GeneralHelper generalHelper) {
         this.generalHelper = generalHelper;
-    }
-
-    public Event<SentryDataModel> getPushEvent() {
-        return pushEvent;
-    }
-
-    public void setPushEvent(Event<SentryDataModel> pushEvent) {
-        this.pushEvent = pushEvent;
     }
 
     public Hashtable<Long, LinkedList<SentryDataModel>> getSentries() {
@@ -597,10 +590,29 @@ public class HandleMonitoringAction implements Serializable {
     }
 
     public List<List<SentryDataModel>> getTrafficLogsbygate() {
+        if(trafficLogsbygate.size()==0){
+            trafficLogsbygate= cachedTrafficLogsbygate;
+        }
         return trafficLogsbygate;
     }
 
     public void setTrafficLogsbygate(List<List<SentryDataModel>> trafficLogsbygate) {
         this.trafficLogsbygate = trafficLogsbygate;
+    }
+
+    public List<Integer> getLoops() {
+        return loops;
+    }
+
+    public void setLoops(List<Integer> loops) {
+        this.loops = loops;
+    }
+
+    public List<List<SentryDataModel>> getCachedTrafficLogsbygate() {
+        return cachedTrafficLogsbygate;
+    }
+
+    public void setCachedTrafficLogsbygate(List<List<SentryDataModel>> cachedTrafficLogsbygate) {
+        this.cachedTrafficLogsbygate = cachedTrafficLogsbygate;
     }
 }
