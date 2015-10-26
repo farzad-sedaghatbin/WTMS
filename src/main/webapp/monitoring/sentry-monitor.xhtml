@@ -10,22 +10,20 @@
     <ui:define name="content">
 
         <h:form id="trafficLogList">
-            <script type="application/javascript">
-                function removeRow(id) {
-                    document.getElementById(id).deleteRow(0);
-                }
 
-            </script>
-            <p:socket channel="/notify">
+            <!--<p:socket channel="/notify"/>-->
 
-                <p:ajax update="test" onstart="removeRow('containertable')" event="message"/>
-            </p:socket>
-
-            <table border="0" cellpadding="3" cellspacing="3" width="90%" dir="#{me.direction}" id="containertable">
-
-
-                <tr valign="top">
-                    <td nowrap="nowrap">
+            <!--<script type="application/javascript">-->
+            <!--function click(){-->
+            <!--document.getElementById("myBtn").click();-->
+            <!--}-->
+            <!--</script>-->
+            <!--<h:commandButton style="display:none" id="myBtn" >-->
+            <!--<f:ajax render="test"/>-->
+            <!--</h:commandButton>-->
+            <table>
+                <tr>
+                    <td>
                         <p:commandButton value="maximize"
                                          execute="@this"
                                          immediate="true"
@@ -35,66 +33,61 @@
                         </p:commandButton>
                     </td>
                 </tr>
-                <tr valign="top">
-
+                <tr>
                     <p:outputPanel id="test">
                         <ui:repeat value="#{handleMonitoringAction.trafficLogsbygate}" var="item">
                             <td>
-                            <h:commandButton image="/images/confirm.png"
-                                             action="#{handleMonitoringAction.forceOpen(item)}"/>
+                                <h:commandButton image="/images/confirm.png"
+                                                 action="#{handleMonitoringAction.forceOpen(item)}"/>
 
-                            <p:dataTable value="#{item}"
-                                         keepSaved="true"
-                                         emptyMessage="#{bundle.empty_message}"
-                                         sortMode="single"
-                                         var="trafficLog"
-                                         rows="#{handleMonitoringAction.sentryCount}"
-                                         onrowdblclick="PF('CommentPanel').show()"
-                                         style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                         rowClasses="ROW1,ROW2">
+                                <p:dataTable value="#{item}"
+                                             emptyMessage="#{bundle.empty_message}"
+                                             sortMode="single"
+                                             var="trafficLog"
+                                             style="BORDER-COLLAPSE: collapse;text-align: center; width:100%">
 
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText escape="true" value="#{bundle.person}"/>
-                                    </f:facet>
-                                    <h:outputText escape="true" value="#{trafficLog.name}"/>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText escape="true" value="#{bundle.person}"/>
+                                        </f:facet>
+                                        <h:outputText escape="true" value="#{trafficLog.name}"/>
 
-                                    <p:commandLink id="editLink" value="#{trafficLog.name}"
-                                                   styleClass="withoutUnderlineLink"
-                                                   execute="@this"
-                                                   limitRender="true"
-                                                   style="display: none"
-                                                   action="#{handleMonitoringAction.selectForComment(trafficLog)}"/>
+                                        <p:commandLink id="editLink" value="#{trafficLog.name}"
+                                                       styleClass="withoutUnderlineLink"
+                                                       execute="@this"
+                                                       limitRender="true"
+                                                       style="display: none"
+                                                       action="#{handleMonitoringAction.selectForComment(trafficLog)}"/>
 
-                                </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText escape="true" value="#{bundle.pdp}"/>
-                                    </f:facet>
-                                    <h:outputText escape="true" value="#{trafficLog.pdpName}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText escape="true" value="#{bundle.pdp}"/>
+                                        </f:facet>
+                                        <h:outputText escape="true" value="#{trafficLog.pdpName}"/>
 
-                                </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText escape="true" value="#{bundle.time}"/>
-                                    </f:facet>
-                                    <h:outputText escape="true" value="#{trafficLog.time}"/>
-                                </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText escape="true" value="#{bundle.status}"/>
-                                    </f:facet>
-                                    <h:graphicImage
-                                            value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                                </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText escape="true" value="type"/>
-                                    </f:facet>
-                                    <h:graphicImage
-                                            value="#{trafficLog.exit eq 'true' ? '/images/s_default.png':'/images/s_go.png'}"/>
-                                </p:column>
-                            </p:dataTable>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText escape="true" value="#{bundle.time}"/>
+                                        </f:facet>
+                                        <h:outputText escape="true" value="#{trafficLog.time}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText escape="true" value="#{bundle.status}"/>
+                                        </f:facet>
+                                        <h:graphicImage
+                                                value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText escape="true" value="type"/>
+                                        </f:facet>
+                                        <h:graphicImage
+                                                value="#{trafficLog.exit eq 'true' ? '/images/s_default.png':'/images/s_go.png'}"/>
+                                    </p:column>
+                                </p:dataTable>
                             </td>
                         </ui:repeat>
                     </p:outputPanel>

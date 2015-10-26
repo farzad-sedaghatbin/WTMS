@@ -19,6 +19,9 @@ import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.LangUtil;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.context.RequestContext;
+import org.primefaces.model.DashboardModel;
+import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.push.EventBus;
 import org.primefaces.push.EventBusFactory;
 import org.primefaces.push.annotation.OnMessage;
@@ -140,12 +143,13 @@ public class HandleMonitoringAction implements Serializable {
             }
 
         }
-
-
-        EventBus eventBus = EventBusFactory.getDefault().eventBus();
-        eventBus.publish("/notify", new Boolean(true));
-        ;
         cachedTrafficLogsbygate= new ArrayList<>(trafficLogsbygate);
+
+//        RequestContext.getCurrentInstance().update("trafficLogList:test");
+            me.redirect("/monitoring/sentry-monitor.xhtml");
+
+//        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+//        eventBus.publish("/notify", new Boolean(true));
     }
 
     public void forceOpen(DataModel<SentryDataModel> gate) {
@@ -199,7 +203,7 @@ public class HandleMonitoringAction implements Serializable {
                 dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
                 trafficLogList.add(dataModel);
             }
-            trafficLogsbygate.add((new ArrayList<>(trafficLogList)));
+//            trafficLogsbygate.add((new ArrayList<>(trafficLogList)));
         }
 //                else{
 //                    notAccess.add(gateway);
@@ -615,4 +619,5 @@ public class HandleMonitoringAction implements Serializable {
     public void setCachedTrafficLogsbygate(List<List<SentryDataModel>> cachedTrafficLogsbygate) {
         this.cachedTrafficLogsbygate = cachedTrafficLogsbygate;
     }
+
 }
