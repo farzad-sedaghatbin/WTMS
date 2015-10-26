@@ -53,7 +53,7 @@
                 <p:column headerText="#{bundle.name}" sortBy="#{currentOrgan.name}" filterBy="#{currentOrgan.name}">
                     <h:outputText value="#{currentOrgan.name}"/>
                 </p:column>
-                <p:column headerText="code" sortBy="#{currentOrgan.code}" filterBy="#{currentOrgan.code}">
+                <p:column headerText="#{bundle.card_code}" sortBy="#{currentOrgan.code}" filterBy="#{currentOrgan.code}">
                     <h:outputText value="#{currentOrgan.code}"/>
                 </p:column>
                 <p:column headerText="#{bundle.type}" sortBy="#{currentOrgan.organType.titleText}" filterBy="#{currentOrgan.organType.titleText}">
@@ -64,7 +64,7 @@
                 </p:column>
             </p:treeTable>
 
-            <p:dialog header="Organ Info" widgetVar="organDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.organ}" widgetVar="organDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="organDetail" style="text-align:center;">
                     <f:facet name="header">
@@ -91,7 +91,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="title:"/>
+                                <h:outputText value="#{bundle.title}"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleOrganAction.disableFields}"
@@ -114,7 +114,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="inheritance:"/>
+                                <h:outputText value="#{bundle.inheritance}"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox value="#{handleOrganAction.inheritance}"
@@ -134,7 +134,7 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="Persons" widgetVar="PersonDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.persons}" widgetVar="PersonDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="persons" ajaxRendered="true">
                     <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
@@ -167,7 +167,7 @@
                 </p:outputPanel>
 
             </p:dialog>
-            <p:dialog header="Assign Rule" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.assign_rule}" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="assignRuleDetail" style="text-align:center;">
                     <p:dataTable id="assignRule" var="rule" value="#{handleOrganAction.rulePackageList}"
@@ -177,21 +177,21 @@
                             <h:outputText value="#{person.select_events}"/>
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{handleOrganAction.doAssignRule}" oncomplete="PF('assignRuleDialog').hide()" update=":form:organs"/>
-                        <p:column headerText="rule name">
+                        <p:column headerText="#{bundle.name}">
                             <h:outputText value="#{rule.name}"/>
                         </p:column>
-                        <p:column headerText="calendar name">
+                        <p:column headerText="#{bundle.calendar}">
                             <h:outputText value="#{rule.calendar.name}"/>
                         </p:column>
-                        <p:column headerText="anti pass back">
+                        <p:column headerText="#{bundle.antipassback}">
                             <h:graphicImage
                                     value="#{rule.aniPassBack ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
-                        <p:column headerText="allow exit">
+                        <p:column headerText="#{bundle.allow_exit}">
                             <h:graphicImage
                                     value="#{rule.allowExit ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
-                        <p:column headerText="allow exit gadget">
+                        <p:column headerText="#{bundle.allow_exit_gadget}">
                             <h:graphicImage
                                     value="#{rule.allowExitGadget ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>

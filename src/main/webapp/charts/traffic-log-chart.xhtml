@@ -5,8 +5,8 @@
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
         <h:form id="form">
-            <p:panel id="panel" header="Search Form" style="margin-bottom:10px;">
-                <h:outputText value="from time"/>
+            <p:panel id="panel" header="#{bundle.search}" style="margin-bottom:10px;">
+                <h:outputText value="#{bundle.from_time}"/>
                 <p:spinner value="#{handleTrafficLogChartAction.fromHour}"
                            step="1" maxValue="23" size="6" minValue="0"/>
                 :
@@ -16,7 +16,7 @@
                 <p:spinner value="#{handleTrafficLogChartAction.fromSec}"
                            step="1" maxValue="59" size="6" minValue="0"/>
                 <br/>
-                <h:outputText value="to time"/>
+                <h:outputText value="#{bundle.to_time}"/>
                 <p:spinner value="#{handleTrafficLogChartAction.toHour}"
                            step="1" maxValue="23" size="6" minValue="0"/>
                 :

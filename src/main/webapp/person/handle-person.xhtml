@@ -30,7 +30,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="firstname:"
+                                        value="#{bundle.firstname}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -47,7 +47,7 @@
 
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="lastname:"
+                                        value="#{bundle.lastname}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -65,7 +65,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="email:"
+                                        value="#{bundle.email}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -78,7 +78,7 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="mobile:"
+                                        value="#{bundle.mobile}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -92,7 +92,7 @@
                         <tr>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="personnelCode:"
+                                        value="#{bundle.personnel_code}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -107,7 +107,7 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="nationalCode:"
+                                        value="#{bundle.national_code}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -125,7 +125,7 @@
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
                                         rendered="#{not handlePersonAction.editable}"
-                                        value="password:"
+                                        value="#{bundle.password}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -138,7 +138,7 @@
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
                                         rendered="#{not handlePersonAction.editable}"
-                                        value="confirm-password:"
+                                        value="#{bundle.confirm_password}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -153,7 +153,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="address:"
+                                        value="#{bundle.address}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -164,7 +164,7 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="workStation:"
+                                        value="#{bundle.workstation}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
@@ -191,7 +191,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="employeeNo:" styleClass="textColor"/>
+                                        value="#{bundle.employee_number}" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
@@ -201,7 +201,7 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="employeeType:"
+                                        value="#{bundle.employee_type}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap" align="#{me.align}">
@@ -216,7 +216,7 @@
                         </tr>
                         <tr valign="top">
                             <td nowrap="nowrap">
-                                <h:outputText escape="true" value="folderNo:" styleClass="textColor"/>
+                                <h:outputText escape="true" value="#{bundle.folder_number}" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
@@ -226,7 +226,7 @@
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="intenalTel:" styleClass="textColor"/>
+                                        value="#{bundle.internal_tel}" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
@@ -240,7 +240,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="post:"
+                                        value="#{bundle.post}"
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap" align="#{me.align}">
@@ -252,7 +252,7 @@
                                 </h:selectOneMenu>
                             </td>
                             <td nowrap="nowrap">
-                                <h:outputText escape="true" value="assistType:"
+                                <h:outputText escape="true" value="#{bundle.assist_type}"
                                               styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap" align="#{me.align}">
@@ -268,7 +268,7 @@
                         <tr valign="top">
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
-                                        value="description:" styleClass="textColor"/>
+                                        value="#{bundle.description}" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:inputTextarea dir="#{me.direction}"
@@ -313,7 +313,7 @@
         </table>
 </p:tab>
 
-<p:tab header="picture">
+<p:tab header="#{bundle.picture}">
 
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
             <tr>
@@ -345,13 +345,13 @@
                         <f:param value="#{handlePersonAction.time}" name="time"/>
                     </p:graphicImage>
                     <br/>
-                    <p:commandLink value="delete-picture"
+                    <p:commandLink value="#{bundle.remove_picture}"
                                      rendered="#{handlePersonAction.havePicture and handlePersonAction.editable}"
                                      action="#{handlePersonAction.deletePicture}"
                                      update="personPicture"/>
                 </td>
                 <td>
-                    <p:commandButton value="unload" rendered="false"
+                    <p:commandButton value="#{bundle.remove}" rendered="false"
                                        action="#{handlePersonAction.unsetPicture}"
                                        update="handlePanel"/>
                 </td>
@@ -359,7 +359,7 @@
         </table>
 </p:tab>
 
-<p:tab header="extraFeild">
+<p:tab header="#{bundle.extra_field}">
 
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
             <tr valign="top">
@@ -422,11 +422,11 @@
         </table>
 </p:tab>
 
-<p:tab header="cards" rendered="#{handlePersonAction.editable eq 'true'}">
+<p:tab header="#{bundle.cards}" rendered="#{handlePersonAction.editable eq 'true'}">
     <table border="0" cellpadding="3" cellspacing="3" align="#{me.align}">
         <tr valign="top">
             <td nowrap="nowrap">
-                <h:outputText escape="true" value="finger:" styleClass="textColor"/>
+                <h:outputText escape="true" value="#{bundle.finger}" styleClass="textColor"/>
             </td>
             <td nowrap="nowrap">
                 <h:graphicImage
@@ -442,7 +442,7 @@
 
                             <tr valign="top">
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="card:"
+                                    <h:outputText escape="true" value="#{bundle.card}"
                                                   styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
@@ -456,28 +456,28 @@
                             </tr>
                             <tr valign="top">
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="card_status" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="#{bundle.card_code}" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="#{me.getValue(card.cardStatus.code)}" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="#{card.cardStatus.code}" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="card_type" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="#{bundle.card_type}" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="#{me.getValue(card.cardType.code)}" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="#{card.cardType.code}" styleClass="textColor"/>
                                 </td>
                             </tr>
                             <tr valign="top">
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="startDate" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="#{bundle.start_date}" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
                                     <h:outputText escape="true" value="#{card.startDate}" converter="dateConverter"
                                                   styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
-                                    <h:outputText escape="true" value="expirationDate" styleClass="textColor"/>
+                                    <h:outputText escape="true" value="#{bundle.expiration_date}" styleClass="textColor"/>
                                 </td>
                                 <td nowrap="nowrap">
                                     <h:outputText escape="true" value="#{card.expirationDate}"
@@ -496,7 +496,7 @@
 <tr valign="top">
     <td nowrap="nowrap" colspan="4">
         <p:commandButton id="saveId"
-                           value="save"
+                           value="#{bundle.save}"
                            action="#{handlePersonAction.saveOrUpdate}"/>
         <h:commandButton id="resetId"
                          rendered="#{handlePersonAction.enabled eq 'true'}"

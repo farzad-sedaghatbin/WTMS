@@ -38,33 +38,33 @@
                 <p:column headerText="#{bundle.name}" sortBy="#{currentCard.name}" filterBy="#{currentCard.name}">
                     <h:outputText value="#{currentCard.name}"/>
                 </p:column>
-                <p:column headerText="code" sortBy="#{currentCard.code}" filterBy="#{currentCard.code}">
+                <p:column headerText="#{bundle.card_code}" sortBy="#{currentCard.code}" filterBy="#{currentCard.code}">
                     <h:outputText value="#{currentCard.code}"/>
                 </p:column>
-                <p:column headerText="card type" sortBy="#{currentCard.cardType.code}" filterBy="#{currentCard.cardType.code}">
+                <p:column headerText="#{bundle.card_type}" sortBy="#{currentCard.cardType.code}" filterBy="#{currentCard.cardType.code}">
                     <h:outputText value="#{currentCard.cardType.code}"/>
                 </p:column>
-                <p:column headerText="card status" sortBy="#{currentCard.cardStatus.code}" filterBy="#{currentCard.cardStatus.code}">
+                <p:column headerText="#{bundle.card_status}" sortBy="#{currentCard.cardStatus.code}" filterBy="#{currentCard.cardStatus.code}">
                     <h:outputText value="#{currentCard.cardStatus.code}"/>
                 </p:column>
-                <p:column headerText="start date" sortBy="#{currentCard.startDate}" filterBy="#{currentCard.startDate}">
+                <p:column headerText="#{bundle.start_date}" sortBy="#{currentCard.startDate}" filterBy="#{currentCard.startDate}">
                     <h:outputText value="#{currentCard.startDate}"/>
                 </p:column>
-                <p:column headerText="expiration date" sortBy="#{currentCard.expirationDate}" filterBy="#{currentCard.expirationDate}">
+                <p:column headerText="#{bundle.expiration_date}" sortBy="#{currentCard.expirationDate}" filterBy="#{currentCard.expirationDate}">
                     <h:outputText value="#{currentCard.expirationDate}"/>
                 </p:column>
-                <p:column headerText="person name" sortBy="#{currentCard.person.name}" filterBy="#{currentCard.person.name}">
+                <p:column headerText="#{bundle.firstname}" sortBy="#{currentCard.person.name}" filterBy="#{currentCard.person.name}">
                     <h:outputText value="#{currentCard.person.name}"/>
                 </p:column>
-                <p:column headerText="person lastname" sortBy="#{currentCard.person.lastName}" filterBy="#{currentCard.person.lastName}">
+                <p:column headerText="#{bundle.lastname}" sortBy="#{currentCard.person.lastName}" filterBy="#{currentCard.person.lastName}">
                     <h:outputText value="#{currentCard.person.lastName}"/>
                 </p:column>
-                <p:column headerText="personnel code" sortBy="#{currentCard.person.personnelNo}" filterBy="#{currentCard.person.personnelNo}">
+                <p:column headerText="#{bundle.personel_code}" sortBy="#{currentCard.person.personnelNo}" filterBy="#{currentCard.person.personnelNo}">
                     <h:outputText value="#{currentCard.person.personnelNo}"/>
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="Card Info" widgetVar="cardDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.card}" widgetVar="cardDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="cardDetail" style="text-align:center;">
                     <f:facet name="header">
@@ -169,7 +169,7 @@
                     </table>
                 </p:outputPanel>
             </p:dialog>
-            <p:dialog header="Card specilize" widgetVar="cardSpecilize" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.card_specialize}" widgetVar="cardSpecilize" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="specilize" style="text-align:center;">
                 <f:facet name="header">
@@ -203,9 +203,9 @@
 
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="cardCode"/>
+                                                <h:outputText escape="true" value="#{bundle.card_code}"/>
                                             </f:facet>
-                                            <h:outputText escape="true" value="#{card.code}"/>
+                                            <h:outputText escape="true" value="#{bundle.code}"/>
                                         </p:column>
                                     </p:pickList>
                                 </td>

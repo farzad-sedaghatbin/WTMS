@@ -29,7 +29,7 @@
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="shakhs"/>
+                                        <h:outputText escape="true" value="#{bundle.person}"/>
                                     </f:facet>
 
                                     <h:outputText escape="true" value="#{trafficLog.person.name}"/>
@@ -38,7 +38,7 @@
 
 
                                 </p:column>
-                                <p:column headerText="gateway name" sortBy="#{trafficLog.gateway.name}" filterBy="#{trafficLog.gateway.name}">
+                                <p:column headerText="#{bundle.name}" sortBy="#{trafficLog.gateway.name}" filterBy="#{trafficLog.gateway.name}">
                                     <h:outputText escape="true" value="#{trafficLog.gateway.name}"/>
                                 </p:column>
                                 <p:column headerText="#{bundle.time}" sortBy="#{trafficLog.time}" filterBy="#{trafficLog.time}">

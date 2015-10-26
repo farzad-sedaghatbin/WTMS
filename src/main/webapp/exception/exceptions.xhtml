@@ -43,7 +43,7 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="Exc Info" widgetVar="excDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.exception}" widgetVar="excDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="true">
                 <p:outputPanel id="excDetail" style="text-align:center;">
                     <f:facet name="header">
@@ -70,7 +70,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="to date:"/>
+                                <h:outputText value="#{bundle.to_date}"/>
                             </td>
                             <td>
                                 <p:inputText id="to" readonly="#{handleRuleExceptionAction.disableFields}"
@@ -79,7 +79,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="start time:"/>
+                                <h:outputText value="#{bundle.start_time}"/>
                                 <p:spinner id="startS" readonly="#{handleRuleExceptionAction.disableFields}"
                                            value="#{handleRuleExceptionAction.startSecond}" stepFactor="1"
                                            max="59" size="6" min="0"/>
@@ -96,7 +96,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="end time:"/>
+                                <h:outputText value="#{bundle.end_time}"/>
                                 <p:spinner id="endS" readonly="#{handleRuleExceptionAction.disableFields}"
                                            value="#{handleRuleExceptionAction.endSecond}" stepFactor="1"
                                            max="59" size="6" min="0"/>
@@ -113,17 +113,17 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="enterance count:"/>
+                                <h:outputText value="#{bundle.entrance_count}"/>
                             </td>
                             <td>
-                                <p:spinner id="enterance" readonly="#{handleRuleExceptionAction.disableFields}"
+                                <p:spinner id="#{bundle.entrance}" readonly="#{handleRuleExceptionAction.disableFields}"
                                            value="#{handleRuleExceptionAction.ruleEntranceCount}"
                                            stepFactor="1" max="99" size="6" min="0"/>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="exit count:"/>
+                                <h:outputText value="#{bundle.exit_count}"/>
                             </td>
                             <td>
                                 <p:spinner id="exit" readonly="#{handleRuleExceptionAction.disableFields}"
@@ -133,7 +133,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="rule deny:"/>
+                                <h:outputText value="#{bundle.rule_deny}"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox id="deny" disabled="#{handleRuleExceptionAction.disableFields}"

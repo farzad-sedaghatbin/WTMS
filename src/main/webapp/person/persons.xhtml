@@ -13,37 +13,37 @@
             <p:menuitem value="#{bundle.person}" url="#" />
         </p:breadCrumb>
 
-        <p:dialog header="PC Info" widgetVar="selectPDP" modal="true" showEffect="fade" hideEffect="fade"
+        <p:dialog header="#{bundle.sync}" widgetVar="selectPDP" modal="true" showEffect="fade" hideEffect="fade"
                   resizable="false">
             <ui:include src="selectlist-pdp.xhtml"/>
         </p:dialog>
 
-        <p:dialog header="PC Info" widgetVar="PersonPanel" modal="true" showEffect="fade" hideEffect="fade"
+        <p:dialog header="#{bundle.person}" widgetVar="PersonPanel" modal="true" showEffect="fade" hideEffect="fade"
                   resizable="false">
             <ui:include src="handle-person.xhtml"/>
         </p:dialog>
 
-        <p:dialog header="PC Info" widgetVar="AssignRulePanel" modal="true" showEffect="fade" hideEffect="fade"
+        <p:dialog header="#{bundle.assign_rule}" widgetVar="AssignRulePanel" modal="true" showEffect="fade" hideEffect="fade"
                   resizable="false">
             <ui:include src="assign-person-rule.xhtml"/>
         </p:dialog>
 
-        <p:dialog header="PC Info" widgetVar="rulePanel" modal="true" showEffect="fade" hideEffect="fade"
+        <p:dialog header="#{bundle.edit_rule}" widgetVar="rulePanel" modal="true" showEffect="fade" hideEffect="fade"
                   resizable="false">
             <ui:include src="../rule/handle-rule-edit.xhtml"/>
         </p:dialog>
 
-        <p:dialog header="PC Info" widgetVar="resetPanel" modal="true" showEffect="fade" hideEffect="fade"
+        <p:dialog header="#{bundle.reset_password}" widgetVar="resetPanel" modal="true" showEffect="fade" hideEffect="fade"
                   resizable="false">
             <ui:include src="reset-password.xhtml"/>
         </p:dialog>
 
-        <p:dialog header="PC Info" widgetVar="PersonDetailPanel" modal="true" showEffect="fade" hideEffect="fade"
+        <p:dialog header="#{bundle.detail}" widgetVar="PersonDetailPanel" modal="true" showEffect="fade" hideEffect="fade"
                   resizable="false">
             <ui:include src="detail-person.xhtml"/>
         </p:dialog>
 
-        <p:dialog header="PC Info" widgetVar="ConfirmationPanel" modal="true" showEffect="fade" hideEffect="fade"
+        <p:dialog header="#{bundle.confirmation}" widgetVar="ConfirmationPanel" modal="true" showEffect="fade" hideEffect="fade"
                   resizable="false">
             <f:facet name="header">
                 &#160;

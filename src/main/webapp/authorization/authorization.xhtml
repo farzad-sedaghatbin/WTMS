@@ -9,8 +9,8 @@
     <ui:define name="content">
         <h:form>
             <p:contextMenu for="commentTable">
-                <p:menuitem value="accept" icon="icon-done" actionListener="#{handleCommentAction.accept}"/>
-                <p:menuitem value="refuse" icon="icon-delete2" actionListener="#{handleCommentAction.refuse}"/>
+                <p:menuitem value="#{bundle.accept}" icon="icon-done" actionListener="#{handleCommentAction.accept}"/>
+                <p:menuitem value="#{bundle.refuse}" icon="icon-delete2" actionListener="#{handleCommentAction.refuse}"/>
             </p:contextMenu>
             <p:dataTable id="commentTable"
                          value="#{handleCommentAction.comments}"

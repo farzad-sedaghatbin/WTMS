@@ -12,9 +12,9 @@
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="zoneDetail" icon="ui-icon-search"
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.edit}"/>
-                <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search"
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleZoneAction.assignRule}"/>
-                <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleZoneAction.editRule}"/>
                 <p:menuitem value="#{bundle.delete}" update="zones" icon="ui-icon-close"
                             actionListener="#{handleZoneAction.doDelete}">
@@ -53,7 +53,7 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="Zone Info" widgetVar="zoneDialog" modal="true" showEffect="fade"
+            <p:dialog header="#{bundle.zone}" widgetVar="zoneDialog" modal="true" showEffect="fade"
                       hideEffect="fade" resizable="false">
                 <p:outputPanel id="zoneDetail" style="text-align:center;">
                     <table>
@@ -127,7 +127,7 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="Assign Rule" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.assign_rule}" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="true">
                 <p:outputPanel id="assignRuleDetail" style="text-align:center;">
                     <p:dataTable id="assignRule" var="rule" value="#{handleZoneAction.rulePackageList}"
@@ -137,21 +137,21 @@
                             <h:outputText value="#{person.select_events}"/>
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{handleZoneAction.selectNewRuleForZone}" update=":form:zones" oncomplete="PF('assignRuleDialog').hide()"/>
-                        <p:column headerText="rule name">
+                        <p:column headerText="#{bundle.name}">
                             <h:outputText value="#{rule.name}"/>
                         </p:column>
-                        <p:column headerText="calendar name">
+                        <p:column headerText="#{bundle.calendar}">
                             <h:outputText value="#{rule.calendar.name}"/>
                         </p:column>
-                        <p:column headerText="anti pass back">
+                        <p:column headerText="#{bundle.antipassback}">
                             <h:graphicImage
                                     value="#{rule.aniPassBack ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
-                        <p:column headerText="allow exit">
+                        <p:column headerText="#{bundle.allow_exit}">
                             <h:graphicImage
                                     value="#{rule.allowExit ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
-                        <p:column headerText="allow exit gadget">
+                        <p:column headerText="#{bundle.allow_exit_gadget}">
                             <h:graphicImage
                                     value="#{rule.allowExitGadget ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
@@ -159,7 +159,7 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="Edit Rule" widgetVar="editRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.edit_rule}" widgetVar="editRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <ui:include src="../rule/zone-rule-edit.xhtml"/>
             </p:dialog>

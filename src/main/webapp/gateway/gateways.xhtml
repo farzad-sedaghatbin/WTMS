@@ -12,9 +12,9 @@
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="gatewayDetail" icon="ui-icon-search"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.edit}"/>
-                <p:menuitem value="Assign Rule" update="assignRuleDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search"
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleGatewayAction.assignRule}"/>
-                <p:menuitem value="Edit Rule" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleGatewayAction.editRule}"/>
                 <p:menuitem value="#{bundle.special_status}" update="specialStatusTable" icon="ui-icon-search"
                             oncomplete="PF('gatewayStatus').show()" actionListener="#{handleGatewayAction.assignSpecialStatus}"/>
@@ -55,7 +55,7 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="Description Info" widgetVar="gatewayDialog" modal="true" showEffect="fade"
+            <p:dialog header="#{bundle.gateway}" widgetVar="gatewayDialog" modal="true" showEffect="fade"
                       hideEffect="fade" resizable="true">
                 <p:outputPanel id="gatewayDetail" style="text-align:center;">
                     <f:facet name="header">
@@ -124,7 +124,7 @@
                     </table>
                 </p:outputPanel>
             </p:dialog>
-            <p:dialog header="Status Info" widgetVar="gatewayStatus" modal="true" showEffect="fade"
+            <p:dialog header="#{bundle.special_status}" widgetVar="gatewayStatus" modal="true" showEffect="fade"
                       hideEffect="fade" resizable="true">
                 <p:outputPanel id="AssignSpecialStatus" ajaxRendered="true">
                         <table border="0" cellpadding="3" cellspacing="3" width="290"
@@ -143,7 +143,7 @@
 
                                         <p:column>
                                             <f:facet name="header">
-                                                <h:outputText escape="true" value="status_date"/>
+                                                <h:outputText escape="true" value="#{bundle.status_date}"/>
                                             </f:facet>
                                             <h:outputText escape="true" value="#{specialStatus.date}" converter="dateConverter"/>
                                         </p:column>
@@ -188,7 +188,7 @@
                                             <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
                                                 <tr valign="middle">
                                                     <td nowrap="nowrap" width="60px">
-                                                        <h:outputText escape="true" value="statusDate:"/>
+                                                        <h:outputText escape="true" value="#{bundle.status_date}"/>
                                                     </td>
                                                     <td nowrap="nowrap">
                                                         <p:inputText id="calendar" value="#{handleGatewayAction.statusDate}" styleClass="datepicker"/>
@@ -215,13 +215,13 @@
                                                 </tr>
                                                 <tr valign="bottom">
                                                     <td nowrap="nowrap" width="60px">
-                                                        <h:outputText escape="true" value="until"/>
+                                                        <h:outputText escape="true" value="#{bundle.until}"/>
                                                     </td>
                                                     <td nowrap="nowrap">
                                                         <p:spinner value="#{handleGatewayAction.until}"
                                                                                  step="1" maxValue="23"
                                                                                  inputSize="1" minValue="0"/>
-                                                        <h:outputLabel value="hour" />
+                                                        <h:outputLabel value="#{bundle.hour}" />
                                                     </td>
                                                 </tr>
                                                 <tr valign="middle">
@@ -262,7 +262,7 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="Assign Rule" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.assign_rule}" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="true">
                 <p:outputPanel id="assignRuleDetail" style="text-align:center;">
                     <p:dataTable id="assignRule" var="rule" value="#{handleGatewayAction.rulePackageList}"
@@ -272,21 +272,21 @@
                             <h:outputText value="#{person.select_events}"/>
                         </f:facet>
                         <p:ajax event="rowSelect" listener="#{handleGatewayAction.selectNewRuleForZone}" update=":form:gateways"/>
-                        <p:column headerText="rule name">
+                        <p:column headerText="#{bundle.name}">
                             <h:outputText value="#{rule.name}"/>
                         </p:column>
-                        <p:column headerText="calendar name">
+                        <p:column headerText="#{bundle.calendar}">
                             <h:outputText value="#{rule.calendar.name}"/>
                         </p:column>
-                        <p:column headerText="anti pass back">
+                        <p:column headerText="#{bundle.antipassback}">
                             <h:graphicImage
                                     value="#{rule.aniPassBack ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
-                        <p:column headerText="allow exit">
+                        <p:column headerText="#{bundle.allow_exit}">
                             <h:graphicImage
                                     value="#{rule.allowExit ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
-                        <p:column headerText="allow exit gadget">
+                        <p:column headerText="#{bundle.allow_exit_gadget}">
                             <h:graphicImage
                                     value="#{rule.allowExitGadget ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
@@ -295,7 +295,7 @@
             </p:dialog>
 
 
-            <p:dialog header="Edit Rule" widgetVar="editRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.edit_rule}" widgetVar="editRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="true">
                 <ui:include src="../rule/gateway-rule-edit.xhtml"/>
             </p:dialog>

@@ -10,7 +10,7 @@
                 <table border="0">
                     <tr valign="top">
                         <td nowrap="nowrap">
-                            <h:outputText value="rule name:"/>
+                            <h:outputText value="#{bundle.name}"/>
                             &#160;&#160;&#160;&#160;&#160;
                             <p:inputText id="ruleName"
                                          converter="persianConverter"
@@ -20,7 +20,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="rule date:"/>
+                                          value="#{bundle.date}"/>
                             &#160;&#160;&#160;&#160;&#160;
                             <p:selectOneMenu value="#{handleZoneAction.selectedCalendarIdTemp}" tabindex="2">
                                 <f:selectItems value="#{handleZoneAction.calendarItems}"/>
@@ -30,7 +30,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="anti pass back:" styleClass="textColor"/>
+                                          value="#{bundle.antipassback}" styleClass="textColor"/>
                             &#160;&#160;&#160;
                             <p:selectBooleanCheckbox value="#{handleZoneAction.ruleAniPassBack}" tabindex="3"/>
                         </td>
@@ -38,7 +38,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="allow exit:" styleClass="textColor"/>
+                                          value="#{bundle.allow_exit}" styleClass="textColor"/>
                             &#160;&#160;&#160;
                             <p:selectBooleanCheckbox value="#{handleZoneAction.ruleAllowExit}" tabindex="4"/>
                         </td>
@@ -46,7 +46,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="allow exit gadget:" styleClass="textColor"/>
+                                          value="#{bundle.allow_exit_gadget}" styleClass="textColor"/>
                             &#160;&#160;&#160;
                             <p:selectBooleanCheckbox value="#{handleZoneAction.ruleAllowExitGadget}" tabindex="5"/>
                         </td>
@@ -62,35 +62,35 @@
                                          style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="rule day type"/>
+                                        <h:outputText escape="true" value="#{bundle.daytype}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.dayType.title}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="rule start time"/>
+                                        <h:outputText escape="true" value="#{bundle.start_time}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.startTime}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="rule end time"/>
+                                        <h:outputText escape="true" value="#{bundle.end_time}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.endTime}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="allow exit gadget"/>
+                                        <h:outputText escape="true" value="#{bundle.allow_exit_gadget}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.entranceCount}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="rule exit count"/>
+                                        <h:outputText escape="true" value="#{bundle.exit_count}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.exitCount}"/>
                                 </p:column>
@@ -121,7 +121,7 @@
                                     <table>
                                         <tr valign="middle">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule day type"/>
+                                                <h:outputText escape="true" value="#{bundle.daytype}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:selectOneMenu value="#{handleZoneAction.dayTypeIdTemp}">
@@ -131,7 +131,7 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule start time"/>
+                                                <h:outputText escape="true" value="#{bundle.start_time}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleZoneAction.startSecond}"
@@ -148,7 +148,7 @@
 
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule end time"/>
+                                                <h:outputText escape="true" value="#{bundle.end_time}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleZoneAction.endSecond}"
@@ -163,7 +163,7 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule enterance count"/>
+                                                <h:outputText escape="true" value="#{bundle.entrance_count}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner
@@ -174,7 +174,7 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule exit count"/>
+                                                <h:outputText escape="true" value="#{bundle.exit_count}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner
@@ -185,7 +185,7 @@
                                         </tr>
                                         <tr>
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="deny:" styleClass="textColor"/>
+                                                <h:outputText escape="true" value="#{bundle.deny}" styleClass="textColor"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:selectBooleanCheckbox value="#{handleZoneAction.ruleDeny}"/>
@@ -194,7 +194,7 @@
                                         <tr valign="top">
                                             <td nowrap="nowrap">
                                                 <p:commandButton action="#{handleZoneAction.doAddNewRule}"
-                                                                 value="add rule"
+                                                                 value="#{bundle.add}"
                                                                  title="افزودن قانون"
                                                                  tabindex="6"
                                                                  update="form:ruleFrm:handleRulePanel"/>

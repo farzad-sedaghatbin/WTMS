@@ -33,7 +33,7 @@
                                             style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="row number"/>
+                                        <h:outputText escape="true" value="#{bundle.row_number}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{rowIndex + 1}"/>
                                 </p:column>
@@ -67,7 +67,7 @@
                                 <p:column sortBy="#{pdp.description}"
                                              sortOrder="#{handlePDPAction.pdpDescriptionOrder}">
                                     <f:facet name="header">
-                                        <p:commandLink value="description" update="pdpTable"
+                                        <p:commandLink value="#{bundle.description}" update="pdpTable"
                                                          action="#{handlePDPAction.sortByPdpDescription}"/>
                                         <br/>
                                         <p:inputText value="#{handlePDPAction.pdpDescriptionFilter}">
@@ -79,7 +79,7 @@
                                 <p:column sortBy="#{pdp.ip}"
                                              sortOrder="#{handlePDPAction.ipOrder}">
                                     <f:facet name="header">
-                                        <p:commandLink value="ip"
+                                        <p:commandLink value="#{bundle.ip}"
                                                          update="pdpTable"
                                                          action="#{handlePDPAction.sortByIp}"/>
                                         <br/>
@@ -95,12 +95,11 @@
                                                        page="#{handlePDPAction.page}"/>
                                 </f:facet>
                             </p:dataTable>
-                        </fieldset>
                     </td>
                 </tr>
                 <tr valign="top">
                     <td align="center" nowrap="nowrap">
-                        <h:commandButton value="synch"
+                        <h:commandButton value="#{bundle.sync}"
                                          execute="@this"
                                          limitRender="true"
                                          rendered="#{me.hasPermission('SYNCH')}"
