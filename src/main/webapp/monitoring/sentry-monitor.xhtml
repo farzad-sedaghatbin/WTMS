@@ -11,34 +11,32 @@
 
         <h:form id="trafficLogList">
 
-            <!--<p:socket channel="/notify"/>-->
+            <p:socket channel="/notify"/>
+            <p:socket channel="/notify">
 
-            <!--<script type="application/javascript">-->
-            <!--function click(){-->
-            <!--document.getElementById("myBtn").click();-->
-            <!--}-->
-            <!--</script>-->
-            <!--<h:commandButton style="display:none" id="myBtn" >-->
-            <!--<f:ajax render="test"/>-->
-            <!--</h:commandButton>-->
-            <table>
-                <tr>
-                    <td>
-                        <p:commandButton value="maximize"
-                                         execute="@this"
-                                         immediate="true"
-                                         oncomplete="newWindow('/WTMS/monitoring/sentry-monitor-popup.htm','بزرگنمایی',window.screen.width ,window.screen.height,'yes','no','no','no','no','no','no');">
-                            <p:tooltip layout="block"
-                                       styleClass="pTitleText">maximize</p:tooltip>
-                        </p:commandButton>
-                    </td>
-                </tr>
-                <tr>
-                    <p:outputPanel id="test">
+                <p:ajax update="test" event="message"/>
+            </p:socket>
+            <tr>
+                <td>
+                    <p:commandButton value="maximize"
+                                     execute="@this"
+                                     immediate="true"
+                                     oncomplete="newWindow('/WTMS/monitoring/sentry-monitor-popup.htm','بزرگنمایی',window.screen.width ,window.screen.height,'yes','no','no','no','no','no','no');">
+                        <p:tooltip layout="block"
+                                   styleClass="pTitleText">maximize</p:tooltip>
+                    </p:commandButton>
+                </td>
+            </tr>
+
+            <p:outputPanel id="test">
+                <table id="containertable">
+                    <tr>
+
                         <ui:repeat value="#{handleMonitoringAction.trafficLogsbygate}" var="item">
                             <td>
                                 <h:commandButton image="/images/confirm.png"
                                                  action="#{handleMonitoringAction.forceOpen(item)}"/>
+
 
                                 <p:dataTable value="#{item}"
                                              emptyMessage="#{bundle.empty_message}"
@@ -90,9 +88,10 @@
                                 </p:dataTable>
                             </td>
                         </ui:repeat>
-                    </p:outputPanel>
-                </tr>
-            </table>
+                    </tr>
+                </table>
+            </p:outputPanel>
+
         </h:form>
     </ui:define>
 </ui:composition>

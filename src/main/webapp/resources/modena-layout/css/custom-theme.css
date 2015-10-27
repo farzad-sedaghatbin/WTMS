@@ -1,0 +1,51 @@
+.GrayModena.Geometry{
+    direction: rtl;
+}
+
+#mobile-menu-button {
+    float: right;
+}
+
+#top-menu{
+    float: left;
+}
+
+#wrapper {
+    /*display: inline-block;*/
+}
+
+.layout-menu > li > a > i {
+    float: right;
+}
+
+.ui-paginator .ui-paginator-prev .ui-icon {
+    background-image: url("/modena-1.0.1/javax.faces.resource/images/right-one-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+}
+
+.ui-paginator .ui-paginator-next .ui-icon {
+    background-image: url("/modena-1.0.1/javax.faces.resource/images/left-one-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+}
+
+.ui-paginator .ui-paginator-last .ui-icon {
+    background-image: url("/modena-1.0.1/javax.faces.resource/images/left-double-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+}
+
+.ui-paginator .ui-paginator-first .ui-icon {
+    background-image: url("/modena-1.0.1/javax.faces.resource/images/right-double-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+}
+
+.ui-treetable .ui-icon-triangle-1-e {
+    background-image: url("/modena-1.0.1/javax.faces.resource/images/leftarrow-navy.svg.xhtml?ln=primefaces-modena");
+}
+
+#containertable tr {
+    vertical-align: top;
+}
+
+#top-menu li ul.active-menu{
+    left: 150px;
+}
+
+.icon-menu {
+    padding-left: 10px;
+}

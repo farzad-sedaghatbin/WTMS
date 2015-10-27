@@ -146,10 +146,10 @@ public class HandleMonitoringAction implements Serializable {
         cachedTrafficLogsbygate= new ArrayList<>(trafficLogsbygate);
 
 //        RequestContext.getCurrentInstance().update("trafficLogList:test");
-            me.redirect("/monitoring/sentry-monitor.xhtml");
+//            me.redirect("/monitoring/sentry-monitor.xhtml");
 
-//        EventBus eventBus = EventBusFactory.getDefault().eventBus();
-//        eventBus.publish("/notify", new Boolean(true));
+        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+        eventBus.publish("/notify", new Boolean(true));
     }
 
     public void forceOpen(DataModel<SentryDataModel> gate) {
@@ -166,7 +166,7 @@ public class HandleMonitoringAction implements Serializable {
         LinkedList<SentryDataModel> trafficLogList;
         List<Gateway> notAccess = new ArrayList<>();
         List<Long> pdpID = new ArrayList<>();
-        for (WorkGroup workGroup : me.getUser().getWorkGroups()) {
+        /*for (WorkGroup workGroup : me.getUser().getWorkGroups()) {
             for (Role role : workGroup.getRoles()) {
                 for (Permission permission : role.getPermissions()) {
                     if (permission.getPermissionType().equals(PermissionType.PDP)) {
@@ -174,9 +174,9 @@ public class HandleMonitoringAction implements Serializable {
                     }
                 }
             }
-        }
+        }*/
 
-        List<PDP> pdps = pdpService.getAllPdpbyIDs(pdpID);
+        List<PDP> pdps = pdpService.getAllPDPs();
         for (PDP pdp : pdps) {
             List<TrafficLog> traffic = logService.findByPDP(pdp.getId(), CalendarUtil.getDate(new Date()));
             SentryDataModel dataModel;
@@ -203,7 +203,7 @@ public class HandleMonitoringAction implements Serializable {
                 dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
                 trafficLogList.add(dataModel);
             }
-//            trafficLogsbygate.add((new ArrayList<>(trafficLogList)));
+            trafficLogsbygate.add((new ArrayList<>(trafficLogList)));
         }
 //                else{
 //                    notAccess.add(gateway);

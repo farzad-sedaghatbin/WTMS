@@ -21,6 +21,20 @@
             <a id="show-top-menu" class="ShowOnMobile ripplelink"><i class="icon-more_vert" id="active"></i><i
                     class="icon-close DispNone" id="passive"></i> </a>
             <ul id="top-menu">
+                <li>
+
+                    <a class="ripplelink"><i class="icon-power"></i> <span class="ShowOnMobile">System</span></a>
+                    <ul>
+                        <li><a href="#"><span class="Blue"><i
+                                class="icon-airline_seat_individual_suite Fs30 DispBlock"></i> Sleep Mode</span></a>
+                        </li>
+                        <li><a href="#"><span class="Orange"><i class="icon-track_changes Fs30 DispBlock"></i> Restart System</span></a>
+                        </li>
+                        <li><h:commandLink action="#{logoutAction.logout}"><span class="Red"><i
+                                class="icon-vpn_key Fs30 DispBlock"></i> <h:outputText
+                                value="#{bundle.logout}"/> </span></h:commandLink></li>
+                    </ul>
+                </li>
 
 
                 <li>
@@ -63,20 +77,6 @@
                         <li><a href="#"><i class="icon-settings"></i> تنظیمات سامانه</a></li>
                         <li><a href="#"><i class="icon-verified_user"></i> تنظیمات امنیتی</a></li>
                         <li><a href="#"><i class="icon-assignment_ind"></i>تنظیمات کاربران</a></li>
-                    </ul>
-                </li>
-                <li>
-
-                    <a class="ripplelink"><i class="icon-power"></i> <span class="ShowOnMobile">System</span></a>
-                    <ul>
-                        <li><a href="#"><span class="Blue"><i
-                                class="icon-airline_seat_individual_suite Fs30 DispBlock"></i> Sleep Mode</span></a>
-                        </li>
-                        <li><a href="#"><span class="Orange"><i class="icon-track_changes Fs30 DispBlock"></i> Restart System</span></a>
-                        </li>
-                        <li><h:commandLink action="#{logoutAction.logout}"><span class="Red"><i
-                                class="icon-vpn_key Fs30 DispBlock"></i> <h:outputText
-                                value="#{bundle.logout}"/> </span></h:commandLink></li>
                     </ul>
                 </li>
             </ul>
