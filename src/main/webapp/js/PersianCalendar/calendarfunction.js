@@ -13,3 +13,13 @@ $(document).ready(function(){
         buttonImageOnly: true
     });
 });
+
+function initDatePicker(){
+    $(".datepicker").datepicker(
+        {
+            dateFormat: "yy/mm/dd",
+            showOn: "button",
+            buttonImage: "../js/PersianCalendar/s_calendar.png",
+            buttonImageOnly: true
+        });
+}

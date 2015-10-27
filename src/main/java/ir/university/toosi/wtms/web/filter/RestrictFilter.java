@@ -17,47 +17,11 @@ import java.io.IOException;
  * @version : 0.8
  */
 
-@WebFilter(urlPatterns = {
-        "/authorization",
-        "/report",
-        "/business-rules",
-        "/calendar",
-        "/card",
-        "/comment",
-        "/operation",
-        "/event",
-        "/language",
-        "/lookup",
-        "/role",
-        "/user",
-        "/workgroup",
-        "/map",
-        "/menu",
-        "/monitoring",
-        "/organ",
-        "/pc",
-        "/person",
-        "/setting",
-        "/traffic",
-        "/zone",
-        "/bLookup/",
-        "/home.htm",
-        "/exception.htm",
-        "/password.htm",
-        "/template-popup.htm",
-        "/template-reset-password.htm",
-        "/template.htm",
-        "/menu/menu.htm",
-        "/change-password.htm",
-        "/progress.htm",
-        "/top.htm",
-        "/menuHandler",
-        "/rules"
-})
+
 public class RestrictFilter implements Filter {
 
-    @Inject
-    private GeneralHelper generalHelper;
+//    @Inject
+//    private GeneralHelper generalHelper;
 
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -70,11 +34,15 @@ public class RestrictFilter implements Filter {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("username") == null) {
+        String path = request.getRequestURI();
+        if (path.contains("/login.xhtml")){
+            filterChain.doFilter(request, response);
+        } else if (session == null || session.getAttribute("username") == null) {
             response.sendRedirect(request.getContextPath() + "/login.xhtml");
         } else {
+            filterChain.doFilter(request, response);
 //            User currentUser = generalHelper.getUserService().findByUsername(session.getAttribute("username").toString());
-            User currentUser =  generalHelper.getUserService().findByUsername(session.getAttribute("username").toString());
+//            User currentUser =  generalHelper.getUserService().findByUsername(session.getAttribute("username").toString());
             boolean flag = true;
 //            for(WorkGroup workGroup:currentUser.getWorkGroups()){
 //            for (Role role : workGroup.getRoles()) {
@@ -89,13 +57,6 @@ public class RestrictFilter implements Filter {
 //            if (currentUser == null || currentUser.getWorkGroups().iterator().next().getRoles().size() == 0) {
 //                flag = false;
 //            }
-            if (true) {
-                filterChain.doFilter(servletRequest, servletResponse);
-            } else {
-                session.invalidate();
-                response.sendRedirect(request.getRequestURL().substring(0, request.getRequestURL().indexOf(Configuration.getProperty("app.name")) + Configuration.getProperty("app.name").length()) + "/login.htm");
-            }
-
         }
     }
 

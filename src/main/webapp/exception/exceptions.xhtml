@@ -8,22 +8,27 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="excs">
-                <p:menuitem value="#{bundle.view}" update="excDetail" icon="ui-icon-search" oncomplete="PF('excDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="excDetail" icon="ui-icon-search"
+                            oncomplete="PF('excDialog').show()"
                             actionListener="#{handleRuleExceptionAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="excDetail" icon="ui-icon-search" oncomplete="PF('excDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="excDetail" icon="ui-icon-search"
+                            oncomplete="PF('excDialog').show()"
                             actionListener="#{handleRuleExceptionAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="excs" icon="ui-icon-close"
                             actionListener="#{handleRuleExceptionAction.doDelete}">
-                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert"/>
                 </p:menuitem>
             </p:contextMenu>
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes"
+                                 icon="ui-icon-check"/>
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no"
+                                 icon="ui-icon-close"/>
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" id="add" update="excDetail" actionListener="#{handleRuleExceptionAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="excDetail"
+                             actionListener="#{handleRuleExceptionAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('excDialog').show()"/>
 
             <p:dataTable id="excs" var="currentExc" value="#{handleRuleExceptionAction.ruleExceptionList}"
@@ -34,8 +39,9 @@
                          rowsPerPageTemplate="5,10,15"
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
-لیست                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
-                    <p:columnToggler datasource="excs" trigger="toggler" />
+                    لیست <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right"
+                                          icon="ui-icon-calculator"/>
+                    <p:columnToggler datasource="excs" trigger="toggler"/>
                 </f:facet>
 
                 <p:column headerText="#{bundle.name}" sortBy="#{currentExc.name}" filterBy="#{currentExc.name}">
@@ -44,12 +50,13 @@
             </p:dataTable>
 
             <p:dialog header="Exc Info" widgetVar="excDialog" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="true">
+                      resizable="true" onShow="initDatePicker()">
+
                 <p:outputPanel id="excDetail" style="text-align:center;">
                     <f:facet name="header">
                         <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
                     </f:facet>
-                    <table border="0">
+                    <table>
                         <tr>
                             <td>
                                 <h:outputText value="#{bundle.name}"/>
@@ -80,6 +87,8 @@
                         <tr>
                             <td>
                                 <h:outputText value="start time:"/>
+                            </td>
+                            <td>
                                 <p:spinner id="startS" readonly="#{handleRuleExceptionAction.disableFields}"
                                            value="#{handleRuleExceptionAction.startSecond}" stepFactor="1"
                                            max="59" size="6" min="0"/>
@@ -92,11 +101,12 @@
                                            value="#{handleRuleExceptionAction.startHour}"
                                            stepFactor="1" max="23" size="6" min="0"/>
                             </td>
-                            <td></td>
                         </tr>
                         <tr>
                             <td>
                                 <h:outputText value="end time:"/>
+                            </td>
+                            <td>
                                 <p:spinner id="endS" readonly="#{handleRuleExceptionAction.disableFields}"
                                            value="#{handleRuleExceptionAction.endSecond}" stepFactor="1"
                                            max="59" size="6" min="0"/>
@@ -109,7 +119,6 @@
                                            value="#{handleRuleExceptionAction.endHour}"
                                            stepFactor="6" max="23" size="6" min="0"/>
                             </td>
-                            <td></td>
                         </tr>
                         <tr>
                             <td>
