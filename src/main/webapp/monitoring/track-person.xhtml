@@ -37,12 +37,12 @@
                                                       value="#{person.name}"/>
                                     </p:column>
 
-                                    <p:column headerText="last name" sortBy="#{person.lastName}"
+                                    <p:column headerText="#{bundle.lastname}" sortBy="#{person.lastName}"
                                               filterBy="#{person.lastName}">
                                         <h:outputText escape="true" value="#{person.lastName}"/>
                                     </p:column>
 
-                                    <p:column headerText="personnel No" sortBy="#{person.personnelNo}"
+                                    <p:column headerText="#{bundle.personnel_number}" sortBy="#{person.personnelNo}"
                                               filterBy="#{person.personnelNo}">
                                         <h:outputText escape="true" value="#{person.personnelNo}"/>
                                     </p:column>
@@ -152,7 +152,7 @@
                 <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
                     <tr valign="bottom">
                         <td nowrap="nowrap" width="60">
-                            <h:outputText escape="true" value="startTime"/>
+                            <h:outputText escape="true" value="#{bundle.start_time}"/>
                         </td>
                         <td nowrap="nowrap">
                             <p:spinner value="#{handleMonitoringAction.startSecond}"
@@ -168,7 +168,7 @@
 
                     <tr valign="bottom">
                         <td nowrap="nowrap" width="60">
-                            <h:outputText escape="true" value="endTime"/>
+                            <h:outputText escape="true" value="#{bundle.end_time}"/>
                         </td>
                         <td nowrap="nowrap">
                             <p:spinner value="#{handleMonitoringAction.endSecond}"

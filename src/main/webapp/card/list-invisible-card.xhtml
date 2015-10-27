@@ -54,7 +54,7 @@
                 <p:column sortBy="#{card.code}"
                           sortOrder="#{handleCardAction.cardCodeOrder}">
                     <f:facet name="header">
-                        <p:commandLink value="card_code" update="cardTable"
+                        <p:commandLink value="#{bundle.card_code}" update="cardTable"
                                        execute="@this"
                                        limitRender="true"
                                        action="#{handleCardAction.sortByCardCode}"/>
@@ -74,7 +74,7 @@
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText escape="true" value="card_type"/>
+                        <h:outputText escape="true" value="#{bundle.card_type}"/>
                         <br/>
                         <h:inputText value="#{handleCardAction.cardTypeCodeFilter}" size="10">
                             <p:ajax event="blur" update="cardTable" execute="@this" limitRender="true"
@@ -87,7 +87,7 @@
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText escape="true" value="card_status"/>
+                        <h:outputText escape="true" value="#{bundle.card_status}"/>
                         <br/>
                         <h:inputText value="#{handleCardAction.cardStatusCodeFilter}" size="10">
                             <p:ajax event="blur" update="cardTable" execute="@this" limitRender="true"
@@ -95,7 +95,7 @@
                         </h:inputText>
                     </f:facet>
 
-                    <h:outputText escape="true" value="#{ard.cardStatus.code}"/>
+                    <h:outputText escape="true" value="#{card.cardStatus.code}"/>
                 </p:column>
 
                 <p:column sortBy="#{card.startDate}"
@@ -184,7 +184,7 @@
                                     page="#{handleCardAction.page}"/>
                 </f:facet>
             </p:dataTable>
-            <p:dialog header="Card Info" widgetVar="cardDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.card}" widgetVar="cardDialog" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="cardDetail" style="text-align:center;">
                     <f:facet name="header">

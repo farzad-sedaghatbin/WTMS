@@ -21,7 +21,7 @@
                     <p:columnToggler datasource="settingTable" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="parameter description" sortBy="#{setting.parameter.description}" filterBy="#{setting.parameter.description}">
+                <p:column headerText="#{bundle.description}" sortBy="#{setting.parameter.description}" filterBy="#{setting.parameter.description}">
                     <h:outputText value="#{setting.parameter.description}"/>
                 </p:column>
                 <p:column>

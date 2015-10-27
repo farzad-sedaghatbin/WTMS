@@ -74,14 +74,14 @@
                         <td nowrap="nowrap" align="center" colspan="4">
                             <p:commandButton id="saveId"
                                                tabindex="6"
-                                               value="'save"
+                                               value="'#{bundle.save}"
                                                action="#{handlePersonAction.doAssignRule}"/>
                             <p:commandButton id="resetId"
                                                limitRender="true"
                                                rendered="#{handlePersonAction.enabled eq 'true'}"
                                                tabindex="7"
                                                action="#{handlePersonAction.begin}"
-                                               value="'revert"/>
+                                               value="'#{bundle.revert}"/>
                         </td>
                     </tr>
                 </table>

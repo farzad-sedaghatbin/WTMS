@@ -4,7 +4,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog header="Rule Package Info" widgetVar="rulePackageDialog" modal="true" showEffect="fade" hideEffect="fade"
+    <p:dialog header="#{bundle.rule}" widgetVar="rulePackageDialog" modal="true" showEffect="fade" hideEffect="fade"
               resizable="false">
         <p:outputPanel id="rulePackageDetailPanel" style="text-align:center;">
             <p:panelGrid columns="2" columnClasses="label,value">
@@ -15,7 +15,7 @@
                 <h:outputText value="#{bundle.name}"/>
                 <p:inputText readonly="#{handleRuleAction.disableFields}" value="#{handleRuleAction.name}"/>
 
-                <h:outputText value="selectedCalendarIdTemp:"/>
+                <h:outputText value="#{bundle.calendar_select}"/>
                 <h:selectOneMenu id="calendarIdTempSelection"
                                  value="#{handleRuleAction.selectedCalendarIdTemp}"
                                  required="true"
@@ -23,15 +23,15 @@
                     <f:selectItems value="#{handleRuleAction.calendarItems}"/>
                 </h:selectOneMenu>
 
-                <h:outputText value="ruleAniPassBack:"/>
+                <h:outputText value="#{bundle.antipassback}"/>
                 <p:selectBooleanCheckbox readonly="#{handleRuleAction.disableFields}"
                                          value="#{handleRuleAction.ruleAniPassBack}"/>
 
-                <h:outputText value="ruleAllowExit:"/>
+                <h:outputText value="#{bundle.allow_exit}"/>
                 <p:selectBooleanCheckbox readonly="#{handleRuleAction.disableFields}"
                                          value="#{handleRuleAction.ruleAllowExit}"/>
 
-                <h:outputText value="ruleAllowExitGadget:"/>
+                <h:outputText value="#{bundle.allow_exit_gadget}"/>
                 <p:selectBooleanCheckbox readonly="#{handleRuleAction.disableFields}"
                                          value="#{handleRuleAction.ruleAllowExitGadget}"/>
 
@@ -57,35 +57,35 @@
                          selectionMode="single">
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="rule_dayType"/>
+                        <h:outputText value="#{bundle.daytype}"/>
                     </f:facet>
                     <h:outputText value="#{ruleTemp.dayType.title}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="rule_startTime"/>
+                        <h:outputText value="#{bundle.start_time}"/>
                     </f:facet>
                     <h:outputText value="#{ruleTemp.startTime}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="rule_endTime"/>
+                        <h:outputText value="#{bundle.end_time}"/>
                     </f:facet>
                     <h:outputText value="#{ruleTemp.endTime}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="rule_entranceCount"/>
+                        <h:outputText value="#{bundle.entrance_count}"/>
                     </f:facet>
                     <h:outputText value="#{ruleTemp.entranceCount}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="rule_exitCount"/>
+                        <h:outputText value="#{bundle.exit_count}"/>
                     </f:facet>
                     <h:outputText value="#{ruleTemp.exitCount}"/>
                 </p:column>
@@ -122,7 +122,7 @@
                                 <table>
                                     <tr valign="middle">
                                         <td nowrap="nowrap">
-                                            <h:outputText escape="true" value="rule day type"/>
+                                            <h:outputText escape="true" value="#{bundle.daytype}"/>
                                         </td>
                                         <td nowrap="nowrap">
                                             <p:selectOneMenu value="#{handleRuleAction.dayTypeIdTemp}">
@@ -132,7 +132,7 @@
                                     </tr>
                                     <tr valign="bottom">
                                         <td nowrap="nowrap">
-                                            <h:outputText escape="true" value="rule start time"/>
+                                            <h:outputText escape="true" value="#{bundle.start_time}"/>
                                         </td>
                                         <td nowrap="nowrap">
                                             <p:spinner value="#{handleRuleAction.startSecond}"
@@ -149,7 +149,7 @@
 
                                     <tr valign="bottom">
                                         <td nowrap="nowrap">
-                                            <h:outputText escape="true" value="rule end time"/>
+                                            <h:outputText escape="true" value="#{bundle.end_time}"/>
                                         </td>
                                         <td nowrap="nowrap">
                                             <p:spinner value="#{handleRuleAction.endSecond}"
@@ -164,7 +164,7 @@
                                     </tr>
                                     <tr valign="bottom">
                                         <td nowrap="nowrap">
-                                            <h:outputText escape="true" value="rule enterance count"/>
+                                            <h:outputText escape="true" value="#{bundle.entrance_count}"/>
                                         </td>
                                         <td nowrap="nowrap">
                                             <p:spinner
@@ -175,7 +175,7 @@
                                     </tr>
                                     <tr valign="bottom">
                                         <td nowrap="nowrap">
-                                            <h:outputText escape="true" value="rule exit count"/>
+                                            <h:outputText escape="true" value="#{bundle.exit_count}"/>
                                         </td>
                                         <td nowrap="nowrap">
                                             <p:spinner
@@ -186,7 +186,7 @@
                                     </tr>
                                     <tr>
                                         <td nowrap="nowrap">
-                                            <h:outputText escape="true" value="deny:" styleClass="textColor"/>
+                                            <h:outputText escape="true" value="#{bundle.deny}" styleClass="textColor"/>
                                         </td>
                                         <td nowrap="nowrap">
                                             <p:selectBooleanCheckbox value="#{handleRuleAction.ruleDeny}"/>
@@ -195,7 +195,7 @@
                                     <tr valign="top">
                                         <td nowrap="nowrap">
                                             <p:commandButton action="#{handleRuleAction.doAddNewRule}"
-                                                             value="add rule"
+                                                             value="#{bundle.add}"
                                                              title="افزودن قانون"
                                                              tabindex="6"
                                                              update="ruleTempTable"/>

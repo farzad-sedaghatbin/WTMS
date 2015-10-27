@@ -33,7 +33,7 @@
                                          style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="row number"/>
+                                        <h:outputText escape="true" value="#{bundle.row_number}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{rowIndex + 1}"/>
                                 </p:column>
@@ -66,7 +66,7 @@
 
                                 <p:column sortBy="#{pdp.description}">
                                     <f:facet name="header">
-                                        <p:commandLink value="description" update="pdpTable"
+                                        <p:commandLink value="#{bundle.description}" update="pdpTable"
                                                        action="#{handlePDPAction.sortByPdpDescription}"/>
                                         <br/>
                                         <p:inputText value="#{handlePDPAction.pdpDescriptionFilter}">
@@ -97,7 +97,7 @@
                     </tr>
                     <tr valign="top">
                         <td align="center" nowrap="nowrap">
-                            <h:commandButton value="synch"
+                            <h:commandButton value="#{bundle.sync}"
                                              rendered="#{me.hasPermission('SYNCH')}"
                                              update="pdpTable, pdpPanelId"
                                              action="#{handlePDPAction.synchronize}"/>

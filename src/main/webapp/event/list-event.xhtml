@@ -23,13 +23,13 @@
                     <p:columnToggler datasource="eventTable" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="operation" sortBy="#{event.operation}" filterBy="#{event.operation}">
+                <p:column headerText="#{bundle.operation}" sortBy="#{event.operation}" filterBy="#{event.operation}">
                     <h:outputText value="#{event.operation}"/>
                 </p:column>
-                <p:column headerText="object id" sortBy="#{event.objectId}" filterBy="#{event.objectId}">
+                <p:column headerText="#{bundle.object_id}" sortBy="#{event.objectId}" filterBy="#{event.objectId}">
                     <h:outputText value="#{event.objectId}"/>
                 </p:column>
-                <p:column headerText="table name" sortBy="#{event.tableName}" filterBy="#{event.tableName}">
+                <p:column headerText="#{bundle.table_name}" sortBy="#{event.tableName}" filterBy="#{event.tableName}">
                     <h:outputText value="#{event.tableName}"/>
                 </p:column>
                 <p:column headerText="#{bundle.username}" sortBy="#{event.username}" filterBy="#{event.username}">

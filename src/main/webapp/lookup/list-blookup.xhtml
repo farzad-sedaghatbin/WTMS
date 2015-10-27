@@ -43,7 +43,7 @@
 
                 <p:column headerText="#{bundle.title}" sortBy="#{blookup.title}" filterBy="#{blookup.title}">
                     <f:facet name="header">
-                        <h:outputText escape="true" value="title"/>
+                        <h:outputText escape="true" value="#{bundle.title}"/>
                     </f:facet>
                     <h:outputText escape="true" value="#{blookup.code}"/>
                 </p:column>
@@ -52,13 +52,12 @@
                                        page="#{handleBLookupAction.page}"/>
                 </f:facet>
             </p:dataTable>
-            <p:dialog header="blookup Info" widgetVar="blookupDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:dialog header="#{bundle.blookup}" widgetVar="blookupDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                 <p:outputPanel id="blookupPanelId" ajaxRendered="true">
-                            <h:outputText escape="true" value="add"
+                            <h:outputText escape="true" value="#{bundle.add}"
                                           rendered="#{handlePCAction.editable eq 'false'}"/>
-                            <h:outputText escape="true" value="edit"
+                            <h:outputText escape="true" value="#{bundle.edit}"
                                           rendered="#{handlePCAction.editable eq 'true'}"/>
-                        </legend>
                         <table border="0" cellpadding="3" cellspacing="3" width="50%"
                                dir="#{me.direction}">
                             <tr valign="top">

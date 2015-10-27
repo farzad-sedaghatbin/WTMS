@@ -11,7 +11,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="rule_name:"/>
+                                          value="#{bundle.name}"/>
                             &#160;&#160;&#160;&#160;&#160;
                             <h:inputText id="ruleName"
                                          converter="persianConverter"
@@ -26,7 +26,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="rule_date:"/>
+                                          value="#{bundle.date}:"/>
                             &#160;&#160;&#160;&#160;&#160;
                             <h:selectOneMenu value="#{handleGatewayAction.selectedCalendarIdTemp}" tabindex="2">
                                 <f:selectItems value="#{handleGatewayAction.calendarItems}"/>
@@ -36,7 +36,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="antiPassBack:" styleClass="textColor"/>
+                                          value="#{bundle.antipasback}:" styleClass="textColor"/>
                             &#160;&#160;&#160;
                             <h:selectBooleanCheckbox value="#{handleGatewayAction.ruleAniPassBack}" tabindex="3"/>
                         </td>
@@ -44,7 +44,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="allowExit:" styleClass="textColor"/>
+                                          value="#{bundle.allow_exit}" styleClass="textColor"/>
                             &#160;&#160;&#160;
                             <h:selectBooleanCheckbox value="#{handleGatewayAction.ruleAllowExit}" tabindex="4"/>
                         </td>
@@ -52,7 +52,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <h:outputText escape="true"
-                                          value="allowExitGadget:" styleClass="textColor"/>
+                                          value="#{bundle.allow_exit_gadget}" styleClass="textColor"/>
                             &#160;&#160;&#160;
                             <h:selectBooleanCheckbox value="#{handleGatewayAction.ruleAllowExitGadget}" tabindex="5"/>
                         </td>
@@ -71,35 +71,35 @@
                                          rowClasses="ROW1,ROW2">
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="rule_dayType"/>
+                                        <h:outputText escape="true" value="#{bundle.daytype}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.dayType.title}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="rule_startTime"/>
+                                        <h:outputText escape="true" value="#{bundle.start_time}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.startTime}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="rule_endTime"/>
+                                        <h:outputText escape="true" value="#{bundle.end_time}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.endTime}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="allowExitGadget"/>
+                                        <h:outputText escape="true" value="#{bundle.allow_exit_gadget}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.entranceCount}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
-                                        <h:outputText escape="true" value="rule_exitCount"/>
+                                        <h:outputText escape="true" value="#{bundle.exit_count}"/>
                                     </f:facet>
                                     <h:outputText escape="true" value="#{ruleTemp.exitCount}"/>
                                 </p:column>
@@ -136,7 +136,7 @@
                                     <table border="0" cellpadding="3" cellspacing="3" width="50%">
                                         <tr valign="middle">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule_dayType"/>
+                                                <h:outputText escape="true" value="#{bundle.daytype}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <h:selectOneMenu value="#{handleGatewayAction.dayTypeIdTemp}">
@@ -146,7 +146,7 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule_startTime"/>
+                                                <h:outputText escape="true" value="#{bundle.start_time}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleGatewayAction.startSecond}"
@@ -163,7 +163,7 @@
 
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule_endTime"/>
+                                                <h:outputText escape="true" value="#{bundle.end_time}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner value="#{handleGatewayAction.endSecond}"
@@ -178,7 +178,7 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule_entranceCount"/>
+                                                <h:outputText escape="true" value="#{bundle.entrance_count}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner dir="#{me.direction}"
@@ -189,7 +189,7 @@
                                         </tr>
                                         <tr valign="bottom">
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="rule_exitCount"/>
+                                                <h:outputText escape="true" value="#{bundle.exit_count}"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <p:spinner dir="#{me.direction}"
@@ -200,7 +200,7 @@
                                         </tr>
                                         <tr>
                                             <td nowrap="nowrap">
-                                                <h:outputText escape="true" value="deny:" styleClass="textColor"/>
+                                                <h:outputText escape="true" value="#{bundle.deny}" styleClass="textColor"/>
                                             </td>
                                             <td nowrap="nowrap">
                                                 <h:selectBooleanCheckbox value="#{handleGatewayAction.ruleDeny}"/>
@@ -209,7 +209,7 @@
                                         <tr valign="top">
                                             <td nowrap="nowrap">
                                                 <p:commandButton action="#{handleGatewayAction.doAddNewRule}"
-                                                                 value="rule_add"
+                                                                 value="#{bundle.add}"
                                                                  title="افزودن قانون"
                                                                  tabindex="6"
                                                                  update="form:ruleFrm:handleRulePanel"/>
@@ -224,7 +224,7 @@
                     <tr valign="top">
                         <td nowrap="nowrap" align="#{me.align}" colspan="2">
                             <p:commandButton id="saveRuleId"
-                                             value="save"
+                                             value="#{bundle.save}"
                                              action="#{handleGatewayAction.doEditGatewayRule}"/>
                             <p:commandButton id="resetRuleId"
                                              action="#{handleGatewayAction.init}"
