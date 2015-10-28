@@ -2,6 +2,7 @@ package ir.university.toosi.tms.model.service.zone;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.IReaderWrapperService;
 import ir.university.toosi.tms.model.dao.zone.VirdiDAOImpl;
 import ir.university.toosi.tms.model.entity.BLookup;
 import ir.university.toosi.tms.model.entity.EventLogType;
@@ -34,6 +35,8 @@ import org.jboss.ejb3.annotation.TransactionTimeout;
 
 import javax.ejb.*;
 import javax.imageio.ImageIO;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -41,6 +44,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -84,6 +89,13 @@ public class VirdiServiceImpl<T extends Virdi> {
     private RuleServiceImpl ruleService;
 
     public T findById(long id) {
+        try {
+            return (T) virdiDAO.findById(id);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public T findByTerminalId(long id) {
         try {
             return (T) virdiDAO.findById(id);
         } catch (Exception e) {
@@ -316,4 +328,17 @@ public class VirdiServiceImpl<T extends Virdi> {
         }
     }
 
+    public void forceOpen(int terminalId) throws MalformedURLException {
+        URL url = new URL("http://127.0.0.1:8081/ws?wsdl");
+
+        //1st argument service URI, refer to wsdl document above
+        //2nd argument is service name, refer to wsdl document above
+        QName qname = new QName("http://ir/", "ReaderWrapperServiceService");
+
+        Service service = Service.create(url, qname);
+
+        IReaderWrapperService readerWrapperService = service.getPort(IReaderWrapperService.class);
+
+        readerWrapperService.forceOpenDoor(terminalId);
+    }
 }

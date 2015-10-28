@@ -85,7 +85,7 @@ public class HandleOperationAction implements Serializable {
         page = 1;
         List<Operation> operations = operationService.getAllOperation();
         for (Operation operation : operations) {
-            operation.setDescription(me.getValue(operation.getDescription()));
+            operation.setDescription(operation.getDescription());
         }
         this.operations = new DualListModel(operations, new ArrayList());
     }

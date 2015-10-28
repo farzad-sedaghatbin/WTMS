@@ -6,6 +6,12 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.management}" url="#" />
+            <p:menuitem value="#{bundle.pc}" url="#" />
+        </p:breadCrumb>
+
         <h:form id="form">
             <p:contextMenu for="pcs">
                 <p:menuitem value="#{bundle.view}" update="pcDetail" icon="ui-icon-search" oncomplete="PF('pcDialog').show()" actionListener="#{handlePCAction.view}"/>

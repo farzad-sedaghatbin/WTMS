@@ -7,7 +7,12 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-
+    <ui:define name="content">
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.system_information}" url="#" />
+            <p:menuitem value="#{bundle.event}" url="#" />
+        </p:breadCrumb>
         <h:form id="eventList">
 
 

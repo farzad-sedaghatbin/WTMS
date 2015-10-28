@@ -4,8 +4,10 @@ package ir.university.toosi.wtms.web.action;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.ReaderWrapperService;
 import ir.university.toosi.tms.model.entity.personnel.Card;
 import ir.university.toosi.tms.model.entity.zone.Zone;
+import ir.university.toosi.tms.model.service.OperationServiceImpl;
 import ir.university.toosi.tms.model.service.SystemConfigurationServiceImpl;
 import ir.university.toosi.tms.model.service.UserServiceImpl;
 import ir.university.toosi.tms.model.service.calendar.CalendarServiceImpl;
@@ -71,7 +73,10 @@ public class UserManagementAction implements Serializable {
     private SystemConfigurationServiceImpl configurationService;
     @EJB
     private CalendarServiceImpl calendarService;
-
+    @EJB
+    private OperationServiceImpl operationService;
+    @EJB
+    private ReaderWrapperService readerWrapperService;
 
     @EJB
     GatewayServiceImpl gatewayService;
@@ -236,6 +241,7 @@ public class UserManagementAction implements Serializable {
             user.setUsername(username);
             user.setPassword(password);
             user = userService.authenticate(username, password);
+            readerWrapperService.setMonitoringAction(monitoringAction);
 //            if (!generalHelper.getLastLanguages().isRtl()) {
 //                direction = "ltr";
 //                align = "left";
@@ -257,8 +263,8 @@ public class UserManagementAction implements Serializable {
                     //getGeneralHelper().getUserService().editUser(user);
                 }
                 session.setAttribute(INVALID_TRY, invalidTry);
-//                addErrorMessage("invalid.login");
-//                return "login";
+                addErrorMessage("invalid.login");
+                redirect("/login.xhtml");
             }
             /*else if ((user.getEnable().equalsIgnoreCase("false")) || (user.getWorkGroups().getEnabled().equalsIgnoreCase("false"))) {
                 addErrorMessage("invalid.login.userDisable");
@@ -292,22 +298,25 @@ public class UserManagementAction implements Serializable {
 //            getGeneralHelper().getWebServiceInfo().setServiceName("/getAllOperation");
 //            List<Operation> operationList = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(getGeneralHelper().getWebServiceInfo().getServerUrl(), getGeneralHelper().getWebServiceInfo().getServiceName()), new TypeReference<List<Operation>>() {
 //            });
-//            if (username.equalsIgnoreCase("admin")) {
-//                for (Operation operation : operationList) {
-//                    permissionHash.put(operation.getDescription(), Boolean.TRUE);
-//
-//                }
-//            }
-//            for (Operation operation : operationList) {
-//                for (WorkGroup workGroup : user.getWorkGroups()) {
-//                    for (Role role : workGroup.getRoles()) {
-//                        for (Operation innerOperation : role.getOperations()) {
-//                            if (innerOperation.getDescription().equalsIgnoreCase(operation.getDescription())) {
-//                                permissionHash.put(operation.getDescription(), Boolean.TRUE);
-//                            }
-//                        }
-//                    }
-//                }
+
+            List<Operation> operationList = operationService.getAllOperation();
+            if (username.equalsIgnoreCase("admin")) {
+                for (Operation operation : operationList) {
+                    permissionHash.put(operation.getName(), Boolean.TRUE);
+
+                }
+            }
+            for (Operation operation : operationList) {
+                for (WorkGroup workGroup : user.getWorkGroups()) {
+                    for (Role role : workGroup.getRoles()) {
+                        for (Operation innerOperation : role.getOperations()) {
+                            if (innerOperation.getName().equalsIgnoreCase(operation.getName())) {
+                                permissionHash.put(operation.getName(), Boolean.TRUE);
+                            }
+                        }
+                    }
+                }
+            }
 //                if (!permissionHash.containsKey(operation.getDescription()))
 //                    permissionHash.put(operation.getDescription(), Boolean.FALSE);
 //            }

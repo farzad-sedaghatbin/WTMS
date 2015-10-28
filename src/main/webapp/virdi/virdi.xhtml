@@ -6,6 +6,11 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.device}" url="#" />
+            <p:menuitem value="#{bundle.virdi}" url="#" />
+        </p:breadCrumb>
         <h:form id="form">
             <p:contextMenu for="virdis">
                 <p:menuitem value="#{bundle.view}" update="virdiDetail" icon="ui-icon-search" oncomplete="PF('virdiDialog').show()"
@@ -55,7 +60,7 @@
                     <p:graphicImage value="#{currentVirdi.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
                 </p:column>
                 <p:column headerText="#{bundle.type}">
-                    <h:outputText value="#{currentVirdi.entrance ? 'entrance' : 'exit'}"/>
+                    <h:outputText value="#{currentVirdi.entrance ? 'ورودی' : 'خروجی'}"/>
                 </p:column>
             </p:dataTable>
 
@@ -146,9 +151,9 @@
                             <td colspan="2">
                                 <p:selectOneRadio id="oneDirection"
                                                   value="#{handleVirdiAction.entrance}">
-                                    <f:selectItem itemLabel="entrance" itemValue='true'/>
-                                    <f:selectItem itemLabel="exit" itemValue='false'/>
-                                    <f:selectItem itemLabel="entranceAndExit" itemValue='false' itemDisabled="true"/>
+                                    <f:selectItem itemLabel="#{bundle.entrance}" itemValue='true'/>
+                                    <f:selectItem itemLabel="#{bundle.exit}" itemValue='false'/>
+                                    <f:selectItem itemLabel="#{bundle.entance_and_exit}" itemValue='false' itemDisabled="true"/>
                                 </p:selectOneRadio>
                             </td>
                         </tr>

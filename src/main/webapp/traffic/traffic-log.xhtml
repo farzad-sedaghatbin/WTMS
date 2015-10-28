@@ -7,7 +7,11 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.report}" url="#" />
+            <p:menuitem value="#{bundle.trafficlog}" url="#" />
+        </p:breadCrumb>
         <h:form>
 
             <p:dataTable id="trafficLogTable" value="#{handleTrafficAction.eventLogList}" var="trafficLog"
@@ -41,7 +45,7 @@
                     <h:outputText value="#{trafficLog.traffic_time}"/>
                 </p:column>
 
-                <p:column width="200" sortBy="#{trafficLog.traffic_date}" filterBy="#{trafficLog.traffic_date}">
+                <p:column width="200" headerText="#{bundle.date}" sortBy="#{trafficLog.traffic_date}" filterBy="#{trafficLog.traffic_date}">
                     <h:outputText value="#{trafficLog.traffic_date}" converter="dateConverter"/>
                 </p:column>
 

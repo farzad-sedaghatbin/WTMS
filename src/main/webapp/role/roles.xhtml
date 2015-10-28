@@ -123,17 +123,17 @@
                 <p:outputPanel id="PermissionPanelId" ajaxRendered="true">
                     <p:dataTable id="permissionDetail"
 
-                                    value="#{handleRoleAction.pdpList}"
+                                    value="#{handleRoleAction.roleList}"
                                     rowKeyVar="rowIndex"
                                     emptyMessage="#{bundle.empty_message}"
                                     sortMode="single"
-                                    var="pdp"
+                                    var="role"
                                     rows="10"
                                     style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
                                     rowClasses="ROW1,ROW2">
 
                         <p:column>
-                            <h:selectBooleanCheckbox value="#{pdp.selected}"
+                            <h:selectBooleanCheckbox value="#{role.selected}"
                                                      valueChangeListener="#{handleRoleAction.selectPdp}">
                                 <p:ajax execute="@this" limitRender="true"/>
                             </h:selectBooleanCheckbox>
@@ -143,12 +143,12 @@
                             <f:facet name="header">
                                 <h:outputText escape="true" value="#{bundle.name}"/>
                             </f:facet>
-                            <h:outputText escape="true" value="#{pdp.objectName}"
+                            <h:outputText escape="true" value="#{role.name}"
                                     />
                         </p:column>
                         <f:facet name="footer">
-                            <p:dataScroller limitRender="true" execute="@this" update="pdpTable"
-                                               page="#{handleRoleAction.pdpPage}"/>
+                            <p:dataScroller limitRender="true" execute="@this" update="roleTable"
+                                               page="#{handleRoleAction.page}"/>
                         </f:facet>
                     </p:dataTable>
                 </p:outputPanel>

@@ -12,6 +12,7 @@ import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
+import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
 import ir.university.toosi.tms.util.CalendarUtil;
 import ir.university.toosi.tms.util.EventLogManager;
 import ir.university.toosi.tms.util.LangUtil;
@@ -40,6 +41,8 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
     private EventLogServiceImpl eventLogService;
     @EJB
     private PDPServiceImpl pdpService;
+    @EJB
+    private VirdiServiceImpl virdiService;
     @EJB
     private PersonServiceImpl personService;
     @EJB
@@ -154,6 +157,14 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
         try {
 
             return (List<T>) TrafficLogDAO.findByPDP(pdpID, date, systemConfigurationService.findByParameter(SystemParameterType.SENTRY_COUNT));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public List<T> findByVirdi(Long virdiID, String date) {
+        try {
+
+            return (List<T>) TrafficLogDAO.findByVirdi(virdiID, date, systemConfigurationService.findByParameter(SystemParameterType.SENTRY_COUNT));
         } catch (Exception e) {
             return null;
         }

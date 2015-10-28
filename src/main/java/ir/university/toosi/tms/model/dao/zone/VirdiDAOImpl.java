@@ -27,6 +27,15 @@ public class VirdiDAOImpl extends BaseDAOImpl<Virdi> {
             return null;
         }
     }
+    public Virdi findByTerminalId(long id) {
+        try {
+            return (Virdi) em.createNamedQuery("Virdi.findById")
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     public List<Virdi> findByGatewayId(String id) {
         try {

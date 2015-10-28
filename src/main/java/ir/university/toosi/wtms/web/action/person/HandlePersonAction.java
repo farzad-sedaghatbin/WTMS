@@ -299,21 +299,21 @@ public class HandlePersonAction implements Serializable {
     private void fillSearchCombos() {
 
         preConditions = new SelectItem[3];
-        preConditions[0] = new SelectItem(" ", "select_option");
+        preConditions[0] = new SelectItem(" ", "انتخاب یک گزینه");
         preConditions[1] = new SelectItem("(", "(");
         preConditions[2] = new SelectItem("not", "not");
 
         postConditions = new SelectItem[4];
-        postConditions[0] = new SelectItem(" ", "select_option");
+        postConditions[0] = new SelectItem(" ", "انتخاب یک گزینه");
         postConditions[1] = new SelectItem(")", ")");
         postConditions[2] = new SelectItem("and", "and");
         postConditions[3] = new SelectItem("or", "or");
 
         attributeNames = new SelectItem[4];
-        attributeNames[0] = new SelectItem("name", "name");
-        attributeNames[1] = new SelectItem("lastname", "lastname");
-        attributeNames[2] = new SelectItem("personnelNo", "personnelCode");
-        attributeNames[3] = new SelectItem("nationalCode", "nationalCode");
+        attributeNames[0] = new SelectItem("name", "نام");
+        attributeNames[1] = new SelectItem("lastname", "نام خانوادگی");
+        attributeNames[2] = new SelectItem("personnelNo", "کد پرسنلی");
+        attributeNames[3] = new SelectItem("nationalCode", "کد ملی");
     }
     public void listener(FileUploadEvent event) throws Exception {
         UploadedFile item = event.getFile();

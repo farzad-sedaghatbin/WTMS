@@ -168,7 +168,7 @@ public class HandleRoleAction implements Serializable {
         handleOperationAction.setSelectedOperations(new HashSet<Operation>());
         List<Role> roles = roleService.getAllRole();
         for (Role role : roles) {
-            role.setDescText(me.getValue(role.getDescription()));
+            role.setDescText(role.getDescription());
         }
         roleList = new ArrayList<>(roles);
     }
@@ -207,7 +207,7 @@ public class HandleRoleAction implements Serializable {
     public void view() {
         setDisableFields(true);
         roleEnabled = currentRole.isEnabled();
-        descText = me.getValue(currentRole.getDescription());
+        descText =currentRole.getDescription();
         name = currentRole.getName();
 
         List<Operation> operationsSource = new ArrayList<>();
@@ -216,7 +216,7 @@ public class HandleRoleAction implements Serializable {
         List<Operation> operationList = operationService.getAllOperation();
         handleOperationAction.setSelectedOperations(new HashSet<Operation>());
         for (Operation operation : operationList) {
-            operation.setDescription(me.getValue(operation.getDescription()));
+            operation.setDescription(operation.getDescription());
         }
         for (Operation currentOperation : currentRole.getOperations()) {
             for (Operation operation : operationList) {
@@ -253,7 +253,7 @@ public class HandleRoleAction implements Serializable {
         setEditable("true");
         setDisableFields(false);
         roleEnabled = currentRole.isEnabled();
-        descText = me.getValue(currentRole.getDescription());
+        descText = currentRole.getDescription();
         name = currentRole.getName();
 
         List<Operation> operationsSource = new ArrayList<>();
@@ -262,7 +262,7 @@ public class HandleRoleAction implements Serializable {
         List<Operation> operationList = operationService.getAllOperation();
         handleOperationAction.setSelectedOperations(new HashSet<Operation>());
         for (Operation operation : operationList) {
-            operation.setDescription(me.getValue(operation.getDescription()));
+            operation.setDescription(operation.getDescription());
         }
         for (Operation currentOperation : currentRole.getOperations()) {
             for (Operation operation : operationList) {

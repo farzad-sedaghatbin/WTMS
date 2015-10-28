@@ -1,11 +1,13 @@
 package ir.university.toosi.wtms.web.action.monitoring;
 
 
+import ir.university.toosi.tms.model.entity.zone.Virdi;
 import ir.university.toosi.tms.model.service.CommentServiceImpl;
 import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
+import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
 import ir.university.toosi.wtms.web.action.HandleCommentAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
@@ -44,6 +46,7 @@ import javax.inject.Named;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.*;
 
@@ -68,6 +71,8 @@ public class HandleMonitoringAction implements Serializable {
     private GatewayServiceImpl gatewayService;
     @EJB
     private PDPServiceImpl pdpService;
+    @EJB
+    private VirdiServiceImpl virdiService;
     @EJB
     private CommentServiceImpl commentService;
     @EJB
@@ -146,15 +151,21 @@ public class HandleMonitoringAction implements Serializable {
         cachedTrafficLogsbygate= new ArrayList<>(trafficLogsbygate);
 
 //        RequestContext.getCurrentInstance().update("trafficLogList:test");
-//            me.redirect("/monitoring/sentry-monitor.xhtml");
+            me.redirect("/monitoring/sentry-monitor.xhtml");
 
-        EventBus eventBus = EventBusFactory.getDefault().eventBus();
-        eventBus.publish("/notify", new Boolean(true));
+//        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+//        eventBus.publish("/notify", new Boolean(true));
     }
 
-    public void forceOpen(DataModel<SentryDataModel> gate) {
+    public void forceOpen(List<SentryDataModel> gate) {
+        if (gate == null || gate.size() == 0)
+            return;
         String logId = String.valueOf(gate.iterator().next().getId());
-        gatewayService.forceOpen(logService.findById(Long.parseLong(logId)).getPdp().getIp());
+        try {
+            virdiService.forceOpen(logService.findById(Long.parseLong(logId)).getVirdi().getTerminalId());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -166,19 +177,19 @@ public class HandleMonitoringAction implements Serializable {
         LinkedList<SentryDataModel> trafficLogList;
         List<Gateway> notAccess = new ArrayList<>();
         List<Long> pdpID = new ArrayList<>();
-        /*for (WorkGroup workGroup : me.getUser().getWorkGroups()) {
-            for (Role role : workGroup.getRoles()) {
-                for (Permission permission : role.getPermissions()) {
-                    if (permission.getPermissionType().equals(PermissionType.PDP)) {
-                        pdpID.add(Long.valueOf(permission.getObjectId()));
-                    }
-                }
-            }
-        }*/
+//        for (WorkGroup workGroup : me.getUser().getWorkGroups()) {
+//            for (Role role : workGroup.getRoles()) {
+//                for (Permission permission : role.getPermissions()) {
+//                    if (permission.getPermissionType().equals(PermissionType.PDP)) {
+//                        pdpID.add(Long.valueOf(permission.getObjectId()));
+//                    }
+//                }
+//            }
+//        }
 
-        List<PDP> pdps = pdpService.getAllPDPs();
-        for (PDP pdp : pdps) {
-            List<TrafficLog> traffic = logService.findByPDP(pdp.getId(), CalendarUtil.getDate(new Date()));
+        List<Virdi> virdis = virdiService.getAllVirdis();
+        for (Virdi virdi : virdis) {
+            List<TrafficLog> traffic = logService.findByVirdi(virdi.getId(), CalendarUtil.getDate(new Date()));
             SentryDataModel dataModel;
             trafficLogList = new LinkedList<SentryDataModel>() {
                 @Override
@@ -188,7 +199,10 @@ public class HandleMonitoringAction implements Serializable {
                     return super.add(sentryDataModel);
                 }
             };
-            sentries.put(pdp.getId(), trafficLogList);
+            sentries.put(virdi.getId(), trafficLogList);
+            if (traffic == null) {
+                traffic = new ArrayList<>();
+            }
             for (TrafficLog log : traffic) {
                 dataModel = new SentryDataModel();
                 dataModel.setVideo(log.getVideo());
@@ -199,7 +213,7 @@ public class HandleMonitoringAction implements Serializable {
                 dataModel.setGate(log.getGateway().getName());
                 dataModel.setPersonId(log.getPerson().getId());
                 dataModel.setId(log.getId());
-                dataModel.setPdpName(log.getPdp().getName());
+                dataModel.setPdpName(log.getVirdi().getName());
                 dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
                 trafficLogList.add(dataModel);
             }
@@ -297,7 +311,8 @@ public class HandleMonitoringAction implements Serializable {
         for (Gateway gateway1 : gateways) {
             gatewayItems[i++] = new SelectItem(gateway1.getId(), gateway1.getName());
         }
-        gatewayId = gatewayItems[0].getValue().toString();
+        if (gatewayItems != null)
+            gatewayId = gatewayItems[0].getValue().toString();
         me.redirect("/monitoring/track-person.xhtml");
     }
 
@@ -594,8 +609,8 @@ public class HandleMonitoringAction implements Serializable {
     }
 
     public List<List<SentryDataModel>> getTrafficLogsbygate() {
-        if(trafficLogsbygate.size()==0){
-            trafficLogsbygate= cachedTrafficLogsbygate;
+        if (trafficLogsbygate.size() == 0) {
+            trafficLogsbygate = cachedTrafficLogsbygate;
         }
         return trafficLogsbygate;
     }

@@ -8,33 +8,32 @@
     <div class="Animated05" id="layout-menu-cover">
         <h:form>
             <pm:menu>
-                <p:submenu id="test" label="test" icon="icon-menu">
+                <p:submenu id="test" label="test" icon="icon-menu" rendered="false">
 
                     <p:menuitem id="finger" value="finger" icon="icon-verified_user"
-                                action="#{me.test}"/>
+                                action="#{me.test}" rendered="false"/>
                     <p:menuitem id="sent" value="sentry" icon="icon-verified_user"
                                 action="#{handleMonitoringAction.beginSentry}"/>
                     <p:menuitem id="cont" value="count" icon="icon-verified_user"
-                                action="#{counterView.beginCount}"/>
+                                action="#{counterView.beginCount}" rendered="false"/>
                 </p:submenu>
-                <p:submenu id="usermanagemen" label="user Management" icon="icon-menu">
-                    <p:menuitem id="rm_dashboard" value="Dashboard" icon="icon-dvr"/>
+                <p:submenu id="usermanagemen" rendered="#{me.hasPermission('USER')}" label="#{bundle.user_management}" icon="icon-menu">
+                    <p:menuitem id="rm_dashboard" value="Dashboard" icon="icon-dvr" rendered="false"/>
 
-                    <p:menuitem id="rm_user" value="#{bundle.user}" icon="icon-verified_user" action="#{handleUserAction.begin}"/>
-                    <p:menuitem id="rm_person" value="#{bundle.person}" icon="icon-person" action="#{handlePersonAction.begin}"/>
-                    <p:menuitem id="rm_role" value="#{bundle.role}" icon="icon-party_mode" action="#{handleRoleAction.begin}"/>
-                    <p:menuitem id="rm_workgroup" value="#{bundle.workgroup}" icon="icon-group"
+                    <p:menuitem id="rm_user" value="#{bundle.user}" icon="icon-verified_user"
+                                action="#{handleUserAction.begin}"/>
+                    <p:menuitem id="rm_person" value="#{bundle.person}" icon="icon-person"
+                                action="#{handlePersonAction.begin}"/>
+                    <p:menuitem id="rm_role" value="#{bundle.role}" icon="icon-party_mode"
+                                action="#{handleRoleAction.begin}" rendered="false"/>
+                    <p:menuitem id="rm_workgroup" value="#{bundle.workgroup}" icon="icon-group" rendered="false"
                                 action="#{handleWorkGroupAction.begin}"/>
-                    <p:menuitem id="rm_pc" value="#{bundle.pc}" icon="icon-computer" actionListener="#{handlePCAction.begin}"/>
+                    <p:menuitem id="rm_pc" value="#{bundle.pc}" icon="icon-computer"
+                                actionListener="#{handlePCAction.begin}"/>
                 </p:submenu>
 
-                <p:submenu id="authorize" label="#{bundle.authorize}" icon="icon-menu">
-                    <p:menuitem id="rm_authorize" value="#{bundle.authorize}" icon="icon-person"
-                                action="#{handleCommentAction.beginAuthorize}"/>
-                    <p:menuitem id="rm_comment" value="#{bundle.comment}" icon="icon-comment"
-                                action="#{handleCommentAction.begin}"/>
-                </p:submenu>
-                <p:submenu id="zone" label="#{bundle.zone}" icon="icon-menu">
+
+                <p:submenu id="zone" rendered="#{me.hasPermission('ZONE')}" label="#{bundle.zone_management}" icon="icon-menu">
 
                     <p:menuitem id="rm_zone" value="#{bundle.zone}" icon="icon-control_point"
                                 actionListener="#{handleZoneAction.begin}"/>
@@ -44,54 +43,67 @@
                                 actionListener="#{handleOrganAction.begin}"/>
                 </p:submenu>
 
-                <p:submenu id="device" label="#{bundle.device}" icon="icon-menu">
+                <p:submenu id="device" rendered="#{me.hasPermission('DEVICE')}" label="#{bundle.device}" icon="icon-menu">
                     <p:menuitem id="rm_camera" value="#{bundle.camera}" icon="icon-camera2"
                                 actionListener="#{handleCameraAction.begin}"/>
-                    <p:menuitem id="rm_pdp" value="#{bundle.pdp}" icon="icon-devices" actionListener="#{handlePDPAction.begin}"/>
-                    <p:menuitem id="rm_deviceMonitor" value="devicemonitor" icon="icon-perm_device_information"
+                    <p:menuitem id="rm_pdp" value="#{bundle.pdp}" icon="icon-devices"
+                                actionListener="#{handlePDPAction.begin}" rendered="false"/>
+                    <p:menuitem id="rm_virdi" value="#{bundle.virdi}" icon="icon-perm_device_information"
+                                actionListener="#{handleVirdiAction.begin}"/>
+
+                    <p:menuitem id="rm_deviceMonitor" value="#{bundle.device_monitoring}"
+                                icon="icon-perm_device_information"
                                 actionListener="#{handleDeviceAction.beginDevice}"/>
                     <p:menuitem id="rm_card" value="#{bundle.card}" icon="icon-sd_card"
                                 actionListener="#{handleCardAction.begin}"/>
 
                 </p:submenu>
-                <p:submenu id="setting" label="setting" icon="icon-menu">
-                    <p:menuitem id="rm_setting" value="powerSetting" icon="icon-power_settings_new"
-                                actionListener="#{handleSettingAction.begin}"/>
+                <p:submenu id="monitoring" label="#{bundle.monitoring}" rendered="#{me.hasPermission('MONITORING')}"  icon="icon-menu">
+                    <p:menuitem id="sentry" value="#{bundle.sentry}" icon="icon-verified_user"
+                                action="#{handleMonitoringAction.beginSentry}"/>
+                    <p:menuitem id="rm_map" value="#{bundle.map}" icon="icon-map"
+                                actionListener="#{handleMapAction.begin}" rendered="false"/>
+                    <p:menuitem id="rm_authorize" value="#{bundle.authorize}" icon="icon-person"
+                                action="#{handleCommentAction.beginAuthorize}" rendered="false"/>
+                    <p:menuitem id="rm_comment" value="#{bundle.comment}" icon="icon-comment"
+                                action="#{handleCommentAction.begin}" rendered="false"/>
                 </p:submenu>
-                <p:submenu id="report" label="report" icon="icon-menu">
-                    <p:menuitem id="rm_traffic_chart" value="traffic chart" icon="icon-report"
+                <p:submenu id="setting" label="setting" icon="icon-menu" rendered="false">
+                    <p:menuitem id="rm_setting" value="powerSetting" icon="icon-power_settings_new"
+                                actionListener="#{handleSettingAction.begin}" rendered="false"/>
+                </p:submenu>
+                <p:submenu id="report" label="#{bundle.report}" rendered="#{me.hasPermission('REPORT')}" icon="icon-menu">
+                    <p:menuitem id="rm_traffic" value="#{bundle.trafficlog}" icon="icon-traffic"
+                                actionListener="#{handleTrafficAction.begin}"/>
+                    <p:menuitem id="rm_traffic_chart" value="#{bundle.chart}" icon="icon-report"
                                 actionListener="#{handleTrafficLogChartAction.begin}"/>
-                    <p:menuitem id="rm_trackByperson" value="trackByperson" icon="icon-report"
+                    <p:menuitem id="rm_trackByperson" value="#{bundle.track_by_person}" icon="icon-report"
                                 actionListener="#{handleMonitoringAction.trackByPerson}"/>
-                    <p:menuitem id="rm_trackByGate" value="trackBygate" icon="icon-report"
+                    <p:menuitem id="rm_trackByGate" value="#{bundle.track_by_gate}" icon="icon-report"
                                 actionListener="#{handleMonitoringAction.trackByPersonAndGate}"/>
-                    <p:menuitem id="rm_trackBytime" value="trackBytime" icon="icon-report"
+                    <p:menuitem id="rm_trackBytime" value="#{bundle.track_by_time}" icon="icon-report"
                                 actionListener="#{handleMonitoringAction.trackByPersonAndTime}"/>
 
                 </p:submenu>
 
-                <p:submenu id="schedule" label="Schedule" icon="icon-menu">
+                <p:submenu id="schedule" label="Schedule" icon="icon-menu" rendered="false">
                     <p:menuitem id="rm_rule" value="rule" icon="icon-device_hub"
-                                actionListener="#{handleRuleAction.begin}"/>
+                                actionListener="#{handleRuleAction.begin}" rendered="false"/>
                     <p:menuitem id="rm_day" value="day" icon="icon-view_day"
-                                actionListener="#{handleDayTypeAction.begin}"/>
+                                actionListener="#{handleDayTypeAction.begin}" rendered="false"/>
                     <p:menuitem id="rm_calendar" value="#{bundle.calendar}" icon="icon-perm_contact_calendar"
-                                actionListener="#{handleCalendarAction.begin}"/>
-                    <p:menuitem id="rm_map" value="#{bundle.map}" icon="icon-map"
-                                actionListener="#{handleMapAction.begin}"/>
+                                actionListener="#{handleCalendarAction.begin}" rendered="false"/>
+
                 </p:submenu>
 
-                <p:submenu id="others" label="System Information" icon="icon-menu">
+                <p:submenu id="others" label="#{bundle.system_information}" rendered="#{me.hasPermission('INFORMATION')}"  icon="icon-menu">
                     <p:menuitem id="rm_event" value="#{bundle.event}" icon="icon-event"
                                 actionListener="#{handleEventAction.begin}"/>
-                    <p:menuitem id="rm_exception" value="exception" icon="icon-error"
-                                actionListener="#{handleRuleExceptionAction.begin}"/>
-                    <p:menuitem id="rm_lookup" value="lookup" icon="icon-looks_3"
+                    <p:menuitem id="rm_exception" value="#{bundle.exception}" icon="icon-error"
+                                actionListener="#{handleRuleExceptionAction.begin}" rendered="false"/>
+                    <p:menuitem id="rm_lookup" value="#{bundle.lookup}" icon="icon-looks_3"
                                 actionListener="#{handleLookupAction.begin}"/>
-                    <p:menuitem id="rm_traffic" value="traffic" icon="icon-traffic"
-                                actionListener="#{handleTrafficAction.begin}"/>
-                    <p:menuitem id="rm_virdi" value="#{bundle.virdi}" icon="icon-perm_device_information"
-                                actionListener="#{handleVirdiAction.begin}"/>
+
 
                 </p:submenu>
             </pm:menu>
