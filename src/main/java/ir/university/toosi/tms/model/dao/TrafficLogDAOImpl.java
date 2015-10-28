@@ -147,6 +147,18 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
             return null;
         }
     }
+    public List<TrafficLog> findByVirdi(Long virdiId, String date,SystemConfiguration systemConfiguration) {
+        try {
+            return (List<TrafficLog>) em.createNamedQuery("TrafficLog.findByVirdi")
+                    .setParameter("virdiId", virdiId)
+                    .setParameter("trafficDate", date)
+                    .setFirstResult(1)
+                    .setMaxResults(Integer.parseInt(systemConfiguration.getValue()))
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     public List<TrafficLog> findByPerson(Long personId, String date) {
         try {

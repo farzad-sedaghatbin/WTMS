@@ -22,17 +22,7 @@
             <!--<f:ajax render="test"/>-->
             <!--</h:commandButton>-->
             <table>
-                <tr>
-                    <td>
-                        <p:commandButton value="maximize"
-                                         execute="@this"
-                                         immediate="true"
-                                         oncomplete="newWindow('/WTMS/monitoring/sentry-monitor-popup.htm','بزرگنمایی',window.screen.width ,window.screen.height,'yes','no','no','no','no','no','no');">
-                            <p:tooltip layout="block"
-                                       styleClass="pTitleText">maximize</p:tooltip>
-                        </p:commandButton>
-                    </td>
-                </tr>
+
                 <tr>
                     <p:outputPanel id="test">
                         <ui:repeat value="#{handleMonitoringAction.trafficLogsbygate}" var="item">
@@ -62,7 +52,7 @@
                                     </p:column>
                                     <p:column>
                                         <f:facet name="header">
-                                            <h:outputText escape="true" value="#{bundle.pdp}"/>
+                                            <h:outputText escape="true" value="#{bundle.virdi}"/>
                                         </f:facet>
                                         <h:outputText escape="true" value="#{trafficLog.pdpName}"/>
 

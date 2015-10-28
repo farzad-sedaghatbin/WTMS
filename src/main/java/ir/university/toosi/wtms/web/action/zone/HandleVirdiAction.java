@@ -319,6 +319,7 @@ public class HandleVirdiAction implements Serializable {
         me.addInfoMessage("fetch_from_virdi_completed");
         me.redirect("/virdi/virdi.xhtml");
     }
+
     public void synchSetUsers() {
 //        readerWrapperService.se(currentVirdi.getTerminalId());
         me.addInfoMessage("sync_to_virdi_completed");
@@ -386,13 +387,15 @@ public class HandleVirdiAction implements Serializable {
         selectedVirdi.setGateway(gateway);
         selectedVirdi.setCamera(camera);
         selectedVirdi.setOnline(online);
-        boolean condition = virdiService.exist(selectedVirdi.getIp(), selectedVirdi.getId());
-        if (condition) {
+        if(ip!=null&&ip.length()>0) {
+            boolean condition = virdiService.exist(selectedVirdi.getIp(), selectedVirdi.getId());
+            if (condition) {
 
-            me.addInfoMessage("virdi.exist");
-            return;
+                me.addInfoMessage("virdi.exist");
+                me.redirect("/virdi/virdi.xhtml");
+            }
         }
-        condition = virdiService.editVirdi(selectedVirdi);
+        boolean condition = virdiService.editVirdi(selectedVirdi);
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
@@ -427,11 +430,13 @@ public class HandleVirdiAction implements Serializable {
         boolean flag = false;
         newVirdi.setGateway(gateway);
         newVirdi.setCamera(camera);
-        boolean condition = virdiService.existNotId(newVirdi.getIp());
-        if (condition) {
+        if (ip != null && ip.length() > 0) {
+            boolean condition = virdiService.existNotId(newVirdi.getIp());
+            if (condition) {
 
-            me.addInfoMessage("virdi.exist");
-            return;
+                me.addInfoMessage("virdi.exist");
+                me.redirect("/virdi/virdi.xhtml");
+            }
         }
         Virdi insertedVirdi = null;
         insertedVirdi = virdiService.createVirdi(newVirdi);
@@ -810,6 +815,10 @@ public class HandleVirdiAction implements Serializable {
 
     public int getTerminalId() {
         return terminalId;
+    }
+
+    public void setTerminalId(int terminalId) {
+        this.terminalId = terminalId;
     }
 }
 

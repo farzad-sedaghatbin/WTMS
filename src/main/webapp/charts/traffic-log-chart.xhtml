@@ -4,6 +4,11 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.report}" url="#" />
+            <p:menuitem value="#{bundle.chart}" url="#" />
+        </p:breadCrumb>
         <h:form id="form">
             <p:panel id="panel" header="#{bundle.search}" style="margin-bottom:10px;">
                 <h:outputText value="#{bundle.from_time}"/>

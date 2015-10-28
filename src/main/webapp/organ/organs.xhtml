@@ -6,6 +6,12 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.zone_management}" url="#" />
+            <p:menuitem value="#{bundle.organ}" url="#" />
+        </p:breadCrumb>
+
         <h:form id="form">
             <p:contextMenu for="organs">
                 <p:menuitem value="#{bundle.add}" update="organDetail" icon="ui-icon-search"
@@ -17,7 +23,7 @@
                 <p:menuitem value="#{bundle.edit}" update="organDetail" icon="ui-icon-search"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search" rendered="false"
                             oncomplete="PF('assignRuleDialog').show()"
                             actionListener="#{handleOrganAction.assignRule}"/>
                 <p:menuitem value="#{bundle.persons}" update="personTable" icon="ui-icon-search"
@@ -53,7 +59,7 @@
                 <p:column headerText="#{bundle.name}" sortBy="#{currentOrgan.name}" filterBy="#{currentOrgan.name}">
                     <h:outputText value="#{currentOrgan.name}"/>
                 </p:column>
-                <p:column headerText="#{bundle.card_code}" sortBy="#{currentOrgan.code}" filterBy="#{currentOrgan.code}">
+                <p:column headerText="#{bundle.organ_code}" sortBy="#{currentOrgan.code}" filterBy="#{currentOrgan.code}">
                     <h:outputText value="#{currentOrgan.code}"/>
                 </p:column>
                 <p:column headerText="#{bundle.type}" sortBy="#{currentOrgan.organType.titleText}" filterBy="#{currentOrgan.organType.titleText}">

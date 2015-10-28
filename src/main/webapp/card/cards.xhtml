@@ -6,6 +6,11 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.device}" url="#" />
+            <p:menuitem value="#{bundle.card}" url="#" />
+        </p:breadCrumb>
         <h:form id="form">
             <p:contextMenu for="cards">
                 <p:menuitem value="#{bundle.view}" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardDialog').show()"
@@ -59,7 +64,7 @@
                 <p:column headerText="#{bundle.lastname}" sortBy="#{currentCard.person.lastName}" filterBy="#{currentCard.person.lastName}">
                     <h:outputText value="#{currentCard.person.lastName}"/>
                 </p:column>
-                <p:column headerText="#{bundle.personel_code}" sortBy="#{currentCard.person.personnelNo}" filterBy="#{currentCard.person.personnelNo}">
+                <p:column headerText="#{bundle.personnel_number}" sortBy="#{currentCard.person.personnelNo}" filterBy="#{currentCard.person.personnelNo}">
                     <h:outputText value="#{currentCard.person.personnelNo}"/>
                 </p:column>
             </p:dataTable>

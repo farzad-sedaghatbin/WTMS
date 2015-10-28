@@ -19,6 +19,10 @@ import java.util.Enumeration;
                 name = "Virdi.findById",
                 query = "select v from Virdi v where v.id=:id and v.deleted = '0'"
         )
+        ,    @NamedQuery(
+                name = "Virdi.findByTerminalId",
+                query = "select v from Virdi v where v.terminalId=:id and v.deleted = '0'"
+        )
         ,
         @NamedQuery(
                 name = "Virdi.findByIp",

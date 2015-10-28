@@ -6,6 +6,12 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.device}" url="#" />
+            <p:menuitem value="#{bundle.camera}" url="#" />
+        </p:breadCrumb>
+
         <h:form id="form">
             <p:contextMenu for="cameras">
                 <p:menuitem value="#{bundle.view}" update="cameraDetail" icon="ui-icon-search"
@@ -66,7 +72,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h:outputText value="#{bundle.name}"/>
+                                    <h:outputText value="#{bundle.ip}"/>
                                 </td>
                                 <td>
                                     <p:inputText readonly="#{handleCameraAction.disableFields}"
@@ -75,7 +81,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h:outputText value="#{bundle.name}"/>
+                                    <h:outputText value="#{bundle.description}"/>
                                 </td>
                                 <td>
                                     <p:inputTextarea readonly="#{handleCameraAction.disableFields}"

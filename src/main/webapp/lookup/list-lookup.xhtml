@@ -7,7 +7,11 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.system_information}" url="#" />
+            <p:menuitem value="#{bundle.lookup}" url="#" />
+        </p:breadCrumb>
         <h:form>
             <p:contextMenu for="lookupTable">
                 <p:menuitem value="#{bundle.edit}"  icon="ui-icon-search"  action="#{handleLookupAction.edit}"/>

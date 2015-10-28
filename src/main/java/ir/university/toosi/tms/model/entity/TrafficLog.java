@@ -59,6 +59,9 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "TrafficLog.findByPDP",
                 query = "select t from TrafficLog t where t.pdp.id =:PDPId and t.traffic_date =:trafficDate order by t.id desc "
+        ),  @NamedQuery(
+                name = "TrafficLog.findByVirdi",
+                query = "select t from TrafficLog t where t.virdi.id =:virdiId and t.traffic_date =:trafficDate order by t.id desc "
         ),
         @NamedQuery(
                 name = "TrafficLog.findByPerson",

@@ -6,18 +6,24 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.zone_management}" url="#" />
+            <p:menuitem value="#{bundle.gateway}" url="#" />
+        </p:breadCrumb>
+
         <h:form id="form">
             <p:contextMenu for="gateways">
                 <p:menuitem value="#{bundle.view}" update="gatewayDetail" icon="ui-icon-search"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="gatewayDetail" icon="ui-icon-search"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search" rendered="false"
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleGatewayAction.assignRule}"/>
-                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="ui-icon-search" rendered="false"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleGatewayAction.editRule}"/>
                 <p:menuitem value="#{bundle.special_status}" update="specialStatusTable" icon="ui-icon-search"
-                            oncomplete="PF('gatewayStatus').show()" actionListener="#{handleGatewayAction.assignSpecialStatus}"/>
+                            oncomplete="PF('gatewayStatus').show()" actionListener="#{handleGatewayAction.assignSpecialStatus}" rendered="false"/>
                 <p:menuitem value="#{bundle.delete}" update="gateways" icon="ui-icon-close"
                             actionListener="#{handleGatewayAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
@@ -87,38 +93,6 @@
                             <td>
                                 <p:selectBooleanCheckbox value="#{handleGatewayAction.gatewayEnabled}"
                                                          valueChangeListener="#{handleGatewayAction.changeGateways}"/>
-                            </td>
-                        </tr>
-                    </table>
-                    <table>
-                        <tr>
-                            <td>
-                                <p:pickList id="gatewayPickList" value="#{handleGatewayAction.gatewayDuals}"
-                                            var="gateway"
-                                            effect="bounce"
-                                            itemValue="#{gateway}" itemLabel="#{gateway.name}"
-                                            showSourceControls="true" converter="#{gatewayConverter}"
-                                            showTargetControls="true" showCheckbox="true" responsive="true"
-                                            showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
-                                            disabled="#{handleGatewayAction.disableFields}">
-                                    <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
-                                    <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
-
-                                    <p:ajax event="transfer" listener="#{handleGatewayAction.onTransferForPreRequire}"/>
-
-                                    <p:column style="width:90%;">
-                                        <h:outputText value="#{gateway.name}"/>
-                                    </p:column>
-                                </p:pickList>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p:commandButton value="#{bundle.submit}" id="edit" update="gateways"
-                                                 actionListener="#{handleGatewayAction.saveOrUpdate}"
-                                                 oncomplete="PF('gatewayDialog').hide()"
-                                                 styleClass="ui-priority-primary"
-                                                 rendered="#{not handleGatewayAction.disableFields}"/>
                             </td>
                         </tr>
                     </table>
