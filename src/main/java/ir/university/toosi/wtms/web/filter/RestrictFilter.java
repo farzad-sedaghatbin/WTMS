@@ -35,7 +35,7 @@ public class RestrictFilter implements Filter {
         response.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(false);
         String path = request.getRequestURI();
-        if (path.contains("/login.xhtml") || path.contains("?wsdl")){
+        if (path.contains("/login.xhtml") || path.contains("?wsdl") || path.contains(".css") || path.contains(".js") || path.contains(".svg")){
             filterChain.doFilter(request, response);
         } else if (session == null || session.getAttribute("username") == null) {
             response.sendRedirect(request.getContextPath() + "/login.xhtml");

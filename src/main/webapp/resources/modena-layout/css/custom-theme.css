@@ -10,10 +10,6 @@
     float: left;
 }
 
-#wrapper {
-    /*display: inline-block;*/
-}
-
 .layout-menu > li > a > i {
     float: right;
 }
@@ -48,4 +44,12 @@
 
 .icon-menu {
     padding-left: 10px;
+}
+
+#layout-menu-cover:not(.showmenu) {
+    margin-right: -320px;
+}
+
+.layout-menu li ul li a {
+    text-align: right;
 }
