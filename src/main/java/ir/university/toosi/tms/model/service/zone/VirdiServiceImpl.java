@@ -155,7 +155,7 @@ public class VirdiServiceImpl<T extends Virdi> {
     public String deleteVirdi(T entity) {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), BLookup.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             virdiDAO.delete(findById(entity.getId()));
-            return "operation.occurred";;
+            return "operation.occurred";
     }
 
     public T createVirdi(T entity) {
