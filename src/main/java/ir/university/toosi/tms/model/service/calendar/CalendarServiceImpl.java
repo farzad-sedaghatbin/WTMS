@@ -98,7 +98,7 @@ public class CalendarServiceImpl<T extends Calendar> {
             }
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Calendar.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             calendarDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

@@ -132,7 +132,7 @@ public class GatewayServiceImpl<T extends Gateway> {
             entity.getCameras().clear();
             editGateway(entity);
             GatewayDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

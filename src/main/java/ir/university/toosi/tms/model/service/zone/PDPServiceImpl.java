@@ -140,7 +140,7 @@ public class PDPServiceImpl<T extends PDP> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), BLookup.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             PDPdao.delete(findById(entity.getId()));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "FALSE";

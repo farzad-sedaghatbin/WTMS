@@ -96,7 +96,7 @@ public class OrganServiceImpl<T extends Organ> {
                 return new ObjectMapper().writeValueAsString("REL_ORGAN_PERSON");
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Organ.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             organDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

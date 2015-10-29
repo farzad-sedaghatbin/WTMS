@@ -50,7 +50,7 @@ public class GatewaySpecialStateServiceImpl<T extends GatewaySpecialState> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), GatewayPerson.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             gatewaySpecialStateDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

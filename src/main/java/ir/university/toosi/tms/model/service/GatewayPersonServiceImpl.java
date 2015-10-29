@@ -69,7 +69,7 @@ public class GatewayPersonServiceImpl<T extends GatewayPerson> {
         try {
 //            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), GatewayPerson.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             gatewayPersonDAO.delete(findByPersonIdAndGatewayId(personID, gatewayID));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }
@@ -79,7 +79,7 @@ public class GatewayPersonServiceImpl<T extends GatewayPerson> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), GatewayPerson.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             gatewayPersonDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

@@ -224,7 +224,7 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), TrafficLog.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             TrafficLogDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

@@ -62,7 +62,7 @@ public class CalendarDateServiceImpl<T extends CalendarDate> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), CalendarDate.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             calendarDateDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

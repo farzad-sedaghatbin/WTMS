@@ -50,7 +50,7 @@ public class LanguageManagementServiceImpl<T extends LanguageManagement> {
     public String deleteLanguageManagement(T entity) {
         try {
             languageDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

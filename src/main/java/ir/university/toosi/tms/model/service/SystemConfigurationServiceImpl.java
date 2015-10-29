@@ -69,7 +69,7 @@ public class SystemConfigurationServiceImpl<T extends SystemConfiguration> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), TrafficLog.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             systemConfigurationDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

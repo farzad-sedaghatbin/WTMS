@@ -114,7 +114,7 @@ public class CardServiceImpl<T extends Card> {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Card.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
 
             cardDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

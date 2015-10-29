@@ -69,7 +69,7 @@ public class SavedQueryServiceImpl<T extends SavedQuery> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), SavedQuery.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             savedQueryDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

@@ -125,7 +125,7 @@ public class RulePackageServiceImpl<T extends RulePackage> {
 
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), RulePackage.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             rulePackageDAO.delete(findById(String.valueOf(entity.getId())));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

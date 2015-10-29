@@ -66,7 +66,7 @@ public class LanguageServiceImpl<T extends Languages> {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Languages.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
 
             languageDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

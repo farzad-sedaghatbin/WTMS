@@ -76,7 +76,7 @@ public class RuleServiceImpl<T extends Rule> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Rule.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             ruleDAO.delete(findById(String.valueOf(entity.getId())));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

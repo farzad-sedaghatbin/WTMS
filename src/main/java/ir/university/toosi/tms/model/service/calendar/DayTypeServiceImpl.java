@@ -65,7 +65,7 @@ public class DayTypeServiceImpl<T extends DayType> {
                 return new ObjectMapper().writeValueAsString("REL_DAYTYPE_RULE");
             EventLogManager.eventLog(eventLogService, null, DayType.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             dayTypeDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }
@@ -83,7 +83,7 @@ public class DayTypeServiceImpl<T extends DayType> {
                 EventLogManager.eventLog(eventLogService, null, DayType.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
                 dayTypeDAO.delete(entity);
             }
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }
@@ -101,7 +101,7 @@ public class DayTypeServiceImpl<T extends DayType> {
                 EventLogManager.eventLog(eventLogService, null, DayType.class.getSimpleName(), EventLogType.DELETE, userName);
                 dayTypeDAO.delete(entity);
             }
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

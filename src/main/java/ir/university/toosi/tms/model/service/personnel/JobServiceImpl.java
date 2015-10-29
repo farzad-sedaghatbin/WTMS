@@ -54,7 +54,7 @@ public class JobServiceImpl<T extends Job> {
     public String deleteJob(T entity) {
         try {
             jobDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

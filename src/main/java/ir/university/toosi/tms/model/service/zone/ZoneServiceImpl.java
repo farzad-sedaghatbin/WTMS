@@ -70,7 +70,7 @@ public class ZoneServiceImpl<T extends Zone> {
             if (gateways != null && gateways.size() != 0)
                 return new ObjectMapper().writeValueAsString("REL_GATEWAY_ZONE");
             ZoneDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

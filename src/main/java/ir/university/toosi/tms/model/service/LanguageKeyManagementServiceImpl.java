@@ -60,7 +60,7 @@ public class LanguageKeyManagementServiceImpl<T extends LanguageKeyManagement> {
     public String deleteLanguageKeyManagement(T entity) {
         try {
             languageDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

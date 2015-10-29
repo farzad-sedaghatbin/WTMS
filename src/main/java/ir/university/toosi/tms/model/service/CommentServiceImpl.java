@@ -69,7 +69,7 @@ public class CommentServiceImpl<T extends Comment> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Comment.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             commentDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }
@@ -78,7 +78,7 @@ public class CommentServiceImpl<T extends Comment> {
     public String rejectComment(T entity) {
         try {
             entity.setReject(true);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

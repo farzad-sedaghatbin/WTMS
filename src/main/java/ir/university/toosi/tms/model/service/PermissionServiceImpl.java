@@ -86,7 +86,7 @@ public class PermissionServiceImpl<T extends Permission> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Permission.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             permissionDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

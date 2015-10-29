@@ -75,7 +75,7 @@ public class MapServiceImpl<T extends Map> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Map.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             mapDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

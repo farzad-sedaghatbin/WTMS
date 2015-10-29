@@ -90,7 +90,7 @@ public class OperationServiceImpl<T extends Operation> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Operation.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             operationDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

@@ -70,7 +70,7 @@ public class RoleServiceImpl<T extends Role> {
 
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Role.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             roleDAO.delete(findById(String.valueOf(entity.getId())));
-            return "operation.occurred";
+            return "operation.occurred";;
         } catch (Exception e) {
             return "FALSE";
         }

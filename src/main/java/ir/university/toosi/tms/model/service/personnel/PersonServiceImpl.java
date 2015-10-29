@@ -202,7 +202,7 @@ public class PersonServiceImpl<T extends Person> {
             }
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Person.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             personDAO.delete(findById(entity.getId()));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             e.printStackTrace();
             return "FALSE";

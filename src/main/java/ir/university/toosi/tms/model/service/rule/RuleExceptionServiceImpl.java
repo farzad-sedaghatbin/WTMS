@@ -81,7 +81,7 @@ public class RuleExceptionServiceImpl<T extends RuleException> {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Role.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             ruleExceptionDAO.delete(findById(String.valueOf(entity.getId())));
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

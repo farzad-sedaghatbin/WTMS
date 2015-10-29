@@ -52,7 +52,7 @@ public class EventLogServiceImpl<T extends EventLog> {
     public String deleteEventLog(T entity) {
         try {
             eventLogDAO.delete(entity);
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "FALSE";
         }

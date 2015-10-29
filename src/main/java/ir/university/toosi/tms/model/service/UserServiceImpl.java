@@ -161,7 +161,7 @@ public class UserServiceImpl<T extends User> {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), User.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             userDAO.delete(findById(entity.getId()));
 
-            return new ObjectMapper().writeValueAsString("operation.occurred");
+            return "operation.occurred";
         } catch (Exception e) {
             return "false";
         }
