@@ -265,6 +265,7 @@ public class UserManagementAction implements Serializable {
                 session.setAttribute(INVALID_TRY, invalidTry);
                 addErrorMessage("invalid.login");
                 redirect("/login.xhtml");
+                return;
             }
             /*else if ((user.getEnable().equalsIgnoreCase("false")) || (user.getWorkGroups().getEnabled().equalsIgnoreCase("false"))) {
                 addErrorMessage("invalid.login.userDisable");

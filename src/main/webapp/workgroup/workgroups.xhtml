@@ -8,9 +8,9 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="groups">
-                <p:menuitem value="#{bundle.edit}" update="groupDetail" icon="ui-icon-search" oncomplete="PF('groupDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="groupDetail" icon="icon-edit" oncomplete="PF('groupDialog').show()"
                             actionListener="#{handleWorkGroupAction.edit}"/>
-                <p:menuitem value="#{bundle.delete}" update="groups" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="groups" icon="icon-delete"
                             actionListener="#{handleWorkGroupAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

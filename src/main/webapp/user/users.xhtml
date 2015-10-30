@@ -15,17 +15,17 @@
 
         <h:form id="form">
             <p:contextMenu for="users">
-                <p:menuitem value="#{bundle.view}" update="userDetail" icon="ui-icon-search" oncomplete="PF('userDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="userDetail" icon="icon-pageview" oncomplete="PF('userDialog').show()"
                             actionListener="#{handleUserAction.viewMode}"/>
-                <p:menuitem value="#{bundle.edit}" update="userDetail" icon="ui-icon-search" oncomplete="PF('userDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="userDetail" icon="icon-edit" oncomplete="PF('userDialog').show()"
                             actionListener="#{handleUserAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_pc}" update="assignPCDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.assign_pc}" update="assignPCDetail" icon="icon-assignment"
                             oncomplete="PF('assignPCDialog').show()"
                             actionListener="#{handleUserAction.assignPC}"/>
-                <p:menuitem value="#{bundle.assign_person}" update="assignPersonDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.assign_person}" update="assignPersonDetail" icon="icon-assignment"
                             oncomplete="PF('assignPersonDialog').show()"
                             actionListener="#{handleUserAction.assignPerson}"/>
-                <p:menuitem value="#{bundle.delete}" update="users" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="users" icon="icon-delete"
                             actionListener="#{handleUserAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                             </p:menuitem>
@@ -221,8 +221,7 @@
                              selectionMode="single" selection="#{handleUserAction.selectedPerson}"
                              rowKey="#{person.id}"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                             rowsPerPageTemplate="5,10,15"
-                             draggableColumns="true" style="margin-bottom:20px">
+                             rowsPerPageTemplate="5,10,15" style="margin-bottom:20px;width: 100%;height: 500px">
                     <f:facet name="header">
                         <h:outputText value="#{person.select_events}"/>
                     </f:facet>
@@ -232,7 +231,7 @@
                     <p:column headerText="#{bundle.name}" sortBy="#{person.name}" filterBy="#{person.name}">
                         <h:outputText value="#{person.name}"/>
                     </p:column>
-                    <p:column headerText="#{bundle.lastName}" sortBy="#{person.lastName}" filterBy="#{person.lastName}">
+                    <p:column headerText="#{bundle.lastname}" sortBy="#{person.lastName}" filterBy="#{person.lastName}">
                         <h:outputText value="#{person.lastName}"/>
                     </p:column>
                 </p:dataTable>

@@ -553,12 +553,12 @@ public class HandleGatewayAction implements Serializable {
     public void onTransfer(TransferEvent event) {
         if (event.isAdd()) {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(true);
+                ((Gateway) item).setSelected(true);
                 selectedGateways.add((Gateway) item);
             }
         } else {
             for (Object item : event.getItems()) {
-                ((Operation) item).setSelected(false);
+                ((Gateway) item).setSelected(false);
                 selectedGateways.remove(item);
             }
         }

@@ -45,9 +45,10 @@ import java.util.*;
 @Named(value = "handleUserAction")
 @SessionScoped
 public class HandleUserAction implements Serializable {
-
     @Inject
     private UserManagementAction me;
+
+
     @Inject
     private HandleWorkGroupAction handleWorkGroupAction;
     @Inject
@@ -158,6 +159,8 @@ public class HandleUserAction implements Serializable {
         workgroupFilter = "";
         personNameFilter = "";
         personLastNameFilter = "";
+        setDisableFields(false);
+
     }
 
     public void refresh() {

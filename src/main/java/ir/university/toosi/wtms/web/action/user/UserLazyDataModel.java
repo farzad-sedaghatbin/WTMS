@@ -33,7 +33,9 @@ public class UserLazyDataModel extends LazyDataModel<User> {
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
         Root<User> root = criteria.from(User.class);
 
-        for (Map.Entry<String,Object> e : filters.entrySet()) {
+        predicate = builder.and(predicate, builder.notEqual(root.<String>get("deleted"), "1"));
+
+        for (Map.Entry<String, Object> e : filters.entrySet()) {
             predicate = builder.and(predicate, builder.like(root.<String>get(e.getKey()), "%" + e.getValue() + "%"));
         }
 
@@ -58,7 +60,6 @@ public class UserLazyDataModel extends LazyDataModel<User> {
         typedQuery.setMaxResults(first + pageSize);
         return typedQuery.getResultList();
     }
-
 
 
     @Override

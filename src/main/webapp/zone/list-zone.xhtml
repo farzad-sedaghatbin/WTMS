@@ -14,15 +14,15 @@
 
         <h:form id="form">
             <p:contextMenu for="zones">
-                <p:menuitem value="#{bundle.view}" update="zoneDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.view}" update="zoneDetail" icon="icon-pageview"
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="zoneDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="zoneDetail" icon="icon-edit"
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search" rendered="false"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="icon-assignment" rendered="false"
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleZoneAction.assignRule}"/>
-                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="ui-icon-search" rendered="false"
+                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="icon-edit" rendered="false"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleZoneAction.editRule}"/>
-                <p:menuitem value="#{bundle.delete}" update="zones" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="zones" icon="icon-delete"
                             actionListener="#{handleZoneAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

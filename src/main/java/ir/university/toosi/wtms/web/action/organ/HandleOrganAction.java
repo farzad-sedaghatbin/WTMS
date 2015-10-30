@@ -761,7 +761,7 @@ public class HandleOrganAction implements Serializable {
 
     public TreeNode getRootOrgans() {
         HashMap<Long, Boolean> hashMap = new HashMap();
-        TreeNode root = new DefaultTreeNode(new Organ("*****",null,null,null), null);
+        TreeNode root = new DefaultTreeNode(new Organ("*****", null, null, null), null);
         if (rootOrgans == null) {
             List<Organ> organs = organService.getAllOrgan();
             organs = Organ.prepareHierarchy(organs);
@@ -775,12 +775,16 @@ public class HandleOrganAction implements Serializable {
     }
 
     private TreeNode recurciveNodes(TreeNode organ) {
+        if (organ.getChildren().size() != 0) {
+            for (TreeNode treeNode : organ.getChildren()) {
 
-        if (((Organ)organ.getData())==null || ((Organ)organ.getData()).getChildren() == null || ((Organ)organ.getData()).getChildren().size() == 0) {
+            }
+        }
+        if (((Organ) organ.getData()) == null || ((Organ) organ.getData()).getChildren() == null || ((Organ) organ.getData()).getChildren().size() == 0) {
             return organ;
         } else {
-            for (TreeNode treeNode : ((Organ)organ.getData()).getChildren()) {
-                new DefaultTreeNode(recurciveNodes( treeNode), organ);
+            for (TreeNode treeNode : ((Organ) organ.getData()).getChildren()) {
+                recurciveNodes(new DefaultTreeNode(treeNode, organ));
             }
 
         }

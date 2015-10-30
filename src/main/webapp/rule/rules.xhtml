@@ -8,11 +8,11 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="rulePackageTable">
-                <p:menuitem value="#{bundle.view}" update="rulePackageDetailPanel" icon="ui-icon-document"
+                <p:menuitem value="#{bundle.view}" update="rulePackageDetailPanel" icon="icon-pageview"
                             oncomplete="PF('rulePackageDialog').show()" actionListener="#{handleRuleAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="rulePackageDetailPanel" icon="ui-icon-comment"
+                <p:menuitem value="#{bundle.edit}" update="rulePackageDetailPanel" icon="icon-edit"
                             oncomplete="PF('rulePackageDialog').show()" actionListener="#{handleRuleAction.edit}"/>
-                <p:menuitem value="#{bundle.delete}" update="rulePackageTable" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="rulePackageTable" icon="icon-delete"
                             actionListener="#{handleRuleAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

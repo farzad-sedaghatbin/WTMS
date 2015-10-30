@@ -11,8 +11,8 @@
 
         <h:form>
             <p:contextMenu for="calendarTable">
-                <p:menuitem value="#{bundle.edit}" icon="ui-icon-search" actionListener="#{handleCalendarAction.edit}"/>
-                <p:menuitem value="#{bundle.delete}" update="calendarTable" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.edit}" icon="icon-edit" actionListener="#{handleCalendarAction.edit}"/>
+                <p:menuitem value="#{bundle.delete}" update="calendarTable" icon="icon-delete"
                             actionListener="#{handleCalendarAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

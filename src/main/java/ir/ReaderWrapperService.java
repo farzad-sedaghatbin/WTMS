@@ -12,6 +12,8 @@ import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
 import ir.university.toosi.tms.readerwrapper.AccessEventData;
 import ir.university.toosi.tms.readerwrapper.GetAccessEventDataDelegate;
 import ir.university.toosi.tms.readerwrapper.Person;
+import ir.university.toosi.tms.util.Configuration;
+import ir.university.toosi.tms.util.Initializer;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 
@@ -21,6 +23,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -113,6 +118,11 @@ public class ReaderWrapperService implements IReaderWrapperService {
         trafficLog.setCurrentLang(new Languages());
         trafficLog.setVideo("");
         trafficLogService.createTrafficLog(trafficLog);
+        try {
+            createPicture(trafficLog);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         monitoringAction.sendMessage(trafficLog);
 
     }
@@ -123,5 +133,23 @@ public class ReaderWrapperService implements IReaderWrapperService {
 
     public void setMonitoringAction(HandleMonitoringAction monitoringAction) {
         this.monitoringAction = monitoringAction;
+    }
+    private void createPicture(TrafficLog trafficLog) throws IOException {
+        File folder = new File(Configuration.getProperty("jboss.name") + trafficLog.getPictures());
+        List<byte[]> pics = Initializer.pics.get(trafficLog.getPdp().getCamera().getId());
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        for (int i = 0; i < pics.size(); i++) {
+            File file = new File(Configuration.getProperty("jboss.name") + trafficLog.getPictures() + "/" + i + ".png");
+
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(pics.get(i));
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+        }
+
+
     }
 }

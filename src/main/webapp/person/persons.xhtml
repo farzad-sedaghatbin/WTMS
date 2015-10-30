@@ -221,24 +221,15 @@
 
                     <tr valign="top">
                         <td align="#{me.align}" nowrap="nowrap" colspan="2">
-                            <p:commandButton value="#{bundle.add}"
-                                             action="#{handlePersonAction.add}"
-                                             execute="@this"
-                                             limitRender="true"
-                                             onclick="PF('PersonPanel').show()"
-                                             rendered="#{me.hasPermission('ADD_PERSON')}"
-                                             update="gallery, operationArea, handlePersonForm:handlePanel, pic_top, extrafiled1,extrafiled2,extrafiled3,extrafiled4"/>
-                            &#160;&#160;
-                            <h:commandButton action="#{handlePersonAction.exportExcel}" value="#{bundle.export}"/>
-
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <td align="#{me.align}" nowrap="nowrap" colspan="2">
                             <h:inputText converter="persianConverter" value="#{handlePersonAction.simpleValue}"/>
                             &#160;&#160;
                             <h:commandButton action="#{handlePersonAction.simpleSearch}" value="#{bundle.search}"/>
 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:commandButton action="#{handlePersonAction.exportExcel}" value="#{bundle.export}"/>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -246,6 +237,15 @@
                             <p:outputPanel id="gallery" ajaxRendered="true"
                                            rendered="#{handlePersonAction.personAvailable}">
                                 <table border="0" cellspacing="3" cellpadding="3" width="100%" dir="rtl">
+                                    <tr valign="top">
+                                        <td align="#{me.align}" nowrap="nowrap" colspan="2">
+                                            <p:commandButton value="#{bundle.add}"
+                                                             action="#{handlePersonAction.add}"
+                                                             onclick="PF('PersonPanel').show()"/>
+                                            &#160;&#160;
+
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td>
                                             <p:ring id="custom" value="#{handlePersonAction.persons}" var="person"
@@ -264,8 +264,9 @@
                                                             </p:commandLink>
                                                         </td>
                                                         <td>
-                                                            <p:commandLink action="#{handlePersonAction.assignRule}"
+                                                            <p:commandLink action="#{handlePersonAction.assignRule(person.id)}"
                                                                            title="assign rule"
+                                                                           update="assignPersonRule:handleAssignRulePanel"
                                                                            oncomplete="PF('AssignRulePanel').show()">
                                                                 <p:graphicImage value="/images/assign-rule.png"/>
                                                             </p:commandLink>

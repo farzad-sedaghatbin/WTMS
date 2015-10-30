@@ -7,19 +7,18 @@
 
     <ui:define name="content">
         <p:breadCrumb>
+
             <p:menuitem value="category" url="#"/>
             <p:menuitem value="#{bundle.device}" url="#" />
             <p:menuitem value="#{bundle.card}" url="#" />
         </p:breadCrumb>
         <h:form id="form">
             <p:contextMenu for="cards">
-                <p:menuitem value="#{bundle.view}" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="cardDetail" icon="icon-pageview" oncomplete="PF('cardDialog').show()"
                             actionListener="#{handleCardAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="cardDetail" icon="icon-edit" oncomplete="PF('cardDialog').show()"
                             actionListener="#{handleCardAction.edit}"/>
-                <p:menuitem value="#{bundle.edit}" update="cardDetail" icon="ui-icon-search" oncomplete="PF('cardSpecilize').show()"
-                            actionListener="#{handleCardAction.specializeCard}"/>
-                <p:menuitem value="#{bundle.delete}" update="cards" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="cards" icon="icon-delete"
                             actionListener="#{handleCardAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

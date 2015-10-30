@@ -21,19 +21,19 @@ public class CameraManager implements Runnable {
 
     @Override
     public void run() {
-//        while (true) {
-//            for (Camera camera :(List<Camera>) cameraService.getAllCamera()) {
-//                List<byte[]> photos= new ArrayList<>();
-//                for (int i = 0; i < camera.getFrames(); i++) {
-//                    photos.add(photoService.connect(camera.getIp()));
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                Initializer.pics.put(camera.getId(),photos);
-//            }
-//        }
+        while (true) {
+            for (Camera camera : (List<Camera>) cameraService.getAllCamera()) {
+                List<byte[]> photos = new ArrayList<>();
+                for (int i = 0; i < camera.getFrames(); i++) {
+                    photos.add(photoService.connect(camera.getIp()));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Initializer.pics.put(camera.getId(), photos);
+            }
+        }
     }
 }

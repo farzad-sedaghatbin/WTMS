@@ -8,13 +8,13 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="excs">
-                <p:menuitem value="#{bundle.view}" update="excDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.view}" update="excDetail" icon="icon-pageview"
                             oncomplete="PF('excDialog').show()"
                             actionListener="#{handleRuleExceptionAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="excDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="excDetail" icon="icon-edit"
                             oncomplete="PF('excDialog').show()"
                             actionListener="#{handleRuleExceptionAction.edit}"/>
-                <p:menuitem value="#{bundle.delete}" update="excs" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="excs" icon="icon-delete"
                             actionListener="#{handleRuleExceptionAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert"/>
                 </p:menuitem>

@@ -8,13 +8,13 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="roles">
-                <p:menuitem value="#{bundle.view}" update="roleDetail" icon="ui-icon-search" oncomplete="PF('roleDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="roleDetail" icon="icon-pageview" oncomplete="PF('roleDialog').show()"
                             actionListener="#{handleRoleAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="roleDetail" icon="ui-icon-search" oncomplete="PF('roleDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="roleDetail" icon="icon-edit" oncomplete="PF('roleDialog').show()"
                             actionListener="#{handleRoleAction.edit}"/>       
-                <p:menuitem value="#{bundle.permissions}" update="permissionDetail" icon="ui-icon-search" oncomplete="PF('permissionDialog').show()"
+                <p:menuitem value="#{bundle.permissions}" update="permissionDetail" icon="icon-assignment" oncomplete="PF('permissionDialog').show()"
                             actionListener="#{handleRoleAction.assignPermission}"/>
-                <p:menuitem value="#{bundle.delete}" update="roles" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="roles" icon="icon-delete"
                             actionListener="#{handleRoleAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

@@ -107,7 +107,7 @@ public class HandlePersonAction implements Serializable {
     private Organ selectedOrgan;
     private String selectedOrganName, rulePackageName, organId, calendarName;
     private boolean antiPassBack, allowExit, allowExitGadget;
-    private DataModel<RulePackage> rulePackageList = null;
+    private List<RulePackage> rulePackageList = null;
     private RulePackage selectedRulePackage;
     private byte[] picture;
     private String name;
@@ -707,10 +707,10 @@ public class HandlePersonAction implements Serializable {
         personFamilyFilter = "";
         personnelNoFilter = "";
         fillSearchCombos();
-        extraField1Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_1).equalsIgnoreCase("true") ? true : false;
-        extraField2Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_2).equalsIgnoreCase("true") ? true : false;
-        extraField3Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_3).equalsIgnoreCase("true") ? true : false;
-        extraField4Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_4).equalsIgnoreCase("true") ? true : false;
+//        extraField1Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_1).equalsIgnoreCase("true") ? true : false;
+//        extraField2Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_2).equalsIgnoreCase("true") ? true : false;
+//        extraField3Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_3).equalsIgnoreCase("true") ? true : false;
+//        extraField4Enable = me.getSystemParameter().get(SystemParameterType.PERSON_EXTRA_FIELD_4).equalsIgnoreCase("true") ? true : false;
         extraField1 = "";
         extraField2 = "";
         extraField3 = "";
@@ -918,8 +918,8 @@ public class HandlePersonAction implements Serializable {
         }
     }
 
-    public void assignRule() {
-        currentPerson = personService.findById(currentPerson.getId());
+    public void assignRule(String personId) {
+        currentPerson = personService.findById(Long.parseLong(personId));
         selectedRulePackage = currentPerson.getRulePackage();
         if (selectedRulePackage != null) {
             rulePackageName = selectedRulePackage.getName();
@@ -939,7 +939,7 @@ public class HandlePersonAction implements Serializable {
         }
 
         List rulePackages = rulePackageService.getAllRulePackage();
-        rulePackageList = new ListDataModel<>(rulePackages);
+        rulePackageList = rulePackages;
     }
 
     public void editRule(String personId) {
@@ -1101,7 +1101,6 @@ public class HandlePersonAction implements Serializable {
     }
 
     public void selectNewRuleForPerson() {
-        selectedRulePackage = rulePackageList.getRowData();
         rulePackageName = selectedRulePackage.getName();
         if (selectedRulePackage.getCalendar() != null)
             calendarName = selectedRulePackage.getCalendar().getName();
@@ -1549,11 +1548,11 @@ public class HandlePersonAction implements Serializable {
         this.allowExitGadget = allowExitGadget;
     }
 
-    public DataModel<RulePackage> getRulePackageList() {
+    public List<RulePackage> getRulePackageList() {
         return rulePackageList;
     }
 
-    public void setRulePackageList(DataModel<RulePackage> rulePackageList) {
+    public void setRulePackageList(List<RulePackage> rulePackageList) {
         this.rulePackageList = rulePackageList;
     }
 
@@ -2297,5 +2296,7 @@ public class HandlePersonAction implements Serializable {
     public void setRuleArrayList(List<Rule> ruleArrayList) {
         this.ruleArrayList = ruleArrayList;
     }
+
+
 }
 

@@ -88,17 +88,17 @@
         </p:outputPanel>
 
             <p:dataTable id="personTableInPopup" value="#{handlePersonAction.rulePackageList}"
-                            keepSaved="true"
-                            noDataLabel="'no_result_found"
-                            sortMode="single"
                             var="rulePackage"
-                            rows="10"
+                            rowKey="#{rulePackage.id}" selection="#{handlePersonAction.selectedRulePackage}"
+                            selectionMode="single"
                             style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                            rowClasses="ROW1,ROW2">
+                            paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                            rowsPerPageTemplate="5,10,15">
                 <p:column>
                     <f:facet name="header">
                         <h:outputText escape="true" value="'package-name"/>
                     </f:facet>
+
                     <p:commandLink id="selectLink" value="#{rulePackage.name}"
                                      action="#{handlePersonAction.selectNewRuleForPerson}"
                                      update="personTableInPopup, handleAssignRulePanel"

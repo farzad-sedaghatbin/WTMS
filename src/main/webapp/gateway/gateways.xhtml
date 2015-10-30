@@ -14,17 +14,17 @@
 
         <h:form id="form">
             <p:contextMenu for="gateways">
-                <p:menuitem value="#{bundle.view}" update="gatewayDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.view}" update="gatewayDetail" icon="icon-pageview"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="gatewayDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="gatewayDetail" icon="icon-edit"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search" rendered="false"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="icon-assignment" rendered="false"
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleGatewayAction.assignRule}"/>
-                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="ui-icon-search" rendered="false"
+                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="icon-mode_edit" rendered="false"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleGatewayAction.editRule}"/>
-                <p:menuitem value="#{bundle.special_status}" update="specialStatusTable" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.special_status}" update="specialStatusTable" icon="icon-beenhere"
                             oncomplete="PF('gatewayStatus').show()" actionListener="#{handleGatewayAction.assignSpecialStatus}" rendered="false"/>
-                <p:menuitem value="#{bundle.delete}" update="gateways" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="gateways" icon="icon-delete"
                             actionListener="#{handleGatewayAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

@@ -31,8 +31,6 @@
                     <p:menuitem id="rm_pc" value="#{bundle.pc}" icon="icon-computer"
                                 actionListener="#{handlePCAction.begin}"/>
                 </p:submenu>
-
-
                 <p:submenu id="zone" rendered="#{me.hasPermission('ZONE')}" label="#{bundle.zone_management}" icon="icon-menu">
 
                     <p:menuitem id="rm_zone" value="#{bundle.zone}" icon="icon-control_point"
@@ -42,7 +40,6 @@
                     <p:menuitem id="rm_organ" value="#{bundle.organ}" icon="icon-globe"
                                 actionListener="#{handleOrganAction.begin}"/>
                 </p:submenu>
-
                 <p:submenu id="device" rendered="#{me.hasPermission('DEVICE')}" label="#{bundle.device}" icon="icon-menu">
                     <p:menuitem id="rm_camera" value="#{bundle.camera}" icon="icon-camera2"
                                 actionListener="#{handleCameraAction.begin}"/>
@@ -85,17 +82,15 @@
                                 actionListener="#{handleMonitoringAction.trackByPersonAndTime}"/>
 
                 </p:submenu>
-
-                <p:submenu id="schedule" label="Schedule" icon="icon-menu" rendered="false">
+                <p:submenu id="schedule" label="Schedule" icon="icon-menu" >
                     <p:menuitem id="rm_rule" value="rule" icon="icon-device_hub"
-                                actionListener="#{handleRuleAction.begin}" rendered="false"/>
+                                actionListener="#{handleRuleAction.begin}" />
                     <p:menuitem id="rm_day" value="day" icon="icon-view_day"
-                                actionListener="#{handleDayTypeAction.begin}" rendered="false"/>
+                                actionListener="#{handleDayTypeAction.begin}"/>
                     <p:menuitem id="rm_calendar" value="#{bundle.calendar}" icon="icon-perm_contact_calendar"
-                                actionListener="#{handleCalendarAction.begin}" rendered="false"/>
+                                actionListener="#{handleCalendarAction.begin}"/>
 
                 </p:submenu>
-
                 <p:submenu id="others" label="#{bundle.system_information}" rendered="#{me.hasPermission('INFORMATION')}"  icon="icon-menu">
                     <p:menuitem id="rm_event" value="#{bundle.event}" icon="icon-event"
                                 actionListener="#{handleEventAction.begin}"/>

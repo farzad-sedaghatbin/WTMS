@@ -14,11 +14,11 @@
 
         <h:form id="form">
             <p:contextMenu for="cameras">
-                <p:menuitem value="#{bundle.view}" update="cameraDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.view}" update="cameraDetail" icon="icon-pageview"
                             oncomplete="PF('cameraDialog').show()" actionListener="#{handleCameraAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="cameraDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="cameraDetail" icon="icon-edit"
                             oncomplete="PF('cameraDialog').show()" actionListener="#{handleCameraAction.edit}"/>
-                <p:menuitem value="#{bundle.delete}" update="cameras" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="cameras" icon="icon-delete"
                             actionListener="#{handleCameraAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

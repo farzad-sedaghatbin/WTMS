@@ -8,11 +8,11 @@
     <ui:define name="content">
         <h:form id="form">
             <p:contextMenu for="pdps">
-                <p:menuitem value="#{bundle.view}" update="pdpDetail" icon="ui-icon-search" oncomplete="PF('pdpDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="pdpDetail" icon="icon-pageview" oncomplete="PF('pdpDialog').show()"
                             actionListener="#{handlePDPAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="pdpDetail" icon="ui-icon-search" oncomplete="PF('pdpDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="pdpDetail" icon="icon-edit" oncomplete="PF('pdpDialog').show()"
                             actionListener="#{handlePDPAction.edit}"/>
-                <p:menuitem value="#{bundle.delete}" update="pdps" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="pdps" icon="icon-delete"
                             actionListener="#{handlePDPAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

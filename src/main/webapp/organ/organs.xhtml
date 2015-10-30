@@ -14,21 +14,21 @@
 
         <h:form id="form">
             <p:contextMenu for="organs">
-                <p:menuitem value="#{bundle.add}" update="organDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.add}" update="organDetail" icon="icon-add"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.addChild}"/>
-                <p:menuitem value="#{bundle.view}" update="organDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.view}" update="organDetail" icon="icon-pageview"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="organDetail" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.edit}" update="organDetail" icon="icon-edit"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-search" rendered="false"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="icon-assignment" rendered="false"
                             oncomplete="PF('assignRuleDialog').show()"
                             actionListener="#{handleOrganAction.assignRule}"/>
-                <p:menuitem value="#{bundle.persons}" update="personTable" icon="ui-icon-search"
+                <p:menuitem value="#{bundle.persons}" update="personTable" icon="icon-person"
                             oncomplete="PF('PersonDialog').show()" actionListener="#{handleOrganAction.viewPerson}"/>
-                <p:menuitem value="#{bundle.delete}" update="organs" icon="ui-icon-close"
+                <p:menuitem value="#{bundle.delete}" update="organs" icon="icon-delete"
                             actionListener="#{handleOrganAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>
@@ -39,7 +39,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:tree id="tree"  var="organ" dir="RTL" value="#{handleOrganAction.rootOrgans}"
+            <p:tree id="tree"  var="organ" dir="rtl" value="#{handleOrganAction.rootOrgans}"
                     orientation="horizontal">
                 <p:treeNode >
 
@@ -51,7 +51,7 @@
             <p:commandButton value="#{bundle.add}" id="add" update="organDetail" actionListener="#{handleOrganAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('organDialog').show()"/>
 
-            <p:treeTable id="organs" var="currentOrgan" value="#{handleOrganAction.rootOrgans}" dataLocale="#{me.locale}" style="margin-top: 0"
+            <p:treeTable id="organs" var="currentOrgan"  value="#{handleOrganAction.rootOrgans}" dataLocale="#{me.locale}" style="margin-top: 0"
 
                          selection="#{handleOrganAction.selectedNode}" selectionMode="single"
                          >
