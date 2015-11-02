@@ -1,5 +1,6 @@
 package ir.university.toosi.wtms.web.action.zone;
 
+import ir.IReaderWrapperService;
 import ir.ReaderWrapperService;
 import ir.university.toosi.tms.model.entity.zone.*;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
@@ -18,8 +19,12 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -314,7 +319,14 @@ public class HandleVirdiAction implements Serializable {
         virdiNameFilter = "";
     }
 
-    public void fetch() {
+    public void fetch() throws MalformedURLException {
+//        readerWrapperService.getUserList(currentVirdi.getTerminalId());
+        URL url = new URL("http://127.0.0.1:8081/ws?wsdl");
+        QName qname = new QName("http://ir/", "ReaderWrapperServiceService");
+
+        Service service = Service.create(url, qname);
+
+        IReaderWrapperService readerWrapperService = service.getPort(IReaderWrapperService.class);
         readerWrapperService.getUserList(currentVirdi.getTerminalId());
         me.addInfoMessage("fetch_from_virdi_completed");
         me.redirect("/virdi/virdi.xhtml");
@@ -387,7 +399,7 @@ public class HandleVirdiAction implements Serializable {
         selectedVirdi.setGateway(gateway);
         selectedVirdi.setCamera(camera);
         selectedVirdi.setOnline(online);
-        if(ip!=null&&ip.length()>0) {
+        if (ip != null && ip.length() > 0) {
             boolean condition = virdiService.exist(selectedVirdi.getIp(), selectedVirdi.getId());
             if (condition) {
 

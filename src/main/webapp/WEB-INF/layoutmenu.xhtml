@@ -59,7 +59,7 @@
                     <p:menuitem id="sentry" value="#{bundle.sentry}" icon="icon-verified_user"
                                 action="#{handleMonitoringAction.beginSentry}"/>
                     <p:menuitem id="rm_map" value="#{bundle.map}" icon="icon-map"
-                                actionListener="#{handleMapAction.begin}" rendered="false"/>
+                                actionListener="#{handleMapAction.begin}"/>
                     <p:menuitem id="rm_authorize" value="#{bundle.authorize}" icon="icon-person"
                                 action="#{handleCommentAction.beginAuthorize}" rendered="false"/>
                     <p:menuitem id="rm_comment" value="#{bundle.comment}" icon="icon-comment"
@@ -82,7 +82,7 @@
                                 actionListener="#{handleMonitoringAction.trackByPersonAndTime}"/>
 
                 </p:submenu>
-                <p:submenu id="schedule" label="Schedule" icon="icon-menu" >
+                <p:submenu id="schedule" label="Schedule" icon="icon-menu" rendered="false" >
                     <p:menuitem id="rm_rule" value="rule" icon="icon-device_hub"
                                 actionListener="#{handleRuleAction.begin}" />
                     <p:menuitem id="rm_day" value="day" icon="icon-view_day"

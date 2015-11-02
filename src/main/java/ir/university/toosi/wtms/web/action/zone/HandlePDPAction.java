@@ -246,7 +246,7 @@ public class HandlePDPAction implements Serializable {
     public void fingerPage() throws MalformedURLException {
 //        me.setActiveMenu(MenuType.SEND_RECEIVE);
         finger = true;
-        URL url = new URL("http://192.168.1.6:8081/ws?wsdl");
+        URL url = new URL("http://127.0.0.1:8081/ws?wsdl");
 
         //1st argument service URI, refer to wsdl document above
         //2nd argument is service name, refer to wsdl document above

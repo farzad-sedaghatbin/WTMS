@@ -16,8 +16,10 @@ import ir.university.toosi.wtms.web.util.CalendarUtil;
 //import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.util.LangUtil;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.StreamedContent;
 
 
 import javax.ejb.EJB;
@@ -26,9 +28,7 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -432,5 +432,20 @@ public class HandleTrafficAction implements Serializable {
 
     public void setDateFilter(String dateFilter) {
         this.dateFilter = dateFilter.replace("/", "");
+    }
+
+    public StreamedContent getPic(TrafficLog trafficLog1) {
+        if (trafficLog1 != null) {
+            String address = trafficLog1.getPictures();
+            if (address == null)
+                return new DefaultStreamedContent();
+            address = address + "/" + index + ".png";
+            try {
+                new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("jboss.name") + address)), "image/png");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    return null;
     }
 }

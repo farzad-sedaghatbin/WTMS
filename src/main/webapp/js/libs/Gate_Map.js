@@ -885,7 +885,7 @@
                     Methods.NodesSelectBoxPoint = Point;
                 };
                 Point = $(Point);
-                Point.append('<option value="" style=" background:#fff; ">select Node</option>');
+                Point.append('<option value="" style=" background:#fff; ">انتخاب گذرگاه</option>');
                 for (i in Methods.NodesSelectBox) {
                     var NodesSelectBox = Methods.NodesSelectBox[i];
                     if(!NodesSelectBox['Color']){
@@ -914,7 +914,7 @@
                     Methods.ShapeSelectBoxPoint = Point;
                 };
                 Point = $(Point);
-                Point.append('<option value="" style=" background:#fff; ">select Shape</option>');
+                Point.append('<option value="" style=" background:#fff; ">انتخاب مدل</option>');
                 for (i in Methods.ShapeSelectBox) {
                     var ShapeSelectBox = Methods.ShapeSelectBox[i];
                     if(!ShapeSelectBox['Color']){

@@ -1,9 +1,11 @@
 package ir;
 
 
+import com.sun.faces.facelets.tag.ui.ParamHandler;
 import ir.university.toosi.tms.readerwrapper.AccessEventData;
 import ir.university.toosi.tms.readerwrapper.GetAccessEventDataDelegate;
 import ir.university.toosi.tms.readerwrapper.Person;
+import ir.university.toosi.tms.readerwrapper.PersonHolder;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -34,7 +36,7 @@ public interface IReaderWrapperService {
     public void getUserList(int terminalId);
 
     @WebMethod
-    public void setUserList(int terminalId,List<Person> personList,boolean isSucceed,String failedMessage);
+    public void setUserList(int terminalId,PersonHolder personList);
 
     @WebMethod
     public void addOnGetAccessEventData(int terminalId, AccessEventData value);

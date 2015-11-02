@@ -12,6 +12,7 @@ import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
 import ir.university.toosi.tms.readerwrapper.AccessEventData;
 import ir.university.toosi.tms.readerwrapper.GetAccessEventDataDelegate;
 import ir.university.toosi.tms.readerwrapper.Person;
+import ir.university.toosi.tms.readerwrapper.PersonHolder;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.tms.util.Initializer;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
@@ -80,9 +81,10 @@ public class ReaderWrapperService implements IReaderWrapperService {
     }
 
     @Override
-    public void setUserList(int terminalId, List<Person> personList, boolean isSucceed, String failedMessage) {
-        System.out.println(personList.size());
-        for (Person person : personList) {
+    public void setUserList(int terminalId, PersonHolder
+            personList) {
+        System.out.println(personList.getPersons().length);
+        for (Person person : personList.getPersons()) {
             ir.university.toosi.tms.model.entity.personnel.Person person1 = new ir.university.toosi.tms.model.entity.personnel.Person();
             person1.setPersonOtherId(String.valueOf(person.getUserId()));
             person1.setId(person.getUserId());
