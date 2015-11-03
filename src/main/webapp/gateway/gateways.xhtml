@@ -95,6 +95,11 @@
                                                          valueChangeListener="#{handleGatewayAction.changeGateways}"/>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <p:commandButton value="#{bundle.submit}" actionListener="#{handleGatewayAction.saveOrUpdate}" rendered="#{not handleGatewayAction.disableFields}"/>
+                            </td>
+                        </tr>
                     </table>
                 </p:outputPanel>
             </p:dialog>

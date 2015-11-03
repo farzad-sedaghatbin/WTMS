@@ -85,6 +85,7 @@ public class HandleTrafficAction implements Serializable {
 
 
     public void search() {
+        eventLogList = new TrafficLazyDataModel(trafficLogService);
         List<TrafficLogDataModel> logDataModels = new ArrayList<>();
 
         for (TrafficLog log : new TrafficLazyDataModel(trafficLogService)) {

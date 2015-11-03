@@ -204,7 +204,7 @@ public class HandleCardAction implements Serializable {
         String condition = cardService.deleteCard(getCard());
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/card/list-card.htm");
+        me.redirect("/card/cards.xhtml");
     }
 
     public void downloadJnlp() throws IOException {
@@ -404,7 +404,7 @@ public class HandleCardAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/card/list-card.htm");
+            me.redirect("/card/cards.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }

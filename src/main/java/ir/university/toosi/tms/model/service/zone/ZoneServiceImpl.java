@@ -68,7 +68,7 @@ public class ZoneServiceImpl<T extends Zone> {
 
             List<Gateway> gateways = gatewayService.findByZone(entity);
             if (gateways != null && gateways.size() != 0)
-                return new ObjectMapper().writeValueAsString("REL_GATEWAY_ZONE");
+                return "there.are.gateways.for.this.zone";
             ZoneDAO.delete(entity);
             return "operation.occurred";
         } catch (Exception e) {

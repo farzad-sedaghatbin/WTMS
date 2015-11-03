@@ -184,7 +184,7 @@ public class HandleOrganAction implements Serializable {
         String condition = organService.deleteOrgan(currentOrgan);
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/organ/list-organ.htm");
+        me.redirect("/organ/organs.xhtml");
     }
 
     public void init() {
@@ -271,7 +271,7 @@ public class HandleOrganAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/organ/list-organ.htm");
+            me.redirect("/organ/organs.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;

@@ -35,6 +35,8 @@ public class CardLazyDataModel extends LazyDataModel<Card> {
         CriteriaQuery<Card> criteria = builder.createQuery(Card.class);
         Root<Card> root = criteria.from(Card.class);
 
+        predicate = builder.and(predicate, builder.notEqual(root.<String>get("deleted"), "1"));
+
         for (Map.Entry<String,Object> e : filters.entrySet()) {
             predicate = builder.and(predicate, builder.like(root.<String>get(e.getKey()), "%" + e.getValue() + "%"));
         }

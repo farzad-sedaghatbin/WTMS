@@ -17,7 +17,7 @@
                     <p:menuitem id="cont" value="count" icon="icon-verified_user"
                                 action="#{counterView.beginCount}" rendered="false"/>
                 </p:submenu>
-                <p:submenu id="usermanagemen" rendered="#{me.hasPermission('USER')}" label="#{bundle.user_management}" icon="icon-menu">
+                <p:submenu id="usermanagemen" label="#{bundle.user_management}" icon="icon-menu">
                     <p:menuitem id="rm_dashboard" value="Dashboard" icon="icon-dvr" rendered="false"/>
 
                     <p:menuitem id="rm_user" value="#{bundle.user}" icon="icon-verified_user"
@@ -31,7 +31,7 @@
                     <p:menuitem id="rm_pc" value="#{bundle.pc}" icon="icon-computer"
                                 actionListener="#{handlePCAction.begin}"/>
                 </p:submenu>
-                <p:submenu id="zone" rendered="#{me.hasPermission('ZONE')}" label="#{bundle.zone_management}" icon="icon-menu">
+                <p:submenu id="zone" label="#{bundle.zone_management}" icon="icon-menu">
 
                     <p:menuitem id="rm_zone" value="#{bundle.zone}" icon="icon-control_point"
                                 actionListener="#{handleZoneAction.begin}"/>
@@ -40,7 +40,7 @@
                     <p:menuitem id="rm_organ" value="#{bundle.organ}" icon="icon-globe"
                                 actionListener="#{handleOrganAction.begin}"/>
                 </p:submenu>
-                <p:submenu id="device" rendered="#{me.hasPermission('DEVICE')}" label="#{bundle.device}" icon="icon-menu">
+                <p:submenu id="device" label="#{bundle.device}" icon="icon-menu">
                     <p:menuitem id="rm_camera" value="#{bundle.camera}" icon="icon-camera2"
                                 actionListener="#{handleCameraAction.begin}"/>
                     <p:menuitem id="rm_pdp" value="#{bundle.pdp}" icon="icon-devices"
@@ -55,7 +55,7 @@
                                 actionListener="#{handleCardAction.begin}"/>
 
                 </p:submenu>
-                <p:submenu id="monitoring" label="#{bundle.monitoring}" rendered="#{me.hasPermission('MONITORING')}"  icon="icon-menu">
+                <p:submenu id="monitoring" label="#{bundle.monitoring}" icon="icon-menu">
                     <p:menuitem id="sentry" value="#{bundle.sentry}" icon="icon-verified_user"
                                 action="#{handleMonitoringAction.beginSentry}"/>
                     <p:menuitem id="rm_map" value="#{bundle.map}" icon="icon-map"
@@ -69,7 +69,7 @@
                     <p:menuitem id="rm_setting" value="powerSetting" icon="icon-power_settings_new"
                                 actionListener="#{handleSettingAction.begin}" rendered="false"/>
                 </p:submenu>
-                <p:submenu id="report" label="#{bundle.report}" rendered="#{me.hasPermission('REPORT')}" icon="icon-menu">
+                <p:submenu id="report" label="#{bundle.report}" icon="icon-menu">
                     <p:menuitem id="rm_traffic" value="#{bundle.trafficlog}" icon="icon-traffic"
                                 actionListener="#{handleTrafficAction.begin}"/>
                     <p:menuitem id="rm_traffic_chart" value="#{bundle.chart}" icon="icon-report"
@@ -91,7 +91,7 @@
                                 actionListener="#{handleCalendarAction.begin}"/>
 
                 </p:submenu>
-                <p:submenu id="others" label="#{bundle.system_information}" rendered="#{me.hasPermission('INFORMATION')}"  icon="icon-menu">
+                <p:submenu id="others" label="#{bundle.system_information}" icon="icon-menu">
                     <p:menuitem id="rm_event" value="#{bundle.event}" icon="icon-event"
                                 actionListener="#{handleEventAction.begin}"/>
                     <p:menuitem id="rm_exception" value="#{bundle.exception}" icon="icon-error"

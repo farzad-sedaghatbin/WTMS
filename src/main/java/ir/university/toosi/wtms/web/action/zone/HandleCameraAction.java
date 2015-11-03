@@ -1,28 +1,20 @@
 package ir.university.toosi.wtms.web.action.zone;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.zone.Camera;
+import ir.university.toosi.tms.model.entity.zone.Gateway;
+import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.tms.model.entity.MenuType;
-import ir.university.toosi.tms.model.entity.zone.Camera;
-import ir.university.toosi.tms.model.entity.zone.Gateway;
-import ir.university.toosi.tms.model.entity.zone.PDP;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
-
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -138,7 +130,7 @@ public class HandleCameraAction implements Serializable {
     public void add() {
         init();
         gatewayGrid = handleGatewayAction.getSelectionGrid();
-        handleGatewayAction.setGatewayDualList(new DualListModel<Gateway>(gatewayGrid,new ArrayList<Gateway>()));
+        handleGatewayAction.setGatewayDualList(new DualListModel<Gateway>(gatewayGrid, new ArrayList<Gateway>()));
         setEditable("false");
     }
 
@@ -149,7 +141,7 @@ public class HandleCameraAction implements Serializable {
         pdpList = pdpService.findByCameraId(currentCamera.getId());
         if (pdpList != null && pdpList.size() > 0) {
             me.addInfoMessage("camera.pdp");
-            me.redirect("/zone/list-camera.htm");
+            me.redirect("/zone/list-camera.xhtml");
         }
 
         List<Gateway> gatewayList = null;
@@ -172,7 +164,7 @@ public class HandleCameraAction implements Serializable {
         String condition = cameraService.deleteCamera(currentCamera);
         refresh();
         me.addInfoMessage(condition);
-        me.redirect("/zone/list-camera.htm");
+        me.redirect("/zone/list-camera.xhtml");
     }
 
 
@@ -224,7 +216,7 @@ public class HandleCameraAction implements Serializable {
             }
         }
         handleGatewayAction.setGatewayList(gatewayList);
-        handleGatewayAction.setGatewayDualList(new DualListModel<Gateway>(sourceGateways,targetGateways));
+        handleGatewayAction.setGatewayDualList(new DualListModel<Gateway>(sourceGateways, targetGateways));
     }
 
 
@@ -261,7 +253,7 @@ public class HandleCameraAction implements Serializable {
             }
         }
         handleGatewayAction.setGatewayList(gatewayList);
-        handleGatewayAction.setGatewayDualList(new DualListModel<Gateway>(sourceGateways,targetGateways));
+        handleGatewayAction.setGatewayDualList(new DualListModel<Gateway>(sourceGateways, targetGateways));
     }
 
 
@@ -317,7 +309,7 @@ public class HandleCameraAction implements Serializable {
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/zone/list-camera.htm");
+            me.redirect("/zone/list-camera.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
             return;
@@ -335,14 +327,15 @@ public class HandleCameraAction implements Serializable {
         newCamera.setStatus("c");
         newCamera.setEffectorUser(me.getUsername());
         newCamera.setIp(ip);
-        newCamera.setFrames(Long.valueOf(frames));
+        if (frames != null || !"".equals(frames))
+            newCamera.setFrames(Long.valueOf(frames));
 
-            boolean condition =cameraService.existNotId(newCamera.getIp());
-            if (condition) {
+        boolean condition = cameraService.existNotId(newCamera.getIp());
+        if (condition) {
 
-                me.addInfoMessage("camera.exist");
-                return;
-            }
+            me.addInfoMessage("camera.exist");
+            return;
+        }
 
         Set<Gateway> selecteGateway = new HashSet<>();
         for (Gateway gateway : handleGatewayAction.getSelectedGateways()) {
@@ -358,16 +351,16 @@ public class HandleCameraAction implements Serializable {
         }
 
         Camera insertedCamera = null;
-            insertedCamera = cameraService.createCamera(insertedCamera);
+        insertedCamera = cameraService.createCamera(insertedCamera);
 
         if (insertedCamera != null) {
             for (Gateway gateway1 : selecteGateway) {
                 gateway1.getCameras().add(insertedCamera);
-              gatewayService.editGateway(gateway1);
+                gatewayService.editGateway(gateway1);
             }
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/zone/list-camera.htm");
+            me.redirect("/zone/list-camera.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
