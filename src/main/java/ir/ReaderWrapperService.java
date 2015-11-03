@@ -15,6 +15,7 @@ import ir.university.toosi.tms.readerwrapper.Person;
 import ir.university.toosi.tms.readerwrapper.PersonHolder;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.tms.util.Initializer;
+import ir.university.toosi.tms.util.LangUtil;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 
@@ -47,7 +48,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
     VirdiServiceImpl virdiService;
     @EJB
     TrafficLogServiceImpl trafficLogService;
-
+    @Inject
     private HandleMonitoringAction monitoringAction;
 
     @Override
@@ -81,16 +82,14 @@ public class ReaderWrapperService implements IReaderWrapperService {
     }
 
     @Override
-    public void setUserList(int terminalId, PersonHolder
-            personList) {
+    public void setUserList(int terminalId, PersonHolder personList) {
         System.out.println(personList.getPersons().length);
         for (Person person : personList.getPersons()) {
             ir.university.toosi.tms.model.entity.personnel.Person person1 = new ir.university.toosi.tms.model.entity.personnel.Person();
             person1.setPersonOtherId(String.valueOf(person.getUserId()));
-            person1.setId(person.getUserId());
             person1.setName(person.getUserName());
             person1.setPersonnelNo(person.getEmplymentCode());
-            if (personService.findById(person1.getId()) == null) {
+            if (personService.getPersonByPersonOtherId(person1.getPersonOtherId()) == null) {
                 personService.createPerson(person1);
             } else {
                 personService.editPerson(person1);
@@ -102,12 +101,12 @@ public class ReaderWrapperService implements IReaderWrapperService {
     @Override
     public void addOnGetAccessEventData(int terminalId, AccessEventData value) {
         TrafficLog trafficLog = new TrafficLog();
-        trafficLog.setTime(value.getDateTime());
-        trafficLog.setDate(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
+        trafficLog.setTime(LangUtil.getEnglishNumber(CalendarUtil.getTime(new Date(), new Locale("fa"))));
+        trafficLog.setDate(LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
         trafficLog.setExit(true);
         trafficLog.setValid(value.isAuthorized());
         trafficLog.setVirdi(virdiService.findByTerminalId(terminalId));
-        trafficLog.setPerson(personService.findById(value.getUserID()));
+        trafficLog.setPerson(personService.getPersonByPersonOtherId(String.valueOf(value.getUserID())));
         trafficLog.setGateway(trafficLog.getVirdi().getGateway());
         trafficLog.setCard(null);
         trafficLog.setFinger(true);
@@ -120,12 +119,22 @@ public class ReaderWrapperService implements IReaderWrapperService {
         trafficLog.setCurrentLang(new Languages());
         trafficLog.setVideo("");
         trafficLogService.createTrafficLog(trafficLog);
-        try {
-            createPicture(trafficLog);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            createPicture(trafficLog);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         monitoringAction.sendMessage(trafficLog);
+
+    }
+
+    @Override
+    public boolean addOnGetOnlineVerifyAccessControl(int terminalId, AccessEventData accessEventData) {
+        return false;
+    }
+
+    @Override
+    public void addUserInfo(int terminal, PersonHolder personHolder) {
 
     }
 
@@ -136,6 +145,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
     public void setMonitoringAction(HandleMonitoringAction monitoringAction) {
         this.monitoringAction = monitoringAction;
     }
+
     private void createPicture(TrafficLog trafficLog) throws IOException {
         File folder = new File(Configuration.getProperty("jboss.name") + trafficLog.getPictures());
         List<byte[]> pics = Initializer.pics.get(trafficLog.getPdp().getCamera().getId());

@@ -95,9 +95,9 @@ public class VirdiServiceImpl<T extends Virdi> {
             return null;
         }
     }
-    public T findByTerminalId(long id) {
+    public T findByTerminalId(int id) {
         try {
-            return (T) virdiDAO.findById(id);
+            return (T) virdiDAO.findByTerminalId(id);
         } catch (Exception e) {
             return null;
         }

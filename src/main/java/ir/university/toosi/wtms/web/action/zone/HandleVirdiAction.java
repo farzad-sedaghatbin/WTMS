@@ -3,10 +3,13 @@ package ir.university.toosi.wtms.web.action.zone;
 import ir.IReaderWrapperService;
 import ir.ReaderWrapperService;
 import ir.university.toosi.tms.model.entity.zone.*;
+import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
+import ir.university.toosi.tms.readerwrapper.Person;
+import ir.university.toosi.tms.readerwrapper.PersonHolder;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
 import org.primefaces.model.SortOrder;
@@ -51,6 +54,8 @@ public class HandleVirdiAction implements Serializable {
     private RulePackageServiceImpl rulePackageService;
     @EJB
     private ReaderWrapperService readerWrapperService;
+    @EJB
+    private PersonServiceImpl personService;
 
     private String editable = "false";
 
@@ -332,8 +337,27 @@ public class HandleVirdiAction implements Serializable {
         me.redirect("/virdi/virdi.xhtml");
     }
 
-    public void synchSetUsers() {
+    public void synchSetUsers() throws MalformedURLException {
 //        readerWrapperService.se(currentVirdi.getTerminalId());
+        URL url = new URL("http://127.0.0.1:8081/ws?wsdl");
+        QName qname = new QName("http://ir/", "ReaderWrapperServiceService");
+
+        Service service = Service.create(url, qname);
+
+        IReaderWrapperService readerWrapperService = service.getPort(IReaderWrapperService.class);
+        PersonHolder personHolder= new PersonHolder();
+        List<ir.university.toosi.tms.model.entity.personnel.Person> persons = personService.getAllPerson();
+        Person[] p= new Person[persons.size()];
+        int i=0;
+        for (ir.university.toosi.tms.model.entity.personnel.Person person : persons) {
+            Person person1= new Person();
+            person1.setEmplymentCode(person.getPersonnelNo());
+            person1.setUserId(Integer.parseInt(person.getPersonOtherId()));
+            person1.setUserName(person.getName());
+            p[i++]=person1;
+        }
+        personHolder.setPersons(p);
+        readerWrapperService.addUserInfo(currentVirdi.getTerminalId(), personHolder);
         me.addInfoMessage("sync_to_virdi_completed");
         me.redirect("/virdi/virdi.xhtml");
     }

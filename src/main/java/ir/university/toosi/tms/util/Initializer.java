@@ -104,7 +104,7 @@ public class Initializer {
         //TODO : ADD SystemConfiguration
 //        lang = languageService.loadLanguage("fa");
         createSavedReportScheduler.startService();
-        new Thread(new CameraManager(photoService, cameraService)).start();
+//        new Thread(new CameraManager(photoService, cameraService)).start();
     }
 
     private void fillPersons() {
