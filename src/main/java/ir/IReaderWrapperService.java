@@ -1,7 +1,6 @@
 package ir;
 
 
-import com.sun.faces.facelets.tag.ui.ParamHandler;
 import ir.university.toosi.tms.readerwrapper.AccessEventData;
 import ir.university.toosi.tms.readerwrapper.GetAccessEventDataDelegate;
 import ir.university.toosi.tms.readerwrapper.Person;
@@ -17,6 +16,7 @@ import java.util.List;
  */
 @WebService
 public interface IReaderWrapperService {
+
 
     @WebMethod
     public  void forceOpenDoor(int terminalId);
@@ -36,8 +36,14 @@ public interface IReaderWrapperService {
     public void getUserList(int terminalId);
 
     @WebMethod
-    public void setUserList(int terminalId,PersonHolder personList);
+    public void setUserList(int terminalId, PersonHolder personHolder);
 
     @WebMethod
-    public void addOnGetAccessEventData(int terminalId, AccessEventData value);
+    public void addOnGetAccessEventData(int terminalId, ir.university.toosi.tms.readerwrapper.AccessEventData accessEventData);
+
+    @WebMethod
+    public boolean addOnGetOnlineVerifyAccessControl(int terminalId, ir.university.toosi.tms.readerwrapper.AccessEventData accessEventData) ;
+
+    @WebMethod
+    public void addUserInfo(int terminal, PersonHolder personHolder);
 }

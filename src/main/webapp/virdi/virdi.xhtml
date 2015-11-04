@@ -18,7 +18,7 @@
                 <p:menuitem value="#{bundle.edit}" update="virdiDetail" icon="icon-edit" oncomplete="PF('virdiDialog').show()"
                             actionListener="#{handleVirdiAction.edit}"/>
                 <p:menuitem value="#{bundle.fetch}"  icon="icon-assignment" actionListener="#{handleVirdiAction.fetch}"/>
-                <p:menuitem value="#{bundle.synch}"  icon="icon-sync" actionListener="#{handleVirdiAction.synch}"/>
+                <p:menuitem value="#{bundle.synch}"  icon="icon-sync" actionListener="#{handleVirdiAction.synchSetUsers}"/>
                 <p:menuitem value="#{bundle.delete}" update="virdis" icon="icon-delete"
                             actionListener="#{handleVirdiAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />

@@ -1,6 +1,7 @@
 package ir.university.toosi.wtms.web.action.monitoring;
 
 
+import ir.ReaderWrapperService;
 import ir.university.toosi.tms.model.entity.zone.Virdi;
 import ir.university.toosi.tms.model.service.CommentServiceImpl;
 import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
@@ -64,7 +65,8 @@ public class HandleMonitoringAction implements Serializable {
     @Inject
     private HandlePersonAction handlePersonAction;
 
-
+    @EJB
+    private ReaderWrapperService readerWrapperService;
     @EJB
     private PersonServiceImpl personService;
     @EJB
@@ -104,13 +106,14 @@ public class HandleMonitoringAction implements Serializable {
     private String endHour;
     private String endMinute;
     private String endSecond;
-    private Hashtable<Long, LinkedList<SentryDataModel>> sentries = new Hashtable<>();
-    private volatile  List<List<SentryDataModel>> trafficLogsbygate = new ArrayList<>();
+    private static Hashtable<Long, LinkedList<SentryDataModel>> sentries = new Hashtable<>();
+    private  static  volatile  List<List<SentryDataModel>> trafficLogsbygate = new ArrayList<>();
     private volatile  List<List<SentryDataModel>> cachedTrafficLogsbygate = new ArrayList<>();
     private long sentryCount;
 
     @PostConstruct
-    public void init() {
+    public void
+    init() {
         try {
             sentryCount = Long.valueOf(me.SENTRY_COUNT);
 
@@ -124,7 +127,7 @@ public class HandleMonitoringAction implements Serializable {
         if (log == null || log.getGateway() == null || log.getPerson() == null)
             return;
 
-        LinkedList<SentryDataModel> sentryDataModels = sentries.get(log.getPdp().getId());
+        LinkedList<SentryDataModel> sentryDataModels = sentries.get(log.getVirdi().getId());
         if (sentryDataModels != null) {
             SentryDataModel dataModel = new SentryDataModel();
             dataModel.setVideo(log.getVideo());
@@ -134,11 +137,11 @@ public class HandleMonitoringAction implements Serializable {
             dataModel.setExit(log.isExit());
             dataModel.setValid(log.isValid());
             dataModel.setGate(log.getGateway().getName());
-            dataModel.setPdpName(log.getPdp().getName());
+            dataModel.setPdpName(log.getVirdi().getName());
             dataModel.setPersonId(log.getPerson().getId());
             dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
             sentryDataModels.addFirst(dataModel);
-            sentries.put(log.getPdp().getId(), sentryDataModels);
+            sentries.put(log.getVirdi().getId(), sentryDataModels);
             trafficLogsbygate = new ArrayList<>();
             loops=new ArrayList<>();
             int i=0;
@@ -151,10 +154,10 @@ public class HandleMonitoringAction implements Serializable {
         cachedTrafficLogsbygate= new ArrayList<>(trafficLogsbygate);
 
 //        RequestContext.getCurrentInstance().update("trafficLogList:test");
-            me.redirect("/monitoring/sentry-monitor.xhtml");
-
-//        EventBus eventBus = EventBusFactory.getDefault().eventBus();
-//        eventBus.publish("/notify", new Boolean(true));
+//            me.redirect("/monitoring/sentry-monitor.xhtml");
+//
+        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+        eventBus.publish("/notify", new Boolean(true));
     }
 
     public void forceOpen(List<SentryDataModel> gate) {
@@ -172,6 +175,8 @@ public class HandleMonitoringAction implements Serializable {
 
 
     private void initialize() {
+        readerWrapperService.setMonitoringAction(this);
+
         page = 1;
         trafficLogsbygate = new ArrayList<>();
         LinkedList<SentryDataModel> trafficLogList;
@@ -189,7 +194,7 @@ public class HandleMonitoringAction implements Serializable {
 
         List<Virdi> virdis = virdiService.getAllVirdis();
         for (Virdi virdi : virdis) {
-            List<TrafficLog> traffic = logService.findByVirdi(virdi.getId(), CalendarUtil.getDate(new Date()));
+            List<TrafficLog> traffic = logService.findByVirdi(virdi.getId(), ir.university.toosi.tms.util.LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
             SentryDataModel dataModel;
             trafficLogList = new LinkedList<SentryDataModel>() {
                 @Override

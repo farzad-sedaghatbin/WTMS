@@ -56,6 +56,13 @@
                     <h:graphicImage
                             value="#{trafficLog.exit eq 'true' ? '/images/s_default.png':'/images/s_go.png'}"/>
                 </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <p:commandLink value="#{bundle.picture}"/>
+                    </f:facet>
+                    <p:graphicImage value="#{handleTrafficAction.getPic(trafficLog)}" />
+
+                </p:column>
 
                 <f:facet name="footer">
                     <p:dataScroller limitRender="true" execute="@this" update="trafficLogTable"

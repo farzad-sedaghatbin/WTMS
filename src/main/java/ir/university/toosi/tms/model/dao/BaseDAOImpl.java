@@ -39,6 +39,7 @@ public class BaseDAOImpl<T extends BaseEntity> {
             em.persist(entity);
             return entity;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -49,6 +50,7 @@ public class BaseDAOImpl<T extends BaseEntity> {
             em.persist(entity);
             return entity;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -57,6 +59,7 @@ public class BaseDAOImpl<T extends BaseEntity> {
         try {
             return (T) em.find(entity.getClass(), primaryKey);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -66,6 +69,7 @@ public class BaseDAOImpl<T extends BaseEntity> {
             return ((long) (isNamedQuery ? em.createNamedQuery(query).getSingleResult()
                     : em.createQuery(query).getSingleResult())) + 1;
         } catch (Exception e) {
+            e.printStackTrace();
             return 1;
         }
     }

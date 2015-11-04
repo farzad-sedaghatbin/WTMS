@@ -241,7 +241,6 @@ public class UserManagementAction implements Serializable {
             user.setUsername(username);
             user.setPassword(password);
             user = userService.authenticate(username, password);
-            readerWrapperService.setMonitoringAction(monitoringAction);
 //            if (!generalHelper.getLastLanguages().isRtl()) {
 //                direction = "ltr";
 //                align = "left";

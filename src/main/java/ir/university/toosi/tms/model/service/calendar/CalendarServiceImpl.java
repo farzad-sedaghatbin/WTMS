@@ -135,7 +135,7 @@ public class CalendarServiceImpl<T extends Calendar> {
         for (int i = 0; i < dayTypes.size(); i++) {
             CalendarInfo.Year.selectBox a0 = new CalendarInfo.Year.selectBox();
             a0.set_id(String.valueOf(dayTypes.get(i).getId()));
-            a0.setColor(dayTypes.get(i).getColor());
+            a0.setColor("#"+dayTypes.get(i).getColor());
             a0.setTitle(dayTypes.get(i).getTitle());
             a0.setTimestamp("4523456236-4343456236");
             list[i] = a0;

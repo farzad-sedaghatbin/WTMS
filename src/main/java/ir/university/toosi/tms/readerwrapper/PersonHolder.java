@@ -3,9 +3,10 @@ package ir.university.toosi.tms.readerwrapper;
 
 import java.io.Serializable;
 
-public class PersonHolder implements Serializable {
+public class PersonHolder implements Serializable{
 
-    Person[] persons;
+
+    ir.university.toosi.tms.readerwrapper.Person[] persons;
 
     public PersonHolder() {
     }
