@@ -123,11 +123,11 @@ public class HandleOrganAction implements Serializable {
     private int personPage = 1;
     private String listPerson;
     private boolean disableFields;
+    private List<Organ> organs;
 
 
     public void begin() {
 //        me.setActiveMenu(MenuType.MANAGEMENT);
-
         refresh();
         me.redirect("/organ/organs.xhtml");
     }
@@ -1145,5 +1145,13 @@ public class HandleOrganAction implements Serializable {
 
     public void setSelectedNode(DefaultTreeNode selectedNode) {
         this.selectedNode = selectedNode;
+    }
+
+    public List<Organ> getOrgans() {
+        return organs;
+    }
+
+    public void setOrgans(List<Organ> organs) {
+        this.organs = organs;
     }
 }

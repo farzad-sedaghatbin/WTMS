@@ -21,6 +21,7 @@ import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
+import ir.university.toosi.wtms.web.action.organ.HandleOrganAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.wtms.web.util.*;
 import ir.university.toosi.wtms.web.util.ReportUtils;
@@ -68,6 +69,8 @@ public class HandlePersonAction implements Serializable {
     private GeneralHelper generalHelper;
     @Inject
     private AccessControlAction accessControlAction;
+    @Inject
+    private HandleOrganAction handleOrganAction;
     @EJB
     private PersonServiceImpl personService;
 
@@ -838,6 +841,8 @@ public class HandlePersonAction implements Serializable {
         employeeType = currentJob.getEmployType() ;
         postType = currentJob.getPostType();
         assistType = currentJob.getAssistType();
+        List<Organ> organs = organService.getAllOrgan();
+        handleOrganAction.setOrgans(organs);
     }
 
     public void detail() {
@@ -1111,8 +1116,7 @@ public class HandlePersonAction implements Serializable {
         allowExitGadget = selectedRulePackage.isAllowExitGadget();
     }
 
-    public void selectOrgan(long organId) {
-        selectedOrgan = organService.findById(organId);
+    public void selectOrgan() {
         selectedOrganName = selectedOrgan.getName();
     }
 

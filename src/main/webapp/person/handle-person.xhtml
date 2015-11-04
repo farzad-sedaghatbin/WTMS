@@ -292,18 +292,12 @@
             <tr>
                 <td>
                     <div align="right">
-                        <ui:repeat value="#{handleOrganAction.rootOrgans}" var="organs"/>
-                        <p:tree id="tree" var="organ" dir="RTL" value="#{organs}"
-                                   toggleType="client">
-                            <p:treeNode iconCollapsed="/images/node_icon.gif" iconExpanded="/images/node_open.jpg">
-                                <p:commandLink
-                                        value="#{organ.name} - #{organ.code} - #{organ.organType.code} - #{organ.title}"
-                                        execute="@this"
-                                        limitRender="true"
-                                        update="organName"
-                                        action="#{handlePersonAction.selectOrgan(organ.id)}"/>
-                            </p:treeNode>
-                        </p:tree>
+                        <p:dataTable var="organ" value="#{handleOrganAction.organs}" selectionMode="single" rowKey="#{organ.id}" selection="#{handlePersonAction.selectedOrgan}">
+                            <p:ajax event="rowSelect" listener="#{handlePersonAction.selectOrgan}" update="handlePersonForm:tabPanel:organName"/>
+                            <p:column headerText="#{bundle.name}">
+                                <h:outputText  value="#{organ.name} - #{organ.code} - #{organ.organType.code} - #{organ.title}"/>
+                            </p:column>
+                        </p:dataTable>
                     </div>
                 </td>
             </tr>
