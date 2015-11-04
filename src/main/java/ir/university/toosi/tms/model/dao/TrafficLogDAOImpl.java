@@ -152,7 +152,7 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
             return (List<TrafficLog>) em.createNamedQuery("TrafficLog.findByVirdi")
                     .setParameter("virdiId", virdiId)
                     .setParameter("trafficDate", date)
-                    .setFirstResult(1)
+                    .setFirstResult(0)
                     .setMaxResults(Integer.parseInt(systemConfiguration.getValue()))
                     .getResultList();
         } catch (Exception e) {

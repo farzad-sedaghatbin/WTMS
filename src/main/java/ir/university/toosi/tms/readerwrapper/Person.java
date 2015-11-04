@@ -4,10 +4,11 @@ package ir.university.toosi.tms.readerwrapper;
 import java.io.Serializable;
 
 public class Person implements Serializable{
-    
     int userId;
     String userName;
     String EmplymentCode;
+    String[] cards;
+    byte[] fingers;
 
     public Person() {
     }
@@ -35,5 +36,21 @@ public class Person implements Serializable{
 
     public void setEmplymentCode(String emplymentCode) {
         EmplymentCode = emplymentCode;
+    }
+
+    public String[] getCards() {
+        return cards;
+    }
+
+    public void setCards(String[] cards) {
+        this.cards = cards;
+    }
+
+    public byte[] getFingers() {
+        return fingers;
+    }
+
+    public void setFingers(byte[] fingers) {
+        this.fingers = fingers;
     }
 }

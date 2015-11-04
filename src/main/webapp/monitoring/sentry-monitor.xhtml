@@ -15,17 +15,6 @@
 
                 <p:ajax update="test" event="message"/>
             </p:socket>
-            <tr>
-                <td>
-                    <p:commandButton value="maximize"
-                                     execute="@this"
-                                     immediate="true"
-                                     oncomplete="newWindow('/WTMS/monitoring/sentry-monitor-popup.htm','بزرگنمایی',window.screen.width ,window.screen.height,'yes','no','no','no','no','no','no');">
-                        <p:tooltip layout="block"
-                                   styleClass="pTitleText">maximize</p:tooltip>
-                    </p:commandButton>
-                </td>
-            </tr>
 
             <p:outputPanel id="test">
                 <table id="containertable">
@@ -33,8 +22,12 @@
 
                         <ui:repeat value="#{handleMonitoringAction.trafficLogsbygate}" var="item">
                             <td>
-                                <h:commandButton image="/images/confirm.png"
+                                <p:commandButton value="#{bundle.force_open}"
                                                  action="#{handleMonitoringAction.forceOpen(item)}"/>
+                                &#160;&#160; <p:commandButton value="#{bundle.open}"
+                                                              action="#{handleMonitoringAction.forceOpen(item)}"/>
+                                &#160;&#160; <p:commandButton value="#{bundle.close}"
+                                                              action="#{handleMonitoringAction.forceOpen(item)}"/>
 
 
                                 <p:dataTable value="#{item}"
@@ -45,7 +38,7 @@
 
                                     <p:column>
                                         <f:facet name="header">
-                                            <h:outputText escape="true" value="#{bundle.person}"/>
+                                            <h:outputText escape="true" value="#{bundle.name}"/>
                                         </f:facet>
                                         <h:outputText escape="true" value="#{trafficLog.name}"/>
 
@@ -68,7 +61,7 @@
                                         <f:facet name="header">
                                             <h:outputText escape="true" value="#{bundle.time}"/>
                                         </f:facet>
-                                        <h:outputText escape="true" value="#{trafficLog.time}"/>
+                                        <h:outputText escape="true" value="#{trafficLog.time}" converter="timeConverter"/>
                                     </p:column>
                                     <p:column>
                                         <f:facet name="header">
@@ -76,13 +69,6 @@
                                         </f:facet>
                                         <h:graphicImage
                                                 value="#{trafficLog.valid eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                                    </p:column>
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText escape="true" value="type"/>
-                                        </f:facet>
-                                        <h:graphicImage
-                                                value="#{trafficLog.exit eq 'true' ? '/images/s_default.png':'/images/s_go.png'}"/>
                                     </p:column>
                                 </p:dataTable>
                             </td>

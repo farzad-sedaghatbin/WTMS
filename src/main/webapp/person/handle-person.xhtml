@@ -13,9 +13,9 @@
 
 <tr valign="top">
 <td>
-<p:tabView id="tabPanel">
+<p:tabView id="tabPanel" dir="rtl">
 
-<p:tab title="Person">
+<p:tab title="#{bundle.info_person}">
 
         <table border="0" cellpadding="3" cellspacing="3" width="360"
                dir="#{me.direction}">
@@ -36,10 +36,9 @@
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
                                              id="firstname"
-                                             converter="persianConverter"
                                              value="#{handlePersonAction.personname}"
                                              maxlength="25"
-                                             required="true"
+
                                              styleClass="inputRequiredField"/>
                                 <p:message ajaxRendered="true" for="firstname" showSummary="true" showDetail="false"
                                               errorClass="errorMsg"/>
@@ -53,8 +52,6 @@
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
                                              id="lastname"
-                                             converter="persianConverter"
-                                             required="true"
                                              value="#{handlePersonAction.lastname}"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
@@ -98,7 +95,7 @@
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
                                              id="_personnelCode"
-                                             required="true"
+
                                              value="#{handlePersonAction.personnelNo}"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
@@ -113,7 +110,7 @@
                             <td nowrap="nowrap">
                                 <h:inputText dir="#{me.direction}"
                                              id="_nationalCode"
-                                             required="true"
+
                                              value="#{handlePersonAction.nationalCode}"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
@@ -180,7 +177,7 @@
         </table>
 </p:tab>
 
-<p:tab title="Job">
+<p:tab title="#{bundle.info_job}">
 
         <table border="0" cellpadding="3" cellspacing="3" width="360" dir="#{me.direction}">
 

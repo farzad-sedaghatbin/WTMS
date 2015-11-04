@@ -172,6 +172,26 @@ public class HandleMonitoringAction implements Serializable {
 
 
     }
+    public void unLockDoor(List<SentryDataModel> gate) {
+        if (gate == null || gate.size() == 0)
+            return;
+        String logId = String.valueOf(gate.iterator().next().getId());
+        try {
+            virdiService.unLockDoor(logService.findById(Long.parseLong(logId)).getVirdi().getTerminalId());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void lockDoor(List<SentryDataModel> gate) {
+        if (gate == null || gate.size() == 0)
+            return;
+        String logId = String.valueOf(gate.iterator().next().getId());
+        try {
+            virdiService.lockDoor(logService.findById(Long.parseLong(logId)).getVirdi().getTerminalId());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private void initialize() {

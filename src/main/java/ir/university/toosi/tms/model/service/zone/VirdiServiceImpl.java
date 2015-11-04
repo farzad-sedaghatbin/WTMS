@@ -341,4 +341,30 @@ public class VirdiServiceImpl<T extends Virdi> {
 
         readerWrapperService.forceOpenDoor(terminalId);
     }
+    public void unLockDoor(int terminalId) throws MalformedURLException {
+        URL url = new URL("http://127.0.0.1:8081/ws?wsdl");
+
+        //1st argument service URI, refer to wsdl document above
+        //2nd argument is service name, refer to wsdl document above
+        QName qname = new QName("http://ir/", "ReaderWrapperServiceService");
+
+        Service service = Service.create(url, qname);
+
+        IReaderWrapperService readerWrapperService = service.getPort(IReaderWrapperService.class);
+
+        readerWrapperService.unLockDoor(terminalId);
+    }
+    public void lockDoor(int terminalId) throws MalformedURLException {
+        URL url = new URL("http://127.0.0.1:8081/ws?wsdl");
+
+        //1st argument service URI, refer to wsdl document above
+        //2nd argument is service name, refer to wsdl document above
+        QName qname = new QName("http://ir/", "ReaderWrapperServiceService");
+
+        Service service = Service.create(url, qname);
+
+        IReaderWrapperService readerWrapperService = service.getPort(IReaderWrapperService.class);
+
+        readerWrapperService.unLockDoor(terminalId);
+    }
 }

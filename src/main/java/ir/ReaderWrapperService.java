@@ -6,6 +6,7 @@ import ir.university.toosi.tms.model.entity.personnel.Card;
 import ir.university.toosi.tms.model.entity.zone.Zone;
 import ir.university.toosi.tms.model.service.EJB3RemoteInterface;
 import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
@@ -46,6 +47,8 @@ public class ReaderWrapperService implements IReaderWrapperService {
     GatewayServiceImpl gatewayService;
     @EJB
     VirdiServiceImpl virdiService;
+    @EJB
+    CardServiceImpl cardService;
     @EJB
     TrafficLogServiceImpl trafficLogService;
     @Inject
@@ -89,8 +92,17 @@ public class ReaderWrapperService implements IReaderWrapperService {
             person1.setPersonOtherId(String.valueOf(person.getUserId()));
             person1.setName(person.getUserName());
             person1.setPersonnelNo(person.getEmplymentCode());
+            person1.setFinger(person.getFingers());
+
             if (personService.getPersonByPersonOtherId(person1.getPersonOtherId()) == null) {
-                personService.createPerson(person1);
+                person1 = personService.createPerson(person1);
+                for (String s : person.getCards()) {
+                    Card card = new Card();
+                    card.setCode(s);
+                    card.setPerson(person1);
+                    card.setVisible(true);
+                    cardService.createCard(card);
+                }
             } else {
                 personService.editPerson(person1);
             }
@@ -101,7 +113,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
     @Override
     public void addOnGetAccessEventData(int terminalId, AccessEventData value) {
         TrafficLog trafficLog = new TrafficLog();
-        trafficLog.setTime(LangUtil.getEnglishNumber(CalendarUtil.getTime(new Date(), new Locale("fa"))));
+        trafficLog.setTime(LangUtil.getEnglishNumber(CalendarUtil.getTimeWithoutDot(new Date(), new Locale("fa"))));
         trafficLog.setDate(LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
         trafficLog.setExit(true);
         trafficLog.setValid(value.isAuthorized());

@@ -257,55 +257,13 @@
                                                     <tr>
                                                         <td>
                                                             <p:commandLink action="#{handlePersonAction.edit(person.id)}"
-                                                                           title="edit"
+                                                                           title="#{bundle.edit}"
                                                                            onclick="PF('PersonPanel').show()"
                                                                            update="handlePersonForm:handlePanel, handlePersonForm:tabPanel:_personnelConfirm-password,detailPerson:tabPanel:renderdpicture">
                                                                 <p:graphicImage value="/images/edit.png"/>
                                                             </p:commandLink>
                                                         </td>
-                                                        <td>
-                                                            <p:commandLink action="#{handlePersonAction.assignRule(person.id)}"
-                                                                           title="assign rule"
-                                                                           update="assignPersonRule:handleAssignRulePanel"
-                                                                           oncomplete="PF('AssignRulePanel').show()">
-                                                                <p:graphicImage value="/images/assign-rule.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink title="assign card"
-                                                                           action="#{handlePersonAction.downloadJnlp(person.id)}">
-                                                                <p:graphicImage value="/images/assign-card.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink title="synch"
-                                                                           action="#{handlePDPAction.synch}"
-                                                                           oncomplete="PF('selectPDP').show()">
-                                                                <p:graphicImage value="/images/pdp.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink title="delete"
-                                                                           action="#{handlePersonAction.doDelete(person.id)}"
-                                                                           oncomplete="PF('ConfirmationPanel').show()">
-                                                                <p:graphicImage value="/images/delete.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink action="#{handlePersonAction.editRule(person.id)}"
-                                                                           title="edit rule"
-                                                                           update="ruleFrm:handleRulePanel"
-                                                                           oncomplete="PF('rulePanel').show()">
-                                                                <p:graphicImage value="/images/assign-rule.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                        <td>
-                                                            <p:commandLink update="resetFrm:handleResetPanel"
-                                                                           oncomplete="PF('resetPanel').show()">
-                                                                <p:graphicImage value="/images/s_key.png"/>
-                                                            </p:commandLink>
-                                                        </td>
-                                                    </tr>
+                                                       </tr>
                                                 </table>
                                             </p:ring>
                                         </td>
