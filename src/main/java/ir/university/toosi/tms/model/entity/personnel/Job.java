@@ -91,6 +91,8 @@ public class Job extends BaseEntity {
     }
 
     public BLookup getEmployType() {
+        if (employType == null)
+            employType = new BLookup();
         return employType;
     }
 
@@ -116,6 +118,8 @@ public class Job extends BaseEntity {
     }
 
     public BLookup getAssistType() {
+        if (assistType == null)
+            assistType = new BLookup();
         return assistType;
     }
 
@@ -125,6 +129,8 @@ public class Job extends BaseEntity {
 
 
     public BLookup getPostType() {
+        if (postType == null)
+            postType = new BLookup();
         return postType;
     }
 

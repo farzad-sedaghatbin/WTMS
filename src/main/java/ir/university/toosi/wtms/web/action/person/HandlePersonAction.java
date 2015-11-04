@@ -835,7 +835,7 @@ public class HandlePersonAction implements Serializable {
         internalTel = currentJob.getInternalTel();
         folderNo = currentJob.getFolderNo();
         employNo = currentJob.getEmployNo();
-        employeeType = currentJob.getEmployType();
+        employeeType = currentJob.getEmployType() ;
         postType = currentJob.getPostType();
         assistType = currentJob.getAssistType();
     }
