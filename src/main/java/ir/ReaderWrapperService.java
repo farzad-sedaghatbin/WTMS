@@ -96,13 +96,14 @@ public class ReaderWrapperService implements IReaderWrapperService {
 
             if (personService.getPersonByPersonOtherId(person1.getPersonOtherId()) == null) {
                 person1 = personService.createPerson(person1);
-                for (String s : person.getCards()) {
-                    Card card = new Card();
-                    card.setCode(s);
-                    card.setPerson(person1);
-                    card.setVisible(true);
-                    cardService.createCard(card);
-                }
+                if (person.getCards() != null)
+                    for (String s : person.getCards()) {
+                        Card card = new Card();
+                        card.setCode(s);
+                        card.setPerson(person1);
+                        card.setVisible(true);
+                        cardService.createCard(card);
+                    }
             } else {
                 personService.editPerson(person1);
             }
