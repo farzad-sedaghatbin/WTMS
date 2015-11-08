@@ -351,6 +351,9 @@ public class HandleRoleAction implements Serializable {
     public Role findById(String id){
         return roleService.findById(id);
     }
+    public Operation findByIdop(String id){
+        return operationService.findById(id);
+    }
 
 //    public Filter<?> getRoleDescriptionFilterImpl() {
 //        return new Filter<Role>() {
