@@ -30,7 +30,7 @@
                     <h:outputText value="#{trafficLog.person.name}"/>
                 </p:column>
 
-                <p:column headerText="#{bundle.gateway}">
+                <p:column headerText="#{bundle.gateway}"  sortBy="#{trafficLog.gateway}">
                     <h:outputText value="#{trafficLog.gateway.name}"/>
                 </p:column>
                 <p:column>
@@ -42,7 +42,7 @@
                 </p:column>
 
                 <p:column headerText="#{bundle.time}" sortBy="#{trafficLog.traffic_time}" filterBy="#{trafficLog.traffic_time}">
-                    <h:outputText value="#{trafficLog.traffic_time}"/>
+                    <h:outputText value="#{trafficLog.traffic_time}" converter="timeConverter"/>
                 </p:column>
 
                 <p:column width="200" headerText="#{bundle.date}" sortBy="#{trafficLog.traffic_date}" filterBy="#{trafficLog.traffic_date}">

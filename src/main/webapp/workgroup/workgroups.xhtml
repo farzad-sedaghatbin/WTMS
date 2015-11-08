@@ -7,7 +7,7 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <p:contextMenu for="groups">
+            <p:contextMenu for="groups" rendered="#{me.hasPermission('WORKGROUPMANAGEMENT')}">
                 <p:menuitem value="#{bundle.edit}" update="groupDetail" icon="icon-edit" oncomplete="PF('groupDialog').show()"
                             actionListener="#{handleWorkGroupAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="groups" icon="icon-delete"
@@ -21,7 +21,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" id="add" update="groupDetail" actionListener="#{handleWorkGroupAction.add}"
+            <p:commandButton value="#{bundle.add}" rendered="#{me.hasPermission('WORKGROUPMANAGEMENT')}" id="add" update="groupDetail" actionListener="#{handleWorkGroupAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('groupDialog').show()"/>
 
             <p:dataTable id="groups" var="group" value="#{handleWorkGroupAction.workGroupList}" rowKey="#{group.id}"

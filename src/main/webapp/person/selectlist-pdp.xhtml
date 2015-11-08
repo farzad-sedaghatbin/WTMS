@@ -56,7 +56,7 @@
                                         <p:commandLink value="#{bundle.name}" update="pdpTable"
                                                        action="#{handlePDPAction.sortByPdpName}"/>
                                         <br/>
-                                        <p:inputText converter="persianConverter"
+                                        <p:inputText
                                                      value="#{handlePDPAction.pdpNameFilter}">
                                             <p:ajax event="blur" update="pdpTable"/>
                                         </p:inputText>

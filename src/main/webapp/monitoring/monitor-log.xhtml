@@ -42,7 +42,7 @@
                                     <h:outputText escape="true" value="#{trafficLog.gateway.name}"/>
                                 </p:column>
                                 <p:column headerText="#{bundle.time}" sortBy="#{trafficLog.time}" filterBy="#{trafficLog.time}">
-                                    <h:outputText escape="true" value="#{trafficLog.time}"/>
+                                    <h:outputText escape="true" value="#{trafficLog.time}" converter="timeConverter"/>
                                 </p:column>
                                 <p:column headerText="#{bundle.date}" sortBy="#{trafficLog.date}" filterBy="#{trafficLog.date}">
                                     <h:outputText escape="true" value="#{trafficLog.date}" converter="dateConverter"/>

@@ -180,6 +180,7 @@ public class HandleOrganAction implements Serializable {
     }
 
     public void doDelete() {
+        currentOrgan=((Organ)selectedNode.getData());
         currentOrgan.setEffectorUser(me.getUsername());
         String condition = organService.deleteOrgan(currentOrgan);
         refresh();
@@ -219,13 +220,14 @@ public class HandleOrganAction implements Serializable {
     }
 
     public void listPerson() {
-
+        currentOrgan=((Organ)selectedNode.getData());
         personList = personService.findByOrgan(currentOrgan.getId());
     }
 
     public void edit() {
         setEditable("true");
         setDisableFields(false);
+        currentOrgan=((Organ)selectedNode.getData());
         currentOrgan = organService.findById(currentOrgan.getId());
         organName = currentOrgan.getName();
         organTitle = currentOrgan.getTitle();
@@ -236,6 +238,7 @@ public class HandleOrganAction implements Serializable {
     public void view() {
         setEditable("true");
         setDisableFields(true);
+        currentOrgan=((Organ)selectedNode.getData());
         currentOrgan = organService.findById(currentOrgan.getId());
         organName = currentOrgan.getName();
         organTitle = currentOrgan.getTitle();
@@ -252,10 +255,12 @@ public class HandleOrganAction implements Serializable {
     }
 
     public void viewPerson() {
+        currentOrgan=((Organ)selectedNode.getData());
         personList = personService.findByOrgan(currentOrgan.getId());
     }
 
     private void doEdit() {
+
         currentOrgan.setOrganType(getOrganType());
         currentOrgan.setCode(organCode);
         currentOrgan.setTitle(organTitle);
@@ -323,6 +328,7 @@ public class HandleOrganAction implements Serializable {
 
 
     public void assignRule() {
+        currentOrgan=((Organ)selectedNode.getData());
         currentOrgan = organService.findById(currentOrgan.getId());
         selectedRulePackage = currentOrgan.getRulePackage();
         if (selectedRulePackage != null) {
@@ -374,6 +380,7 @@ public class HandleOrganAction implements Serializable {
     }
 
     public void editRule() {
+        currentOrgan=((Organ)selectedNode.getData());
         currentOrgan = organService.findById(currentOrgan.getId());
         if (currentOrgan.getRulePackage() == null) {
             refresh();

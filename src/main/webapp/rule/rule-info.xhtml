@@ -27,10 +27,6 @@
                 <p:selectBooleanCheckbox readonly="#{handleRuleAction.disableFields}"
                                          value="#{handleRuleAction.ruleAniPassBack}"/>
 
-                <h:outputText value="#{bundle.allow_exit}"/>
-                <p:selectBooleanCheckbox readonly="#{handleRuleAction.disableFields}"
-                                         value="#{handleRuleAction.ruleAllowExit}"/>
-
                 <h:outputText value="#{bundle.allow_exit_gadget}"/>
                 <p:selectBooleanCheckbox readonly="#{handleRuleAction.disableFields}"
                                          value="#{handleRuleAction.ruleAllowExitGadget}"/>
@@ -95,16 +91,6 @@
                     </f:facet>
                     <h:graphicImage
                             value="#{ruleTemp.deny eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText escape="true" value="#{bundle.delete}"/>
-                    </f:facet>
-                    <p:commandButton image="/images/delete.png"
-                                     title="delete"
-                                     update="ruleTempTable"
-                                     action="#{handleRuleAction.remove}"
-                            />
                 </p:column>
                 <f:facet name="footer">
                     <p:dataScroller limitRender="true" execute="@this"
@@ -198,7 +184,7 @@
                                                              value="#{bundle.add}"
                                                              title="افزودن قانون"
                                                              tabindex="6"
-                                                             update="ruleTempTable"/>
+                                                             update="ruleTempTable,messageInfo"/>
                                         </td>
                                     </tr>
                                 </table>

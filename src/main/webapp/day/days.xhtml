@@ -7,7 +7,7 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <p:contextMenu for="days">
+            <p:contextMenu for="days" rendered="#{me.hasPermission('DAYTYPEMANAGEMENT')}">
                 <p:menuitem value="#{bundle.view}" update="dayDetail" icon="icon-pageview" oncomplete="PF('dayDialog').show()" actionListener="#{handleDayTypeAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="dayDetail" icon="icon-edit" oncomplete="PF('dayDialog').show()" actionListener="#{handleDayTypeAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="days" icon="icon-delete" actionListener="#{handleDayTypeAction.doDelete}">
@@ -20,7 +20,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" id="add" update="dayDetail" actionListener="#{handleDayTypeAction.add}" styleClass="ui-priority-primary" onclick="PF('dayDialog').show()"/>
+            <p:commandButton value="#{bundle.add}" rendered="#{me.hasPermission('DAYTYPEMANAGEMENT')}" id="add" update="dayDetail" actionListener="#{handleDayTypeAction.add}" styleClass="ui-priority-primary" onclick="PF('dayDialog').show()"/>
 
             <p:dataTable id="days" var="currentDay" value="#{handleDayTypeAction.dayTypeList}" rowKey="#{currentDay.id}"
                          selection="#{handleDayTypeAction.currentDayType}" selectionMode="single"

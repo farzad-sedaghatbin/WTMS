@@ -48,14 +48,6 @@
                                         <h:selectBooleanCheckbox tabindex="3" disabled="true"
                                                                  value="#{handlePersonAction.antiPassBack}"/>
                                     </td>
-                                    <td nowrap="nowrap">
-                                        <h:outputText escape="true" value="#{'اجازه خروج'}:" styleClass="textColor"/>
-                                    </td>
-                                    <td nowrap="nowrap">
-                                        <h:selectBooleanCheckbox disabled="true"
-                                                                 tabindex="4"
-                                                                 value="#{handlePersonAction.allowExit}"/>
-                                    </td>
                                 </tr>
                                 <tr valign="top">
                                     <td nowrap="nowrap">
@@ -116,13 +108,6 @@
                     </f:facet>
                     <h:graphicImage
                             value="#{rulePackage.aniPassBack eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText escape="true" value="#{'خروج'}"/>
-                    </f:facet>
-                    <h:graphicImage
-                            value="#{rulePackage.allowExit eq 'true' ? '/images/s_true.png':'/images/s_false.png'}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">

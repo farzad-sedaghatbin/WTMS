@@ -24,43 +24,43 @@ public class LangUtil {
             c = number.charAt(i);
             switch (c) {
                 case '0':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۰');
                     break;
 
                 case '1':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۱');
                     break;
 
                 case '2':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۲');
                     break;
 
                 case '3':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۳');
                     break;
 
                 case '4':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۴');
                     break;
 
                 case '5':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۵');
                     break;
 
                 case '6':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۶');
                     break;
 
                 case '7':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۷');
                     break;
 
                 case '8':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۸');
                     break;
 
                 case '9':
-                    farsiNumberString.append('?');
+                    farsiNumberString.append('۹');
                     break;
 
                 default:

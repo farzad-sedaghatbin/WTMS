@@ -12,7 +12,7 @@
             <p:menuitem value="#{bundle.virdi}" url="#" />
         </p:breadCrumb>
         <h:form id="form">
-            <p:contextMenu for="virdis">
+             <p:contextMenu for="virdis" rendered="#{me.hasPermission('VIRDIMANAGEMENT')}" >
                 <p:menuitem value="#{bundle.view}" update="virdiDetail" icon="icon-pageview" oncomplete="PF('virdiDialog').show()"
                             actionListener="#{handleVirdiAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="virdiDetail" icon="icon-edit" oncomplete="PF('virdiDialog').show()"
@@ -30,7 +30,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" id="add" update="virdiDetail" actionListener="#{handleVirdiAction.add}"
+            <p:commandButton value="#{bundle.add}" rendered="#{me.hasPermission('VIRDIMANAGEMENT')}" id="add" update="virdiDetail" actionListener="#{handleVirdiAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('virdiDialog').show()"/>
 
             <p:dataTable id="virdis" var="currentVirdi" value="#{handleVirdiAction.virdiList}" rowKey="#{currentVirdi.id}"

@@ -8,32 +8,36 @@
     <ui:define name="content">
         <p:breadCrumb>
             <p:menuitem value="category" url="#"/>
-            <p:menuitem value="#{bundle.zone_management}" url="#" />
-            <p:menuitem value="#{bundle.zone}" url="#" />
+            <p:menuitem value="#{bundle.zone_management}" url="#"/>
+            <p:menuitem value="#{bundle.zone}" url="#"/>
         </p:breadCrumb>
 
         <h:form id="form">
-            <p:contextMenu for="zones">
+            <p:contextMenu for="zones" rendered="#{me.hasPermission('ZONEMANAGEMENT')}">
                 <p:menuitem value="#{bundle.view}" update="zoneDetail" icon="icon-pageview"
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="zoneDetail" icon="icon-edit"
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="icon-assignment" rendered="false"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="icon-assignment"
+                            rendered="false"
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleZoneAction.assignRule}"/>
-                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="icon-edit" rendered="false"
+                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="icon-edit"
+                            rendered="false"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleZoneAction.editRule}"/>
                 <p:menuitem value="#{bundle.delete}" update="zones" icon="icon-delete"
                             actionListener="#{handleZoneAction.doDelete}">
-                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
+                    <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert"/>
                 </p:menuitem>
             </p:contextMenu>
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes"
+                                 icon="ui-icon-check"/>
+                <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no"
+                                 icon="ui-icon-close"/>
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" id="add" update="zoneDetail" actionListener="#{handleZoneAction.add}"
+            <p:commandButton value="#{bundle.add}" rendered="#{me.hasPermission('ZONEMANAGEMENT')}" id="add" update="zoneDetail" actionListener="#{handleZoneAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('zoneDialog').show()"/>
 
             <p:dataTable id="zones" var="currentZone" value="#{handleZoneAction.zoneList}"
@@ -44,14 +48,16 @@
                          rowsPerPageTemplate="5,10,15"
                          draggableColumns="true" style="margin-bottom:20px">
                 <f:facet name="header">
-لیست                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
-                    <p:columnToggler datasource="zones" trigger="toggler" />
+                    لیست <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right"
+                                          icon="ui-icon-calculator"/>
+                    <p:columnToggler datasource="zones" trigger="toggler"/>
                 </f:facet>
 
                 <p:column headerText="#{bundle.name}" sortBy="#{currentZone.name}" filterBy="#{currentZone.name}">
                     <h:outputText value="#{currentZone.name}"/>
                 </p:column>
-                <p:column headerText="#{bundle.description}" sortBy="#{currentZone.description}" filterBy="#{currentZone.description}">
+                <p:column headerText="#{bundle.description}" sortBy="#{currentZone.description}"
+                          filterBy="#{currentZone.description}">
                     <h:outputText value="#{currentZone.description}"/>
                 </p:column>
                 <p:column headerText="#{bundle.enable}">
@@ -86,7 +92,8 @@
                                 <h:outputText value="#{bundle.true_pass}"/>
                             </td>
                             <td>
-                                <p:selectBooleanCheckbox value="#{handleZoneAction.truePassControl}" disabled="#{handleZoneAction.disableFields}"/>
+                                <p:selectBooleanCheckbox value="#{handleZoneAction.truePassControl}"
+                                                         disabled="#{handleZoneAction.disableFields}"/>
                             </td>
                         </tr>
                         <tr>
@@ -94,7 +101,9 @@
                                 <h:outputText value="#{bundle.enable}"/>
                             </td>
                             <td>
-                                <p:selectBooleanCheckbox value="#{handleZoneAction.zoneEnabled}" disabled="#{handleZoneAction.disableFields}" valueChangeListener="#{handleZoneAction.changeZones}"/>
+                                <p:selectBooleanCheckbox value="#{handleZoneAction.zoneEnabled}"
+                                                         disabled="#{handleZoneAction.disableFields}"
+                                                         valueChangeListener="#{handleZoneAction.changeZones}"/>
                             </td>
                         </tr>
                     </table>
@@ -133,7 +142,8 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="#{bundle.assign_rule}" widgetVar="assignRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.assign_rule}" widgetVar="assignRuleDialog" modal="true" showEffect="fade"
+                      hideEffect="fade"
                       resizable="true">
                 <p:outputPanel id="assignRuleDetail" style="text-align:center;">
                     <p:dataTable id="assignRule" var="rule" value="#{handleZoneAction.rulePackageList}"
@@ -142,7 +152,8 @@
                         <f:facet name="header">
                             <h:outputText value="#{person.select_events}"/>
                         </f:facet>
-                        <p:ajax event="rowSelect" listener="#{handleZoneAction.selectNewRuleForZone}" update=":form:zones" oncomplete="PF('assignRuleDialog').hide()"/>
+                        <p:ajax event="rowSelect" listener="#{handleZoneAction.selectNewRuleForZone}"
+                                update=":form:zones" oncomplete="PF('assignRuleDialog').hide()"/>
                         <p:column headerText="#{bundle.name}">
                             <h:outputText value="#{rule.name}"/>
                         </p:column>
@@ -153,10 +164,6 @@
                             <h:graphicImage
                                     value="#{rule.aniPassBack ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
-                        <p:column headerText="#{bundle.allow_exit}">
-                            <h:graphicImage
-                                    value="#{rule.allowExit ? '/images/s_true.png':'/images/s_false.png'}"/>
-                        </p:column>
                         <p:column headerText="#{bundle.allow_exit_gadget}">
                             <h:graphicImage
                                     value="#{rule.allowExitGadget ? '/images/s_true.png':'/images/s_false.png'}"/>
@@ -165,7 +172,8 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="#{bundle.edit_rule}" widgetVar="editRuleDialog" modal="true" showEffect="fade" hideEffect="fade"
+            <p:dialog header="#{bundle.edit_rule}" widgetVar="editRuleDialog" modal="true" showEffect="fade"
+                      hideEffect="fade"
                       resizable="false">
                 <ui:include src="../rule/zone-rule-edit.xhtml"/>
             </p:dialog>

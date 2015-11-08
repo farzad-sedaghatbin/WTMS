@@ -10,7 +10,7 @@
 
 
         <h:form>
-            <p:contextMenu for="calendarTable">
+            <p:contextMenu for="calendarTable" rendered="#{me.hasPermission('CALENDARMANAGEMENT')}">
                 <p:menuitem value="#{bundle.edit}" icon="icon-edit" actionListener="#{handleCalendarAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="calendarTable" icon="icon-delete"
                             actionListener="#{handleCalendarAction.doDelete}">
@@ -24,6 +24,7 @@
             </p:confirmDialog>
 
             <p:commandButton value="#{bundle.add}" id="add"
+                             rendered="#{me.hasPermission('CALENDARMANAGEMENT')}"
                              actionListener="#{handleCalendarAction.add}"
                              styleClass="ui-priority-primary"/>
             <p:dataTable id="calendarTable"

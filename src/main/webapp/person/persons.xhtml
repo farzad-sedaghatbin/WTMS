@@ -107,7 +107,7 @@
                                                             </td>
                                                             &#160;&#160;
                                                             <td>
-                                                                <h:inputText converter="persianConverter"
+                                                                <h:inputText
                                                                              value="#{handlePersonAction.attributeValue}"/>
                                                             </td>
                                                             &#160;&#160;
@@ -221,7 +221,7 @@
 
                     <tr valign="top">
                         <td align="#{me.align}" nowrap="nowrap" colspan="2">
-                            <h:inputText converter="persianConverter" value="#{handlePersonAction.simpleValue}"/>
+                            <h:inputText value="#{handlePersonAction.simpleValue}"/>
                             &#160;&#160;
                             <h:commandButton action="#{handlePersonAction.simpleSearch}" value="#{bundle.search}"/>
 
@@ -240,6 +240,7 @@
                                     <tr valign="top">
                                         <td align="#{me.align}" nowrap="nowrap" colspan="2">
                                             <p:commandButton value="#{bundle.add}"
+                                                             rendered="#{me.hasPermission('PERSONMANAGEMENT')}"
                                                              action="#{handlePersonAction.add}"
                                                              onclick="PF('PersonPanel').show()"/>
                                             &#160;&#160;
@@ -258,6 +259,7 @@
                                                         <td>
                                                             <p:commandLink action="#{handlePersonAction.edit(person.id)}"
                                                                            title="#{bundle.edit}"
+                                                                           rendered="#{me.hasPermission('PERSONMANAGEMENT')}"
                                                                            onclick="PF('PersonPanel').show()"
                                                                            update="handlePersonForm:handlePanel, handlePersonForm:tabPanel:_personnelConfirm-password,detailPerson:tabPanel:renderdpicture">
                                                                 <p:graphicImage value="/images/edit.png"/>

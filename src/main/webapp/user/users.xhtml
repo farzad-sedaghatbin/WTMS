@@ -14,7 +14,7 @@
         </p:breadCrumb>
 
         <h:form id="form">
-            <p:contextMenu for="users">
+            <p:contextMenu for="users" rendered="#{me.hasPermission('USERMANAGEMENT')}">
                 <p:menuitem value="#{bundle.view}" update="userDetail" icon="icon-pageview" oncomplete="PF('userDialog').show()"
                             actionListener="#{handleUserAction.viewMode}"/>
                 <p:menuitem value="#{bundle.edit}" update="userDetail" icon="icon-edit" oncomplete="PF('userDialog').show()"
@@ -39,7 +39,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" id="add" update="userDetail" actionListener="#{handleUserAction.add}"
+            <p:commandButton value="#{bundle.add}" rendered="#{me.hasPermission('USERMANAGEMENT')}" id="add" update="userDetail" actionListener="#{handleUserAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('userDialog').show()"/>
 
             <p:dataTable id="users" var="user" value="#{handleUserAction.userList}" rowKey="#{user.id}"

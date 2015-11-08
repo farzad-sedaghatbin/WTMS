@@ -444,7 +444,7 @@ public class HandleTrafficAction implements Serializable {
             try {
                 new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("jboss.name") + address)), "image/png");
             } catch (IOException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
     return null;

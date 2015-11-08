@@ -1,4 +1,4 @@
-ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -56,7 +56,7 @@ ui:composition xmlns="http://www.w3.org/1999/xhtml"
                                         <p:commandLink value="#{bundle.name}" update="pdpTable"
                                                        action="#{handlePDPAction.sortByPdpName}"/>
                                         <br/>
-                                        <p:inputText converter="persianConverter"
+                                        <p:inputText
                                                      value="#{handlePDPAction.pdpNameFilter}">
                                             <p:ajax event="blur" update="pdpTable"/>
                                         </p:inputText>

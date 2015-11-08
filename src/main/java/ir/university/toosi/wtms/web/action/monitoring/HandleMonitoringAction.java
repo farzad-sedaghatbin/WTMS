@@ -110,6 +110,7 @@ public class HandleMonitoringAction implements Serializable {
     private  static  volatile  List<List<SentryDataModel>> trafficLogsbygate = new ArrayList<>();
     private volatile  List<List<SentryDataModel>> cachedTrafficLogsbygate = new ArrayList<>();
     private long sentryCount;
+    private Person currentPerson;
 
     @PostConstruct
     public void
@@ -313,10 +314,9 @@ public class HandleMonitoringAction implements Serializable {
     }
 
     public void dotrackByPerson() {
-        Person currentPerson = null/*personList.getRowData()*/;
-        eventLogList = logService.findByPerson(currentPerson.getId(), CalendarUtil.getDate(new Date()));
+        eventLogList = logService.findByPerson(currentPerson.getId(), ir.university.toosi.tms.util.LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
         init();
-        me.redirect("/monitoring/monitor-log.htm");
+        me.redirect("/monitoring/monitor-log.xhtml");
     }
 
 
@@ -344,10 +344,9 @@ public class HandleMonitoringAction implements Serializable {
     public void dotrackByPersonAndGate() {
         List<TrafficLog> innerTrafficLogList = null;
         handlePersonAction.init();
-        String ids = String.valueOf(null/*personList.getRowData().getId()*/) + "#" + gatewayId;
-        eventLogList = logService.findByPersonAndGate(null, Long.valueOf(gatewayId), CalendarUtil.getDate(new Date()));
+        eventLogList = logService.findByPersonAndGate(currentPerson.getId(), Long.valueOf(gatewayId), ir.university.toosi.tms.util.LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
         init();
-        me.redirect("/monitoring/monitor-log.htm");
+        me.redirect("/monitoring/monitor-log.xhtml");
     }
 
     public void trackByPersonAndTime() {
@@ -376,16 +375,15 @@ public class HandleMonitoringAction implements Serializable {
         long endTime1 = time2long(endTime);
 
         if (endTime1 < startTime1) {
-            me.addInfoMessage(me.getValue("wrong.time"));
-            me.redirect("/home.htm");
+            me.addInfoMessage("wrong.time");
+            me.redirect("/monitoring/track-person.xhtml");
             return;
         }
 
-        String data = /*personList.getRowData().getId()*/null + "#" + startTime + "#" + endTime;
         List<TrafficLog> innerTrafficLogList = null;
-        eventLogList = logService.findByPersonLocationInDuration(null, startTime, endTime, CalendarUtil.getDate(new Date()));
+        eventLogList = logService.findByPersonLocationInDuration(currentPerson.getId(), startTime, endTime, ir.university.toosi.tms.util.LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
 
-        me.redirect("/monitoring/monitor-log.htm");
+        me.redirect("/monitoring/monitor-log.xhtml");
     }
 
 
@@ -660,4 +658,11 @@ public class HandleMonitoringAction implements Serializable {
         this.cachedTrafficLogsbygate = cachedTrafficLogsbygate;
     }
 
+    public Person getCurrentPerson() {
+        return currentPerson;
+    }
+
+    public void setCurrentPerson(Person currentPerson) {
+        this.currentPerson = currentPerson;
+    }
 }

@@ -13,7 +13,7 @@
         </p:breadCrumb>
 
         <h:form id="form">
-            <p:contextMenu for="cameras">
+            <p:contextMenu for="cameras" rendered="#{me.hasPermission('CAMERAMANAGEMENT')}">
                 <p:menuitem value="#{bundle.view}" update="cameraDetail" icon="icon-pageview"
                             oncomplete="PF('cameraDialog').show()" actionListener="#{handleCameraAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="cameraDetail" icon="icon-edit"
@@ -29,7 +29,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" id="add" update="cameraDetail" actionListener="#{handleCameraAction.add}"
+            <p:commandButton value="#{bundle.add}" rendered="#{me.hasPermission('CAMERAMANAGEMENT')}" id="add" update="cameraDetail" actionListener="#{handleCameraAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('cameraDialog').show()"/>
 
             <p:dataTable id="cameras" var="currentCamera" value="#{handleCameraAction.cameraList}"

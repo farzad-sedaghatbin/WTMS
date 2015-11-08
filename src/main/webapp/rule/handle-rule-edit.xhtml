@@ -14,7 +14,6 @@
                                       value="#{bundle.name}"/>
                         &#160;&#160;&#160;&#160;&#160;
                         <h:inputText id="ruleName"
-                                     converter="persianConverter"
                                      styleClass="inputRequiredField"
                                      required="true"
                                      tabindex="1"
@@ -40,14 +39,6 @@
                                       value="#{bundle.antipassback}" styleClass="textColor"/>
                         &#160;&#160;&#160;
                         <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAniPassBack}" tabindex="3"/>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <td nowrap="nowrap">
-                        <h:outputText escape="true"
-                                      value="#{bundle.allow_exit}:" styleClass="textColor"/>
-                        &#160;&#160;&#160;
-                        <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExit}" tabindex="4"/>
                     </td>
                 </tr>
                 <tr valign="top">

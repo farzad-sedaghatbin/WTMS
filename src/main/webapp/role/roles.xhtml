@@ -7,7 +7,7 @@
 
     <ui:define name="content">
         <h:form id="form">
-            <p:contextMenu for="roles">
+            <p:contextMenu for="roles" rendered="#{me.hasPermission('ROLEMANAGEMENT')}">
                 <p:menuitem value="#{bundle.view}" update="roleDetail" icon="icon-pageview" oncomplete="PF('roleDialog').show()"
                             actionListener="#{handleRoleAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="roleDetail" icon="icon-edit" oncomplete="PF('roleDialog').show()"
@@ -25,7 +25,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" id="add" update="roleDetail" actionListener="#{handleRoleAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" rendered="#{me.hasPermission('ROLEMANAGEMENT')}" update="roleDetail" actionListener="#{handleRoleAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('roleDialog').show()"/>
 
             <p:dataTable id="roles" var="role" value="#{handleRoleAction.roleList}" rowKey="#{role.id}"

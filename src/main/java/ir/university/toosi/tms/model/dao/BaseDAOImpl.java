@@ -69,7 +69,6 @@ public class BaseDAOImpl<T extends BaseEntity> {
             return ((long) (isNamedQuery ? em.createNamedQuery(query).getSingleResult()
                     : em.createQuery(query).getSingleResult())) + 1;
         } catch (Exception e) {
-            e.printStackTrace();
             return 1;
         }
     }

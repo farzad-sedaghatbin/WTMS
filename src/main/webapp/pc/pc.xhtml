@@ -13,7 +13,7 @@
         </p:breadCrumb>
 
         <h:form id="form">
-            <p:contextMenu for="pcs">
+            <p:contextMenu for="pcs" rendered="#{me.hasPermission('PCMANAGEMENT')}">
                 <p:menuitem value="#{bundle.view}" update="pcDetail" icon="icon-pageview" oncomplete="PF('pcDialog').show()" actionListener="#{handlePCAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="pcDetail" icon="icon-edit" oncomplete="PF('pcDialog').show()" actionListener="#{handlePCAction.edit}"/>
                 <p:menuitem value="#{bundle.delete}" update="pcs" icon="icon-delete" actionListener="#{handlePCAction.doDelete}">
@@ -26,7 +26,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" id="add" update="pcDetail" actionListener="#{handlePCAction.add}" styleClass="ui-priority-primary" onclick="PF('pcDialog').show()"/>
+            <p:commandButton value="#{bundle.add}" id="add" rendered="#{me.hasPermission('PCMANAGEMENT')}" update="pcDetail" actionListener="#{handlePCAction.add}" styleClass="ui-priority-primary" onclick="PF('pcDialog').show()"/>
 
             <p:dataTable id="pcs" var="currentPC" value="#{handlePCAction.pcList}" rowKey="#{currentPC.id}"
                          selection="#{handlePCAction.currentPC}" selectionMode="single"

@@ -17,11 +17,17 @@
                                 <legend>
                                     <h:outputText escape="true" value="#{bunlde.person_list}"/>
                                 </legend>
+                                <p:contextMenu for="personTable">
+                                    <p:menuitem value="#{bundle.search}"  icon="icon-add"
+                                                actionListener="#{handleMonitoringAction.dotrackByPerson}"/>
+                                </p:contextMenu>
                                 <p:dataTable id="personTable" value="#{handleMonitoringAction.personList}"
                                              var="person"
                                              rowKey="#{person.id}"
                                              selectionMode="single"
+                                             selection="#{handleMonitoringAction.currentPerson}"
                                              paginator="true" rows="10"
+
                                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                              rowsPerPageTemplate="5,10,15"
                                              draggableColumns="true" style="margin-bottom:20px">
@@ -30,7 +36,6 @@
                                                               style="float:right" icon="ui-icon-calculator"/>
                                         <p:columnToggler datasource="personTable" trigger="toggler"/>
                                     </f:facet>
-                                    <p:ajax event="rowSelect" listener="#{handleMonitoringAction.dotrackByPerson}"/>
                                     <p:column headerText="#{bundle.name}" sortBy="#{person.name}"
                                               filterBy="#{person.name}">
                                         <h:outputText id="selectLink"
@@ -76,16 +81,21 @@
                                 <legend>
                                     <h:outputText escape="true" value="#{bunlde.person_list}"/>
                                 </legend>
+                                <p:contextMenu for="personTable1">
+                                    <p:menuitem value="#{bundle.search}"  icon="icon-add"
+                                                actionListener="#{handleMonitoringAction.dotrackByPersonAndGate}"/>
+                                </p:contextMenu>
                                 <p:dataTable id="personTable1" value="#{handleMonitoringAction.personList}"
                                              keepSaved="true"
                                              emptyMessage="#{bundle.empty_message}"
                                              sortMode="single"
+                                             selection="#{handleMonitoringAction.currentPerson}"
+                                             selectionMode="single"
                                              var="person"
                                              rows="10"
                                              style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
                                              rowClasses="ROW1,ROW2">
-                                    <p:ajax event="rowSelect"
-                                            listener="#{handleMonitoringAction.dotrackByPersonAndGate}"/>
+
                                     <p:column sortBy="#{person.name}"
                                               sortOrder="#{handlePersonAction.personnameOrder}">
                                         <f:facet name="header">
@@ -188,18 +198,21 @@
                                 <legend>
                                     <h:outputText escape="true" value="#{bunlde.person_list}"/>
                                 </legend>
-                                0
+                                <p:contextMenu for="personTable2">
+                                    <p:menuitem value="#{bundle.search}"  icon="icon-add"
+                                                actionListener="#{handleMonitoringAction.dotrackByPersonAndTime}"/>
+                                </p:contextMenu>
                                 <p:dataTable id="personTable2"
                                              value="#{handleMonitoringAction.personList}"
                                              keepSaved="true"
                                              emptyMessage="#{bundle.empty_message}"
                                              sortMode="single"
+                                             selection="#{handleMonitoringAction.currentPerson}"
+                                             selectionMode="single"
                                              var="person"
                                              rows="10"
                                              style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
                                              rowClasses="ROW1,ROW2">
-                                    <p:ajax event="rowSelect"
-                                            listener="#{handleMonitoringAction.dotrackByPersonAndTime}"/>
                                     <p:column sortBy="#{person.name}"
                                               sortOrder="#{handlePersonAction.personnameOrder}">
                                         <f:facet name="header">

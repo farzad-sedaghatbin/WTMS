@@ -23,7 +23,7 @@
                 <p:menuitem value="#{bundle.edit}" update="organDetail" icon="icon-edit"
                             oncomplete="PF('organDialog').show()"
                             actionListener="#{handleOrganAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="icon-assignment" rendered="false"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="icon-assignment"
                             oncomplete="PF('assignRuleDialog').show()"
                             actionListener="#{handleOrganAction.assignRule}"/>
                 <p:menuitem value="#{bundle.persons}" update="personTable" icon="icon-person"
@@ -51,7 +51,7 @@
             <p:commandButton value="#{bundle.add}" id="add" update="organDetail" actionListener="#{handleOrganAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('organDialog').show()"/>
 
-            <p:treeTable id="organs" var="currentOrgan"  value="#{handleOrganAction.rootOrgans}" dataLocale="#{me.locale}" style="margin-top: 0"
+            <p:treeTable id="organs" var="currentOrgan"   value="#{handleOrganAction.rootOrgans}" dataLocale="#{me.locale}" style="margin-top: 0"
 
                          selection="#{handleOrganAction.selectedNode}" selectionMode="single"
                          >
@@ -192,10 +192,6 @@
                         <p:column headerText="#{bundle.antipassback}">
                             <h:graphicImage
                                     value="#{rule.aniPassBack ? '/images/s_true.png':'/images/s_false.png'}"/>
-                        </p:column>
-                        <p:column headerText="#{bundle.allow_exit}">
-                            <h:graphicImage
-                                    value="#{rule.allowExit ? '/images/s_true.png':'/images/s_false.png'}"/>
                         </p:column>
                         <p:column headerText="#{bundle.allow_exit_gadget}">
                             <h:graphicImage
