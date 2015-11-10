@@ -1,7 +1,8 @@
 package ir.university.toosi.wtms.web.action.person;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.university.toosi.tms.model.entity.*;
+import ir.university.toosi.tms.model.entity.BLookup;
+import ir.university.toosi.tms.model.entity.Lookup;
+import ir.university.toosi.tms.model.entity.PersonSearch;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
 import ir.university.toosi.tms.model.entity.calendar.DayType;
 import ir.university.toosi.tms.model.entity.personnel.Card;
@@ -23,7 +24,9 @@ import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.organ.HandleOrganAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.wtms.web.util.*;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
+import ir.university.toosi.wtms.web.util.ImageUtils;
+import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.ReportUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -114,7 +117,7 @@ public class HandlePersonAction implements Serializable {
     private RulePackage selectedRulePackage;
     private byte[] picture;
     private String name;
-    private List<String> pageCount= new ArrayList<>();
+    private List<String> pageCount = new ArrayList<>();
     private int pageFrom = 1;
     private int pageTo = 5;
     private List<Rule> ruleArrayList = new ArrayList<>();
@@ -131,7 +134,7 @@ public class HandlePersonAction implements Serializable {
     private String selectedCalendarIdTemp, dayTypeIdTemp, ruleStartTime, ruleEndTime, startHour, startMinute, startSecond;
     private String endHour, endMinute, endSecond, ruleEntranceCount, ruleExitCount, finger;
     private Boolean ruleDeny;
-    private List<Card> cards= new ArrayList<>();
+    private List<Card> cards = new ArrayList<>();
     private Job job;
     private String editableRule = "false";
     private boolean addNewRuleFlag = false;
@@ -141,15 +144,15 @@ public class HandlePersonAction implements Serializable {
     private Hashtable<String, DayType> dayTypeHashtable = new Hashtable<>();
     private String employNo;
     private BLookup employeeType;
-    private List<BLookup> employeeTypes= new ArrayList<>();
+    private List<BLookup> employeeTypes = new ArrayList<>();
     private BLookup assistType;
-    private List<BLookup> assistTypes= new ArrayList<>();
+    private List<BLookup> assistTypes = new ArrayList<>();
     private BLookup postType;
-    private List<BLookup> postTypes= new ArrayList<>();
+    private List<BLookup> postTypes = new ArrayList<>();
     private List<Long> innerPersonList = new ArrayList<>();
     private String folderNo, internalTel, preCondition, attributeName, attributeValue, postCondition, description;
     private SelectItem[] preConditions, postConditions, attributeNames;
-    private List<PersonSearch> personSearchList= new ArrayList<>();
+    private List<PersonSearch> personSearchList = new ArrayList<>();
     private int rowIndex = 0;
     private int pageIndex = 1;
     private int totalPages = 1;
@@ -318,6 +321,7 @@ public class HandlePersonAction implements Serializable {
         attributeNames[2] = new SelectItem("personnelNo", "کد پرسنلی");
         attributeNames[3] = new SelectItem("nationalCode", "کد ملی");
     }
+
     public void listener(FileUploadEvent event) throws Exception {
         UploadedFile item = event.getFile();
         BufferedImage sourceBufferedImage = ImageUtils.convertByteArrayToBufferedImage(item.getContents());
@@ -656,9 +660,11 @@ public class HandlePersonAction implements Serializable {
 
         currentJob = jobService.findByPersonId(currentPerson.getId());
 
-        currentJob.setStatus("o," + me.getUsername());
-        currentJob.setEffectorUser(me.getUsername());
-        condition = jobService.deleteJob(currentJob);
+        if (currentJob != null) {
+            currentJob.setStatus("o," + me.getUsername());
+            currentJob.setEffectorUser(me.getUsername());
+            condition = jobService.deleteJob(currentJob);
+        }
         refresh();
         me.addInfoMessage(condition);
         me.redirect("/person/persons.xhtml");
@@ -838,7 +844,7 @@ public class HandlePersonAction implements Serializable {
         internalTel = currentJob.getInternalTel();
         folderNo = currentJob.getFolderNo();
         employNo = currentJob.getEmployNo();
-        employeeType = currentJob.getEmployType() ;
+        employeeType = currentJob.getEmployType();
         postType = currentJob.getPostType();
         assistType = currentJob.getAssistType();
         List<Organ> organs = organService.getAllOrgan();
@@ -969,7 +975,8 @@ public class HandlePersonAction implements Serializable {
         ruleAniPassBack = rulePackage.isAniPassBack();
         ruleAllowExit = rulePackage.isAllowExit();
         selectedCalendar = rulePackage.getCalendar();
-        selectedCalendarIdTemp = String.valueOf(selectedCalendar.getId());
+        if (selectedCalendar != null)
+            selectedCalendarIdTemp = String.valueOf(selectedCalendar.getId());
         editable = "true";
     }
 
@@ -1086,14 +1093,14 @@ public class HandlePersonAction implements Serializable {
         currentPerson.setEffectorUser(me.getUsername());
         currentPerson.setRulePackage(selectedRulePackage);
         boolean condition = personService.editPerson(currentPerson);
-        if (condition) {
-            refresh();
-            me.addInfoMessage("operation.occurred");
-            me.redirect("/person/persons.xhtml");
-        } else {
-            me.addInfoMessage("operation.not.occurred");
-            return;
-        }
+//        if (condition) {
+//            refresh();
+//            me.addInfoMessage("operation.occurred");
+//            me.redirect("/person/persons.xhtml");
+//        } else {
+//            me.addInfoMessage("operation.not.occurred");
+//            return;
+//        }
     }
 
     public void personDetail() {
@@ -1105,7 +1112,8 @@ public class HandlePersonAction implements Serializable {
 
     }
 
-    public void selectNewRuleForPerson() {
+    public void selectNewRuleForPerson(String id) {
+        selectedRulePackage = rulePackageService.findById(id);
         rulePackageName = selectedRulePackage.getName();
         if (selectedRulePackage.getCalendar() != null)
             calendarName = selectedRulePackage.getCalendar().getName();

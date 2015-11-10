@@ -67,7 +67,7 @@ public class HandlePDPAction implements Serializable {
     private PDP currentPdp = null;
     private PDP newPdp = null;
     private int page = 1;
-    private Set<PDP> selectedPdps = new HashSet<>();
+    private List<PDP> selectedPdps = new ArrayList<>();
     private PDP selectedPdp;
     private boolean selectAll;
     private boolean fingers;
@@ -171,7 +171,7 @@ public class HandlePDPAction implements Serializable {
         for (PDP pdp : pdpList) {
             pdp.setSelected(false);
         }
-        selectedPdps = new HashSet<>();
+        selectedPdps = new ArrayList<>();
 
         List<Gateway> gateways = gatewayService.getAllGateway();
 
@@ -267,20 +267,20 @@ public class HandlePDPAction implements Serializable {
             PDPSync pdpSync = new PDPSync();
             pdpSync.setDb(db);
             pdpSync.setFinger(fingers);
-            pdpSync.setPdpList(selectedPdps);
+            pdpSync.setPdpList(new HashSet<PDP>(selectedPdps));
             pdpSync.setPicture(pictures);
             pdpSync.setSchedule(schedule);
             pdpService.synchronizePdp(pdpSync);
         } else {
-            pdpService.fingerPrint(selectedPdps);
+            pdpService.fingerPrint(new HashSet<PDP>(selectedPdps));
         }
-        me.redirect("/home.htm");
+        me.redirect("/");
     }
 
     public void synchronizeOneByOne() {
         PDPSync pdpSync = new PDPSync();
         pdpSync.setFinger(fingers);
-        pdpSync.setPdpList(selectedPdps);
+        pdpSync.setPdpList(new HashSet<PDP>(selectedPdps));
         pdpSync.setPicture(pictures);
         pdpSync.setPerson(handlePersonAction.getCurrentPerson());
         pdpService.synchronizeOnePdp(pdpSync);
@@ -645,11 +645,11 @@ public class HandlePDPAction implements Serializable {
         this.newPdp = newPdp;
     }
 
-    public Set<PDP> getSelectedPdps() {
+    public List<PDP> getSelectedPdps() {
         return selectedPdps;
     }
 
-    public void setSelectedPdps(Set<PDP> selectedPdps) {
+    public void setSelectedPdps(List<PDP> selectedPdps) {
         this.selectedPdps = selectedPdps;
     }
 
