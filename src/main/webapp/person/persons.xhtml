@@ -262,12 +262,6 @@
                                                         </p:commandLink>
                                                     </td>
                                                     <td>
-                                                        <p:commandLink title="assign card"
-                                                                       action="#{handlePersonAction.downloadJnlp(person.id)}">
-                                                            <p:graphicImage value="/images/assign-card.png"/>
-                                                        </p:commandLink>
-                                                    </td>
-                                                    <td>
                                                         <p:commandLink title="synch"
                                                                        action="#{handlePDPAction.synch}"
                                                                        update=":frm:selectPdpList"
@@ -595,7 +589,7 @@
                                         <f:facet name="header">
                                             <h:outputText escape="true" value="#{bundle.delete}"/>
                                         </f:facet>
-                                        <p:commandButton image="/images/delete.png"
+                                        <p:commandButton image="icon-delete"
                                                          title="delete"
                                                          update="ruleTempTable"
                                                          action="#{handlePersonAction.remove}"
