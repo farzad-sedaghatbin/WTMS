@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -150,15 +151,14 @@ public class HandleOperationAction implements Serializable {
     }
 
     public void backUp() {
-//        me.setActiveMenu(MenuType.SETTING);
 
-        String db = Configuration.getProperty("db");
-        if (db.equalsIgnoreCase("derby")) {
-            me.getGeneralHelper().getWebServiceInfo().setServiceName("/backUpDerby");
+        try {
+            operationService.backupDerby();
+        } catch (SQLException e) {
+            me.addErrorMessage(e.getMessage());
         }
-        new RESTfulClientUtil().restFullServiceString(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), "derby");
-
-//        me.addInfoMessage("operation.occurred");
+        me.addInfoMessage("backup_done");
+        me.redirect("/dashboard.xhtml");
     }
 
     private void doAdd() {
