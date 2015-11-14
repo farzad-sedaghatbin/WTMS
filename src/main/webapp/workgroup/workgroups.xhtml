@@ -6,6 +6,14 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+
+
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.management}" url="#" />
+            <p:menuitem value="#{bundle.workgroup}" url="#" />
+        </p:breadCrumb>
+
         <h:form id="form">
             <p:contextMenu for="groups" rendered="#{me.hasPermission('WORKGROUPMANAGEMENT')}">
                 <p:menuitem value="#{bundle.edit}" update="groupDetail" icon="icon-edit" oncomplete="PF('groupDialog').show()"

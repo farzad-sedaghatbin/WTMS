@@ -6,6 +6,13 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.management}" url="#" />
+            <p:menuitem value="#{bundle.role}" url="#" />
+        </p:breadCrumb>
+
         <h:form id="form">
             <p:contextMenu for="roles" rendered="#{me.hasPermission('ROLEMANAGEMENT')}">
                 <p:menuitem value="#{bundle.view}" update="roleDetail" icon="icon-pageview" oncomplete="PF('roleDialog').show()"

@@ -2,9 +2,11 @@ package ir.university.toosi.wtms.web.action.zone;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.zone.Virdi;
 import ir.university.toosi.tms.model.service.PCServiceImpl;
 import ir.university.toosi.tms.model.service.zone.CameraServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
+import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.BaseEntity;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -34,6 +36,8 @@ public class HandleDeviceAction implements Serializable {
     @EJB
     private PDPServiceImpl pdpService;
     @EJB
+    private VirdiServiceImpl virdiService;
+    @EJB
     private CameraServiceImpl cameraService;
     @EJB
     private PCServiceImpl pcService;
@@ -59,26 +63,37 @@ public class HandleDeviceAction implements Serializable {
 //        init();
         page = 1;
 
-            List<PDP> pdps = pdpService.getAllPDPs();
-            DeviceDataModel pdpDataModel;
+            List<Virdi> virdis = virdiService.getAllVirdis();
+            DeviceDataModel deviceDataModel;
             listModel = new ArrayList<>();
+            for (Virdi virdi : virdis) {
+                deviceDataModel = new DeviceDataModel();
+                deviceDataModel.setName(virdi.getName());
+                deviceDataModel.setEnabled(virdi.isEnabled());
+                deviceDataModel.setIp(virdi.getIp());
+                deviceDataModel.setDescription(virdi.getDescription());
+                listModel.add(deviceDataModel);
+            }
+
+
+            List<PDP> pdps = pdpService.getAllPDPs();
             for (PDP pdp : pdps) {
-                pdpDataModel = new DeviceDataModel();
-                pdpDataModel.setName(pdp.getName());
-                pdpDataModel.setEnabled(pdp.isEnabled());
-                pdpDataModel.setIp(pdp.getIp());
-                pdpDataModel.setDescription(pdp.getDescription());
-                listModel.add(pdpDataModel);
+                deviceDataModel = new DeviceDataModel();
+                deviceDataModel.setName(pdp.getName());
+                deviceDataModel.setEnabled(pdp.isEnabled());
+                deviceDataModel.setIp(pdp.getIp());
+                deviceDataModel.setDescription(pdp.getDescription());
+                listModel.add(deviceDataModel);
             }
 
             List<Camera> cameras =cameraService.getAllCamera();
             for (Camera camera : cameras) {
-                pdpDataModel = new DeviceDataModel();
-                pdpDataModel.setName(camera.getName());
-                pdpDataModel.setEnabled(camera.isEnabled());
-                pdpDataModel.setIp(camera.getIp());
-                pdpDataModel.setDescription(camera.getDescription());
-                listModel.add(pdpDataModel);
+                deviceDataModel = new DeviceDataModel();
+                deviceDataModel.setName(camera.getName());
+                deviceDataModel.setEnabled(camera.isEnabled());
+                deviceDataModel.setIp(camera.getIp());
+                deviceDataModel.setDescription(camera.getDescription());
+                listModel.add(deviceDataModel);
             }
 
 
@@ -89,14 +104,14 @@ public class HandleDeviceAction implements Serializable {
     }
 
     public void ping() {
-        for (DeviceDataModel pdpDataModel : listModel) {
+        for (DeviceDataModel deviceDataModel : listModel) {
 
             try {
-                boolean status = pdpService.ping(pdpDataModel.getIp());
+                boolean status = pdpService.ping(deviceDataModel.getIp());
                 if (status)
-                    pdpDataModel.setEnabled(true);
+                    deviceDataModel.setEnabled(true);
                 else
-                    pdpDataModel.setEnabled(false);
+                    deviceDataModel.setEnabled(false);
 
             } catch (IOException e) {
                 e.printStackTrace();

@@ -51,15 +51,16 @@
                     <p:menuitem id="rm_virdi" value="#{bundle.virdi}" icon="icon-perm_device_information"
                                 actionListener="#{handleVirdiAction.begin}"/>
 
-                    <p:menuitem id="rm_deviceMonitor" value="#{bundle.device_monitoring}" rendered="false"
-                                icon="icon-perm_device_information"
-                                actionListener="#{handleDeviceAction.beginDevice}"/>
                     <p:menuitem id="rm_card" value="#{bundle.card}" icon="icon-sd_card"
                                 actionListener="#{handleCardAction.begin}"/>
 
                 </p:submenu>
                 <p:submenu id="monitoring" label="#{bundle.monitoring}" rendered="#{me.hasPermission('MONITORING')}"
                            icon="icon-menu">
+
+                    <p:menuitem id="rm_deviceMonitor" value="#{bundle.device_monitoring}"
+                                icon="icon-perm_device_information"
+                                actionListener="#{handleDeviceAction.beginDevice}"/>
                     <p:menuitem id="sentry" value="#{bundle.sentry}" icon="icon-verified_user"
                                 action="#{handleMonitoringAction.beginSentry}"/>
                     <p:menuitem id="rm_map" rendered="false" value="#{bundle.map}" icon="icon-map"
@@ -105,6 +106,8 @@
                                 actionListener="#{handleRuleExceptionAction.begin}"/>
                     <p:menuitem id="rm_lookup" value="#{bundle.lookup}" icon="icon-looks_3"
                                 actionListener="#{handleLookupAction.begin}"/>
+                    <p:menuitem id="rm_backup" value="#{bundle.backup}" icon="icon-looks_3"
+                                actionListener="#{handleOperationAction.backUp}"/>
 
 
                 </p:submenu>
