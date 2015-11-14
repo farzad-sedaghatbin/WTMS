@@ -79,32 +79,32 @@
 
                                                 <tr valign="top">
                                                     <td align="#{me.align}" nowrap="nowrap">
-                                                        <h:selectOneMenu
+                                                        <p:selectOneMenu
                                                                 value="#{handlePersonAction.preCondition}">
                                                             <f:selectItems
                                                                     value="#{handlePersonAction.preConditions}"/>
-                                                        </h:selectOneMenu>
+                                                        </p:selectOneMenu>
                                                     </td>
                                                     &#160;&#160;
                                                     <td align="#{me.align}" nowrap="nowrap">
-                                                        <h:selectOneMenu
+                                                        <p:selectOneMenu
                                                                 value="#{handlePersonAction.attributeName}">
                                                             <f:selectItems
                                                                     value="#{handlePersonAction.attributeNames}"/>
-                                                        </h:selectOneMenu>
+                                                        </p:selectOneMenu>
                                                     </td>
                                                     &#160;&#160;
                                                     <td>
-                                                        <h:inputText
+                                                        <p:inputText
                                                                 value="#{handlePersonAction.attributeValue}"/>
                                                     </td>
                                                     &#160;&#160;
                                                     <td align="#{me.align}" nowrap="nowrap">
-                                                        <h:selectOneMenu
+                                                        <p:selectOneMenu
                                                                 value="#{handlePersonAction.postCondition}">
                                                             <f:selectItems
                                                                     value="#{handlePersonAction.postConditions}"/>
-                                                        </h:selectOneMenu>
+                                                        </p:selectOneMenu>
                                                     </td>
 
                                                     <td align="#{me.align}" nowrap="nowrap">
@@ -182,7 +182,7 @@
                                                 </tr>
                                                 <tr valign="top">
                                                     <td align="#{me.align}" nowrap="nowrap">
-                                                        <h:commandButton value="#{bundle.search}"
+                                                        <p:commandButton value="#{bundle.search}"
                                                                          action="#{handlePersonAction.search}"/>
                                                     </td>
 
@@ -209,15 +209,15 @@
 
                 <tr valign="top">
                     <td align="#{me.align}" nowrap="nowrap" colspan="2">
-                        <h:inputText value="#{handlePersonAction.simpleValue}"/>
+                        <p:inputText value="#{handlePersonAction.simpleValue}"/>
                         &#160;&#160;
-                        <h:commandButton action="#{handlePersonAction.simpleSearch}" value="#{bundle.search}"/>
+                        <p:commandButton action="#{handlePersonAction.simpleSearch}" value="#{bundle.search}"/>
 
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <h:commandButton action="#{handlePersonAction.exportExcel}" value="#{bundle.export}"/>
+                        <p:commandButton action="#{handlePersonAction.exportExcel}" value="#{bundle.export}"/>
                     </td>
                 </tr>
                 <tr valign="top">
@@ -273,11 +273,11 @@
                                                         <p:commandLink title="delete"
                                                                        action="#{handlePersonAction.doDelete(person.id)}">
                                                             <p:graphicImage value="/images/delete.png"/>
-                                                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                                            <p:confirm header="#{bundle.confirmation}" message="#{bundle.sureQuestion}" icon="ui-icon-alert" />
                                                         </p:commandLink>
                                                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                            <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                            <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                                                         </p:confirmDialog>
                                                     </td>
                                                     <td>
@@ -286,7 +286,7 @@
                                                                 title="edit rule"
                                                                 update=":frm:handleRulePanel"
                                                                 oncomplete="PF('rulePanel').show()">
-                                                            <p:graphicImage value="/images/assign-rule.png"/>
+                                                            <p:graphicImage value="/images/rule.png" width="20px" height="20px"/>
                                                         </p:commandLink>
                                                     </td>
                                                     <td>
@@ -419,14 +419,14 @@
                         <tr valign="top">
                             <td nowrap="nowrap" align="#{me.align}">
                                 <h:outputText escape="true" value="#{bundle.finger}"/>
-                                <h:selectBooleanCheckbox
+                                <p:selectBooleanCheckbox
                                         value="#{handlePDPAction.fingers}">
-                                </h:selectBooleanCheckbox>
+                                </p:selectBooleanCheckbox>
                                 &#160;&#160;
                                 <h:outputText escape="true" value="#{bundle.picture}"/>
-                                <h:selectBooleanCheckbox
+                                <p:selectBooleanCheckbox
                                         value="#{handlePDPAction.pictures}">
-                                </h:selectBooleanCheckbox>
+                                </p:selectBooleanCheckbox>
 
 
                             </td>
@@ -438,53 +438,29 @@
                                              selection="#{handlePDPAction.selectedPdps}"
                                              rowKey="#{pdp.id}"
                                              var="pdp"
-                                             style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
+                                             paginator="true" rows="10"
+                                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                             rowsPerPageTemplate="5,10,15" style="margin-bottom:20px">
 
                                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
-                                    <p:column sortBy="#{pdp.name}">
-                                        <f:facet name="header">
-                                            <p:commandLink value="#{bundle.name}" update="pdpTable"
-                                                           action="#{handlePDPAction.sortByPdpName}"/>
-                                            <br/>
-                                            <p:inputText
-                                                    value="#{handlePDPAction.pdpNameFilter}">
-                                                <p:ajax event="blur" update="pdpTable"/>
-                                            </p:inputText>
-                                        </f:facet>
+                                    <p:column headerText="#{bundle.name}" sortBy="#{pdp.name}">
                                         <h:outputLabel value="#{pdp.name}"/>
                                     </p:column>
 
-                                    <p:column sortBy="#{pdp.description}">
-                                        <f:facet name="header">
-                                            <p:commandLink value="#{bundle.description}" update="pdpTable"
-                                                           action="#{handlePDPAction.sortByPdpDescription}"/>
-                                            <br/>
-                                            <p:inputText value="#{handlePDPAction.pdpDescriptionFilter}">
-                                                <p:ajax event="blur" update="pdpTable"/>
-                                            </p:inputText>
-                                        </f:facet>
-                                        <h:outputText escape="true" value="#{pdp.description}"/>
+                                    <p:column headerText="#{bundle.description}" sortBy="#{pdp.description}">
+                                        <h:outputText value="#{pdp.description}"/>
                                     </p:column>
-                                    <p:column sortBy="#{pdp.ip}">
-                                        <f:facet name="header">
-                                            <p:commandLink value="ip"
-                                                           update="pdpTable"
-                                                           action="#{handlePDPAction.sortByIp}"/>
-                                            <br/>
-                                            <p:inputText value="#{handlePDPAction.pdpIPFilter}">
-                                                <p:ajax event="blur" update="pdpTable"/>
-                                            </p:inputText>
-                                        </f:facet>
-                                        <h:outputText escape="true" value="#{pdp.ip}"/>
+                                    <p:column headerText="ip" sortBy="#{pdp.ip}">
+                                        <h:outputText value="#{pdp.ip}"/>
                                     </p:column>
                                 </p:dataTable>
                             </td>
                         </tr>
                         <tr valign="top">
                             <td align="center" nowrap="nowrap">
-                                <h:commandButton value="#{bundle.sync}"
-                                                 update="pdpTable, pdpPanelId"
+                                <p:commandButton value="#{bundle.sync}"
+                                                 update="pdpTable"
                                                  action="#{handlePDPAction.synchronize}"/>
                             </td>
                         </tr>
@@ -501,7 +477,7 @@
                                 <h:outputText escape="true"
                                               value="#{bundle.name}"/>
                                 &#160;&#160;&#160;&#160;&#160;
-                                <h:inputText id="ruleName"
+                                <p:inputText id="ruleName"
                                              value="#{handlePersonAction.name}"
                                              dir="#{me.direction}"/>
                             </td>
@@ -511,9 +487,9 @@
                                 <h:outputText escape="true"
                                               value="#{bundle.date}"/>
                                 &#160;&#160;&#160;&#160;&#160;
-                                <h:selectOneMenu value="#{handlePersonAction.selectedCalendarIdTemp}" tabindex="2">
+                                <p:selectOneMenu value="#{handlePersonAction.selectedCalendarIdTemp}" tabindex="2">
                                     <f:selectItems value="#{handlePersonAction.calendarItems}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                             </td>
                         </tr>
                         <tr valign="top">
@@ -521,7 +497,7 @@
                                 <h:outputText escape="true"
                                               value="#{bundle.antipassback}" styleClass="textColor"/>
                                 &#160;&#160;&#160;
-                                <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAniPassBack}" tabindex="3"/>
+                                <p:selectBooleanCheckbox value="#{handlePersonAction.ruleAniPassBack}" tabindex="3"/>
                             </td>
                         </tr>
                         <tr valign="top">
@@ -529,7 +505,7 @@
                                 <h:outputText escape="true"
                                               value="#{bundle.allow_exit_gadget}" styleClass="textColor"/>
                                 &#160;&#160;&#160;
-                                <h:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExitGadget}" tabindex="5"/>
+                                <p:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExitGadget}" tabindex="5"/>
                             </td>
                         </tr>
 
@@ -620,9 +596,9 @@
                                                     <h:outputText escape="true" value="#{bundle.daytype}"/>
                                                 </td>
                                                 <td nowrap="nowrap">
-                                                    <h:selectOneMenu value="#{handlePersonAction.dayTypeIdTemp}">
+                                                    <p:selectOneMenu value="#{handlePersonAction.dayTypeIdTemp}">
                                                         <f:selectItems value="#{handlePersonAction.dayTypeItems}"/>
-                                                    </h:selectOneMenu>
+                                                    </p:selectOneMenu>
                                                 </td>
                                             </tr>
                                             <tr valign="bottom">
@@ -631,14 +607,14 @@
                                                 </td>
                                                 <td nowrap="nowrap">
                                                     <p:spinner value="#{handlePersonAction.startSecond}"
-                                                               stepFactor="1" max="59" size="1" min="0"/>
+                                                               stepFactor="1" max="59" size="6" min="0"/>
                                                     &#160;
                                                     <p:spinner value="#{handlePersonAction.startMinute}"
-                                                               stepFactor="1" max="59" size="1" min="0"/>
+                                                               stepFactor="1" max="59" size="6" min="0"/>
 
                                                     &#160;
                                                     <p:spinner value="#{handlePersonAction.startHour}"
-                                                               stepFactor="1" max="23" size="1" min="0"/>
+                                                               stepFactor="1" max="23" size="6" min="0"/>
                                                 </td>
                                             </tr>
 
@@ -648,13 +624,13 @@
                                                 </td>
                                                 <td nowrap="nowrap">
                                                     <p:spinner value="#{handlePersonAction.endSecond}"
-                                                               stepFactor="1" max="59" size="1" min="0"/>
+                                                               stepFactor="1" max="59" size="6" min="0"/>
                                                     &#160;
                                                     <p:spinner value="#{handlePersonAction.endMinute}"
-                                                               stepFactor="1" max="59" size="1" min="0"/>
+                                                               stepFactor="1" max="59" size="6" min="0"/>
                                                     &#160;
                                                     <p:spinner value="#{handlePersonAction.endHour}"
-                                                               stepFactor="1" max="59" size="1" min="0"/>
+                                                               stepFactor="1" max="59" size="6" min="0"/>
                                                 </td>
                                             </tr>
                                             <tr valign="bottom">
@@ -664,7 +640,7 @@
                                                 <td nowrap="nowrap">
                                                     <p:spinner dir="#{me.direction}"
                                                                value="#{handlePersonAction.ruleEntranceCount}"
-                                                               stepFactor="1" max="99" size="1" min="0"/>
+                                                               stepFactor="1" max="99" size="6" min="0"/>
 
                                                 </td>
                                             </tr>
@@ -675,7 +651,7 @@
                                                 <td nowrap="nowrap">
                                                     <p:spinner dir="#{me.direction}"
                                                                value="#{handlePersonAction.ruleExitCount}"
-                                                               stepFactor="1" max="99" size="1" min="0"/>
+                                                               stepFactor="1" max="99" size="6" min="0"/>
 
                                                 </td>
                                             </tr>
@@ -684,7 +660,7 @@
                                                     <h:outputText escape="true" value="#{bundle.deny}:" styleClass="textColor"/>
                                                 </td>
                                                 <td nowrap="nowrap">
-                                                    <h:selectBooleanCheckbox value="#{handlePersonAction.ruleDeny}"/>
+                                                    <p:selectBooleanCheckbox value="#{handlePersonAction.ruleDeny}"/>
                                                 </td>
                                             </tr>
                                             <tr valign="top">
@@ -708,9 +684,7 @@
                                 <p:commandButton id="saveRuleId"
                                                  value="#{bundle.save}"
                                                  action="#{handlePersonAction.doEditPersonRule}"/>
-                                <p:commandButton id="resetRuleId"
-                                                 action="#{handlePersonAction.init}"
-                                                 value="#{bundle.revert}"/>
+
                             </td>
                         </tr>
                     </table>

@@ -34,14 +34,12 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="firstname"
                                              value="#{handlePersonAction.personname}"
                                              maxlength="25"
-
                                              styleClass="inputRequiredField"/>
-                                <p:message ajaxRendered="true" for="firstname" showSummary="true" showDetail="false"
-                                              errorClass="errorMsg"/>
+                                <p:message for="firstname" showSummary="true" showDetail="false"/>
                             </td>
 
                             <td nowrap="nowrap">
@@ -50,13 +48,12 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="lastname"
                                              value="#{handlePersonAction.lastname}"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
-                                <p:message ajaxRendered="true" for="lastname" showSummary="true" showDetail="false"
-                                              errorClass="errorMsg"/>
+                                <p:message for="lastname" showSummary="true" showDetail="false"/>
                             </td>
                         </tr>
                         <tr valign="top">
@@ -66,12 +63,12 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="email"
                                              value="#{handlePersonAction.email}"
                                              maxlength="25"/>
-                                <p:message ajaxRendered="true" for="email" showSummary="true"
-                                              showDetail="false" errorClass="errorMsg"/>
+                                <p:message for="email" showSummary="true"
+                                              showDetail="false"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
@@ -79,7 +76,7 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="mobile"
                                              value="#{handlePersonAction.mobile}"
                                              maxlength="25"/>
@@ -93,14 +90,14 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="_personnelCode"
 
                                              value="#{handlePersonAction.personnelNo}"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
-                                <p:message ajaxRendered="true" for="_personnelCode" showSummary="true"
-                                              showDetail="false" errorClass="errorMsg"/>
+                                <p:message for="_personnelCode" showSummary="true"
+                                              showDetail="false"/>
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true"
@@ -108,14 +105,13 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="_nationalCode"
-
                                              value="#{handlePersonAction.nationalCode}"
                                              maxlength="25"
                                              styleClass="inputRequiredField"/>
-                                <p:message ajaxRendered="true" for="_nationalCode" showSummary="true"
-                                              showDetail="false" errorClass="errorMsg"/>
+                                <p:message for="_nationalCode" showSummary="true"
+                                              showDetail="false"/>
                             </td>
                         </tr>
                         <tr>
@@ -126,7 +122,7 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputSecret dir="#{me.direction}"
+                                <p:password dir="#{me.direction}"
                                                rendered="#{not handlePersonAction.editable}"
                                                id="_personnelPassword"
                                                value="#{handlePersonAction.password}"
@@ -139,7 +135,7 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputSecret dir="#{me.direction}"
+                                <p:password dir="#{me.direction}"
                                                rendered="#{not handlePersonAction.editable}"
                                                id="_personnelConfirm-password"
                                                value="#{handlePersonAction.rePassword}"
@@ -154,7 +150,7 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputTextarea dir="#{me.direction}"
+                                <p:inputTextarea dir="#{me.direction}"
                                                  id="address"
                                                  value="#{handlePersonAction.address}"
                                                  maxlength="25"/>
@@ -165,7 +161,7 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="_workStation"
                                              value="#{handlePersonAction.workStation}"
                                              maxlength="25"/>
@@ -191,7 +187,7 @@
                                         value="#{bundle.employee_number}" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="employeeNo"
                                              value="#{handlePersonAction.employNo}"
                                              maxlength="25"/>
@@ -202,12 +198,12 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap" align="#{me.align}">
-                                <h:selectOneMenu value="#{handlePersonAction.employeeType.id}"
+                                <p:selectOneMenu value="#{handlePersonAction.employeeType.id}"
                                                  valueChangeListener="#{handlePersonAction.selectEmployType}">
                                     <f:selectItems itemLabel="#{employeeType.code}"
                                                    itemValue="#{employeeType.id}" var="employeeType"
                                                    value="#{handlePersonAction.employeeTypes}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                             </td>
 
                         </tr>
@@ -216,7 +212,7 @@
                                 <h:outputText escape="true" value="#{bundle.folder_number}" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="folderNo"
                                              value="#{handlePersonAction.folderNo}"
                                              maxlength="25"/>
@@ -226,7 +222,7 @@
                                         value="#{bundle.internal_tel}" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputText dir="#{me.direction}"
+                                <p:inputText dir="#{me.direction}"
                                              id="intenalTel"
                                              value="#{handlePersonAction.internalTel}"
                                              maxlength="25"/>
@@ -241,24 +237,24 @@
                                         styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap" align="#{me.align}">
-                                <h:selectOneMenu value="#{handlePersonAction.postType.id}"
+                                <p:selectOneMenu value="#{handlePersonAction.postType.id}"
                                                  valueChangeListener="#{handlePersonAction.selectPostType}">
                                     <f:selectItems itemLabel="#{postType.code}"
                                                    itemValue="#{postType.id}" var="postType"
                                                    value="#{handlePersonAction.postTypes}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                             </td>
                             <td nowrap="nowrap">
                                 <h:outputText escape="true" value="#{bundle.assist_type}"
                                               styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap" align="#{me.align}">
-                                <h:selectOneMenu value="#{handlePersonAction.assistType.id}"
+                                <p:selectOneMenu value="#{handlePersonAction.assistType.id}"
                                                  valueChangeListener="#{handlePersonAction.selectAssistType}">
                                     <f:selectItems itemLabel="#{assistType.code}"
                                                    itemValue="#{assistType.id}" var="assistType"
                                                    value="#{handlePersonAction.assistTypes}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                             </td>
 
                         </tr>
@@ -268,7 +264,7 @@
                                         value="#{bundle.description}" styleClass="textColor"/>
                             </td>
                             <td nowrap="nowrap">
-                                <h:inputTextarea dir="#{me.direction}"
+                                <p:inputTextarea dir="#{me.direction}"
                                                  id="description"
                                                  value="#{handlePersonAction.description}"
                                                  maxlength="100"/>
@@ -360,7 +356,7 @@
                                   styleClass="textColor"/>
                 </td>
                 <td nowrap="nowrap">
-                    <h:inputText dir="#{me.direction}"
+                    <p:inputText dir="#{me.direction}"
                                  id="extrafiled1"
                                  value="#{handlePersonAction.extraField1}"
                                  maxlength="25"
@@ -373,7 +369,7 @@
                                   styleClass="textColor"/>
                 </td>
                 <td nowrap="nowrap">
-                    <h:inputText dir="#{me.direction}"
+                    <p:inputText dir="#{me.direction}"
                                  id="extrafiled2"
                                  value="#{handlePersonAction.extraField2}"
                                  maxlength="25"
@@ -389,7 +385,7 @@
                                   styleClass="textColor"/>
                 </td>
                 <td nowrap="nowrap">
-                    <h:inputText dir="#{me.direction}"
+                    <p:inputText dir="#{me.direction}"
                                  id="extrafiled3"
                                  value="#{handlePersonAction.extraField3}"
                                  maxlength="25"
@@ -402,7 +398,7 @@
                                   styleClass="textColor"/>
                 </td>
                 <td nowrap="nowrap">
-                    <h:inputText dir="#{me.direction}"
+                    <p:inputText dir="#{me.direction}"
                                  id="extrafiled4"
                                  rendered="#{handlePersonAction.extraField4Enable}"
                                  value="#{handlePersonAction.extraField4}"
