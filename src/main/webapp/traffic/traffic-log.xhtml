@@ -14,7 +14,7 @@
         </p:breadCrumb>
         <h:form>
 
-            <p:dataTable id="trafficLogTable" value="#{handleTrafficAction.eventLogList}" var="trafficLog"
+            <p:dataTable widgetVar="thisTable" id="trafficLogTable" value="#{handleTrafficAction.eventLogList}" var="trafficLog"
                          rowKey="#{trafficLog.id}"
                          selection="#{handleTrafficAction.currentTrraficLog}" selectionMode="single"
                          paginator="true" rows="10"
@@ -45,7 +45,10 @@
                     <h:outputText value="#{trafficLog.traffic_time}" converter="timeConverter"/>
                 </p:column>
 
-                <p:column width="200" headerText="#{bundle.date}" sortBy="#{trafficLog.traffic_date}" filterBy="#{trafficLog.traffic_date}">
+                <p:column headerText="#{bundle.date}" sortBy="#{trafficLog.traffic_date}" filterBy="#{trafficLog.traffic_date}">
+                    <f:facet name="filter">
+                        <p:inputText styleClass="datepicker" onchange="PF('thisTable').filter()" converter="dateConverter" style="width: 100px"/>
+                    </f:facet>
                     <h:outputText value="#{trafficLog.traffic_date}" converter="dateConverter"/>
                 </p:column>
 

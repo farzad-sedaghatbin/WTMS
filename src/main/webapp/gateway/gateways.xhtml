@@ -13,7 +13,7 @@
         </p:breadCrumb>
 
         <h:form id="form">
-            <p:contextMenu for="gateways" rendered="#{me.hasPermission('GATEMANAGEMENT')}">
+            <p:contextMenu for="gateways">
                 <p:menuitem value="#{bundle.view}" update="gatewayDetail" icon="icon-pageview"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.view}"/>
                 <p:menuitem value="#{bundle.edit}" update="gatewayDetail" icon="icon-edit"
@@ -26,7 +26,10 @@
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleGatewayAction.editRule}"/>
                 <p:menuitem value="#{bundle.special_status}" update="specialStatusTable" icon="icon-beenhere"
                             oncomplete="PF('gatewayStatus').show()"
-                            actionListener="#{handleGatewayAction.assignSpecialStatus}" rendered="false"/>
+                            actionListener="#{handleGatewayAction.assignSpecialStatus}"/>
+                <p:menuitem value="#{bundle.assign_person}" update="assignGatewayPersonPanel" icon="icon-beenhere"
+                            oncomplete="PF('assignPersonDialog').show()"
+                            actionListener="#{handleGatewayAction.assignPerson}"/>
                 <p:menuitem value="#{bundle.delete}" update="gateways" icon="icon-delete"
                             actionListener="#{handleGatewayAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert"/>
@@ -40,7 +43,7 @@
                                  icon="ui-icon-close"/>
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" rendered="#{me.hasPermission('GATEMANAGEMENT')}" id="add" update="gatewayDetail"
+            <p:commandButton value="#{bundle.add}" id="add" update="gatewayDetail"
                              actionListener="#{handleGatewayAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('gatewayDialog').show()"/>
 
@@ -68,6 +71,56 @@
                     <p:graphicImage value="#{currentGateway.enabled ? '/images/s_true.png' : '/images/s_false.png'}"/>
                 </p:column>
             </p:dataTable>
+
+            <p:dialog header="#{bundle.assignPerson}" widgetVar="assignPersonDialog" modal="true" showEffect="fade"
+                      hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
+                      minimizable="true" height="500">
+                <p:outputPanel id="assignGatewayPersonPanel">
+                    <table dir="#{me.direction}">
+                        <tr>
+                            <td>
+                                <p:dataTable id="personTable"
+                                             value="#{handleGatewayAction.notAssignPersonList}"
+                                             var="person"
+                                             rowKey="#{person.id}"
+                                             selection="#{handleGatewayAction.newSelectedPersons}"
+                                             paginator="true" rows="10"
+                                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                             rowsPerPageTemplate="5,10,15">
+
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+
+                                    <p:column headerText="#{bundle.name}" sortBy="#{person.name}"
+                                              filterBy="#{person.name}">
+                                        <h:outputText value="#{person.name}"/>
+                                    </p:column>
+
+                                    <p:column headerText="#{bundle.family}" sortBy="#{person.lastName}"
+                                              filterBy="#{person.lastName}">
+                                        <h:outputText value="#{person.lastName}"/>
+                                    </p:column>
+
+                                    <p:column headerText="#{bundle.personnelNo}" sortBy="#{person.personnelNo}"
+                                              filterBy="#{person.personnelNo}">
+                                        <h:outputText value="#{person.personnelNo}"/>
+                                    </p:column>
+                                </p:dataTable>
+
+
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td align="#{me.align}" nowrap="nowrap">
+                                <p:commandButton id="savePersonId"
+                                                 value="#{bundle.save}"
+                                                 action="#{handleGatewayAction.doAssignPerson}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+
+            </p:dialog>
 
             <p:dialog header="#{bundle.gateway}" widgetVar="gatewayDialog" modal="true" showEffect="fade"
                       hideEffect="fade" resizable="true">
@@ -114,7 +167,8 @@
                 </p:outputPanel>
             </p:dialog>
             <p:dialog header="#{bundle.special_status}" widgetVar="gatewayStatus" modal="true" showEffect="fade"
-                      hideEffect="fade" resizable="true">
+                      hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
+                      minimizable="true" height="500">
                 <p:outputPanel id="AssignSpecialStatus" ajaxRendered="true">
                     <table border="0" cellpadding="3" cellspacing="3" width="290"
                            dir="#{me.direction}">
@@ -122,52 +176,31 @@
                             <td nowrap="nowrap" colspan="2">
                                 <p:dataTable id="specialStatusTable"
                                              value="#{handleGatewayAction.gatewaySpecialStateList}"
-                                             keepSaved="true"
-                                             emptyMessage="#{bundle.empty_message}"
-                                             sortMode="single"
                                              var="specialStatus"
-                                             rows="10"
-                                             style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;"
-                                             rowClasses="ROW1,ROW2">
+                                             rowKey="#{specialStatus.id}"
+                                             paginator="true" rows="10"
+                                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                             rowsPerPageTemplate="5,10,15" style="margin-bottom:20px">
 
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText escape="true" value="#{bundle.status_date}"/>
-                                        </f:facet>
-                                        <h:outputText escape="true" value="#{specialStatus.date}"
+                                    <p:column headerText="#{bundle.date}">
+                                        <h:outputText value="#{specialStatus.date}"
                                                       converter="dateConverter"/>
                                     </p:column>
 
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText escape="true" value="#{bundle.status_time}"/>
-                                        </f:facet>
-                                        <h:outputText escape="true" value="#{specialStatus.time}"/>
+                                    <p:column headerText="#{bundle.status_time}">
+                                        <h:outputText value="#{specialStatus.time}"/>
                                     </p:column>
 
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText escape="true" value="#{bundle.status_state}"/>
-                                        </f:facet>
-                                        <h:outputText escape="true" value="#{specialStatus.gateWayStatus.description}"/>
+                                    <p:column headerText="#{bundle.status_state}">
+                                        <h:outputText value="#{specialStatus.gateWayStatus.description}"/>
                                     </p:column>
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText escape="true" value="#{bundle.delete}"/>
-                                        </f:facet>
+                                    <p:column headerText="#{bundle.delete}">
                                         <p:commandButton image="/images/delete.png"
                                                          title="delete"
-                                                         execute="@this"
                                                          update="specialStatusTable"
-                                                         limitRender="true"
-                                                         action="#{handleGatewayAction.removeSpecialStatus}"
+                                                         actionListener="#{handleGatewayAction.removeSpecialStatus(specialStatus.id)}"
                                                 />
                                     </p:column>
-                                    <f:facet name="footer">
-                                        <p:dataScroller limitRender="true" execute="@this"
-                                                        update="ruleTempTable"
-                                                        page="#{handleGatewayAction.page}"/>
-                                    </f:facet>
                                 </p:dataTable>
                             </td>
                         </tr>
@@ -192,16 +225,16 @@
                                                 </td>
                                                 <td nowrap="nowrap">
                                                     <p:spinner value="#{handleGatewayAction.statusSecond}"
-                                                               step="1" maxValue="59"
-                                                               inputSize="1" minValue="0"/>
+                                                               stepFactor="1" maxValue="59"
+                                                               size="6" minValue="0"/>
                                                     &#160;
                                                     <p:spinner value="#{handleGatewayAction.statusMinute}"
-                                                               step="1" maxValue="59"
-                                                               inputSize="1" minValue="0"/>
+                                                               stepFactor="1" maxValue="59"
+                                                               size="6" minValue="0"/>
                                                     &#160;
                                                     <p:spinner value="#{handleGatewayAction.statusHour}"
-                                                               step="1" maxValue="23"
-                                                               inputSize="1" minValue="0"/>
+                                                               stepFactor="1" maxValue="23"
+                                                               size="6" minValue="0"/>
                                                 </td>
                                             </tr>
                                             <tr valign="bottom">
@@ -210,8 +243,8 @@
                                                 </td>
                                                 <td nowrap="nowrap">
                                                     <p:spinner value="#{handleGatewayAction.until}"
-                                                               step="1" maxValue="23"
-                                                               inputSize="1" minValue="0"/>
+                                                               stepFactor="1" maxValue="23"
+                                                               size="6" minValue="0"/>
                                                     <h:outputLabel value="#{bundle.hour}"/>
                                                 </td>
                                             </tr>
@@ -220,10 +253,10 @@
                                                     <h:outputText escape="true" value="#{bundle.status_state}"/>
                                                 </td>
                                                 <td nowrap="nowrap">
-                                                    <h:selectOneMenu value="#{handleGatewayAction.statusStateName}">
+                                                    <p:selectOneMenu value="#{handleGatewayAction.statusStateName}">
                                                         <f:selectItems
                                                                 value="#{handleGatewayAction.gatewayStatusItem}"/>
-                                                    </h:selectOneMenu>
+                                                    </p:selectOneMenu>
                                                 </td>
                                             </tr>
                                         </table>
@@ -237,15 +270,11 @@
                             <td nowrap="nowrap" align="center" colspan="2">
                                 <p:commandButton id="save"
                                                  value="#{bundle.save}"
-                                                 execute="@form"
-                                                 limitRender="true"
                                                  update="specialStatusTable"
                                                  action="#{handleGatewayAction.doAssignSpecialStatus}"/>
                                 &#160;&#160;
                                 <p:commandButton id="close"
-                                                 limitRender="true"
                                                  action="#{handleGatewayAction.init}"
-                                                 execute="@this"
                                                  value="#{bundle.revert}"
                                                  oncomplete="PF('gatewayStatus').hide()"/>
                             </td>

@@ -82,4 +82,7 @@ public class GatewaySpecialStateServiceImpl<T extends GatewaySpecialState> {
         }
     }
 
+    public T findById(long id){
+        return (T) gatewaySpecialStateDAO.findById(id);
+    }
 }

@@ -36,7 +36,6 @@ public class GatewaySpecialStateScheduler {
         for (GatewaySpecialState gatewaySpecialState : gatewaySpecialStates) {
             String time = gatewaySpecialState.getTime();
             String date = gatewaySpecialState.getDate();
-            date = date.substring(0, 4) + "/" + date.substring(4, 6) + "/" + date.substring(6);
             String gDate = CalendarUtil.getDate(CalendarUtil.getDate(date, new Locale("fa")), new Locale("en"));
             String[] dateStrings = gDate.split(" ")[0].split("/");
             String day = dateStrings[0];

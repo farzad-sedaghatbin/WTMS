@@ -25,4 +25,14 @@ public class GatewaySpecialStateDAOImpl extends BaseDAOImpl<GatewaySpecialState>
             return null;
         }
     }
+
+    public GatewaySpecialState findById(long id) {
+        try {
+            return (GatewaySpecialState) em.createNamedQuery("GatewaySpecialState.findById")
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

@@ -584,9 +584,6 @@ public class HandleGatewayAction implements Serializable {
 
     public void doAssignPerson() throws IOException {
 
-        for (Person gatewayPerson : unSelectedPersons) {
-            gatewayPersonService.deleteGatewayPerson(gatewayPerson.getId(), selectGetway.getId());
-        }
         GatewayPerson gatewayPerson = null;
         for (Person selectedPerson : newSelectedPersons) {
             gatewayPerson = new GatewayPerson();
@@ -646,6 +643,7 @@ public class HandleGatewayAction implements Serializable {
             gatewaySpecialStates.add(insertedGatewaySpecialState);
             gatewaySpecialStateList = gatewaySpecialStates;
         }
+        me.addInfoMessage("operation.occurred");
     }
 
 
@@ -691,11 +689,11 @@ public class HandleGatewayAction implements Serializable {
     }
 
 
-    public void removeSpecialStatus() {
+    public void removeSpecialStatus(String id) {
+        currentGatewaySpecialStatus = specialStateService.findById(Long.parseLong(id));
 //        currentGatewaySpecialStatus = gatewaySpecialStateList.getRowData();
         String condition = specialStateService.deleteGatewaySpecialState(currentGatewaySpecialStatus);
-        gatewaySpecialStates.remove(currentGatewaySpecialStatus);
-        gatewaySpecialStateList = gatewaySpecialStates;
+        gatewaySpecialStateList = specialStateService.findByGatewayId(currentGetway.getId());
     }
 
     public void specialStatusInitialize() {

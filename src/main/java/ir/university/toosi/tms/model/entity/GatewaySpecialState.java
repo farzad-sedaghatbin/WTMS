@@ -14,6 +14,10 @@ import javax.persistence.*;
                 query = "select g from GatewaySpecialState g where g.deleted='0'"
         ),
         @NamedQuery(
+                name = "GatewaySpecialState.findById",
+                query = "select g from GatewaySpecialState g where g.id=:id"
+        ),
+        @NamedQuery(
                 name = "GatewaySpecialState.findByGatewayId",
                 query = "select g from GatewaySpecialState g where g.gateway.id=:id and g.deleted='0'"
         )
