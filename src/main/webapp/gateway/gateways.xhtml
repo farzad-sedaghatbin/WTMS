@@ -72,7 +72,7 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="#{bundle.assignPerson}" widgetVar="assignPersonDialog" modal="true" showEffect="fade"
+            <p:dialog header="#{bundle.assign_person}" widgetVar="assignPersonDialog" modal="true" showEffect="fade"
                       hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
                       minimizable="true" height="500">
                 <p:outputPanel id="assignGatewayPersonPanel">
@@ -96,12 +96,12 @@
                                         <h:outputText value="#{person.name}"/>
                                     </p:column>
 
-                                    <p:column headerText="#{bundle.family}" sortBy="#{person.lastName}"
+                                    <p:column headerText="#{bundle.lastname}" sortBy="#{person.lastName}"
                                               filterBy="#{person.lastName}">
                                         <h:outputText value="#{person.lastName}"/>
                                     </p:column>
 
-                                    <p:column headerText="#{bundle.personnelNo}" sortBy="#{person.personnelNo}"
+                                    <p:column headerText="#{bundle.personnel_number}" sortBy="#{person.personnelNo}"
                                               filterBy="#{person.personnelNo}">
                                         <h:outputText value="#{person.personnelNo}"/>
                                     </p:column>
@@ -170,7 +170,7 @@
                       hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
                       minimizable="true" height="500">
                 <p:outputPanel id="AssignSpecialStatus" ajaxRendered="true">
-                    <table border="0" cellpadding="3" cellspacing="3" width="290"
+                    <table border="0" cellpadding="3" cellspacing="3" width="400"
                            dir="#{me.direction}">
                         <tr valign="top">
                             <td nowrap="nowrap" colspan="2">
@@ -187,12 +187,12 @@
                                                       converter="dateConverter"/>
                                     </p:column>
 
-                                    <p:column headerText="#{bundle.status_time}">
+                                    <p:column headerText="#{bundle.time}">
                                         <h:outputText value="#{specialStatus.time}"/>
                                     </p:column>
 
-                                    <p:column headerText="#{bundle.status_state}">
-                                        <h:outputText value="#{specialStatus.gateWayStatus.description}"/>
+                                    <p:column headerText="#{bundle.status}">
+                                        <h:outputText value="#{handleGatewayAction.readStatusFromBundle(specialStatus.gateWayStatus.description)}"/>
                                     </p:column>
                                     <p:column headerText="#{bundle.delete}">
                                         <p:commandButton image="/images/delete.png"
@@ -211,7 +211,7 @@
                                         <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
                                             <tr valign="middle">
                                                 <td nowrap="nowrap" width="60px">
-                                                    <h:outputText escape="true" value="#{bundle.status_date}"/>
+                                                    <h:outputText escape="true" value="#{bundle.date}"/>
                                                 </td>
                                                 <td nowrap="nowrap">
                                                     <p:inputText id="calendar" value="#{handleGatewayAction.statusDate}"
@@ -221,7 +221,7 @@
                                             </tr>
                                             <tr valign="bottom">
                                                 <td nowrap="nowrap" width="60px">
-                                                    <h:outputText escape="true" value="#{bundle.status_time}"/>
+                                                    <h:outputText escape="true" value="#{bundle.time}"/>
                                                 </td>
                                                 <td nowrap="nowrap">
                                                     <p:spinner value="#{handleGatewayAction.statusSecond}"
@@ -250,12 +250,12 @@
                                             </tr>
                                             <tr valign="middle">
                                                 <td nowrap="nowrap" width="60pxp">
-                                                    <h:outputText escape="true" value="#{bundle.status_state}"/>
+                                                    <h:outputText escape="true" value="#{bundle.status}"/>
                                                 </td>
                                                 <td nowrap="nowrap">
                                                     <p:selectOneMenu value="#{handleGatewayAction.statusStateName}">
                                                         <f:selectItems
-                                                                value="#{handleGatewayAction.gatewayStatusItem}"/>
+                                                                value="#{handleGatewayAction.gatewayStatusItem}" var="status" itemLabel="#{status.name}" itemValue="#{status.value}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>

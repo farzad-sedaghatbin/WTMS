@@ -1,9 +1,6 @@
 package ir.university.toosi.wtms.web.action.zone;
 
-import ir.university.toosi.tms.model.entity.GatewayPerson;
-import ir.university.toosi.tms.model.entity.GatewaySpecialState;
-import ir.university.toosi.tms.model.entity.GatewayStatus;
-import ir.university.toosi.tms.model.entity.Operation;
+import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.model.entity.calendar.Calendar;
 import ir.university.toosi.tms.model.entity.calendar.DayType;
 import ir.university.toosi.tms.model.entity.personnel.Person;
@@ -114,7 +111,7 @@ public class HandleGatewayAction implements Serializable {
     private String statusDate;
     private String until;
     private String statusStateName;
-    private SelectItem[] gatewayStatusItem;
+    private List<GatewayStatusObject> gatewayStatusItem;
     private Hashtable<String, GatewayStatus> statusHashtable = new Hashtable<>();
     private List<Person> notAssignPersonList = new ArrayList<>();
     private String gatewayNameFilter;
@@ -605,12 +602,10 @@ public class HandleGatewayAction implements Serializable {
         statusDate = "";
         until = "0";
         statusStateName = null;
-        gatewayStatusItem = new SelectItem[GatewayStatus.values().length];
+        gatewayStatusItem = new ArrayList<>();
         int i = 0;
         for (GatewayStatus gatewayStatus : GatewayStatus.values()) {
-            statusHashtable.put(String.valueOf(gatewayStatus.name()), gatewayStatus);
-            gatewayStatusItem[i] = new SelectItem(gatewayStatus.name(), gatewayStatus.getDescription());
-            i++;
+            gatewayStatusItem.add(new GatewayStatusObject(me.getBundleMessage(gatewayStatus.getDescription()),gatewayStatus.getValue()));
         }
         gatewaySpecialStateList = specialStateService.findByGatewayId(currentGetway.getId());
         thisGateway = currentGetway;
@@ -618,7 +613,7 @@ public class HandleGatewayAction implements Serializable {
 
     public void doAssignSpecialStatus() throws IOException {
         String time = statusHour + ":" + statusMinute + ":" + statusSecond;
-        GatewayStatus gatewayStatus = statusHashtable.get(statusStateName);
+        GatewayStatus gatewayStatus = GatewayStatus.findByValue(statusStateName);
         GatewaySpecialState newGatewaySpecialState = new GatewaySpecialState();
         newGatewaySpecialState.setDate(statusDate);
         newGatewaySpecialState.setTime(time);
@@ -646,6 +641,9 @@ public class HandleGatewayAction implements Serializable {
         me.addInfoMessage("operation.occurred");
     }
 
+    public String readStatusFromBundle(String key){
+        return me.getBundleMessage(key);
+    }
 
     public boolean feasible(GatewaySpecialState gatewaySpecialState) {
 
@@ -1008,11 +1006,11 @@ public class HandleGatewayAction implements Serializable {
         this.statusStateName = statusStateName;
     }
 
-    public SelectItem[] getGatewayStatusItem() {
+    public List<GatewayStatusObject> getGatewayStatusItem() {
         return gatewayStatusItem;
     }
 
-    public void setGatewayStatusItem(SelectItem[] gatewayStatusItem) {
+    public void setGatewayStatusItem(List<GatewayStatusObject> gatewayStatusItem) {
         this.gatewayStatusItem = gatewayStatusItem;
     }
 

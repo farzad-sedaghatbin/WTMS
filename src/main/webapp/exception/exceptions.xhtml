@@ -49,8 +49,9 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="Exc Info" widgetVar="excDialog" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="true" onShow="initDatePicker()">
+            <p:dialog header="#{bundle.Exc_Info}" widgetVar="excDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="true" onShow="initDatePicker()" maximizable="true" closeOnEscape="true" draggable="true"
+                      minimizable="true" height="500">
 
                 <p:outputPanel id="excDetail" style="text-align:center;">
                     <f:facet name="header">
@@ -68,25 +69,25 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="from date:"/>
+                                <h:outputText value="#{bundle.start_date}"/>
                             </td>
                             <td>
                                 <p:inputText id="from" readonly="#{handleRuleExceptionAction.disableFields}"
-                                             value="#{handleRuleExceptionAction.fromDate}" styleClass="datepicker"/>
+                                             value="#{handleRuleExceptionAction.fromDate}" styleClass="datepicker" converter="dateConverter"/>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="to date:"/>
+                                <h:outputText value="#{bundle.expiration_date}"/>
                             </td>
                             <td>
                                 <p:inputText id="to" readonly="#{handleRuleExceptionAction.disableFields}"
-                                             value="#{handleRuleExceptionAction.toDate}" styleClass="datepicker"/>
+                                             value="#{handleRuleExceptionAction.toDate}" styleClass="datepicker" converter="dateConverter"/>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="start time:"/>
+                                <h:outputText value="#{bundle.from_time}"/>
                             </td>
                             <td>
                                 <p:spinner id="startS" readonly="#{handleRuleExceptionAction.disableFields}"
@@ -104,7 +105,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="end time:"/>
+                                <h:outputText value="#{bundle.to_time}"/>
                             </td>
                             <td>
                                 <p:spinner id="endS" readonly="#{handleRuleExceptionAction.disableFields}"
@@ -117,12 +118,12 @@
                                 &#160;
                                 <p:spinner id="endH" readonly="#{handleRuleExceptionAction.disableFields}"
                                            value="#{handleRuleExceptionAction.endHour}"
-                                           stepFactor="6" max="23" size="6" min="0"/>
+                                           stepFactor="1" max="23" size="6" min="0"/>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="enterance count:"/>
+                                <h:outputText value="#{bundle.entrance_count}"/>
                             </td>
                             <td>
                                 <p:spinner id="enterance" readonly="#{handleRuleExceptionAction.disableFields}"
@@ -132,7 +133,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="exit count:"/>
+                                <h:outputText value="#{bundle.exit_count}"/>
                             </td>
                             <td>
                                 <p:spinner id="exit" readonly="#{handleRuleExceptionAction.disableFields}"
@@ -142,7 +143,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="rule deny:"/>
+                                <h:outputText value="#{bundle.deny}"/>
                             </td>
                             <td>
                                 <p:selectBooleanCheckbox id="deny" disabled="#{handleRuleExceptionAction.disableFields}"
@@ -160,7 +161,7 @@
                                             showSourceControls="true"
                                             showTargetControls="true" showCheckbox="true" responsive="true"
                                             showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
-                                            disabled="#{handleRuleExceptionAction.disableFields}">
+                                            disabled="#{handleRuleExceptionAction.disableFields}" converter="#{rulePackageConverter}">
                                     <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
                                     <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
 

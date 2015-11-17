@@ -32,4 +32,14 @@ public enum GatewayStatus {
         }
         return "0";
     }
+
+    public static GatewayStatus findByValue(String value){
+        switch (value){
+            case "1":
+                return OPEN;
+            case "2":
+                return CLOSE;
+        }
+        return CLOSE;
+    }
 }

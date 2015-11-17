@@ -29,7 +29,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:dataTable id="cards" var="currentCard" value="#{handleCardAction.cardList}" rowKey="#{currentCard.id}"
+            <p:dataTable id="cards" var="currentCard" widgetVar="thisTable" value="#{handleCardAction.cardList}" rowKey="#{currentCard.id}"
                          selection="#{handleCardAction.currentCard}" selectionMode="single"
                          paginator="true" rows="10"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
@@ -45,25 +45,31 @@
                 <p:column headerText="#{bundle.card_code}" sortBy="#{currentCard.code}" filterBy="#{currentCard.code}">
                     <h:outputText value="#{currentCard.code}"/>
                 </p:column>
-                <p:column headerText="#{bundle.card_type}" sortBy="#{currentCard.cardType.code}" filterBy="#{currentCard.cardType.code}">
+                <p:column headerText="#{bundle.card_type}">
                     <h:outputText value="#{currentCard.cardType.code}"/>
                 </p:column>
-                <p:column headerText="#{bundle.card_status}" sortBy="#{currentCard.cardStatus.code}" filterBy="#{currentCard.cardStatus.code}">
+                <p:column headerText="#{bundle.card_status}">
                     <h:outputText value="#{currentCard.cardStatus.code}"/>
                 </p:column>
                 <p:column headerText="#{bundle.start_date}" sortBy="#{currentCard.startDate}" filterBy="#{currentCard.startDate}">
-                    <h:outputText value="#{currentCard.startDate}"/>
+                    <f:facet name="filter">
+                        <p:inputText styleClass="datepicker" onchange="PF('thisTable').filter()" converter="dateConverter" style="width: 100px"/>
+                    </f:facet>
+                    <h:outputText value="#{currentCard.startDate}" converter="dateConverter"/>
                 </p:column>
                 <p:column headerText="#{bundle.expiration_date}" sortBy="#{currentCard.expirationDate}" filterBy="#{currentCard.expirationDate}">
-                    <h:outputText value="#{currentCard.expirationDate}"/>
+                    <f:facet name="filter">
+                        <p:inputText styleClass="datepicker" onchange="PF('thisTable').filter()" converter="dateConverter" style="width: 100px"/>
+                    </f:facet>
+                    <h:outputText value="#{currentCard.expirationDate}" converter="dateConverter"/>
                 </p:column>
-                <p:column headerText="#{bundle.firstname}" sortBy="#{currentCard.person.name}" filterBy="#{currentCard.person.name}">
+                <p:column headerText="#{bundle.firstname}">
                     <h:outputText value="#{currentCard.person.name}"/>
                 </p:column>
-                <p:column headerText="#{bundle.lastname}" sortBy="#{currentCard.person.lastName}" filterBy="#{currentCard.person.lastName}">
+                <p:column headerText="#{bundle.lastname}">
                     <h:outputText value="#{currentCard.person.lastName}"/>
                 </p:column>
-                <p:column headerText="#{bundle.personnel_number}" sortBy="#{currentCard.person.personnelNo}" filterBy="#{currentCard.person.personnelNo}">
+                <p:column headerText="#{bundle.personnel_number}">
                     <h:outputText value="#{currentCard.person.personnelNo}"/>
                 </p:column>
             </p:dataTable>

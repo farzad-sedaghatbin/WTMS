@@ -261,18 +261,17 @@ public class HandleRuleExceptionAction implements Serializable {
 //
 
     public void onTransfer(TransferEvent event) {
-        RulePackage rulePackage = null /*rulePackageList.getRowData()*/;
         if (event.isAdd()) {
-            rulePackage.setSelected(true);
-            rulePackageList.getTarget().add(rulePackage);
+            for (Object item:event.getItems()) {
+                ((RulePackage)item).setSelected(true);
+                rulePackageList.getTarget().add((RulePackage) item);
+                rulePackageList.getSource().remove(item);
+            }
         } else {
-            rulePackage.setSelected(false);
-            for (RulePackage rulePackage1 : rulePackageList.getTarget()) {
-                if (rulePackage1.getId() == rulePackage.getId()) {
-                    rulePackageList.getTarget().remove(rulePackage1);
-                    rulePackageList.getSource().add(rulePackage1);
-                    break;
-                }
+            for (Object item:event.getItems()) {
+                ((RulePackage)item).setSelected(false);
+                rulePackageList.getTarget().remove(item);
+                rulePackageList.getSource().add((RulePackage) item);
             }
         }
     }
@@ -292,7 +291,7 @@ public class HandleRuleExceptionAction implements Serializable {
         ruleException.setRulePackage(rulePackageList.getTarget());
         if (!feasibleDate(ruleException) || !feasibleTime(ruleException)) {
             me.addInfoMessage("conflict");
-            return;
+            me.redirect("/exception/exceptions.xhtml");
         }
         ruleException.setDeny(ruleDeny);
         RuleException addedRulePackage = null;
