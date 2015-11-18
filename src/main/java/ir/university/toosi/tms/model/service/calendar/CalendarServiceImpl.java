@@ -15,6 +15,7 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ import java.util.List;
 @Stateless
 @LocalBean
 
-public class CalendarServiceImpl<T extends Calendar> {
+public class CalendarServiceImpl<T extends Calendar> implements Serializable {
 
     @EJB
     private CalendarDAOImpl calendarDAO;

@@ -12,6 +12,7 @@ import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.tms.model.entity.rule.Rule;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.tms.model.service.BLookupServiceImpl;
+import ir.university.toosi.tms.model.service.calendar.CalendarServiceImpl;
 import ir.university.toosi.tms.model.service.calendar.DayTypeServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.JobServiceImpl;
@@ -74,6 +75,8 @@ public class HandlePersonAction implements Serializable {
     private AccessControlAction accessControlAction;
     @Inject
     private HandleOrganAction handleOrganAction;
+    @Inject
+    private CalendarServiceImpl calendarService;
     @EJB
     private PersonServiceImpl personService;
 
@@ -140,7 +143,7 @@ public class HandlePersonAction implements Serializable {
     private boolean addNewRuleFlag = false;
     private Rule currentRule;
     private SelectItem[] dayTypeItems;
-    private SelectItem[] calendarItems = me.calendarItem;
+    private List<Calendar> calendarItems = new ArrayList();
     private Hashtable<String, DayType> dayTypeHashtable = new Hashtable<>();
     private String employNo;
     private BLookup employeeType;
@@ -201,7 +204,7 @@ public class HandlePersonAction implements Serializable {
         roleEnabled = true;
         page = 1;
         picture = new byte[0];
-        calendarItems = me.calendarItem;
+        calendarItems = new ArrayList();
         fillDayTypeCombo();
         setCurrentPerson(null);
         setSelectRow(false);
@@ -693,7 +696,7 @@ public class HandlePersonAction implements Serializable {
         roleEnabled = true;
         page = 1;
         picture = new byte[0];
-        calendarItems = me.calendarItem;
+        calendarItems = new ArrayList();
         fillDayTypeCombo();
         setCurrentPerson(null);
         setSelectRow(false);
@@ -974,6 +977,7 @@ public class HandlePersonAction implements Serializable {
         ruleAllowExitGadget = rulePackage.isAllowExitGadget();
         ruleAniPassBack = rulePackage.isAniPassBack();
         ruleAllowExit = rulePackage.isAllowExit();
+        calendarItems = calendarService.getAllCalendar();
         selectedCalendar = rulePackage.getCalendar();
         if (selectedCalendar != null)
             selectedCalendarIdTemp = String.valueOf(selectedCalendar.getId());
@@ -1055,7 +1059,7 @@ public class HandlePersonAction implements Serializable {
         newRulePackage.setAllowExit(ruleAllowExit);
         newRulePackage.setAniPassBack(ruleAniPassBack);
         newRulePackage.setAllowExitGadget(ruleAllowExitGadget);
-        newRulePackage.setCalendar(me.calendarHashtable.get(selectedCalendarIdTemp));
+        newRulePackage.setCalendar(calendarService.findById(selectedCalendarIdTemp));
 
         RulePackage addedRulePackage = null;
         addedRulePackage = rulePackageService.createRulePackage(newRulePackage);
@@ -1866,11 +1870,11 @@ public class HandlePersonAction implements Serializable {
         this.dayTypeItems = dayTypeItems;
     }
 
-    public SelectItem[] getCalendarItems() {
+    public List<Calendar> getCalendarItems() {
         return calendarItems;
     }
 
-    public void setCalendarItems(SelectItem[] calendarItems) {
+    public void setCalendarItems(List<Calendar> calendarItems) {
         this.calendarItems = calendarItems;
     }
 

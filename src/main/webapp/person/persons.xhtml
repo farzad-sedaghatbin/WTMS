@@ -489,7 +489,7 @@
                                               value="#{bundle.date}"/>
                                 &#160;&#160;&#160;&#160;&#160;
                                 <p:selectOneMenu value="#{handlePersonAction.selectedCalendarIdTemp}" tabindex="2">
-                                    <f:selectItems value="#{handlePersonAction.calendarItems}"/>
+                                    <f:selectItems value="#{handlePersonAction.calendarItems}" var="calendar" itemValue="#{calendar.id}" itemLabel="#{calendar.name}"/>
                                 </p:selectOneMenu>
                             </td>
                         </tr>
