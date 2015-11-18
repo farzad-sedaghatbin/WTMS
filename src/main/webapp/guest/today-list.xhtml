@@ -1,0 +1,190 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="index.xhtml">
+
+    <ui:define name="content">
+<!--        <p:popupPanel id="GuestPanel"
+
+                         autosized="true"
+                         followByScroll="false"
+                         moveable="true"
+                         modal="true">
+
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <f:facet name="controls">
+                <p:commandLink>
+                    <h:graphicImage value="/images/close.png"/>
+                    <p:componentControl event="click" target="GuestPanel" operation="hide"/>
+                </p:commandLink>
+            </f:facet>
+            <ui:include src="./editGuest.xhtml"/>
+        </p:popupPanel>
+
+        <p:popupPanel id="PersonPanel"
+
+                         autosized="true"
+                         followByScroll="false"
+                         moveable="true"
+                         modal="true">
+
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <f:facet name="controls">
+                <p:commandLink>
+                    <h:graphicImage value="/images/close.png"/>
+                    <p:componentControl event="click" target="PersonPanel" operation="hide"/>
+                </p:commandLink>
+            </f:facet>
+            <ui:include src="./personWith.xhtml"/>
+        </p:popupPanel>
+
+        <p:popupPanel id="AssignCardPanel"
+
+                         autosized="true"
+                         followByScroll="false"
+                         moveable="true"
+                         modal="true">
+
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <f:facet name="controls">
+                <p:commandLink>
+                    <h:graphicImage value="/images/close.png"/>
+                    <p:componentControl event="click" target="AssignCardPanel" operation="hide"/>
+                </p:commandLink>
+            </f:facet>
+            <ui:include src="./assign-card-person.xhtml"/>
+        </p:popupPanel>
+
+        <p:popupPanel id="ConfirmationPanel"
+
+                         autosized="false"
+                         width="350"
+                         height="125"
+                         followByScroll="true"
+                         moveable="true"
+                         modal="true">
+            <f:facet name="header">
+                &#160;
+            </f:facet>
+            <h:form>
+                <table border="0" cellpadding="3" cellspacing="3" width="85%" class="panelLikeTable">
+                    <tr valign="top">
+                        <td nowrap="nowrap" align="center">
+                            <h:outputText escape="true" value="آیا از لغو کارت تخصیص داده شده مطمین هستید ؟"/>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td nowrap="nowrap" align="center">
+                            <p:commandButton execute="@this" limitRender="true"
+                                               action="#{addGuest.unAssigncard}"
+                                               oncomplete="#{p:component('ConfirmationPanel')}.hide();"
+                                               render="globalMessages,userTable"
+                                               value="#{bundle.yes}"/>
+                            &#160;
+                            <p:commandButton execute="@this" limitRender="true" value="#{bundle.no}"
+                                               oncomplete="#{p:component('ConfirmationPanel')}.hide();"/>
+                        </td>
+                    </tr>
+                </table>
+            </h:form>
+        </p:popupPanel>-->
+
+        <h:form dir="RTL">
+
+        <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
+        <tr valign="top">
+            <td align="RTL" nowrap="nowrap" colspan="2">
+                <h:inputText converter="persianConverter" value="#{addGuest.simpleValue}"/>
+                &#160;&#160;
+                <h:commandButton action="#{addGuest.simpleSearch}"  render="GuestTable" value="#{bundle.search}"/>
+
+            </td>
+        </tr>
+        <tr valign="top">
+        <td align="#{me.align}" nowrap="nowrap" colspan="2">
+
+            <p:dataTable id="GuestTable"
+                            keepSaved="true"
+                            value="#{addGuest.notAssignGuestList}"
+                            rowKeyVar="rowIndex"
+                            noDataLabel="#{bundle.no_result_found}"
+                            sortMode="single"
+                            var="Guest"
+                            rows="15"
+                            style="BORDER-COLLAPSE: collapse;text-align: center; width:700px"
+                            rowClasses="ROW1,ROW2">
+              
+                <p:column sortBy="#{Guest.firstname}"
+                             sortOrder="#{addGuest.guestnameOrder}">
+                    <h:outputText escape="true" value="#{Guest.firstname}"/>
+                </p:column>
+
+                <p:column sortBy="#{Guest.lastname}"
+                             sortOrder="#{addGuest.guestFamilyOrder}">
+                    <h:outputText escape="true" value="#{Guest.lastname}"/>
+                </p:column>
+                <p:column sortBy="#{Guest.time}"
+                             sortOrder="#{addGuest.timeOrder}">
+                    <h:outputText escape="true" value="#{Guest.time}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="تعداد همراهان"/>
+                    </f:facet>
+                    <h:outputText escape="true" value="#{Guest.guestSize}"/>
+                </p:column>
+                <p:column >
+                    <p:commandButton image="/images/edit.png"
+                                       action="#{addGuest.edit}"
+                                       title="#{bundle.edit}"
+                                       execute="@this"
+                                       limitRender="true"
+                                       render="handleUserPanel"
+                                       oncomplete="#{p:component('GuestPanel')}.show();"/>
+                    &#160;   &#160;
+                    <p:commandButton image="/images/assign-card.png"
+                                       action="#{addGuest.assignCard}"
+                                       title="#{bundle.assign}"
+                                       execute="@this"
+                                       limitRender="true"
+                                       render="assigncardPanel,globalMessages"
+                                       oncomplete="#{p:component('AssignCardPanel')}.show();"/>
+                    &#160;   &#160;
+                    <p:commandButton image="/images/delete.png"
+                                       title="#{bundle.unassign}"
+                                       action="#{addGuest.selectPersonWith}"
+                                       oncomplete="#{p:component('ConfirmationPanel')}.show();"
+                                       execute="@this"
+                                       limitRender="true"
+                                       render="assigncardPanel"/>
+                    &#160;   &#160;
+                    <p:commandButton image="/images/operations-menu.png"
+                                       action="#{addGuest.selectPersonWith}"
+                                       title="#{bundle.personWith}"
+                                       execute="@this"
+                                       limitRender="true"
+                                       oncomplete="#{p:component('PersonPanel')}.show();"
+                                       render="handlePersonPanel"/>
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:dataScroller limitRender="true" execute="@this" render="GuestTable"
+                                       page="#{addGuest.guestPage}"/>
+                </f:facet>
+            </p:dataTable>
+            </td>
+            </tr>
+            </table>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

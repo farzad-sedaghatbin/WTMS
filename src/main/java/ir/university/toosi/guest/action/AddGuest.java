@@ -1,0 +1,417 @@
+package ir.university.toosi.guest.action;
+
+import com.google.common.collect.Lists;
+import ir.university.toosi.guest.entity.Guest;
+import ir.university.toosi.guest.entity.Log;
+import ir.university.toosi.tms.model.entity.WorkGroup;
+import ir.university.toosi.tms.model.entity.personnel.Card;
+import ir.university.toosi.tms.util.CalendarUtil;
+import ir.university.toosi.wtms.web.action.UserManagementAction;
+import ir.university.toosi.wtms.web.action.user.HandleUserAction;
+import ir.university.toosi.wtms.web.helper.GeneralHelper;
+import org.primefaces.model.SortOrder;
+
+
+import javax.enterprise.context.SessionScoped;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * Created by M_Danapour on 05/26/2015.
+ */
+@Named(value = "addGuest")
+@SessionScoped
+public class AddGuest implements Serializable {
+    @Inject
+    protected GeneralHelper generalHelper;
+    @Inject
+    UserManagementAction me;
+    @Inject
+    HandleUserAction handleUserAction;
+    private Guest guest;
+    private Guest person;
+    private DataModel<Guest> notAssignGuestList = new ListDataModel<>();
+    private int GuestPage = 1;
+
+    private SortOrder GuestnameOrder = SortOrder.UNSORTED;
+    private SortOrder GuestFamilyOrder = SortOrder.UNSORTED;
+    private SortOrder timeOrder = SortOrder.UNSORTED;
+
+    private String GuestnameFilter;
+    private String GuestFamilyFilter;
+    private String GuestnelNoFilter;
+    private String second;
+    private String minute;
+    private String hour;
+    private DataModel<Card> cardList;
+    private String cardnameOrder;
+    private String cardnameFilter;
+    private String cardCodeOrder;
+    private String cardCodeFilter;
+    Card selectedCard;
+    private String cardPage;
+    private String page;
+    private String simpleValue;
+    private String authenticateType;
+    private String fromDate;
+    private String toDate;
+    private DataModel<Guest> guestList;
+    public void beginSearch(){
+        init();
+        fromDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
+        toDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
+
+    }
+    public void search() {
+        List<Log> innerTrafficLogList = null;
+
+        List<Guest> logDataModels = null;
+        try {
+            logDataModels = me.getGeneralHelper().getGuestService().duration(fromDate,toDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(logDataModels==null)
+            logDataModels= new ArrayList<>();
+        guestList = new ListDataModel<>(Lists.reverse(logDataModels));
+    }
+    public void selectCard(ValueChangeEvent event) {
+        selectedCard= cardList.getRowData();
+
+    }
+    public void begin() {
+        init();
+    }
+
+    public void init() {
+        page="1";
+        setGuest(new Guest());
+        for (WorkGroup workGroup : me.getUser().getWorkGroups()) {
+         if(workGroup.getName().equalsIgnoreCase("EMPLOYEE")){
+             getGuest().setvName(me.getUser().getFirstname());
+             getGuest().setvFamily(me.getUser().getLastname());
+         }
+        }
+    }
+
+    public void beginToday() {
+        init();
+        try {
+            notAssignGuestList=new ListDataModel<>(generalHelper.getGuestService().todayGuest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void saveGuest() throws Exception {
+        guest.setTime(hour+":"+minute);
+        generalHelper.getGuestService().create(guest);
+        setGuest(new Guest());
+        me.addInfoMessage("operation.occurred");
+    }
+
+    public void selectPersonWith() throws Exception {
+        guest=notAssignGuestList.getRowData();
+        person= new Guest();
+    }
+    public void savePersonWith() throws Exception {
+        person.setDate(guest.getDate());
+        person.setTime(guest.getTime());
+        person.setvFamily(guest.getvFamily());
+        person.setvName(guest.getvName());
+        person.setGuestSize(0);
+
+        person=generalHelper.getGuestService().create(person);
+        guest.getGuestSet().add(person);
+        generalHelper.getGuestService().getGuestDao().update(guest);
+        beginToday();
+        me.addInfoMessage("operation.occurred");
+
+    }
+    public void doEdit() throws Exception {
+        generalHelper.getGuestService().getGuestDao().update(guest);
+        init();
+    }
+
+    public Guest getGuest() {
+        if(guest==null)
+            return new Guest();
+        return guest;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
+    }
+
+    public GeneralHelper getGeneralHelper() {
+        return generalHelper;
+    }
+
+    public void setGeneralHelper(GeneralHelper generalHelper) {
+        this.generalHelper = generalHelper;
+    }
+
+    public DataModel<Guest> getNotAssignGuestList() {
+        return notAssignGuestList;
+    }
+
+    public void setNotAssignGuestList(DataModel<Guest> notAssignGuestList) {
+        this.notAssignGuestList = notAssignGuestList;
+    }
+
+    public int getGuestPage() {
+        return GuestPage;
+    }
+
+    public void setGuestPage(int GuestPage) {
+        this.GuestPage = GuestPage;
+    }
+
+    public SortOrder getGuestnameOrder() {
+        return GuestnameOrder;
+    }
+
+    public void setGuestnameOrder(SortOrder GuestnameOrder) {
+        this.GuestnameOrder = GuestnameOrder;
+    }
+
+    public SortOrder getGuestFamilyOrder() {
+        return GuestFamilyOrder;
+    }
+
+    public void setGuestFamilyOrder(SortOrder GuestFamilyOrder) {
+        this.GuestFamilyOrder = GuestFamilyOrder;
+    }
+
+
+
+    public String getGuestnameFilter() {
+        return GuestnameFilter;
+    }
+
+    public void setGuestnameFilter(String GuestnameFilter) {
+        this.GuestnameFilter = GuestnameFilter;
+    }
+
+    public String getGuestFamilyFilter() {
+        return GuestFamilyFilter;
+    }
+
+
+
+    public void setGuestFamilyFilter(String GuestFamilyFilter) {
+        this.GuestFamilyFilter = GuestFamilyFilter;
+    }
+
+    public String getGuestnelNoFilter() {
+        return GuestnelNoFilter;
+    }
+
+    public void setGuestnelNoFilter(String guestnelNoFilter) {
+        GuestnelNoFilter = guestnelNoFilter;
+    }
+
+    public String getSecond() {
+        return second;
+    }
+
+    public void setSecond(String second) {
+        this.second = second;
+    }
+
+    public String getMinute() {
+        return minute;
+    }
+
+    public void setMinute(String minute) {
+        this.minute = minute;
+    }
+
+    public String getHour() {
+        return hour;
+    }
+
+    public void setHour(String hour) {
+        this.hour = hour;
+    }
+
+    public DataModel<Card> getCardList() {
+        return cardList;
+    }
+
+    public String getCardnameOrder() {
+        return cardnameOrder;
+    }
+
+    public String getCardnameFilterImpl() {
+        return null;
+    }
+
+    public String getSortBycardname() {
+        return null;
+    }
+
+    public String getCardnameFilter() {
+        return cardnameFilter;
+    }
+
+    public String getcardCodeOrder() {
+        return cardCodeOrder;
+    }
+
+    public String getcardCodeFilterImpl() {
+        return null;
+    }
+
+    public String getSortBycardCode() {
+        return null;
+    }
+
+    public String getcardCodeFilter() {
+        return cardCodeFilter;
+    }
+
+    public void setCardPage(String cardPage) {
+        this.cardPage = cardPage;
+    }
+
+    public String getCardPage() {
+        return cardPage;
+    }
+
+    public void doAssigncard() {
+//        Card c= cardList.getRowData();
+        guest.setHasCard(true);
+        getGeneralHelper().getGuestService().getGuestDao().update(guest);
+        selectedCard.setGuest(guest);
+        generalHelper.getCardService().editCard(selectedCard);
+        Log log= new Log();
+        log.setGuest(guest);
+        log.setCard(selectedCard);
+        log.setDate(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
+        log.setTime(CalendarUtil.getTime(new Date(), new Locale("fa")));
+        log.setType("ورودی");
+        try {
+            generalHelper.getLogService().create(log);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        beginToday();
+
+
+    }public void unAssigncard() {
+//        guest=notAssignGuestList.getRowData();
+        List<Card> cards =generalHelper.getCardService().findByGuestId(guest.getId());
+        if(cards==null || cards.size()==0)
+            return;
+        selectedCard= cards.get(0);
+        selectedCard.setGuest(null);
+
+        generalHelper.getCardService().editCard(selectedCard);
+        Log log= new Log();
+        log.setGuest(guest);
+        log.setCard(selectedCard);
+        log.setDate(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
+        log.setTime(CalendarUtil.getTime(new Date(), new Locale("fa")));
+        log.setType("خروجی");
+        me.addInfoMessage("کارت تخصیص داده شده حذف شد");
+        try {
+            generalHelper.getLogService().create(log);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void assignCard() {
+        guest= notAssignGuestList.getRowData();
+        if(guest.isHasCard()){
+            me.addInfoMessage("کارت قبلا تخصیص داده شده است");
+            return;
+        }
+        cardList=new ListDataModel<>(generalHelper.getCardService().getAllActiveCard());
+    }
+    public void edit() {
+        guest= notAssignGuestList.getRowData();
+    }
+
+    public void setSimpleValue(String simpleValue) {
+        this.simpleValue = simpleValue;
+    }
+
+    public String getSimpleValue() {
+        return simpleValue;
+    }
+    public void simpleSearch() {
+
+        String query = "select p from Guest p where (";
+        query += " p.firstname like \'%" + simpleValue + "%\' or " + " p.lastname like \'%" + simpleValue + "%\' )";
+        init();
+        notAssignGuestList=new ListDataModel<>(generalHelper.getGuestService().query(query));
+    }
+
+    public SortOrder getTimeOrder() {
+        return timeOrder;
+    }
+
+    public void setTimeOrder(SortOrder timeOrder) {
+        this.timeOrder = timeOrder;
+    }
+
+    public Guest getPerson() {
+        return person;
+    }
+
+    public void setPerson(Guest person) {
+        this.person = person;
+    }
+
+    public void setAuthenticateType(String authenticateType) {
+        this.authenticateType = authenticateType;
+    }
+
+    public String getAuthenticateType() {
+        return authenticateType;
+    }
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
+    }
+
+    public DataModel<Guest> getGuestList() {
+        return guestList;
+    }
+
+    public void setGuestList(DataModel<Guest> guestList) {
+        this.guestList = guestList;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+}
