@@ -41,6 +41,12 @@ public class CardServiceImpl<T extends Card> {
         } catch (Exception e) {
             return null;
         }
+    }    public List<T> findByGuestId(long id) {
+        try {
+            return (List<T>) cardDAO.findByGuestId(id);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<T> closed() {

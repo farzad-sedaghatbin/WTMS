@@ -111,6 +111,17 @@
 
 
                 </p:submenu>
+
+                <p:submenu id="guest" label="#{bundle.guest}" >
+                    <p:menuitem id="addGuest" value="#{bundle.addGuest}" icon="icon-event"
+                                actionListener="#{addGuest.begin}"/>
+                    <p:menuitem id="todayList" value="#{bundle.todayList}" rendered="false" icon="icon-error"
+                                actionListener="#{addGuest.beginToday}"/>
+                    <p:menuitem id="guestReport" value="#{bundle.guestReport}" icon="icon-looks_3"
+                                actionListener="#{addGuest.beginSearch}"/>
+
+
+                </p:submenu>
             </pm:menu>
         </h:form>
 

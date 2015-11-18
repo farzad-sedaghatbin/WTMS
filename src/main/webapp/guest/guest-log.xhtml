@@ -1,0 +1,82 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+<ui:define name="content">
+
+<h:form id="trafficLogForm">
+
+
+<table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
+  
+    <tr valign="middle">
+        <td nowrap="nowrap" align="#{me.appositeAlign}">
+            <h:outputText escape="true" value="#{bundle.fromDate}:"/>
+        </td>
+        <td nowrap="nowrap">
+            <p:inputText  id="fromDate"
+                          value="#{addGuest.fromDate}" styleClass="datepicker" converter="dateConverter"/>
+        </td>
+        <td nowrap="nowrap" align="#{me.appositeAlign}">
+            <h:outputText escape="true" value="#{bundle.toDate}:"/>
+        </td>
+        <td nowrap="nowrap">
+            <p:inputText  id="todate"
+                          value="#{addGuest.toDate}" styleClass="datepicker" converter="dateConverter"/>
+        </td>
+        <td nowrap="nowrap">
+            <p:commandButton value="#{bundle.search}" execute="@form" action="#{addGuest.search}"
+                               render="trafficLogTable"/>
+
+        </td>
+
+    </tr>
+</table>
+<br/>
+
+
+
+    <fieldset dir="#{me.direction}">
+        <legend>
+            <h:outputText escape="true" value="مهمان ها"/>
+        </legend>
+
+        <p:dataTable id="trafficLogTable" value="#{addGuest.guestList}"
+                        sortMode="single"
+                        var="Guest"
+                        rows="10"
+                        style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
+            <p:column sortBy="#{Guest.firstname}"
+                         sortOrder="#{addGuest.guestnameOrder}">
+                <h:outputText escape="true" value="#{Guest.firstname}"/>
+            </p:column>
+
+            <p:column sortBy="#{Guest.lastname}"
+                         sortOrder="#{addGuest.guestFamilyOrder}">
+                <h:outputText escape="true" value="#{Guest.lastname}"/>
+            </p:column>
+            <p:column sortBy="#{Guest.time}"
+                         sortOrder="#{addGuest.timeOrder}">
+                <h:outputText escape="true" value="#{Guest.time}"/>
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="تعداد همراهان"/>
+                </f:facet>
+                <h:outputText escape="true" value="#{Guest.guestSize}"/>
+            </p:column>
+            <f:facet name="footer">
+                <p:dataScroller limitRender="true" execute="@this" render="trafficLogTable"
+                                   page="#{addGuest.page}"/>
+            </f:facet>
+        </p:dataTable>
+    </fieldset>
+
+</h:form>
+</ui:define>
+</ui:composition>

@@ -2,6 +2,7 @@ package ir.university.toosi.tms.model.entity.personnel;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ir.university.toosi.guest.entity.Guest;
 import ir.university.toosi.tms.model.entity.BLookup;
 import ir.university.toosi.tms.model.entity.BaseEntity;
 
@@ -30,6 +31,9 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "Card.findByPersonId",
                 query = "select c from Card c where c.person.id=:id and c.deleted='0'"
+        ),       @NamedQuery(
+                name = "Card.findByGuestId",
+                query = "select c from Card c where c.guest.id=:id and c.deleted='0'"
         ),
         @NamedQuery(
                 name = "Card.findByCode",
@@ -82,6 +86,8 @@ public class Card extends BaseEntity {
     @JsonProperty
     @Column(name = "visible")
     private boolean visible;
+    @OneToOne
+    private Guest guest;
     @JsonProperty
     @ManyToOne
     private Person person;
@@ -193,5 +199,13 @@ public class Card extends BaseEntity {
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;
+    }
+
+    public Guest getGuest() {
+        return guest;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
     }
 }

@@ -3,7 +3,10 @@ package ir.university.toosi.wtms.web.helper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.guest.service.GuestServiceImpl;
+import ir.university.toosi.guest.service.LogServiceImpl;
 import ir.university.toosi.tms.model.service.UserServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.Languages;
 import ir.university.toosi.tms.model.entity.MenuType;
@@ -44,6 +47,12 @@ public class GeneralHelper implements Serializable {
 
     @EJB
     private UserServiceImpl userService;
+    @EJB
+    private GuestServiceImpl guestService;
+    @EJB
+    private CardServiceImpl cardService;
+    @EJB
+    private LogServiceImpl logService;
     private String userExtraField1;
     private String userExtraField2;
     private String userExtraField3;
@@ -318,5 +327,17 @@ public class GeneralHelper implements Serializable {
 
     public void setUserService(UserServiceImpl userService) {
         this.userService = userService;
+    }
+
+    public GuestServiceImpl getGuestService() {
+        return guestService;
+    }
+
+    public CardServiceImpl getCardService() {
+        return cardService;
+    }
+
+    public LogServiceImpl getLogService() {
+        return logService;
     }
 }
