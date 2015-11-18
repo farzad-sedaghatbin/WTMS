@@ -16,9 +16,9 @@
 
         <h:form id="form">
             <p:contextMenu for="groups" rendered="#{me.hasPermission('WORKGROUPMANAGEMENT')}">
-                <p:menuitem value="#{bundle.edit}" update="groupDetail" icon="icon-edit" oncomplete="PF('groupDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="groupDetail" icon="ui-icon-scissors" oncomplete="PF('groupDialog').show()"
                             actionListener="#{handleWorkGroupAction.edit}"/>
-                <p:menuitem value="#{bundle.delete}" update="groups" icon="icon-delete"
+                <p:menuitem value="#{bundle.delete}" update="groups" icon="ui-icon-trash"
                             actionListener="#{handleWorkGroupAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

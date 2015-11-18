@@ -11,8 +11,8 @@
 
         <h:form>
             <p:contextMenu for="calendarTable" rendered="#{me.hasPermission('CALENDARMANAGEMENT')}">
-                <p:menuitem value="#{bundle.edit}" icon="icon-edit" actionListener="#{handleCalendarAction.edit}"/>
-                <p:menuitem value="#{bundle.delete}" update="calendarTable" icon="icon-delete"
+                <p:menuitem value="#{bundle.edit}" icon="ui-icon-scissors" actionListener="#{handleCalendarAction.edit}"/>
+                <p:menuitem value="#{bundle.delete}" update="calendarTable" icon="ui-icon-trash"
                             actionListener="#{handleCalendarAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

@@ -14,17 +14,17 @@
 
         <h:form id="form">
             <p:contextMenu for="zones" rendered="#{me.hasPermission('ZONEMANAGEMENT')}">
-                <p:menuitem value="#{bundle.view}" update="zoneDetail" icon="icon-pageview"
+                <p:menuitem value="#{bundle.view}" update="zoneDetail" icon="ui-icon-info"
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="zoneDetail" icon="icon-edit"
+                <p:menuitem value="#{bundle.edit}" update="zoneDetail" icon="ui-icon-scissors"
                             oncomplete="PF('zoneDialog').show()" actionListener="#{handleZoneAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="icon-assignment"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-suitcase"
                             rendered="false"
                             oncomplete="PF('assignRuleDialog').show()" actionListener="#{handleZoneAction.assignRule}"/>
                 <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="icon-edit"
                             rendered="false"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleZoneAction.editRule}"/>
-                <p:menuitem value="#{bundle.delete}" update="zones" icon="icon-delete"
+                <p:menuitem value="#{bundle.delete}" update="zones" icon="ui-icon-trash"
                             actionListener="#{handleZoneAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert"/>
                 </p:menuitem>

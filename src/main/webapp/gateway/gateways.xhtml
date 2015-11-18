@@ -14,23 +14,23 @@
 
         <h:form id="form">
             <p:contextMenu for="gateways">
-                <p:menuitem value="#{bundle.view}" update="gatewayDetail" icon="icon-pageview"
+                <p:menuitem value="#{bundle.view}" update="gatewayDetail" icon="ui-icon-info"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="gatewayDetail" icon="icon-edit"
+                <p:menuitem value="#{bundle.edit}" update="gatewayDetail" icon="ui-icon-scissors"
                             oncomplete="PF('gatewayDialog').show()" actionListener="#{handleGatewayAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="icon-assignment"
+                <p:menuitem value="#{bundle.assign_rule}" update="assignRuleDetail" icon="ui-icon-suitcase"
                             oncomplete="PF('assignRuleDialog').show()"
                             actionListener="#{handleGatewayAction.assignRule}"/>
-                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="icon-mode_edit"
+                <p:menuitem value="#{bundle.edit_rule}" update="ruleFrm:handleRulePanel" icon="ui-icon-scissors"
                             rendered="false"
                             oncomplete="PF('editRuleDialog').show()" actionListener="#{handleGatewayAction.editRule}"/>
-                <p:menuitem value="#{bundle.special_status}" update="specialStatusTable" icon="icon-beenhere"
+                <p:menuitem value="#{bundle.special_status}" update="specialStatusTable" icon="ui-icon-clock"
                             oncomplete="PF('gatewayStatus').show()"
                             actionListener="#{handleGatewayAction.assignSpecialStatus}"/>
-                <p:menuitem value="#{bundle.assign_person}" update="assignGatewayPersonPanel" icon="icon-beenhere"
+                <p:menuitem value="#{bundle.assign_person}" update="assignGatewayPersonPanel" icon="ui-icon-person"
                             oncomplete="PF('assignPersonDialog').show()"
                             actionListener="#{handleGatewayAction.assignPerson}"/>
-                <p:menuitem value="#{bundle.delete}" update="gateways" icon="icon-delete"
+                <p:menuitem value="#{bundle.delete}" update="gateways" icon="ui-icon-circle-close"
                             actionListener="#{handleGatewayAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert"/>
                 </p:menuitem>
@@ -195,7 +195,7 @@
                                         <h:outputText value="#{handleGatewayAction.readStatusFromBundle(specialStatus.gateWayStatus.description)}"/>
                                     </p:column>
                                     <p:column headerText="#{bundle.delete}">
-                                        <p:commandButton image="/images/delete.png"
+                                        <p:commandButton icon="ui-icon-trash"
                                                          title="delete"
                                                          update="specialStatusTable"
                                                          actionListener="#{handleGatewayAction.removeSpecialStatus(specialStatus.id)}"

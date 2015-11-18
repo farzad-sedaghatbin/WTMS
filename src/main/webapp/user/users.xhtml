@@ -15,17 +15,17 @@
 
         <h:form id="form">
             <p:contextMenu for="users" rendered="#{me.hasPermission('USERMANAGEMENT')}">
-                <p:menuitem value="#{bundle.view}" update="userDetail" icon="icon-pageview" oncomplete="PF('userDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="userDetail" icon="ui-icon-info" oncomplete="PF('userDialog').show()"
                             actionListener="#{handleUserAction.viewMode}"/>
-                <p:menuitem value="#{bundle.edit}" update="userDetail" icon="icon-edit" oncomplete="PF('userDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="userDetail" icon="ui-icon-scissors" oncomplete="PF('userDialog').show()"
                             actionListener="#{handleUserAction.edit}"/>
-                <p:menuitem value="#{bundle.assign_pc}" update="assignPCDetail" icon="icon-assignment"
+                <p:menuitem value="#{bundle.assign_pc}" update="assignPCDetail" icon="ui-icon-calculator"
                             oncomplete="PF('assignPCDialog').show()"
                             actionListener="#{handleUserAction.assignPC}"/>
-                <p:menuitem value="#{bundle.assign_person}" update="assignPersonDetail" icon="icon-assignment"
+                <p:menuitem value="#{bundle.assign_person}" update="assignPersonDetail" icon="ui-icon-person"
                             oncomplete="PF('assignPersonDialog').show()"
                             actionListener="#{handleUserAction.assignPerson}"/>
-                <p:menuitem value="#{bundle.delete}" update="users" icon="icon-delete"
+                <p:menuitem value="#{bundle.delete}" update="users" icon="ui-icon-trash"
                             actionListener="#{handleUserAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                             </p:menuitem>

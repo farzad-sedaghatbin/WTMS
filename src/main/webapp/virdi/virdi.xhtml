@@ -13,13 +13,13 @@
         </p:breadCrumb>
         <h:form id="form">
              <p:contextMenu for="virdis" rendered="#{me.hasPermission('VIRDIMANAGEMENT')}" >
-                <p:menuitem value="#{bundle.view}" update="virdiDetail" icon="icon-pageview" oncomplete="PF('virdiDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="virdiDetail" icon="ui-icon-info" oncomplete="PF('virdiDialog').show()"
                             actionListener="#{handleVirdiAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="virdiDetail" icon="icon-edit" oncomplete="PF('virdiDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="virdiDetail" icon="ui-icon-scissors" oncomplete="PF('virdiDialog').show()"
                             actionListener="#{handleVirdiAction.edit}"/>
-                <p:menuitem value="#{bundle.fetch}"  icon="icon-assignment" actionListener="#{handleVirdiAction.fetch}"/>
-                <p:menuitem value="#{bundle.synch}"  icon="icon-sync" actionListener="#{handleVirdiAction.synchSetUsers}"/>
-                <p:menuitem value="#{bundle.delete}" update="virdis" icon="icon-delete"
+                <p:menuitem value="#{bundle.fetch}"  icon="ui-icon-search" actionListener="#{handleVirdiAction.fetch}"/>
+                <p:menuitem value="#{bundle.synch}"  icon="ui-icon-play" actionListener="#{handleVirdiAction.synchSetUsers}"/>
+                <p:menuitem value="#{bundle.delete}" update="virdis" icon="ui-icon-trash"
                             actionListener="#{handleVirdiAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>

@@ -12,8 +12,8 @@
         <h:form>
 
             <p:contextMenu for="blookups">
-                <p:menuitem value="#{bundle.edit}" update="blookupPanelId" icon="icon-edit" oncomplete="PF('blookupDialog').show()" actionListener="#{handleBLookupAction.edit}"/>
-                <p:menuitem value="#{bundle.delete}" update="blookups" icon="icon-delete" actionListener="#{handleBLookupAction.doDelete}">
+                <p:menuitem value="#{bundle.edit}" update="blookupPanelId" icon="ui-icon-scissors" oncomplete="PF('blookupDialog').show()" actionListener="#{handleBLookupAction.edit}"/>
+                <p:menuitem value="#{bundle.delete}" update="blookups" icon="ui-icon-trash" actionListener="#{handleBLookupAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>
             </p:contextMenu>

@@ -15,13 +15,13 @@
 
         <h:form id="form">
             <p:contextMenu for="roles" rendered="#{me.hasPermission('ROLEMANAGEMENT')}">
-                <p:menuitem value="#{bundle.view}" update="roleDetail" icon="icon-pageview" oncomplete="PF('roleDialog').show()"
+                <p:menuitem value="#{bundle.view}" update="roleDetail" icon="ui-icon-info" oncomplete="PF('roleDialog').show()"
                             actionListener="#{handleRoleAction.view}"/>
-                <p:menuitem value="#{bundle.edit}" update="roleDetail" icon="icon-edit" oncomplete="PF('roleDialog').show()"
+                <p:menuitem value="#{bundle.edit}" update="roleDetail" icon="ui-icon-scissors" oncomplete="PF('roleDialog').show()"
                             actionListener="#{handleRoleAction.edit}"/>       
-                <p:menuitem value="#{bundle.permissions}" update="permissionDetail" icon="icon-assignment" oncomplete="PF('permissionDialog').show()"
+                <p:menuitem value="#{bundle.permissions}" update="permissionDetail" icon="ui-icon-suitcase" oncomplete="PF('permissionDialog').show()"
                             actionListener="#{handleRoleAction.assignPermission}"/>
-                <p:menuitem value="#{bundle.delete}" update="roles" icon="icon-delete"
+                <p:menuitem value="#{bundle.delete}" update="roles" icon="ui-icon-trash"
                             actionListener="#{handleRoleAction.doDelete}">
                     <p:confirm header="#{bundle.confirmation}" message="#{bundle.areYouSure}" icon="ui-icon-alert" />
                 </p:menuitem>
