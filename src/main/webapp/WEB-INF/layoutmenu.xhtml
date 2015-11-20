@@ -87,6 +87,13 @@
                     <p:menuitem id="rm_trackBytime" value="#{bundle.track_by_time}" icon="icon-report"
                                 actionListener="#{handleMonitoringAction.trackByPersonAndTime}"/>
 
+                    <p:menuitem id="rm_reportByperson" value="#{bundle.report_by_person}" icon="icon-report"
+                                actionListener="#{handleSetadReportAction.trackByPerson}"/>
+                    <p:menuitem id="rm_reportByGate" value="#{bundle.report_by_gate}" icon="icon-report"
+                                actionListener="#{handleSetadReportAction.trackByGate}"/>
+                    <p:menuitem id="rm_reportByOrgan" value="#{bundle.report_by_organ}" icon="icon-report"
+                                actionListener="#{handleSetadReportAction.trackByOrgan}"/>
+
                 </p:submenu>
                 <p:submenu id="schedule" label="#{bundle.schedule}" rendered="#{me.hasPermission('SCHEDULE')}"
                            icon="icon-menu">
@@ -112,10 +119,10 @@
 
                 </p:submenu>
 
-                <p:submenu id="guest" label="#{bundle.guest}" >
+                <p:submenu id="guest" label="#{bundle.guest}" icon="icon-menu" >
                     <p:menuitem id="addGuest" value="#{bundle.addGuest}" icon="icon-event"
                                 actionListener="#{addGuest.begin}"/>
-                    <p:menuitem id="todayList" value="#{bundle.todayList}" rendered="false" icon="icon-error"
+                    <p:menuitem id="todayList" value="#{bundle.todayList}"  icon="icon-error"
                                 actionListener="#{addGuest.beginToday}"/>
                     <p:menuitem id="guestReport" value="#{bundle.guestReport}" icon="icon-looks_3"
                                 actionListener="#{addGuest.beginSearch}"/>

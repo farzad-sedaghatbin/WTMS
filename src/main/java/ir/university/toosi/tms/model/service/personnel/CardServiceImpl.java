@@ -112,6 +112,12 @@ public class CardServiceImpl<T extends Card> {
         } catch (Exception e) {
             return null;
         }
+    }  public List<T> getAllGuestActiveCard() {
+        try {
+            return (List<T>) cardDAO.findAll("Card.guest.list", true);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 

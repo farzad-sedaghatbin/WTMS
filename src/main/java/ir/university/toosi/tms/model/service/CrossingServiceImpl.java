@@ -9,8 +9,8 @@ import ir.university.toosi.tms.model.entity.zone.Virdi;
 import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
-import ir.university.toosi.tms.util.CalendarUtil;
 import ir.university.toosi.tms.util.Initializer;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;

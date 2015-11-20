@@ -5,10 +5,10 @@ import ir.university.toosi.guest.entity.Guest;
 import ir.university.toosi.guest.entity.Log;
 import ir.university.toosi.tms.model.entity.WorkGroup;
 import ir.university.toosi.tms.model.entity.personnel.Card;
-import ir.university.toosi.tms.util.CalendarUtil;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.user.HandleUserAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
 import org.primefaces.model.SortOrder;
 
 
@@ -64,66 +64,73 @@ public class AddGuest implements Serializable {
     private String fromDate;
     private String toDate;
     private DataModel<Guest> guestList;
-    public void beginSearch(){
+
+    public void beginSearch() {
         init();
         fromDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
         toDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
-
+        me.redirect("/guest/guest-log.xhtml");
     }
+
     public void search() {
         List<Log> innerTrafficLogList = null;
 
         List<Guest> logDataModels = null;
         try {
-            logDataModels = me.getGeneralHelper().getGuestService().duration(fromDate,toDate);
+            logDataModels = me.getGeneralHelper().getGuestService().duration(fromDate, toDate);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(logDataModels==null)
-            logDataModels= new ArrayList<>();
+        if (logDataModels == null)
+            logDataModels = new ArrayList<>();
         guestList = new ListDataModel<>(Lists.reverse(logDataModels));
     }
+
     public void selectCard(ValueChangeEvent event) {
-        selectedCard= cardList.getRowData();
+        selectedCard = cardList.getRowData();
 
     }
+
     public void begin() {
         init();
+        me.redirect("/guest/addGuest.xhtml");
     }
 
     public void init() {
-        page="1";
+        page = "1";
         setGuest(new Guest());
         for (WorkGroup workGroup : me.getUser().getWorkGroups()) {
-         if(workGroup.getName().equalsIgnoreCase("EMPLOYEE")){
-             getGuest().setvName(me.getUser().getFirstname());
-             getGuest().setvFamily(me.getUser().getLastname());
-         }
+            if (workGroup.getName().equalsIgnoreCase("EMPLOYEE")) {
+                getGuest().setvName(me.getUser().getFirstname());
+                getGuest().setvFamily(me.getUser().getLastname());
+            }
         }
     }
 
     public void beginToday() {
         init();
         try {
-            notAssignGuestList=new ListDataModel<>(generalHelper.getGuestService().todayGuest());
+            notAssignGuestList = new ListDataModel<>(generalHelper.getGuestService().todayGuest());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        me.redirect("/guest/today-list.xhtml");
 
     }
 
 
     public void saveGuest() throws Exception {
-        guest.setTime(hour+":"+minute);
+        guest.setTime(hour + ":" + minute);
         generalHelper.getGuestService().create(guest);
         setGuest(new Guest());
         me.addInfoMessage("operation.occurred");
     }
 
     public void selectPersonWith() throws Exception {
-        guest=notAssignGuestList.getRowData();
-        person= new Guest();
+        guest = notAssignGuestList.getRowData();
+        person = new Guest();
     }
+
     public void savePersonWith() throws Exception {
         person.setDate(guest.getDate());
         person.setTime(guest.getTime());
@@ -131,20 +138,21 @@ public class AddGuest implements Serializable {
         person.setvName(guest.getvName());
         person.setGuestSize(0);
 
-        person=generalHelper.getGuestService().create(person);
+        person = generalHelper.getGuestService().create(person);
         guest.getGuestSet().add(person);
         generalHelper.getGuestService().getGuestDao().update(guest);
         beginToday();
         me.addInfoMessage("operation.occurred");
 
     }
+
     public void doEdit() throws Exception {
         generalHelper.getGuestService().getGuestDao().update(guest);
         init();
     }
 
     public Guest getGuest() {
-        if(guest==null)
+        if (guest == null)
             return new Guest();
         return guest;
     }
@@ -194,7 +202,6 @@ public class AddGuest implements Serializable {
     }
 
 
-
     public String getGuestnameFilter() {
         return GuestnameFilter;
     }
@@ -206,7 +213,6 @@ public class AddGuest implements Serializable {
     public String getGuestFamilyFilter() {
         return GuestFamilyFilter;
     }
-
 
 
     public void setGuestFamilyFilter(String GuestFamilyFilter) {
@@ -295,7 +301,7 @@ public class AddGuest implements Serializable {
         getGeneralHelper().getGuestService().getGuestDao().update(guest);
         selectedCard.setGuest(guest);
         generalHelper.getCardService().editCard(selectedCard);
-        Log log= new Log();
+        Log log = new Log();
         log.setGuest(guest);
         log.setCard(selectedCard);
         log.setDate(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
@@ -309,16 +315,18 @@ public class AddGuest implements Serializable {
         beginToday();
 
 
-    }public void unAssigncard() {
+    }
+
+    public void unAssigncard() {
 //        guest=notAssignGuestList.getRowData();
-        List<Card> cards =generalHelper.getCardService().findByGuestId(guest.getId());
-        if(cards==null || cards.size()==0)
+        List<Card> cards = generalHelper.getCardService().findByGuestId(guest.getId());
+        if (cards == null || cards.size() == 0)
             return;
-        selectedCard= cards.get(0);
+        selectedCard = cards.get(0);
         selectedCard.setGuest(null);
 
         generalHelper.getCardService().editCard(selectedCard);
-        Log log= new Log();
+        Log log = new Log();
         log.setGuest(guest);
         log.setCard(selectedCard);
         log.setDate(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
@@ -333,16 +341,13 @@ public class AddGuest implements Serializable {
     }
 
     public void assignCard() {
-        guest= notAssignGuestList.getRowData();
-        if(guest.isHasCard()){
+        if (guest.isHasCard()) {
             me.addInfoMessage("کارت قبلا تخصیص داده شده است");
             return;
         }
-        cardList=new ListDataModel<>(generalHelper.getCardService().getAllActiveCard());
+        cardList = new ListDataModel<>(generalHelper.getCardService().getAllGuestActiveCard());
     }
-    public void edit() {
-        guest= notAssignGuestList.getRowData();
-    }
+
 
     public void setSimpleValue(String simpleValue) {
         this.simpleValue = simpleValue;
@@ -351,12 +356,13 @@ public class AddGuest implements Serializable {
     public String getSimpleValue() {
         return simpleValue;
     }
+
     public void simpleSearch() {
 
         String query = "select p from Guest p where (";
         query += " p.firstname like \'%" + simpleValue + "%\' or " + " p.lastname like \'%" + simpleValue + "%\' )";
         init();
-        notAssignGuestList=new ListDataModel<>(generalHelper.getGuestService().query(query));
+        notAssignGuestList = new ListDataModel<>(generalHelper.getGuestService().query(query));
     }
 
     public SortOrder getTimeOrder() {

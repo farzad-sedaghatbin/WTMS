@@ -135,7 +135,7 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
         }
     }
 
-    public List<TrafficLog> findByPDP(Long PDPId, String date,SystemConfiguration systemConfiguration) {
+    public List<TrafficLog> findByPDP(Long PDPId, String date, SystemConfiguration systemConfiguration) {
         try {
             return (List<TrafficLog>) em.createNamedQuery("TrafficLog.findByPDP")
                     .setParameter("PDPId", PDPId)
@@ -147,7 +147,8 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
             return null;
         }
     }
-    public List<TrafficLog> findByVirdi(Long virdiId, String date,SystemConfiguration systemConfiguration) {
+
+    public List<TrafficLog> findByVirdi(Long virdiId, String date, SystemConfiguration systemConfiguration) {
         try {
             return (List<TrafficLog>) em.createNamedQuery("TrafficLog.findByVirdi")
                     .setParameter("virdiId", virdiId)
@@ -166,6 +167,54 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
             List<TrafficLog> trafficLogs = em.createNamedQuery("TrafficLog.findByPerson")
                     .setParameter("personId", personId)
                     .setParameter("trafficDate", date)
+                    .getResultList();
+            if (trafficLogs == null)
+                return null;
+            return trafficLogs;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<TrafficLog> findByPersonInDuration(Long personId, String date, String toDate) {
+        try {
+
+            List<TrafficLog> trafficLogs = em.createNamedQuery("TrafficLog.findByPersonInDuration")
+                    .setParameter("personId", personId)
+                    .setParameter("fromDate", date)
+                    .setParameter("toDate", toDate)
+                    .getResultList();
+            if (trafficLogs == null)
+                return null;
+            return trafficLogs;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<TrafficLog> findByOrganInDuration(Long organId, String date, String toDate) {
+        try {
+
+            List<TrafficLog> trafficLogs = em.createNamedQuery("TrafficLog.findByOrganInDuration")
+                    .setParameter("organId", organId)
+                    .setParameter("fromDate", date)
+                    .setParameter("toDate", toDate)
+                    .getResultList();
+            if (trafficLogs == null)
+                return null;
+            return trafficLogs;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<TrafficLog> findByGateInDuration(Long gateId, String date, String toDate) {
+        try {
+
+            List<TrafficLog> trafficLogs = em.createNamedQuery("TrafficLog.findByGateInDuration")
+                    .setParameter("gateId", gateId)
+                    .setParameter("fromDate", date)
+                    .setParameter("toDate", toDate)
                     .getResultList();
             if (trafficLogs == null)
                 return null;
@@ -201,13 +250,13 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
         }
     }
 
-    public List<Object[]> searchForChart(String fromTime, String toTime,boolean valid) {
+    public List<Object[]> searchForChart(String fromTime, String toTime, boolean valid) {
         try {
 
             return em.createNamedQuery("TrafficLog.searchForChart")
                     .setParameter("fromTime", fromTime)
-                    .setParameter("toTime",toTime)
-                    .setParameter("valid",valid)
+                    .setParameter("toTime", toTime)
+                    .setParameter("valid", valid)
                     .getResultList();
         } catch (Exception e) {
             return new ArrayList<>();

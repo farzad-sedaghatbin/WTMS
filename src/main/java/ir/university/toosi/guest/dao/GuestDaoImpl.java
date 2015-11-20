@@ -3,7 +3,7 @@ package ir.university.toosi.guest.dao;
 
 import ir.university.toosi.guest.entity.Guest;
 import ir.university.toosi.tms.model.dao.BaseDAOImpl;
-import ir.university.toosi.tms.util.CalendarUtil;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;

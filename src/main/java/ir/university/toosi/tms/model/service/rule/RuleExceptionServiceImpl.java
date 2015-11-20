@@ -7,8 +7,8 @@ import ir.university.toosi.tms.model.entity.Role;
 import ir.university.toosi.tms.model.entity.rule.RuleException;
 import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.tms.model.service.EventLogServiceImpl;
-import ir.university.toosi.tms.util.CalendarUtil;
 import ir.university.toosi.tms.util.EventLogManager;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;

@@ -77,46 +77,46 @@ public class LangUtil {
         for (int i = 0; i < number.length(); i++) {
             c = number.charAt(i);
             switch (c) {
-                /*case '?':
+                case '۰':
                     englishNumberString.append('0');
                     break;
 
-                case '?':
+                case '۱':
                     englishNumberString.append('1');
                     break;
 
-                case '?':
+                case '۲':
                     englishNumberString.append('2');
                     break;
 
-                case '?':
+                case '۳':
                     englishNumberString.append('3');
                     break;
 
-                case '?':
+                case '۴':
                     englishNumberString.append('4');
                     break;
 
-                case '?':
+                case '۵':
                     englishNumberString.append('5');
                     break;
 
-                case '?':
+                case '۶':
                     englishNumberString.append('6');
                     break;
 
-                case '?':
+                case '۷':
                     englishNumberString.append('7');
                     break;
 
-                case '?':
+                case '۸':
                     englishNumberString.append('8');
                     break;
 
-                case '?':
+                case '۹':
                     englishNumberString.append('9');
                     break;
-*/
+
                 default:
                     englishNumberString.append(c);
                     break;

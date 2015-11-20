@@ -1,7 +1,7 @@
 package ir.university.toosi.tms.model.service;
 
 import ir.university.toosi.tms.model.entity.GatewaySpecialState;
-import ir.university.toosi.tms.util.CalendarUtil;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
 
 import javax.annotation.Resource;
 import javax.ejb.*;

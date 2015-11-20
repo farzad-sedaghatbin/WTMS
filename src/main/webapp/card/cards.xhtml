@@ -152,6 +152,15 @@
                         </tr>
                         <tr>
                             <td>
+                                <h:outputText value="#{bundle.guest}"/>
+                            </td>
+                            <td>
+                                <p:selectBooleanCheckbox value="#{handleCardAction.card.forGuest}"
+                                                         disabled="#{handleCardAction.disableFields}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <h:outputText value="#{bundle.start_date}"/>
                             </td>
                             <td>

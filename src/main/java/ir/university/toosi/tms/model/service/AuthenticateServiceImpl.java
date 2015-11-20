@@ -10,9 +10,9 @@ import ir.university.toosi.tms.model.entity.rule.RulePackage;
 import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.tms.model.service.rule.RuleExceptionServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PreRequestGatewayServiceImpl;
-import ir.university.toosi.tms.util.CalendarUtil;
 import ir.university.toosi.tms.util.Initializer;
 import ir.university.toosi.tms.util.LangUtil;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;

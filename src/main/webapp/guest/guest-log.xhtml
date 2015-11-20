@@ -40,34 +40,29 @@
 
 
 
-    <fieldset dir="#{me.direction}">
-        <legend>
-            <h:outputText escape="true" value="مهمان ها"/>
-        </legend>
 
         <p:dataTable id="trafficLogTable" value="#{addGuest.guestList}"
                         sortMode="single"
                         var="Guest"
                         rows="10"
                         style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
-            <p:column sortBy="#{Guest.firstname}"
-                         sortOrder="#{addGuest.guestnameOrder}">
+            <f:facet name="header">
+                لیست                    <p:commandButton id="toggler" type="button" value="#{bundle.columns}" style="float:right" icon="ui-icon-calculator" />
+                <p:columnToggler datasource="trafficLogTable" trigger="toggler" />
+            </f:facet>
+            <p:column  headerText="#{bundle.name}" sortBy="#{Guest.name}" filterBy="#{Guest.name}">
                 <h:outputText escape="true" value="#{Guest.firstname}"/>
             </p:column>
 
-            <p:column sortBy="#{Guest.lastname}"
-                         sortOrder="#{addGuest.guestFamilyOrder}">
+            <p:column  headerText="#{bundle.lastname}" sortBy="#{Guest.lastname}" filterBy="#{Guest.lastname}">
                 <h:outputText escape="true" value="#{Guest.lastname}"/>
             </p:column>
-            <p:column sortBy="#{Guest.time}"
-                         sortOrder="#{addGuest.timeOrder}">
+            <p:column  headerText="#{bundle.time}" sortBy="#{Guest.time}" filterBy="#{Guest.time}">
                 <h:outputText escape="true" value="#{Guest.time}"/>
             </p:column>
 
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="تعداد همراهان"/>
-                </f:facet>
+            <p:column  headerText="#{bundle.follow}" sortBy="#{Guest.guestSize}" filterBy="#{Guest.guestSize}">
+
                 <h:outputText escape="true" value="#{Guest.guestSize}"/>
             </p:column>
             <f:facet name="footer">
@@ -75,7 +70,6 @@
                                    page="#{addGuest.page}"/>
             </f:facet>
         </p:dataTable>
-    </fieldset>
 
 </h:form>
 </ui:define>

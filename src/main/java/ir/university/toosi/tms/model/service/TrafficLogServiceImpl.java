@@ -13,9 +13,9 @@ import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
 import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
-import ir.university.toosi.tms.util.CalendarUtil;
 import ir.university.toosi.tms.util.EventLogManager;
 import ir.university.toosi.tms.util.LangUtil;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -173,6 +173,27 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
     public List<T> findByPerson(Long personId, String date) {
         try {
             return (List<T>) TrafficLogDAO.findByPerson(personId, date);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<T> findByPersonInDuration(Long personId, String date,String toDate) {
+        try {
+            return (List<T>) TrafficLogDAO.findByPersonInDuration(personId, date, toDate);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public List<T> findByGateInDuration(Long gateId, String date,String toDate) {
+        try {
+            return (List<T>) TrafficLogDAO.findByGateInDuration(gateId, date, toDate);
+        } catch (Exception e) {
+            return null;
+        }
+    }  public List<T> findByOrganInDuration(Long organId, String date,String toDate) {
+        try {
+            return (List<T>) TrafficLogDAO.findByOrganInDuration(organId, date, toDate);
         } catch (Exception e) {
             return null;
         }

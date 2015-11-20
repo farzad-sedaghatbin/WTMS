@@ -19,7 +19,6 @@ import ir.university.toosi.tms.model.service.personnel.OrganServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.ZoneServiceImpl;
-import ir.university.toosi.tms.util.CalendarUtil;
 import ir.university.toosi.tms.util.EventLogManager;
 import ir.university.toosi.tms.util.Initializer;
 

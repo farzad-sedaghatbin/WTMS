@@ -10,9 +10,9 @@ import ir.university.toosi.tms.model.entity.objectValue.alert.Number;
 import ir.university.toosi.tms.model.entity.objectValue.init.*;
 import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
-import ir.university.toosi.tms.util.CalendarUtil;
 import ir.university.toosi.tms.util.EventLogManager;
 import ir.university.toosi.tms.util.JaxbUtil;
+import ir.university.toosi.wtms.web.util.CalendarUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;

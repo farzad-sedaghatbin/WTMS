@@ -23,6 +23,9 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "Card.active.list",
                 query = "select c from Card c where c.deleted <> '1' and c.visible=true "
+        ),        @NamedQuery(
+                name = "Card.guest.list",
+                query = "select c from Card c where c.deleted <> '1' and c.visible=true and c.forGuest=true "
         ),
         @NamedQuery(
                 name = "Card.findById",
@@ -86,6 +89,10 @@ public class Card extends BaseEntity {
     @JsonProperty
     @Column(name = "visible")
     private boolean visible;
+
+    @JsonProperty
+    @Column(name = "forGuest")
+    private boolean forGuest=false;
     @OneToOne
     private Guest guest;
     @JsonProperty
@@ -207,5 +214,13 @@ public class Card extends BaseEntity {
 
     public void setGuest(Guest guest) {
         this.guest = guest;
+    }
+
+    public boolean isForGuest() {
+        return forGuest;
+    }
+
+    public void setForGuest(boolean forGuest) {
+        this.forGuest = forGuest;
     }
 }
