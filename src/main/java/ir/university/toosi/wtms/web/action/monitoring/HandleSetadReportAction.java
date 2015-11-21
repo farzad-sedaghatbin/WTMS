@@ -160,8 +160,8 @@ public class HandleSetadReportAction implements Serializable {
         handlePersonAction.init();
         me.setActiveMenu(MenuType.REPORT);
         person = false;
-        personAndGate = true;
-        personAndTime = false;
+        personAndGate = false;
+        personAndTime = true;
         personPage = 1;
 
 

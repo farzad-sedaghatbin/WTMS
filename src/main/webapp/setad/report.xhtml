@@ -9,10 +9,6 @@
     <ui:define name="content">
 
         <h:form id="trafficLogList">
-            <h:commandLink>
-                <p:graphicImage name="../images/excel.png" value="../images/excel.png"/>
-                <p:dataExporter type="xls" target="trafficLogTable" fileName="logs" />
-            </h:commandLink>
             <table border="0" cellpadding="3" cellspacing="3" width="90%" dir="#{me.direction}">
                 <tr valign="top">
                     <td nowrap="nowrap" align="#{me.align}">
@@ -21,12 +17,12 @@
                                      rowKey="#{trafficLog.id}"
                                      selectionMode="single"
                                      paginator="true" rows="10"
-                                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} {Exporters}"
                                      rowsPerPageTemplate="5,10,15" lazy="true"
                                      draggableColumns="true" style="margin-bottom:20px">
                             <f:facet name="{Exporters}">
                                 <h:commandLink>
-                                    <p:graphicImage name="/images/excel.png" width="24" value="../images/excel.png"/>
+                                    <p:graphicImage value="/images/excel.png" width="24"/>
                                     <p:dataExporter type="xls" target="trafficLogTable" fileName="report"/>
                                 </h:commandLink>
                             </f:facet>

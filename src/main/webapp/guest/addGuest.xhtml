@@ -13,13 +13,13 @@
                     </td>
 
                     <td>
-                        <h:inputText value="#{addGuest.guest.firstname}" maxlength="20"/>
+                        <p:inputText value="#{addGuest.guest.firstname}" maxlength="20"/>
                     </td>
                     <td>
                         <h:outputText value="#{bundle.lastname}"/>
                     </td>
                     <td>
-                        <h:inputText value="#{addGuest.guest.lastname}" maxlength="20"/>
+                        <p:inputText value="#{addGuest.guest.lastname}" maxlength="20"/>
                     </td>
                 </tr>
                 <tr>
@@ -27,13 +27,13 @@
                         <h:outputText value="#{bundle.nationalCode}"/>
                     </td>
                     <td>
-                        <h:inputText value="#{addGuest.guest.nationalCode}" maxlength="10"/>
+                        <p:inputText value="#{addGuest.guest.nationalCode}" maxlength="10"/>
                     </td>
                     <td>
                         <h:outputText value="#{bundle.fatherName}"/>
                     </td>
                     <td>
-                        <h:inputText value="#{addGuest.guest.fatherName}" maxlength="20"/>
+                        <p:inputText value="#{addGuest.guest.fatherName}" maxlength="20"/>
                     </td>
                 </tr>
 
@@ -42,13 +42,13 @@
                         <h:outputText value="#{bundle.mobile}"/>
                     </td>
                     <td>
-                        <h:inputText value="#{addGuest.guest.mobile}" maxlength="11"/>
+                        <p:inputText value="#{addGuest.guest.mobile}" maxlength="11"/>
                     </td>
                     <td>
                         <h:outputText value="#{bundle.tel}"/>
                     </td>
                     <td>
-                        <h:inputText value="#{addGuest.guest.phonNumber}" maxlength="10"/>
+                        <p:inputText value="#{addGuest.guest.phonNumber}" maxlength="10"/>
                     </td>
                 </tr>
                 <tr>
@@ -65,10 +65,25 @@
                     <td>
 
                             <p:spinner value="#{addGuest.minute}"
-                                                     step="1" maxValue="59" inputSize="1" minValue="0"/>
+                                                     stepFactor="1" max="59" size="6" min="0"/>
                             &#160;
                             <p:spinner value="#{addGuest.hour}"
-                                                     step="1" maxValue="23" inputSize="1" minValue="0"/>
+                                                     stepFactor="1" max="23" size="6" min="0"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <h:outputText value="#{bundle.nameVistited}"/>
+                    </td>
+                    <td>
+                        <p:inputText value="#{addGuest.guest.vName}" maxlength="20"/>
+                    </td>
+                    <td>
+                        <h:outputText value="#{bundle.familyVisited}"/>
+                    </td>
+                    <td>
+                        <p:inputText value="#{addGuest.guest.vFamily}" maxlength="20"/>
                     </td>
                 </tr>
 
@@ -78,26 +93,13 @@
                     </td>
                     <td>
                         <p:spinner
-                                              step="1" maxValue="100" inputSize="1" minValue="0" value="#{addGuest.guest.guestSize}"/>
+                                stepFactor="1" max="100" size="6" min="0" value="#{addGuest.guest.guestSize}"/>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <h:outputText value="#{bundle.nameVistited}"/>
-                    </td>
-                    <td>
-                        <h:inputText value="#{addGuest.guest.vName}" maxlength="20"/>
-                    </td>
-                    <td>
-                        <h:outputText value="#{bundle.familyVisited}"/>
-                    </td>
-                    <td>
-                        <h:inputText value="#{addGuest.guest.vFamily}" maxlength="20"/>
-                    </td>
-                </tr>
+
                 <tr>
                     <td colspan="4" align="center">
-                        <h:commandButton value="#{bundle.save}"
+                        <p:commandButton value="#{bundle.save}"
                                          actionListener="#{addGuest.saveGuest}"/>
                     </td>
                 </tr>

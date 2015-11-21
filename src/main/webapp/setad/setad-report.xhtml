@@ -16,8 +16,8 @@
 
         <br/>
         <h:form id="trackFrm">
-            <p:outputPanel id="selectPerson" ajaxRendered="true" rendered="#{handleSetadReportAction.person}" >
-                <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable" align="center">
+            <p:outputPanel id="selectPerson" ajaxRendered="true" rendered="#{handleSetadReportAction.person}">
+                <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable" align="right">
                     <tr>
                         <td nowrap="nowrap" align="#{me.appositeAlign}">
                             <h:outputText escape="true" value="#{bundle.fromDate}:"/>
@@ -38,7 +38,9 @@
 
 
                     </tr>
-
+                </table>
+                <br/><br/><br/><br/>
+                <table>
                     <tr valign="top">
                         <td nowrap="nowrap">
                             <p:contextMenu for="personTable">
@@ -105,22 +107,22 @@
                                          value="#{handleSetadReportAction.toDate}" styleClass="datepicker"
                                          converter="dateConverter"/>
                         </td>
-                        <td nowrap="nowrap">
-                            <p:commandButton value="#{bundle.search}" execute="@form"
-                                             action="#{handleSetadReportAction.dotrackByGate}"
-                                             render="trafficLogTable"/>
-
-                        </td>
-
                     </tr>
-                    <tr valign="top">
-                        <td nowrap="nowrap" width="60">
+                    <tr>
+                        <td nowrap="nowrap" align="#{me.appositeAlign}">
                             <h:outputText escape="true" value="#{bundle.gateway}"/>
                         </td>
                         <td nowrap="nowrap">
-                            <h:selectOneMenu value="#{handleSetadReportAction.gatewayId}">
+                            <p:selectOneMenu value="#{handleSetadReportAction.gatewayId}">
                                 <f:selectItems value="#{handleSetadReportAction.gatewayItems}"/>
-                            </h:selectOneMenu>
+                            </p:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap="nowrap">
+                            <p:commandButton value="#{bundle.search}"
+                                             action="#{handleSetadReportAction.dotrackByGate}"/>
+
                         </td>
                     </tr>
                 </table>
@@ -145,25 +147,24 @@
                                          value="#{handleSetadReportAction.toDate}" styleClass="datepicker"
                                          converter="dateConverter"/>
                         </td>
-                        <td nowrap="nowrap">
-                            <p:commandButton value="#{bundle.search}" execute="@form"
-                                             action="#{handleSetadReportAction.dotrackByOrgan}"
-                                             render="trafficLogTable"/>
-
-                        </td>
-
                     </tr>
                     <tr valign="top">
-                        <td nowrap="nowrap" width="60">
-                            <h:outputText escape="true" value="#{bundle.organ}"/>
+                        <td nowrap="nowrap" align="#{me.appositeAlign}">
+                            <h:outputText escape="true" value="#{bundle.organ}:"/>
                         </td>
                         <td nowrap="nowrap">
-                            <h:selectOneMenu value="#{handleSetadReportAction.organId}">
+                            <p:selectOneMenu value="#{handleSetadReportAction.organId}">
                                 <f:selectItems value="#{handleSetadReportAction.oranItems}"/>
-                            </h:selectOneMenu>
+                            </p:selectOneMenu>
                         </td>
                     </tr>
+                    <tr>
+                        <td nowrap="nowrap">
+                            <p:commandButton value="#{bundle.search}"
+                                             action="#{handleSetadReportAction.dotrackByOrgan}"/>
 
+                        </td>
+                    </tr>
 
                 </table>
             </p:outputPanel>
