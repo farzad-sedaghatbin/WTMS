@@ -285,6 +285,10 @@ public class HandleMonitoringAction implements Serializable {
         me.setActiveMenu(MenuType.SENTRY);
         initialize();
         me.redirect("/monitoring/sentry-monitor.xhtml");
+    }    public void beginSentryParking() {
+        me.setActiveMenu(MenuType.SENTRY);
+        initialize();
+        me.redirect("/monitoring/parking-monitor.xhtml");
     }
 
     public void trackByPerson() {

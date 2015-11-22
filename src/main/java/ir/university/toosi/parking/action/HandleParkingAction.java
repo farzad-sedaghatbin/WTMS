@@ -73,7 +73,7 @@ public class HandleParkingAction implements Serializable {
         toDate = CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"));
         search();
 //        refresh();
-        me.redirect("/park/parking-log.xhtml");
+        me.redirect("/parking/parking-log.xhtml");
 
     }
 
