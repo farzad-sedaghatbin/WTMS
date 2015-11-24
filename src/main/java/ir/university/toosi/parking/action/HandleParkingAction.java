@@ -84,8 +84,8 @@ public class HandleParkingAction implements Serializable {
 
         for (ParkingLog log : new ParkingLazyDataModel(ParkingLogService)) {
             ParkingLogDataModel dataModel = new ParkingLogDataModel();
-            dataModel.setTime(LangUtil.getFarsiNumber(log.getParking_time()));
-            dataModel.setDate(log.getParking_date());
+            dataModel.setTime(LangUtil.getFarsiNumber(log.getTraffic_time()));
+            dataModel.setDate(log.getTraffic_date());
             dataModel.setPictures(log.getPictures());
             dataModel.setId(log.getId());
             dataModel.setNumber(log.getNumber());
@@ -430,9 +430,9 @@ public class HandleParkingAction implements Serializable {
             String address = ParkingLog1.getPictures();
             if (address == null)
                 return new DefaultStreamedContent();
-            address = address + "/" + 1 + ".jpeg";
+            address = address + "/" + 1 + ".png";
             try {
-                new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("jboss.name") + address)), "image/jpeg");
+                new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("jboss.name") + address)), "image/png");
             } catch (IOException e) {
 //                e.printStackTrace();
             }

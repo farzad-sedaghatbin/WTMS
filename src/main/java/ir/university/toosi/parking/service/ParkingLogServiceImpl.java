@@ -79,7 +79,7 @@ public class ParkingLogServiceImpl<T extends ParkingLog> {
             List<ParkingLog> returnParkingLogs = new ArrayList<>();
             List<ParkingLog> ParkingLogs = ParkingLogDAO.findInDuration(date);
             for (ParkingLog ParkingLog : ParkingLogs) {
-                if (time2long(ParkingLog.getParking_time()) > startTime && time2long(ParkingLog.getParking_time()) < endTime)
+                if (time2long(ParkingLog.getTraffic_time()) > startTime && time2long(ParkingLog.getTraffic_time()) < endTime)
                     returnParkingLogs.add(ParkingLog);
             }
             return returnParkingLogs;

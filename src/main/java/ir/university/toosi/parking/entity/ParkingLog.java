@@ -19,10 +19,6 @@ import javax.persistence.*;
                 query = "select t from ParkingLog t where t.id=:id"
         ),
         @NamedQuery(
-                name = "ParkingLog.findByNumberInDuration",
-                query = "select t from ParkingLog t where t.number=:number and t.traffic_date =:trafficDate"
-        ),
-        @NamedQuery(
                 name = "ParkingLog.findParkingInDuration",
                 query = "select t from ParkingLog t where t.traffic_date between :startDate and :endDate"
         ),
@@ -72,19 +68,19 @@ public class ParkingLog extends BaseEntity {
         this.id = id;
     }
 
-    public String getParking_time() {
+    public String getTraffic_time() {
         return traffic_time;
     }
 
-    public void setParking_time(String traffic_time) {
+    public void setTraffic_time(String traffic_time) {
         this.traffic_time = traffic_time;
     }
 
-    public String getParking_date() {
+    public String getTraffic_date() {
         return traffic_date;
     }
 
-    public void setParking_date(String traffic_date) {
+    public void setTraffic_date(String traffic_date) {
         this.traffic_date = traffic_date;
     }
 

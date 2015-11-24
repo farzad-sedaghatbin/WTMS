@@ -166,11 +166,13 @@ public class HandleMonitoringAction implements Serializable {
         eventBus.publish("/notify", new Boolean(true));
     }
 
-    public void sendMessage(ParkingLog log,Boolean t) {
+    public void sendMessage(ParkingLog log, Boolean t) {
         if (log == null || log.getNumber() == null)
             return;
-
-                parkingLogList.add(log);
+        if (parkingLogList == null) {
+            parkingLogList = new ArrayList<>();
+        }
+        parkingLogList.add(log);
 
         EventBus eventBus = EventBusFactory.getDefault().eventBus();
         eventBus.publish("/notifyParking", new Boolean(true));
@@ -285,7 +287,9 @@ public class HandleMonitoringAction implements Serializable {
         me.setActiveMenu(MenuType.SENTRY);
         initialize();
         me.redirect("/monitoring/sentry-monitor.xhtml");
-    }    public void beginSentryParking() {
+    }
+
+    public void beginSentryParking() {
         me.setActiveMenu(MenuType.SENTRY);
         initialize();
         me.redirect("/monitoring/parking-monitor.xhtml");
