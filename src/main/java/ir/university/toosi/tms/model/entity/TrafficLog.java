@@ -18,11 +18,11 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(
                 name = "TrafficLog.list",
-                query = "select t from TrafficLog t where t.deleted='0' and t.traffic_date =:trafficDate "
+                query = "select t from TrafficLog t where t.deleted='0' and t.trafficDate =:trafficDate "
         ),
         @NamedQuery(
                 name = "TrafficLog.searchForChart",
-                query = "select t.gateway.id,count(t.person.id) from TrafficLog t where t.deleted='0' and t.valid=:valid and t.traffic_time between :fromTime and :toTime group by t.gateway.id"
+                query = "select t.gateway.id,count(t.person.id) from TrafficLog t where t.deleted='0' and t.valid=:valid and t.trafficTime between :fromTime and :toTime group by t.gateway.id"
         ),
         @NamedQuery(
                 name = "TrafficLog.findById",
@@ -30,55 +30,55 @@ import javax.persistence.*;
         ),
         @NamedQuery(
                 name = "TrafficLog.findByPersonIdInDuration",
-                query = "select t from TrafficLog t where t.person.id=:personId and t.valid = true and t.exit =:exit and t.traffic_date =:trafficDate"
+                query = "select t from TrafficLog t where t.person.id=:personId and t.valid = true and t.exit =:exit and t.trafficDate =:trafficDate"
         ),
         @NamedQuery(
                 name = "TrafficLog.findByPersonLocationInDuration",
-                query = "select t from TrafficLog t where t.person.id=:personId  and t.traffic_date =:trafficDate"
+                query = "select t from TrafficLog t where t.person.id=:personId  and t.trafficDate =:trafficDate"
         ),
         @NamedQuery(
                 name = "TrafficLog.findTrafficInDuration",
-                query = "select t from TrafficLog t where t.traffic_date between :startDate and :endDate"
+                query = "select t from TrafficLog t where t.trafficDate between :startDate and :endDate"
         ),
         @NamedQuery(
                 name = "TrafficLog.findInDuration",
-                query = "select t from TrafficLog t where t.traffic_date =:date"
+                query = "select t from TrafficLog t where t.trafficDate =:date"
         ),
         @NamedQuery(
                 name = "TrafficLog.findByPersonAndGate",
-                query = "select t from TrafficLog t where t.person.id=:personId and t.gateway.id =:gatewayTd and t.traffic_date =:trafficDate"
+                query = "select t from TrafficLog t where t.person.id=:personId and t.gateway.id =:gatewayTd and t.trafficDate =:trafficDate"
         ),
         @NamedQuery(
                 name = "TrafficLog.findByPersonAndGateExOrEn",
-                query = "select count(t) from TrafficLog t where t.person.id=:personId and t.gateway.id =:gatewayTd and t.traffic_date =:trafficDate and t.exit =:exit"
+                query = "select count(t) from TrafficLog t where t.person.id=:personId and t.gateway.id =:gatewayTd and t.trafficDate =:trafficDate and t.exit =:exit"
         ),
         @NamedQuery(
                 name = "TrafficLog.findByGate",
-                query = "select t from TrafficLog t where t.gateway.id =:gatewayTd and t.traffic_date =:trafficDate"
+                query = "select t from TrafficLog t where t.gateway.id =:gatewayTd and t.trafficDate =:trafficDate"
         ),
         @NamedQuery(
                 name = "TrafficLog.findByPDP",
-                query = "select t from TrafficLog t where t.pdp.id =:PDPId and t.traffic_date =:trafficDate order by t.id desc "
-        ),  @NamedQuery(
-                name = "TrafficLog.findByVirdi",
-                query = "select t from TrafficLog t where t.virdi.id =:virdiId and t.traffic_date =:trafficDate order by t.id desc "
-        ),
+                query = "select t from TrafficLog t where t.pdp.id =:PDPId and t.trafficDate =:trafficDate order by t.id desc "
+        ), @NamedQuery(
+        name = "TrafficLog.findByVirdi",
+        query = "select t from TrafficLog t where t.virdi.id =:virdiId and t.trafficDate =:trafficDate order by t.id desc "
+),
         @NamedQuery(
                 name = "TrafficLog.findByPerson",
-                query = "select t from TrafficLog t where t.person.id=:personId  and t.traffic_date =:trafficDate order by t.traffic_time desc"
+                query = "select t from TrafficLog t where t.person.id=:personId  and t.trafficDate =:trafficDate order by t.trafficTime desc"
         ), @NamedQuery(
-                name = "TrafficLog.findByPersonInDuration",
-                query = "select t from TrafficLog t where t.person.id=:personId  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"
-        ),@NamedQuery(
-                name = "TrafficLog.findByGateInDuration",
-                query = "select t from TrafficLog t where t.gateway.id=:gateId  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"
-        ),@NamedQuery(
-                name = "TrafficLog.findByOrganInDuration",
-                query = "select t from TrafficLog t where t.organ.id=:organId  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"
-        ),
+        name = "TrafficLog.findByPersonInDuration",
+        query = "select t from TrafficLog t where t.person.id=:personId  and (t.trafficDate between :fromDate and :toDate ) order by t.trafficTime desc"
+), @NamedQuery(
+        name = "TrafficLog.findByGateInDuration",
+        query = "select t from TrafficLog t where t.gateway.id=:gateId  and (t.trafficDate between :fromDate and :toDate ) order by t.trafficTime desc"
+), @NamedQuery(
+        name = "TrafficLog.findByOrganInDuration",
+        query = "select t from TrafficLog t where t.organ.id=:organId  and (t.trafficDate between :fromDate and :toDate ) order by t.trafficTime desc"
+),
         @NamedQuery(
                 name = "TrafficLog.findLastByPerson",
-                query = "select t from TrafficLog t where t.person.id=:personId  and t.traffic_date =:trafficDate and t.last = true and t.deleted ='0'"
+                query = "select t from TrafficLog t where t.person.id=:personId  and t.trafficDate =:trafficDate and t.last = true and t.deleted ='0'"
         ), @NamedQuery(
         name = "TrafficLog.maximum",
         query = "select max(t.id) from TrafficLog t"
@@ -114,9 +114,13 @@ public class TrafficLog extends BaseEntity {
     private Gateway gateway;
     @JsonProperty
     @Column(name = "traffic_time")
+    private Integer trafficTime;
+    @Transient
     private String traffic_time;
     @JsonProperty
     @Column(name = "traffic_date")
+    private Integer trafficDate;
+    @Transient
     private String traffic_date;
     @Column(name = "pictures")
     @JsonProperty
@@ -188,18 +192,30 @@ public class TrafficLog extends BaseEntity {
     }
 
     public String getTraffic_time() {
+        if (trafficTime != null){
+            String h = String.valueOf(trafficTime).substring(0,2);
+            String m = String.valueOf(trafficTime).substring(2,4);
+            String s = String.valueOf(trafficTime).substring(4,6);
+            traffic_time = h + ":" + m + ":" + s;
+        }
         return traffic_time;
     }
 
     public void setTraffic_time(String time) {
         this.traffic_time = time;
+        if (time != null)
+            this.setTrafficTime(Integer.valueOf(time.replaceAll(":", "")));
     }
 
     public String getTraffic_date() {
+        if (this.trafficDate != null)
+            this.traffic_date = this.getTrafficDate().toString();
         return traffic_date;
     }
 
     public void setTraffic_date(String date) {
+        if (date != null)
+            this.trafficDate = Integer.valueOf(date);
         this.traffic_date = date;
     }
 
@@ -283,6 +299,7 @@ public class TrafficLog extends BaseEntity {
         this.finger = finger;
 
     }
+
     @JsonIgnore
     public String getTime() {
         return traffic_time;
@@ -292,10 +309,12 @@ public class TrafficLog extends BaseEntity {
     public void setTime(String time) {
         this.traffic_time = time;
     }
+
     @JsonIgnore
     public String getDate() {
         return traffic_date.replace("/", "");
     }
+
     @JsonIgnore
     public void setDate(String date) {
         this.traffic_date = date;
@@ -309,4 +328,20 @@ public class TrafficLog extends BaseEntity {
         this.virdi = virdi;
     }
 
+    public Integer getTrafficTime() {
+        return trafficTime;
+    }
+
+    public void setTrafficTime(Integer trafficTime) {
+        this.trafficTime = trafficTime;
+    }
+
+    public Integer getTrafficDate() {
+        return trafficDate;
+    }
+
+    public void setTrafficDate(Integer trafficDate) {
+        this.trafficDate = trafficDate;
+    }
 }
+
