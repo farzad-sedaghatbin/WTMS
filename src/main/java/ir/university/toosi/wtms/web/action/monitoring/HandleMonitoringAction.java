@@ -2,6 +2,8 @@ package ir.university.toosi.wtms.web.action.monitoring;
 
 
 import ir.ReaderWrapperService;
+import ir.university.toosi.parking.entity.ParkingLog;
+import ir.university.toosi.parking.service.ParkingLogServiceImpl;
 import ir.university.toosi.tms.model.entity.zone.Virdi;
 import ir.university.toosi.tms.model.service.CommentServiceImpl;
 import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
@@ -79,6 +81,8 @@ public class HandleMonitoringAction implements Serializable {
     private CommentServiceImpl commentService;
     @EJB
     private TrafficLogServiceImpl logService;
+    @EJB
+    private ParkingLogServiceImpl parkingLogService;
 
     private String message;
     private String width;
@@ -88,7 +92,8 @@ public class HandleMonitoringAction implements Serializable {
     private int personPage;
     private int page;
     private List<TrafficLog> eventLogList = null;
-    private List<Integer> loops= new ArrayList<>();
+    private List<ParkingLog> parkingLogList = null;
+    private List<Integer> loops = new ArrayList<>();
     private List<List<DataModel<SentryDataModel>>> trafficLogs = null;
     private SentryDataModel currentSentryDataModel;
     private TrafficLog currentTrafficLog;
@@ -107,8 +112,8 @@ public class HandleMonitoringAction implements Serializable {
     private String endMinute;
     private String endSecond;
     private static Hashtable<Long, LinkedList<SentryDataModel>> sentries = new Hashtable<>();
-    private  static  volatile  List<List<SentryDataModel>> trafficLogsbygate = new ArrayList<>();
-    private volatile  List<List<SentryDataModel>> cachedTrafficLogsbygate = new ArrayList<>();
+    private static volatile List<List<SentryDataModel>> trafficLogsbygate = new ArrayList<>();
+    private volatile List<List<SentryDataModel>> cachedTrafficLogsbygate = new ArrayList<>();
     private long sentryCount;
     private Person currentPerson;
 
@@ -144,21 +149,33 @@ public class HandleMonitoringAction implements Serializable {
             sentryDataModels.addFirst(dataModel);
             sentries.put(log.getVirdi().getId(), sentryDataModels);
             trafficLogsbygate = new ArrayList<>();
-            loops=new ArrayList<>();
-            int i=0;
+            loops = new ArrayList<>();
+            int i = 0;
             for (Queue<SentryDataModel> dataModels : sentries.values()) {
                 trafficLogsbygate.add(new ArrayList<>(dataModels));
                 loops.add(i++);
             }
 
         }
-        cachedTrafficLogsbygate= new ArrayList<>(trafficLogsbygate);
+        cachedTrafficLogsbygate = new ArrayList<>(trafficLogsbygate);
 
 //        RequestContext.getCurrentInstance().update("trafficLogList:test");
 //            me.redirect("/monitoring/sentry-monitor.xhtml");
 //
         EventBus eventBus = EventBusFactory.getDefault().eventBus();
         eventBus.publish("/notify", new Boolean(true));
+    }
+
+    public void sendMessage(ParkingLog log, Boolean t) {
+        if (log == null || log.getNumber() == null)
+            return;
+        if (parkingLogList == null) {
+            parkingLogList = new ArrayList<>();
+        }
+        parkingLogList.add(log);
+
+        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+        eventBus.publish("/notifyParking", new Boolean(true));
     }
 
     public void forceOpen(List<SentryDataModel> gate) {
@@ -173,6 +190,7 @@ public class HandleMonitoringAction implements Serializable {
 
 
     }
+
     public void unLockDoor(List<SentryDataModel> gate) {
         if (gate == null || gate.size() == 0)
             return;
@@ -183,6 +201,7 @@ public class HandleMonitoringAction implements Serializable {
             e.printStackTrace();
         }
     }
+
     public void lockDoor(List<SentryDataModel> gate) {
         if (gate == null || gate.size() == 0)
             return;
@@ -254,6 +273,7 @@ public class HandleMonitoringAction implements Serializable {
 //            gateways.remove(notAccess);
 //            trafficLogs = new ListDataModel<List<DataModel<SentryDataModel>>>(trafficLogsbygate);
 
+        parkingLogList = parkingLogService.findParkingInDuration(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")), CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
 
     }
 
@@ -267,6 +287,12 @@ public class HandleMonitoringAction implements Serializable {
         me.setActiveMenu(MenuType.SENTRY);
         initialize();
         me.redirect("/monitoring/sentry-monitor.xhtml");
+    }
+
+    public void beginSentryParking() {
+        me.setActiveMenu(MenuType.SENTRY);
+        initialize();
+        me.redirect("/monitoring/parking-monitor.xhtml");
     }
 
     public void trackByPerson() {
@@ -664,5 +690,13 @@ public class HandleMonitoringAction implements Serializable {
 
     public void setCurrentPerson(Person currentPerson) {
         this.currentPerson = currentPerson;
+    }
+
+    public List<ParkingLog> getParkingLogList() {
+        return parkingLogList;
+    }
+
+    public void setParkingLogList(List<ParkingLog> parkingLogList) {
+        this.parkingLogList = parkingLogList;
     }
 }

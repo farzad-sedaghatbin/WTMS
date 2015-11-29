@@ -1,5 +1,7 @@
 package ir;
 
+import ir.university.toosi.parking.entity.ParkingLog;
+import ir.university.toosi.parking.service.ParkingLogServiceImpl;
 import ir.university.toosi.tms.model.entity.Languages;
 import ir.university.toosi.tms.model.entity.TrafficLog;
 import ir.university.toosi.tms.model.entity.personnel.Card;
@@ -51,6 +53,8 @@ public class ReaderWrapperService implements IReaderWrapperService {
     CardServiceImpl cardService;
     @EJB
     TrafficLogServiceImpl trafficLogService;
+    @EJB
+    ParkingLogServiceImpl parkingLogService;
     @Inject
     private HandleMonitoringAction monitoringAction;
 
@@ -151,6 +155,31 @@ public class ReaderWrapperService implements IReaderWrapperService {
 
     }
 
+    @Override
+    public void sendParking(String pelak, byte[] pic) {
+        ParkingLog parkingLog = new ParkingLog();
+        parkingLog.setTraffic_time(LangUtil.getEnglishNumber(CalendarUtil.getTimeWithoutDot(new Date(), new Locale("fa"))));
+        parkingLog.setTraffic_date(LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
+        parkingLog.setPictures("/" + pelak + new Date().getTime());
+        parkingLog.setDeleted("0");
+        parkingLog.setStatus("c");
+        parkingLog.setCurrentLang(new Languages());
+        parkingLog.setNumber(pelak);
+        parkingLogService.createParkingLog(parkingLog);
+        try {
+            createPicture(pic, parkingLog.getPictures());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        try {
+//            createPicture(trafficLog);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        monitoringAction.sendMessage(parkingLog, true);
+
+    }
+
     public HandleMonitoringAction getMonitoringAction() {
         return monitoringAction;
     }
@@ -175,6 +204,19 @@ public class ReaderWrapperService implements IReaderWrapperService {
 
         }
 
+    }
+
+    private void createPicture(byte[] pics, String picName) throws IOException {
+        File folder = new File(Configuration.getProperty("jboss.name") + picName);
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        File file = new File(Configuration.getProperty("jboss.name") + picName + "/" + 1 + ".png");
+
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        fileOutputStream.write(pics);
+        fileOutputStream.flush();
+        fileOutputStream.close();
 
     }
 }

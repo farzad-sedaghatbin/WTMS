@@ -8,15 +8,6 @@
     <div class="Animated05" id="layout-menu-cover">
         <h:form>
             <pm:menu>
-                <p:submenu id="test" label="test" icon="icon-menu" rendered="false">
-
-                    <p:menuitem id="finger" value="finger" icon="icon-verified_user"
-                                action="#{me.test}"/>
-                    <p:menuitem id="sent" value="sentry" icon="icon-verified_user"
-                                action="#{handleMonitoringAction.beginSentry}"/>
-                    <p:menuitem id="cont" value="count" icon="icon-verified_user"
-                                action="#{counterView.beginCount}"/>
-                </p:submenu>
                 <p:submenu id="usermanagemen" label="#{bundle.user_management}"
                            icon="icon-menu">
                     <p:menuitem id="rm_dashboard" value="Dashboard" icon="icon-dvr" rendered="false"/>
@@ -63,6 +54,8 @@
                                 actionListener="#{handleDeviceAction.beginDevice}"/>
                     <p:menuitem id="sentry" value="#{bundle.sentry}" icon="icon-verified_user"
                                 action="#{handleMonitoringAction.beginSentry}"/>
+                    <p:menuitem id="sentryParking" value="#{bundle.sentryParking}" icon="icon-verified_user"
+                                action="#{handleMonitoringAction.beginSentryParking}"/>
                     <p:menuitem id="rm_map" rendered="false" value="#{bundle.map}" icon="icon-map"
                                 actionListener="#{handleMapAction.begin}"/>
                     <p:menuitem id="rm_authorize" value="#{bundle.authorize}" icon="icon-person"
@@ -78,6 +71,8 @@
                            icon="icon-menu">
                     <p:menuitem id="rm_traffic" value="#{bundle.trafficlog}" icon="icon-traffic"
                                 actionListener="#{handleTrafficAction.begin}"/>
+                    <p:menuitem id="rm_parking" value="#{bundle.parking_log}" icon="icon-traffic"
+                                actionListener="#{handleParkingAction.begin}"/>
                     <p:menuitem id="rm_traffic_chart" value="#{bundle.chart}" icon="icon-report"
                                 actionListener="#{handleTrafficLogChartAction.begin}"/>
                     <p:menuitem id="rm_trackByperson" value="#{bundle.track_by_person}" icon="icon-report"
