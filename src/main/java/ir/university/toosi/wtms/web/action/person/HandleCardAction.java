@@ -7,6 +7,7 @@ import ir.university.toosi.tms.model.service.BLookupServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
+import ir.university.toosi.tms.util.LangUtil;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.personnel.Card;
 import ir.university.toosi.tms.model.entity.personnel.Person;
@@ -366,7 +367,7 @@ public class HandleCardAction implements Serializable {
         try {
             currentWorkbook.write(byteArrayOutputStream);
 
-            new ReportUtils<>().readyForDownload(byteArrayOutputStream.toByteArray(), "vnd.ms-excel", LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".xls");
+            new ReportUtils<>().readyForDownload(byteArrayOutputStream.toByteArray(), "vnd.ms-excel", LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".xls");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -768,7 +769,7 @@ public class HandleCardAction implements Serializable {
          return new Filter<Card>() {
              public boolean accept(Card card) {
                  return StringUtils.isEmpty(startDateFilter) ||
-                         LangUtils.getEnglishNumber(card.getStartDate()).equals(LangUtils.getEnglishNumber(startDateFilter));
+                         LangUtil.getEnglishNumber(card.getStartDate()).equals(LangUtil.getEnglishNumber(startDateFilter));
              }
          };
      }
@@ -777,7 +778,7 @@ public class HandleCardAction implements Serializable {
          return new Filter<Card>() {
              public boolean accept(Card card) {
                  return StringUtils.isEmpty(expirationDateFilter) ||
-                         LangUtils.getEnglishNumber(card.getExpirationDate()).equals(LangUtils.getEnglishNumber(expirationDateFilter));
+                         LangUtil.getEnglishNumber(card.getExpirationDate()).equals(LangUtil.getEnglishNumber(expirationDateFilter));
              }
          };
      }

@@ -21,13 +21,13 @@ import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RulePackageServiceImpl;
 import ir.university.toosi.tms.model.service.rule.RuleServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
+import ir.university.toosi.tms.util.LangUtil;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.organ.HandleOrganAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.ImageUtils;
-import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.ReportUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -496,7 +496,7 @@ public class HandlePersonAction implements Serializable {
         try {
             currentWorkbook.write(byteArrayOutputStream);
 
-            new ReportUtils<>().readyForDownload(byteArrayOutputStream.toByteArray(), "vnd.ms-excel", LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".xls");
+            new ReportUtils<>().readyForDownload(byteArrayOutputStream.toByteArray(), "vnd.ms-excel", LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".xls");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -653,7 +653,7 @@ public class HandlePersonAction implements Serializable {
 
     public void doDelete(String personId) {
         currentPerson = personService.findById(Long.parseLong(personId));
-        String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
+        String currentDate = LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         currentPerson.setCreateDate(currentDate);
         currentPerson.setCreateTime(currentTime);
@@ -757,7 +757,7 @@ public class HandlePersonAction implements Serializable {
         if (!password.equals(rePassword)) {
             me.addInfoMessage("password.not match");
         }
-        String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
+        String currentDate = LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         newPerson = new Person();
         newPerson.setEmail(getEmail());
@@ -868,7 +868,7 @@ public class HandlePersonAction implements Serializable {
 
     public void doEdit() {
 //        Person person = new Person(personname, currentPerson.getPassword(), enabled == true ? "true" : "false");
-        String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
+        String currentDate = LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         currentPerson.setCreateDate(currentDate);
         currentPerson.setCreateTime(currentTime);
@@ -1087,7 +1087,7 @@ public class HandlePersonAction implements Serializable {
 
 
     public void doAssignRule() {
-        String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
+        String currentDate = LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         currentPerson.setCreateDate(currentDate);
         currentPerson.setCreateTime(currentTime);

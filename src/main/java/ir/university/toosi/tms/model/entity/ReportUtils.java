@@ -12,7 +12,7 @@ import ir.university.toosi.tms.model.entity.personnel.Card;
 import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.tms.util.DateConverterUtils;
-import ir.university.toosi.tms.util.LangUtils;
+import ir.university.toosi.tms.util.LangUtil;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -547,7 +547,7 @@ public class ReportUtils<T extends BaseEntity> {
             document.add(catPart);
             document.close();
             byteArrayOutputStream.close();
-            readyForDownload(byteArrayOutputStream.toByteArray(), "pdf", LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".pdf");
+            readyForDownload(byteArrayOutputStream.toByteArray(), "pdf", LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".pdf");
         } catch (
                 Exception e
                 )
@@ -1214,7 +1214,7 @@ public class ReportUtils<T extends BaseEntity> {
             }
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             currentWorkbook.write(byteArrayOutputStream);
-            readyForDownload(byteArrayOutputStream.toByteArray(), "vnd.ms-excel", LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".xls");
+            readyForDownload(byteArrayOutputStream.toByteArray(), "vnd.ms-excel", LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".xls");
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -1541,7 +1541,7 @@ public class ReportUtils<T extends BaseEntity> {
             myWriter.write(fileContent);
             myWriter.flush();
             myWriter.close();
-            readyForDownload(byteArrayOutputStream.toByteArray(), "text", LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".txt");
+            readyForDownload(byteArrayOutputStream.toByteArray(), "text", LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")) + ".txt");
         } catch (Exception e) {
 
         }

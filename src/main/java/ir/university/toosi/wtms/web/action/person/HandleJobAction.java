@@ -2,6 +2,7 @@ package ir.university.toosi.wtms.web.action.person;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.util.LangUtil;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.BLookup;
@@ -9,7 +10,6 @@ import ir.university.toosi.tms.model.entity.Lookup;
 import ir.university.toosi.tms.model.entity.WebServiceInfo;
 import ir.university.toosi.tms.model.entity.personnel.Job;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
-import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 
 import javax.enterprise.context.SessionScoped;
@@ -92,7 +92,7 @@ public class HandleJobAction implements Serializable {
     }
 
     public void doDelete() {
-        String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
+        String currentDate = LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         currentJob = personList.getRowData();
 //        currentJob.setCreateDate(currentDate);
@@ -128,7 +128,7 @@ public class HandleJobAction implements Serializable {
     }
 
     public void doAdd() {
-        String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
+        String currentDate = LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         newJob = new Job();
         newJob.setDeleted("0");
@@ -173,7 +173,7 @@ public class HandleJobAction implements Serializable {
     }
 
     public void doEdit() {
-        String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
+        String currentDate = LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         currentJob.setEffectorUser(me.getUsername());
         currentJob.setAssistType(assistType);

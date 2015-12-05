@@ -14,6 +14,7 @@ import ir.university.toosi.tms.model.service.calendar.CalendarServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.PDPServiceImpl;
+import ir.university.toosi.tms.util.LangUtil;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
 import ir.university.toosi.wtms.web.action.user.HandleUserAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
@@ -25,7 +26,6 @@ import ir.university.toosi.tms.model.entity.User;
 import ir.university.toosi.tms.model.entity.WorkGroup;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.FacesUtil;
-import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.push.EventBus;
 import org.primefaces.push.EventBusFactory;
@@ -181,7 +181,7 @@ public class UserManagementAction implements Serializable {
         if (language.equalsIgnoreCase("fa")) {
             this.setLocale(Locale.ENGLISH);
         } else {
-            this.setLocale(LangUtils.LOCALE_FARSI);
+            this.setLocale(LangUtil.LOCALE_FARSI);
         }
 
         redirect(currentPage);
@@ -219,7 +219,7 @@ public class UserManagementAction implements Serializable {
 
     public Locale getLocale() {
         if (this.locale == null) {
-            this.locale = LangUtils.LOCALE_FARSI;
+            this.locale = LangUtil.LOCALE_FARSI;
         }
         return this.locale;
     }
@@ -651,7 +651,7 @@ public class UserManagementAction implements Serializable {
     }
 
     public String getCurrentTime() {
-        return LangUtils.getEnglishNumber(CalendarUtil.getTime(new Date(), new Locale("fa")));
+        return LangUtil.getEnglishNumber(CalendarUtil.getTime(new Date(), new Locale("fa")));
     }
 
     public static SelectItem[] getCalendarItem() {

@@ -16,6 +16,6 @@ public class EventLogManager {
 
     public synchronized static void eventLog(EventLogServiceImpl eventLogService, String objectId, String tableName, EventLogType operation, String userName) {
 
-        eventLogService.createEventLog(new EventLog(operation, objectId, tableName, userName, LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")), LangUtils.getEnglishNumber(CalendarUtil.getTime(new Date(), new Locale("fa")))));
+        eventLogService.createEventLog(new EventLog(operation, objectId, tableName, userName, LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd")), LangUtil.getEnglishNumber(CalendarUtil.getTime(new Date(), new Locale("fa")))));
     }
 }

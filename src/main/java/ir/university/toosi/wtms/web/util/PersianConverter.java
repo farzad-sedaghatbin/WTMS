@@ -1,5 +1,7 @@
 package ir.university.toosi.wtms.web.util;
 
+import ir.university.toosi.tms.util.LangUtil;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -17,7 +19,7 @@ public class PersianConverter implements Converter {
         if (value != null && !value.isEmpty() && value.contains("") && !value.equalsIgnoreCase("null") && !value.contains("*")) {
             value = value.replace("", "?");
         }
-        value = LangUtils.getEnglishNumber(value);
+        value = LangUtil.getEnglishNumber(value);
 
         return value;
     }

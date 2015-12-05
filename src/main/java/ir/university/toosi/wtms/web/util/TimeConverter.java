@@ -1,5 +1,6 @@
 package ir.university.toosi.wtms.web.util;
 
+import ir.university.toosi.tms.util.LangUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.faces.component.UIComponent;
@@ -19,7 +20,7 @@ public class TimeConverter implements Converter {
         if (value != null && !value.isEmpty() && value.contains("/") && !value.equalsIgnoreCase("null") && !value.contains("*")) {
             value = value.replace("/", "");
         }
-        value = LangUtils.getEnglishNumber(value);
+        value = LangUtil.getEnglishNumber(value);
 
         return value;
     }

@@ -123,7 +123,9 @@ public class AddGuest implements Serializable {
         guest.setTime(hour + ":" + minute);
         generalHelper.getGuestService().create(guest);
         setGuest(new Guest());
+        init();
         me.addInfoMessage("operation.occurred");
+        me.redirect("/guest/addGuest.xhtml");
     }
 
     public void selectPersonWith() throws Exception {

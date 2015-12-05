@@ -29,7 +29,7 @@
                           value="#{addGuest.toDate}" styleClass="datepicker" converter="dateConverter"/>
         </td>
         <td nowrap="nowrap">
-            <p:commandButton value="#{bundle.search}" execute="@form" action="#{addGuest.search}"
+            <p:commandButton value="#{bundle.search}" update="trafficLogTable" action="#{addGuest.search}"
                                render="trafficLogTable"/>
 
         </td>

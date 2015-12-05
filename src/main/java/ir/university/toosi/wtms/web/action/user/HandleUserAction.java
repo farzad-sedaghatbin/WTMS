@@ -7,6 +7,7 @@ import ir.university.toosi.tms.model.service.PCServiceImpl;
 import ir.university.toosi.tms.model.service.UserServiceImpl;
 import ir.university.toosi.tms.model.service.WorkGroupServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
+import ir.university.toosi.tms.util.LangUtil;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
@@ -15,7 +16,6 @@ import ir.university.toosi.wtms.web.action.workgroup.HandleWorkGroupAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
-import ir.university.toosi.wtms.web.util.LangUtils;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 //import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.TransferEvent;
@@ -179,7 +179,7 @@ public class HandleUserAction implements Serializable {
             me.addInfoMessage("delete.self");
             me.redirect("/user/users.xhtml");
         }
-        String currentDate = LangUtils.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
+        String currentDate = LangUtil.getEnglishNumber(CalendarUtil.getDateWithoutSlash(new Date(), new Locale("fa"), "yyyyMMdd"));
         String currentTime = CalendarUtil.getTime(new Date(), new Locale("fa"));
         currentUser.setEffectorUser(me.getUsername());
         String condition = userService.deleteUser(currentUser);
