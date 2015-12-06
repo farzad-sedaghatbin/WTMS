@@ -5,6 +5,11 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
     <ui:define name="content">
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.guest}" url="#" />
+            <p:menuitem value="#{bundle.addGuest}" url="#" />
+        </p:breadCrumb>
         <h:form dir="RTL">
             <p:fieldset legend="#{bundle.addGuest}" style="margin-bottom:20px" >
 

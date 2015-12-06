@@ -6,7 +6,11 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
-
+        <p:breadCrumb>
+            <p:menuitem value="category" url="#"/>
+            <p:menuitem value="#{bundle.guest}" url="#" />
+            <p:menuitem value="#{bundle.todayGuest}" url="#" />
+        </p:breadCrumb>
         <h:form >
             <p:contextMenu for="GuestTable">
 

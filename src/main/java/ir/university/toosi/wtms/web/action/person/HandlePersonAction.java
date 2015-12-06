@@ -1,5 +1,8 @@
 package ir.university.toosi.wtms.web.action.person;
 
+import ir.university.toosi.parking.action.HandleCarAction;
+import ir.university.toosi.parking.entity.Car;
+import ir.university.toosi.parking.service.CarServiceImpl;
 import ir.university.toosi.tms.model.entity.BLookup;
 import ir.university.toosi.tms.model.entity.Lookup;
 import ir.university.toosi.tms.model.entity.PersonSearch;
@@ -77,6 +80,8 @@ public class HandlePersonAction implements Serializable {
     private HandleOrganAction handleOrganAction;
     @Inject
     private CalendarServiceImpl calendarService;
+    @Inject
+    private HandleCarAction handleCarAction;
     @EJB
     private PersonServiceImpl personService;
 
@@ -94,6 +99,8 @@ public class HandlePersonAction implements Serializable {
     private BLookupServiceImpl bLookupService;
     @EJB
     private CardServiceImpl cardService;
+    @EJB
+    private CarServiceImpl carService;
 
 
     private List<Long> personListID = new ArrayList<>();
@@ -954,6 +961,13 @@ public class HandlePersonAction implements Serializable {
 
         List rulePackages = rulePackageService.getAllRulePackage();
         rulePackageList = rulePackages;
+    }
+
+    public void doAssignCar() {
+        Car car = handleCarAction.getCurrentCar();
+        car = carService.findById(car.getId());
+        car.setPerson(currentPerson);
+        carService.editCar(car);
     }
 
     public void editRule(String personId) {

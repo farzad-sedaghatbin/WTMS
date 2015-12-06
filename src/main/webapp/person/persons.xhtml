@@ -296,6 +296,13 @@
                                                             <p:graphicImage value="/images/s_key.png"/>
                                                         </p:commandLink>
                                                     </td>
+
+                                                    <td>
+                                                        <p:commandLink update="resetFrm:assignCarPersonPanel" action="#{handleCarAction.assignPerson(person)}"
+                                                                       oncomplete="PF('assignCarDialog').show()">
+                                                            <p:graphicImage value="/images/car.png"/>
+                                                        </p:commandLink>
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </p:ring>
@@ -686,6 +693,47 @@
                                                  value="#{bundle.save}"
                                                  action="#{handlePersonAction.doEditPersonRule}"/>
 
+                            </td>
+                        </tr>
+                    </table>
+                </p:outputPanel>
+
+            </p:dialog>
+
+            <p:dialog header="#{bundle.assign_car}" widgetVar="assignCarDialog" modal="true" showEffect="fade"
+                      hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
+                      minimizable="true" height="500">
+                <p:outputPanel id="assignCarPersonPanel">
+                    <table dir="#{me.direction}">
+                        <tr>
+                            <td>
+                                <p:dataTable id="carTable"
+                                             value="#{handleCarAction.carList}"
+                                             var="car"
+                                             rowKey="#{car.id}"
+                                             selection="#{handleCarAction.currentCar}"
+                                             paginator="true" rows="10"
+                                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                             rowsPerPageTemplate="5,10,15">
+
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+
+                                    <p:column headerText="#{bundle.number}" sortBy="#{car.number}"
+                                              filterBy="#{car.number}">
+                                        <h:outputText value="#{car.number}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+
+
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td align="#{me.align}" nowrap="nowrap">
+                                <p:commandButton id="savePersonId"
+                                                 value="#{bundle.save}"
+                                                 action="#{handlePersonAction.doAssignCar}"/>
                             </td>
                         </tr>
                     </table>
