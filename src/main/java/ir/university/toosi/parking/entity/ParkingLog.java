@@ -26,9 +26,9 @@ import javax.persistence.*;
                 name = "ParkingLog.findInDuration",
                 query = "select t from ParkingLog t where t.traffic_date =:date"
         ), @NamedQuery(
-                name = "ParkingLog.findByNumberInDuration",
-                query = "select t from ParkingLog t where t.number=:number  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"
-        ), @NamedQuery(
+        name = "ParkingLog.findByNumberInDuration",
+        query = "select t from ParkingLog t where t.number=:number  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"
+), @NamedQuery(
         name = "ParkingLog.maximum",
         query = "select max(t.id) from ParkingLog t"
 )
@@ -51,7 +51,7 @@ public class ParkingLog extends BaseEntity {
     private String pictures;
     @Column(name = "number")
     private String number;
-    
+
     public ParkingLog() {
     }
 

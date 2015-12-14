@@ -61,6 +61,34 @@
                             <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
                         </f:facet>
                         <table border="0" cellpadding="3" cellspacing="3" width="50%">
+
+                            <tr>
+                            <td>
+                                <h:outputText value="#{bundle.username}"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleCameraAction.disableFields}"
+                                             value="#{handleCameraAction.userName}"/>
+                            </td>
+                            </tr>
+                            <tr>
+                            <td>
+                                <h:outputText value="#{bundle.password}"/>
+                            </td>
+                            <td>
+                                <p:inputText readonly="#{handleCameraAction.disableFields}"
+                                             value="#{handleCameraAction.password}"/>
+                            </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="#{bundle.re_password}"/>
+                                </td>
+                                <td>
+                                    <p:inputText readonly="#{handleCameraAction.disableFields}"
+                                                 value="#{handleCameraAction.rePassword}"/>
+                                </td>
+                            </tr>
                             <tr>
                                 <td>
                                     <h:outputText value="#{bundle.name}"/>
@@ -108,34 +136,10 @@
                                 </td>
                             </tr>
                         </table>
-                        <table border="0" cellpadding="3" cellspacing="3" width="50%">
-                            <tr>
-                                <td>
-                                    <p:pickList id="cameraPickList" value="#{handleGatewayAction.gatewayDualList}"
-                                                var="camera"
-                                                effect="bounce"
-                                                itemValue="#{camera}" itemLabel="#{camera.name}"
-                                                showSourceControls="true"
-                                                showTargetControls="true" showCheckbox="true" responsive="true"
-                                                showSourceFilter="true" showTargetFilter="true"
-                                                filterMatchMode="contains"
-                                                disabled="#{handleCameraAction.disableFields}">
-                                        <f:facet name="sourceCaption"><h:outputText value="#{bundle.source}"/></f:facet>
-                                        <f:facet name="targetCaption"><h:outputText value="#{bundle.target}"/></f:facet>
 
-                                        <p:ajax event="transfer" listener="#{handleGatewayAction.onTransfer}"/>
-
-                                        <p:column style="width:90%;">
-                                            <h:outputText value="#{camera.description}"/>
-                                        </p:column>
-                                    </p:pickList>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <p:commandButton value="#{bundle.submit}" id="edit" update="cameras"
+                        <p:commandButton value="#{bundle.submit}" id="edit" update="cameras messageInfo"
                                          actionListener="#{handleCameraAction.saveOrUpdate}"
-                                         oncomplete="PF('cameraDialog').hide()" styleClass="ui-priority-primary"
+                                          styleClass="ui-priority-primary"
                                          rendered="#{not handleCameraAction.disableFields}"/>
                 </p:outputPanel>
             </p:dialog>

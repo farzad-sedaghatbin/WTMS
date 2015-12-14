@@ -50,6 +50,9 @@ public class HandleCameraAction implements Serializable {
     private List<Camera> cameraList = null;
     private List<Gateway> gatewayGrid = null;
     private String cameraName;
+    private String password;
+    private String userName;
+    private String rePassword;
     private Gateway gateway;
     private Camera newCamera = null;
     private int page = 1;
@@ -180,6 +183,9 @@ public class HandleCameraAction implements Serializable {
         currentCamera = null;
         cameraNameFilter = "";
         cameraDescFilter = "";
+        userName="";
+        password="";
+        rePassword="";
         setSelectRow(false);
     }
 
@@ -228,7 +234,9 @@ public class HandleCameraAction implements Serializable {
         ip = currentCamera.getIp();
         descText = currentCamera.getDescription();
         cameraName = currentCamera.getName();
+        password="";
         frames = String.valueOf(currentCamera.getFrames());
+        userName=currentCamera.getUserName();
         currentCamera = cameraService.findById(currentCamera.getId());
         List<Gateway> gatewayList = null;
         gatewayList = gatewayService.getAllGateway();
@@ -268,11 +276,17 @@ public class HandleCameraAction implements Serializable {
     }
 
     public void doEdit() {
+        if(!password.equals(rePassword)){
+            me.addErrorMessage("password.not.match");
+            return;
+        }
         currentCamera.setDescription(descText);
         currentCamera.setName(cameraName);
         currentCamera.setIp(ip);
         currentCamera.setEnabled(cameraEnabled);
         currentCamera.setFrames(Long.valueOf(frames));
+        currentCamera.setUserName(userName);
+        currentCamera.setPassword(password);
         boolean condition = cameraService.exist(currentCamera.getIp(), currentCamera.getId());
         if (condition) {
 
@@ -319,6 +333,10 @@ public class HandleCameraAction implements Serializable {
 
 
     public void doAdd() {
+        if(!password.equals(rePassword)){
+            me.addErrorMessage("password.not.match");
+            return;
+        }
         newCamera = new Camera();
         newCamera.setDescription(descText);
         newCamera.setName(cameraName);
@@ -327,6 +345,9 @@ public class HandleCameraAction implements Serializable {
         newCamera.setStatus("c");
         newCamera.setEffectorUser(me.getUsername());
         newCamera.setIp(ip);
+        newCamera.setPassword(password);
+        newCamera.setUserName(userName);
+
         if (frames != null || !"".equals(frames))
             newCamera.setFrames(Long.valueOf(frames));
 
@@ -345,13 +366,13 @@ public class HandleCameraAction implements Serializable {
                 selecteGateway.add(gateway);
             }
         }
-        if (selecteGateway.size() == 0) {
-            me.addErrorMessage("no_operation_selected");
-            return;
-        }
+//        if (selecteGateway.size() == 0) {
+//            me.addErrorMessage("no_operation_selected");
+//            return;
+//        }
 
         Camera insertedCamera = null;
-        insertedCamera = cameraService.createCamera(insertedCamera);
+        insertedCamera = cameraService.createCamera(newCamera);
 
         if (insertedCamera != null) {
             for (Gateway gateway1 : selecteGateway) {
@@ -624,5 +645,30 @@ public class HandleCameraAction implements Serializable {
 
     public void setDisableFields(boolean disableFields) {
         this.disableFields = disableFields;
+
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRePassword() {
+        return rePassword;
+    }
+
+    public void setRePassword(String rePassword) {
+        this.rePassword = rePassword;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

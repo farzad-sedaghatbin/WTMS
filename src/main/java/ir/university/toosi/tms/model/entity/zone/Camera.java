@@ -34,6 +34,12 @@ public class Camera extends BaseEntity {
     @JsonProperty
     @Column(name = "name")
     private String name;
+    @JsonProperty
+    @Column(name = "password")
+    private String password;
+    @JsonProperty
+    @Column(name = "userName")
+    private String userName;
 
     @Column(name = "enabled")
     @JsonProperty
@@ -141,5 +147,21 @@ public class Camera extends BaseEntity {
 
     public void setFrames(long frames) {
         this.frames = frames;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

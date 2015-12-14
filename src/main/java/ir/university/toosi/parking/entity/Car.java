@@ -22,7 +22,7 @@ import javax.persistence.*;
                 name = "Car.findByNumber",
                 query = "select t from Car t where t.number=:number"
         ), @NamedQuery(
-        name = "ParkingLog.maximum",
+        name = "Car.maximum",
         query = "select max(t.id) from Car t"
 )
 })
