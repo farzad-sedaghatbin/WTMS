@@ -14,6 +14,8 @@
         </p:breadCrumb>
         <h:form>
 
+            <p:commandButton value="test" action="#{handleParkingAction.test}"/>
+
             <p:dataTable widgetVar="thisTable" id="parkingLogTable" value="#{handleParkingAction.eventLogList}" var="parkingLog"
                          rowKey="#{parkingLog.id}"
                          selection="#{handleParkingAction.currentTrraficLog}" selectionMode="single"
@@ -46,7 +48,7 @@
                     <f:facet name="header">
                         <p:commandLink value="#{bundle.picture}"/>
                     </f:facet>
-                    <p:graphicImage value="#{handleParkingAction.getPic(parkingLog)}" />
+                    <p:graphicImage value="#{handleParkingAction.getAddress(parkingLog)}" name=""/>
 
                 </p:column>
 

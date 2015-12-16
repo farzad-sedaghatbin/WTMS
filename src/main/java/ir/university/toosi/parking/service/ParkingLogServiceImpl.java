@@ -104,6 +104,15 @@ public class ParkingLogServiceImpl<T extends ParkingLog> {
         }
     }
 
+    public List<T> findParkingInDurationTime(String startTime, String endTime, String pelak) {
+        try {
+            List<ParkingLog> ParkingLogs = ParkingLogDAO.findParkingInDurationTime(startTime, endTime,pelak);
+            return (List<T>) ParkingLogs;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     public List<T> getAllParkingLog() {
         try {
@@ -152,7 +161,7 @@ public class ParkingLogServiceImpl<T extends ParkingLog> {
     public T createParkingLog(T entity) {
         try {
             entity = (T) ParkingLogDAO.create(entity);
-            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), ParkingLog.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
+//            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), ParkingLog.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
             return entity;
         } catch (Exception e) {
             return null;

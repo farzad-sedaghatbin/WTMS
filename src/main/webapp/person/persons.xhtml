@@ -30,6 +30,35 @@
             <ui:include src="detail-person.xhtml"/>
         </p:dialog>
 
+        <p:dialog header="#{bundle.assign_car}" widgetVar="assignCarDialog" modal="true" showEffect="fade"
+                  hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
+                  minimizable="true" height="500">
+            <p:outputPanel id="assignCarPersonPanel">
+                <h:form>
+                    <p:dataTable id="carTable"
+                                 value="#{handleCarAction.carList}"
+                                 var="car"
+                                 rowKey="#{car.id}"
+                                 selectionMode="single"
+                                 selection="#{handleCarAction.currentCar}"
+                                 paginator="true" rows="10"
+                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <f:facet name="header">
+                            <h:outputText value="#{car.select_events}"/>
+                        </f:facet>
+                        <p:ajax event="rowSelect" listener="#{handlePersonAction.doAssignCar}"
+                                oncomplete="PF('assignCarDialog').hide()"/>
+                        <p:column headerText="#{bundle.number}" sortBy="#{car.number}"
+                                  filterBy="#{car.number}">
+                            <h:outputText value="#{car.number}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:outputPanel>
+
+        </p:dialog>
+
         <p:dialog header="#{bundle.confirmation}" widgetVar="ConfirmationPanel" modal="true" showEffect="fade"
                   hideEffect="fade"
                   resizable="false">
@@ -169,7 +198,7 @@
                                                                                  update="conditionTable"
                                                                                  limitRender="true"
                                                                                  action="#{handlePersonAction.removeCondition}"
-                                                                        />
+                                                                />
                                                             </p:column>
                                                             <f:facet name="footer">
                                                                 <p:dataScroller limitRender="true"
@@ -274,11 +303,18 @@
                                                         <p:commandLink title="delete"
                                                                        action="#{handlePersonAction.doDelete(person.id)}">
                                                             <p:graphicImage value="/images/delete.png"/>
-                                                            <p:confirm header="#{bundle.confirmation}" message="#{bundle.sureQuestion}" icon="ui-icon-alert" />
+                                                            <p:confirm header="#{bundle.confirmation}"
+                                                                       message="#{bundle.sureQuestion}"
+                                                                       icon="ui-icon-alert"/>
                                                         </p:commandLink>
-                                                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                                            <p:commandButton value="#{bundle.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                                            <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                        <p:confirmDialog global="true" showEffect="fade"
+                                                                         hideEffect="fade">
+                                                            <p:commandButton value="#{bundle.yes}" type="button"
+                                                                             styleClass="ui-confirmdialog-yes"
+                                                                             icon="ui-icon-check"/>
+                                                            <p:commandButton value="#{bundle.no}" type="button"
+                                                                             styleClass="ui-confirmdialog-no"
+                                                                             icon="ui-icon-close"/>
                                                         </p:confirmDialog>
                                                     </td>
                                                     <td>
@@ -287,20 +323,16 @@
                                                                 title="edit rule"
                                                                 update=":frm:handleRulePanel"
                                                                 oncomplete="PF('rulePanel').show()">
-                                                            <p:graphicImage value="/images/rule.png" width="20px" height="20px"/>
+                                                            <p:graphicImage value="/images/rule.png" width="20px"
+                                                                            height="20px"/>
                                                         </p:commandLink>
                                                     </td>
                                                     <td>
-                                                        <p:commandLink update="resetFrm:handleResetPanel"
-                                                                       oncomplete="PF('resetPanel').show()">
-                                                            <p:graphicImage value="/images/s_key.png"/>
-                                                        </p:commandLink>
-                                                    </td>
-
-                                                    <td>
-                                                        <p:commandLink update="resetFrm:assignCarPersonPanel" action="#{handleCarAction.assignPerson(person)}"
+                                                        <p:commandLink update="assignCarPersonPanel"
+                                                                       action="#{handleCarAction.assignPerson(person)}"
                                                                        oncomplete="PF('assignCarDialog').show()">
-                                                            <p:graphicImage value="/images/car.png"/>
+                                                            <p:graphicImage value="/images/car.jpg" width="20px"
+                                                                            height="20px"/>
                                                         </p:commandLink>
                                                     </td>
                                                 </tr>
@@ -389,7 +421,8 @@
                                  var="rulePackage"
                                  rowKey="#{rulePackage.id}" selection="#{handlePersonAction.selectedRulePackage}"
                                  selectionMode="single">
-                        <p:ajax event="rowSelect" listener="#{handlePersonAction.doAssignRule}" oncomplete="PF('AssignRulePanel').hide()"/>
+                        <p:ajax event="rowSelect" listener="#{handlePersonAction.doAssignRule}"
+                                oncomplete="PF('AssignRulePanel').hide()"/>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText escape="true" value="#{bundle.packageName}"/>
@@ -476,8 +509,10 @@
                 </p:outputPanel>
             </p:dialog>
 
-            <p:dialog header="#{bundle.edit_rule}" widgetVar="rulePanel" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="true" maximizable="true" closeOnEscape="true" draggable="true" minimizable="true" height="500">
+            <p:dialog header="#{bundle.edit_rule}" widgetVar="rulePanel" modal="true" showEffect="fade"
+                      hideEffect="fade"
+                      resizable="true" maximizable="true" closeOnEscape="true" draggable="true" minimizable="true"
+                      height="500">
                 <p:outputPanel id="handleRulePanel">
                     <table dir="#{me.direction}">
                         <tr valign="top">
@@ -496,7 +531,8 @@
                                               value="#{bundle.date}"/>
                                 &#160;&#160;&#160;&#160;&#160;
                                 <p:selectOneMenu value="#{handlePersonAction.selectedCalendarIdTemp}" tabindex="2">
-                                    <f:selectItems value="#{handlePersonAction.calendarItems}" var="calendar" itemValue="#{calendar.id}" itemLabel="#{calendar.name}"/>
+                                    <f:selectItems value="#{handlePersonAction.calendarItems}" var="calendar"
+                                                   itemValue="#{calendar.id}" itemLabel="#{calendar.name}"/>
                                 </p:selectOneMenu>
                             </td>
                         </tr>
@@ -513,7 +549,8 @@
                                 <h:outputText escape="true"
                                               value="#{bundle.allow_exit_gadget}" styleClass="textColor"/>
                                 &#160;&#160;&#160;
-                                <p:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExitGadget}" tabindex="5"/>
+                                <p:selectBooleanCheckbox value="#{handlePersonAction.ruleAllowExitGadget}"
+                                                         tabindex="5"/>
                             </td>
                         </tr>
 
@@ -577,7 +614,7 @@
                                                          title="delete"
                                                          update="ruleTempTable"
                                                          action="#{handlePersonAction.remove}"
-                                                />
+                                        />
                                     </p:column>
                                 </p:dataTable>
                             </td>
@@ -665,7 +702,8 @@
                                             </tr>
                                             <tr>
                                                 <td nowrap="nowrap">
-                                                    <h:outputText escape="true" value="#{bundle.deny}:" styleClass="textColor"/>
+                                                    <h:outputText escape="true" value="#{bundle.deny}:"
+                                                                  styleClass="textColor"/>
                                                 </td>
                                                 <td nowrap="nowrap">
                                                     <p:selectBooleanCheckbox value="#{handlePersonAction.ruleDeny}"/>
@@ -693,47 +731,6 @@
                                                  value="#{bundle.save}"
                                                  action="#{handlePersonAction.doEditPersonRule}"/>
 
-                            </td>
-                        </tr>
-                    </table>
-                </p:outputPanel>
-
-            </p:dialog>
-
-            <p:dialog header="#{bundle.assign_car}" widgetVar="assignCarDialog" modal="true" showEffect="fade"
-                      hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
-                      minimizable="true" height="500">
-                <p:outputPanel id="assignCarPersonPanel">
-                    <table dir="#{me.direction}">
-                        <tr>
-                            <td>
-                                <p:dataTable id="carTable"
-                                             value="#{handleCarAction.carList}"
-                                             var="car"
-                                             rowKey="#{car.id}"
-                                             selection="#{handleCarAction.currentCar}"
-                                             paginator="true" rows="10"
-                                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                                             rowsPerPageTemplate="5,10,15">
-
-                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-
-
-                                    <p:column headerText="#{bundle.number}" sortBy="#{car.number}"
-                                              filterBy="#{car.number}">
-                                        <h:outputText value="#{car.number}"/>
-                                    </p:column>
-
-                                </p:dataTable>
-
-
-                            </td>
-                        </tr>
-                        <tr valign="top">
-                            <td align="#{me.align}" nowrap="nowrap">
-                                <p:commandButton id="savePersonId"
-                                                 value="#{bundle.save}"
-                                                 action="#{handlePersonAction.doAssignCar}"/>
                             </td>
                         </tr>
                     </table>

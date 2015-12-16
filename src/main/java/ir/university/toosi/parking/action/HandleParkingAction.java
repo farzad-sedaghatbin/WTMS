@@ -2,12 +2,14 @@ package ir.university.toosi.parking.action;
 
 
 import com.google.common.collect.Lists;
+import ir.ReaderWrapperService;
 import ir.university.toosi.parking.entity.ParkingLog;
 import ir.university.toosi.parking.service.ParkingLogServiceImpl;
 import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.wtms.web.action.AccessControlAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
+import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.LangUtil;
@@ -64,6 +66,16 @@ public class HandleParkingAction implements Serializable {
 
     private SortOrder gatewayNameOrder = SortOrder.UNSORTED;
     private String gatewayNameFilter;
+
+
+    @Inject
+    private HandleMonitoringAction monitoringAction;
+    public void test(){
+        ReaderWrapperService service = new ReaderWrapperService();
+        service.setParkingLogService(ParkingLogService);
+        service.setMonitoringAction(monitoringAction);
+        service.sendParking("a123b",new byte[]{102});
+    }
 
     public void begin() {
         me.setActiveMenu(MenuType.REPORT);
@@ -438,5 +450,16 @@ public class HandleParkingAction implements Serializable {
             }
         }
     return null;
+    }
+
+    public String getAddress(ParkingLog ParkingLog1) {
+        if (ParkingLog1 != null) {
+            String address = ParkingLog1.getPictures();
+            if (address == null)
+                return "";
+            address = address + "/" + 1 + ".png";
+            return Configuration.getProperty("jboss.name") + address;
+        }
+        return "";
     }
 }

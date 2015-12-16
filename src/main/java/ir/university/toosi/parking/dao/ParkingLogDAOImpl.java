@@ -78,6 +78,18 @@ public class ParkingLogDAOImpl extends BaseDAOImpl<ParkingLog> {
         }
     }
 
+    public List<ParkingLog> findParkingInDurationTime(String startTime, String endTime, String pelak) {
+        try {
+            return (List<ParkingLog>) em.createNamedQuery("ParkingLog.findParkingInDurationTime")
+                    .setParameter("startTime", startTime)
+                    .setParameter("endTime", endTime)
+                    .setParameter("pelak", pelak)
+                    .getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
 
 

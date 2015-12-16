@@ -10,11 +10,12 @@ import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import org.primefaces.model.SortOrder;
 
+import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ import java.util.Set;
  * @version : 0.8
  */
 
-@ManagedBean(name = "handleCarAction")
+@Named(value = "handleCarAction")
 @SessionScoped
 public class HandleCarAction implements Serializable {
 
@@ -106,7 +107,7 @@ public class HandleCarAction implements Serializable {
 //        currentCar.setEffectorUser(me.getUsername());
         carService.deleteCar(currentCar);
         refresh();
-        me.addInfoMessage("delete was successful");
+        me.addInfoMessage("operation.occurred");
         me.redirect("/parking/car.xhtml");
     }
 
@@ -127,6 +128,7 @@ public class HandleCarAction implements Serializable {
     }
 
     public void view() {
+        disableFields = true;
         carNumber = currentCar.getNumber();
     }
 
@@ -144,14 +146,8 @@ public class HandleCarAction implements Serializable {
 
     private void doEdit() {
         currentCar.setNumber(carNumber);
-        boolean condition = carService.findByNumber(currentCar.getNumber()) != null;
-        if (condition) {
-            me.addInfoMessage("car.exist");
-            return;
-        }
 
-//        currentCar.setEffectorUser(me.getUsername());
-        condition = carService.editCar(currentCar);
+        boolean condition = carService.editCar(currentCar);
         if (condition) {
             refresh();
             me.addInfoMessage("operation.occurred");
@@ -170,7 +166,8 @@ public class HandleCarAction implements Serializable {
         newCar.setStatus("c");
 //        newCar.setEffectorUser(me.getUsername());
         newCar.setNumber(carNumber);
-        boolean condition = carService.findByNumber(carNumber) != null;
+        List<Car> cars = carService.findByNumber(carNumber);
+        boolean condition = cars != null && cars.size() > 0;
         if (condition) {
             me.addInfoMessage("car.exist");
             return;
@@ -180,7 +177,7 @@ public class HandleCarAction implements Serializable {
         insertedCar = carService.createCar(newCar);
         if (insertedCar != null) {
             refresh();
-//            me.addInfoMessage("operation.occurred");
+            me.addInfoMessage("operation.occurred");
             me.redirect("/parking/car.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");

@@ -965,7 +965,6 @@ public class HandlePersonAction implements Serializable {
 
     public void doAssignCar() {
         Car car = handleCarAction.getCurrentCar();
-        car = carService.findById(car.getId());
         car.setPerson(currentPerson);
         carService.editCar(car);
     }

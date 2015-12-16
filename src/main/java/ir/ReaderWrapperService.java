@@ -31,6 +31,7 @@ import javax.jws.soap.SOAPBinding;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -57,6 +58,11 @@ public class ReaderWrapperService implements IReaderWrapperService {
     ParkingLogServiceImpl parkingLogService;
     @Inject
     private HandleMonitoringAction monitoringAction;
+
+    public void setParkingLogService(ParkingLogServiceImpl parkingLogService) {
+        this.parkingLogService = parkingLogService;
+    }
+
 
     @Override
     public void forceOpenDoor(int terminalId) {
@@ -157,26 +163,33 @@ public class ReaderWrapperService implements IReaderWrapperService {
 
     @Override
     public void sendParking(String pelak, byte[] pic) {
-        ParkingLog parkingLog = new ParkingLog();
-        parkingLog.setTraffic_time(LangUtil.getEnglishNumber(CalendarUtil.getTimeWithoutDot(new Date(), new Locale("fa"))));
-        parkingLog.setTraffic_date(LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
-        parkingLog.setPictures("/" + pelak + new Date().getTime());
-        parkingLog.setDeleted("0");
-        parkingLog.setStatus("c");
-        parkingLog.setCurrentLang(new Languages());
-        parkingLog.setNumber(pelak);
-        parkingLogService.createParkingLog(parkingLog);
-        try {
-            createPicture(pic, parkingLog.getPictures());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+        calendar.add(Calendar.SECOND, -10);
+        Date tenMinAgo = calendar.getTime();
+        List logs = parkingLogService.findParkingInDurationTime(LangUtil.getEnglishNumber(CalendarUtil.getTimeWithoutDot(tenMinAgo, new Locale("fa"))),LangUtil.getEnglishNumber(CalendarUtil.getTimeWithoutDot(now, new Locale("fa"))),pelak);
+        if (logs == null || logs.size() == 0) {
+            ParkingLog parkingLog = new ParkingLog();
+            parkingLog.setTraffic_time(LangUtil.getEnglishNumber(CalendarUtil.getTimeWithoutDot(now, new Locale("fa"))));
+            parkingLog.setTraffic_date(LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
+            parkingLog.setPictures("/" + pelak + new Date().getTime());
+            parkingLog.setDeleted("0");
+            parkingLog.setStatus("c");
+            parkingLog.setCurrentLang(new Languages());
+            parkingLog.setNumber(pelak);
+            parkingLogService.createParkingLog(parkingLog);
+            try {
+                createPicture(pic, parkingLog.getPictures());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 //        try {
 //            createPicture(trafficLog);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        monitoringAction.sendMessage(parkingLog, true);
+            monitoringAction.sendMessage(parkingLog, true);
+        }
 
     }
 
@@ -207,11 +220,15 @@ public class ReaderWrapperService implements IReaderWrapperService {
     }
 
     private void createPicture(byte[] pics, String picName) throws IOException {
-        File folder = new File(Configuration.getProperty("jboss.name") + picName);
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
+//        File folder = new File(Configuration.getProperty("jboss.name") + picName);
+//        if (!folder.exists()) {
+//            folder.mkdir();
+//        }
         File file = new File(Configuration.getProperty("jboss.name") + picName + "/" + 1 + ".png");
+        File dir = file.getParentFile();
+        if (!dir.exists()){
+            dir.mkdir();
+        }
 
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         fileOutputStream.write(pics);

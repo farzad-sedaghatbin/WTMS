@@ -121,7 +121,7 @@ public class CarServiceImpl<T extends Car> {
 
     public String deleteCar(T entity) {
         try {
-            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Car.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
+//            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Car.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
             CarDAO.delete(entity);
             return "operation.occurred";
         } catch (Exception e) {
@@ -133,7 +133,7 @@ public class CarServiceImpl<T extends Car> {
     public T createCar(T entity) {
         try {
             entity = (T) CarDAO.create(entity);
-            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Car.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
+//            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Car.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
             return entity;
         } catch (Exception e) {
             return null;
@@ -144,7 +144,7 @@ public class CarServiceImpl<T extends Car> {
     public boolean editCar(T entity) {
         try {
             CarDAO.update(entity);
-            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Car.class.getSimpleName(), EventLogType.EDIT, entity.getEffectorUser());
+//            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Car.class.getSimpleName(), EventLogType.EDIT, entity.getEffectorUser());
             return true;
         } catch (Exception e) {
             return false;
