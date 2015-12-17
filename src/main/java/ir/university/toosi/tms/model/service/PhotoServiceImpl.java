@@ -61,15 +61,15 @@ public class PhotoServiceImpl {
             InputStream is = huc.getInputStream();
             camera.setConnected(true);
             System.out.println("axid");
-            File folder = new File(Configuration.getProperty("jboss.name") + address);
+            File folder = new File(Configuration.getProperty("pic.person") + address);
             if (!folder.exists()) {
                 folder.mkdir();
             }
             int i = 1;
-            File file = new File(Configuration.getProperty("jboss.name") + address + "/" + i + ".png");
+            File file = new File(Configuration.getProperty("pic.person") + address + "/" + i + ".jpg");
             while (file.exists()) {
                 i++;
-                file = new File(Configuration.getProperty("jboss.name") + address + "/" + i + ".png");
+                file = new File(Configuration.getProperty("pic.person") + address + "/" + i + ".jpg");
             }
 
             FileOutputStream fileOutputStream = new FileOutputStream(file);

@@ -36,7 +36,7 @@ public class ImageUtils {
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            ImageIO.write(bufferedImage, "png", baos);
+            ImageIO.write(bufferedImage, "jpg", baos);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

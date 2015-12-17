@@ -198,9 +198,9 @@ public class HandleParkingAction implements Serializable {
             String address = ParkingLog1.getPictures();
             if (address == null)
                 return;
-            address = address + "/" + index + ".png";
+            address = address + "/" + index + ".jpg";
             try {
-                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("jboss.name") + address)));
+                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("pic.parking") + address)));
                 stream.flush();
                 stream.close();
             } catch (IOException e) {
@@ -215,9 +215,9 @@ public class HandleParkingAction implements Serializable {
             String address = currentTrraficLog.getPictures();
             if (address == null)
                 return;
-            address = address + "/" + index + ".png";
+            address = address + "/" + index + ".jpg";
             try {
-                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("jboss.name") + address)));
+                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("pic.parking") + address)));
                 stream.flush();
                 stream.close();
             } catch (IOException e) {
@@ -442,9 +442,9 @@ public class HandleParkingAction implements Serializable {
             String address = ParkingLog1.getPictures();
             if (address == null)
                 return new DefaultStreamedContent();
-            address = address + "/" + 1 + ".png";
+            address = address + "/" + 1 + ".jpg";
             try {
-                new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("jboss.name") + address)), "image/png");
+                new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("pic.parking") + address)), "image/jpeg");
             } catch (IOException e) {
 //                e.printStackTrace();
             }
@@ -457,8 +457,8 @@ public class HandleParkingAction implements Serializable {
             String address = ParkingLog1.getPictures();
             if (address == null)
                 return "";
-            address = address + "/" + 1 + ".png";
-            return Configuration.getProperty("jboss.name") + address;
+            address = address + "/" + 1 + ".jpg";
+            return Configuration.getProperty("pic.parking") + address;
         }
         return "";
     }

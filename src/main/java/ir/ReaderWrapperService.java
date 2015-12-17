@@ -17,6 +17,7 @@ import ir.university.toosi.tms.readerwrapper.GetAccessEventDataDelegate;
 import ir.university.toosi.tms.readerwrapper.Person;
 import ir.university.toosi.tms.readerwrapper.PersonHolder;
 import ir.university.toosi.tms.util.Configuration;
+import ir.university.toosi.tms.util.ConvertedCameraUtil;
 import ir.university.toosi.tms.util.Initializer;
 import ir.university.toosi.tms.util.LangUtil;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
@@ -123,19 +124,22 @@ public class ReaderWrapperService implements IReaderWrapperService {
 
     @Override
     public void addOnGetAccessEventData(int terminalId, AccessEventData value) {
+
+        String address="/" + value.getUserID() + new Date().getTime();
         TrafficLog trafficLog = new TrafficLog();
+        trafficLog.setGateway(trafficLog.getVirdi().getGateway());
+        trafficLog.setVirdi(virdiService.findByTerminalId(terminalId));
+        ConvertedCameraUtil.capture(trafficLog.getVirdi().getCamera(),address);
         trafficLog.setTime(LangUtil.getEnglishNumber(CalendarUtil.getTimeWithoutDot(new Date(), new Locale("fa"))));
         trafficLog.setDate(LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));
         trafficLog.setExit(true);
         trafficLog.setValid(value.isAuthorized());
-        trafficLog.setVirdi(virdiService.findByTerminalId(terminalId));
         trafficLog.setPerson(personService.getPersonByPersonOtherId(String.valueOf(value.getUserID())));
-        trafficLog.setGateway(trafficLog.getVirdi().getGateway());
         trafficLog.setCard(null);
         trafficLog.setFinger(true);
         trafficLog.setLast(true);
         trafficLog.setOffline(false);
-        trafficLog.setPictures("");
+        trafficLog.setPictures(address);
         trafficLog.setDeleted("0");
         trafficLog.setStatus("c");
         trafficLog.setZone(trafficLog.getGateway().getZone());
@@ -208,7 +212,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
             folder.mkdir();
         }
         for (int i = 0; i < pics.size(); i++) {
-            File file = new File(Configuration.getProperty("jboss.name") + trafficLog.getPictures() + "/" + i + ".png");
+            File file = new File(Configuration.getProperty("jboss.name") + trafficLog.getPictures() + "/" + i + ".jpg");
 
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(pics.get(i));
@@ -224,7 +228,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
 //        if (!folder.exists()) {
 //            folder.mkdir();
 //        }
-        File file = new File(Configuration.getProperty("jboss.name") + picName + "/" + 1 + ".png");
+        File file = new File(Configuration.getProperty("pic.parking") + picName + "/" + 1 + ".jpg");
         File dir = file.getParentFile();
         if (!dir.exists()){
             dir.mkdir();

@@ -114,13 +114,13 @@ public class ConsoleServerSocket implements Runnable {
     }
 
     private void createPicture(TrafficLog trafficLog) throws IOException {
-        File folder = new File(Configuration.getProperty("jboss.name") + trafficLog.getPictures());
+        File folder = new File(Configuration.getProperty("pic.person") + trafficLog.getPictures());
         List<byte[]> pics = Initializer.pics.get(trafficLog.getPdp().getCamera().getId());
         if (!folder.exists()) {
             folder.mkdir();
         }
         for (int i = 0; i < pics.size(); i++) {
-            File file = new File(Configuration.getProperty("jboss.name") + trafficLog.getPictures() + "/" + i + ".png");
+            File file = new File(Configuration.getProperty("pic.person") + trafficLog.getPictures() + "/" + i + ".jpg");
 
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(pics.get(i));

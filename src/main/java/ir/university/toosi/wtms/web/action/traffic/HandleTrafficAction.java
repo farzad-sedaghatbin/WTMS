@@ -196,9 +196,9 @@ public class HandleTrafficAction implements Serializable {
             String address = trafficLog1.getPictures();
             if (address == null)
                 return;
-            address = address + "/" + index + ".png";
+            address = address + "/" + index + ".jpg";
             try {
-                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("jboss.name") + address)));
+                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("pic.person") + address)));
                 stream.flush();
                 stream.close();
             } catch (IOException e) {
@@ -213,9 +213,9 @@ public class HandleTrafficAction implements Serializable {
             String address = currentTrraficLog.getPictures();
             if (address == null)
                 return;
-            address = address + "/" + index + ".png";
+            address = address + "/" + index + ".jpg";
             try {
-                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("jboss.name") + address)));
+                stream.write(Files.readAllBytes(Paths.get(Configuration.getProperty("pic.person") + address)));
                 stream.flush();
                 stream.close();
             } catch (IOException e) {
@@ -440,9 +440,9 @@ public class HandleTrafficAction implements Serializable {
             String address = trafficLog1.getPictures();
             if (address == null)
                 return new DefaultStreamedContent();
-            address = address + "/" + index + ".png";
+            address = address + "/" + index + ".jpg";
             try {
-                new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("jboss.name") + address)), "image/png");
+                new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("pic.person") + address)), "image/jpeg");
             } catch (IOException e) {
 //                e.printStackTrace();
             }
