@@ -20,8 +20,10 @@ import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -70,11 +72,12 @@ public class HandleParkingAction implements Serializable {
 
     @Inject
     private HandleMonitoringAction monitoringAction;
-    public void test(){
+
+    public void test() {
         ReaderWrapperService service = new ReaderWrapperService();
         service.setParkingLogService(ParkingLogService);
         service.setMonitoringAction(monitoringAction);
-        service.sendParking("a123b",new byte[]{102});
+        service.sendParking("a123b", new byte[]{102});
     }
 
     public void begin() {
@@ -437,29 +440,19 @@ public class HandleParkingAction implements Serializable {
         this.dateFilter = dateFilter.replace("/", "");
     }
 
-    public StreamedContent getPic(ParkingLog ParkingLog1) {
-        if (ParkingLog1 != null) {
-            String address = ParkingLog1.getPictures();
-            if (address == null)
-                return new DefaultStreamedContent();
-            address = address + "/" + 1 + ".jpg";
-            try {
-                new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("pic.parking") + address)), "image/jpeg");
-            } catch (IOException e) {
+    public StreamedContent getPic() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest myRequest = (HttpServletRequest) context.getExternalContext().getRequest();
+        String address = myRequest.getParameter("address");
+        if (address == null)
+            return new DefaultStreamedContent();
+        address = address + "/" + 1 + ".jpg";
+        try {
+            return new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("pic.parking") + address)), "image/jpeg");
+        } catch (IOException e) {
 //                e.printStackTrace();
-            }
         }
-    return null;
+        return null;
     }
 
-    public String getAddress(ParkingLog ParkingLog1) {
-        if (ParkingLog1 != null) {
-            String address = ParkingLog1.getPictures();
-            if (address == null)
-                return "";
-            address = address + "/" + 1 + ".jpg";
-            return Configuration.getProperty("pic.parking") + address;
-        }
-        return "";
-    }
 }
