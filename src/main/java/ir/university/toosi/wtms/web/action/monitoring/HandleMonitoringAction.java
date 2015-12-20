@@ -3,7 +3,11 @@ package ir.university.toosi.wtms.web.action.monitoring;
 
 import ir.ReaderWrapperService;
 import ir.university.toosi.parking.entity.ParkingLog;
+import ir.university.toosi.parking.service.CarServiceImpl;
 import ir.university.toosi.parking.service.ParkingLogServiceImpl;
+import ir.university.toosi.tms.model.entity.*;
+import ir.university.toosi.tms.model.entity.personnel.Person;
+import ir.university.toosi.tms.model.entity.zone.Gateway;
 import ir.university.toosi.tms.model.entity.zone.Virdi;
 import ir.university.toosi.tms.model.service.CommentServiceImpl;
 import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
@@ -15,34 +19,15 @@ import ir.university.toosi.wtms.web.action.HandleCommentAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.tms.model.entity.*;
-import ir.university.toosi.tms.model.entity.personnel.Person;
-import ir.university.toosi.tms.model.entity.Role;
-import ir.university.toosi.tms.model.entity.WorkGroup;
-import ir.university.toosi.tms.model.entity.zone.Gateway;
-import ir.university.toosi.tms.model.entity.zone.PDP;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
 import ir.university.toosi.wtms.web.util.LangUtil;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.primefaces.context.RequestContext;
-import org.primefaces.model.DashboardModel;
-import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.push.EventBus;
 import org.primefaces.push.EventBusFactory;
-import org.primefaces.push.annotation.OnMessage;
-import org.primefaces.push.annotation.PushEndpoint;
-import org.primefaces.push.impl.JSONEncoder;
-//import org.richfaces.application.push.TopicKey;
-//import org.richfaces.application.push.TopicsContext;
-//import org.richfaces.cdi.push.Push;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
-import javax.enterprise.event.Event;
 import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,6 +37,10 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.*;
+
+//import org.richfaces.application.push.TopicKey;
+//import org.richfaces.application.push.TopicsContext;
+//import org.richfaces.cdi.push.Push;
 
 @Named(value = "handleMonitoringAction")
 @SessionScoped
@@ -83,6 +72,8 @@ public class HandleMonitoringAction implements Serializable {
     private TrafficLogServiceImpl logService;
     @EJB
     private ParkingLogServiceImpl parkingLogService;
+    @EJB
+    private CarServiceImpl carService;
 
     private String message;
     private String width;
@@ -173,6 +164,9 @@ public class HandleMonitoringAction implements Serializable {
             parkingLogList = new ArrayList<>();
         }
         parkingLogList.add(log);
+
+        List carList = carService.findByNumber(log.getNumber());
+        if (carList != null && !carList.isEmpty()) log.setHasCar(true);
 
         EventBus eventBus = EventBusFactory.getDefault().eventBus();
         eventBus.publish("/notifyParking", new Boolean(true));

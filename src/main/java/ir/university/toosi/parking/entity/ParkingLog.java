@@ -1,6 +1,5 @@
 package ir.university.toosi.parking.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ir.university.toosi.tms.model.entity.BaseEntity;
 
@@ -55,6 +54,8 @@ public class ParkingLog extends BaseEntity {
     private String pictures;
     @Column(name = "number")
     private String number;
+    @Transient
+    private boolean hasCar;
 
     public ParkingLog() {
     }
@@ -102,5 +103,13 @@ public class ParkingLog extends BaseEntity {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public boolean isHasCar() {
+        return hasCar;
+    }
+
+    public void setHasCar(boolean hasCar) {
+        this.hasCar = hasCar;
     }
 }

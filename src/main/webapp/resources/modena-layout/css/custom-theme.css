@@ -104,3 +104,8 @@ GrayModena.Geometry {
 .layout-menu li ul li a > i {
     margin-left: 4px;
 }
+
+.has-car {
+    color: #45ab3b;
+    font-weight: bold;
+}

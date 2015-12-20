@@ -32,7 +32,8 @@
                                     <f:facet name="header">
                                         <h:outputText escape="true" value="#{bundle.number}"/>
                                     </f:facet>
-                                    <h:outputText escape="true" value="#{parkingLog.number}"/>
+                                    <h:outputText escape="true" value="#{parkingLog.number}"
+                                                  styleClass="#{parkingLog.hasCar ? 'has-car' : ''}"/>
 
 
                                 </p:column>
@@ -40,7 +41,7 @@
                                     <f:facet name="header">
                                         <p:commandLink value="#{bundle.picture}"/>
                                     </f:facet>
-                                    <p:graphicImage value="#{handleParkingAction.getPic(parkingLog)}" />
+                                    <p:graphicImage value="#{handleParkingAction.getPic(parkingLog)}"/>
 
                                 </p:column>
                             </p:dataTable>

@@ -650,7 +650,7 @@ textarea, input[type="text"], input[type="password"], select {
 }
 
 .panelGrid {
-    font-family: Tahoma !important, Arial;
+    font-family: Tahoma, Arial !important;
     font-weight: bold;
     font-size: 12px;
     text-align: right;
