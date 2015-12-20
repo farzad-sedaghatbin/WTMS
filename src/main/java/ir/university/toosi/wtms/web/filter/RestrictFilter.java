@@ -1,12 +1,6 @@
 package ir.university.toosi.wtms.web.filter;
 
-import ir.university.toosi.tms.model.entity.User;
-import ir.university.toosi.tms.util.Configuration;
-import ir.university.toosi.wtms.web.helper.GeneralHelper;
-
-import javax.inject.Inject;
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -35,7 +29,8 @@ public class RestrictFilter implements Filter {
         response.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(false);
         String path = request.getRequestURI();
-        if (path.contains("/login.xhtml") || path.contains("?wsdl") || path.contains(".css") || path.contains(".js") || path.contains(".svg")){
+        if (path.contains("/login.xhtml") || path.contains("?wsdl") || path.contains(".css") || path.contains(".js")
+                || path.contains(".svg") || path.contains("/javax.faces.resource/fonts/")) {
             filterChain.doFilter(request, response);
         } else if (session == null || session.getAttribute("username") == null) {
             response.sendRedirect(request.getContextPath() + "/login.xhtml");

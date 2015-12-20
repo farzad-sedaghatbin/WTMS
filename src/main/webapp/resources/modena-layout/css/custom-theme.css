@@ -1,4 +1,4 @@
-.GrayModena.Geometry{
+GrayModena.Geometry {
     direction: rtl;
 }
 
@@ -50,6 +50,57 @@
     margin-right: -320px;
 }
 
+#layout-menu-cover {
+    right: 0;
+    min-width: 220px;
+    width: auto;
+}
+
 .layout-menu li ul li a {
     text-align: right;
+    direction: rtl
+}
+
+.ui-paginator-current {
+    direction: ltr;
+}
+
+.layout-menu > li > a {
+    text-align: right;
+}
+
+.ui-menu {
+    min-width: 110px;
+    width: auto;
+    border-right: 3px solid #0277bd;
+    border-bottom: 1px solid #0277bd;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.ui-menu .ui-menuitem .ui-menuitem-link .ui-menuitem-icon {
+    margin-right: 14px;
+}
+
+.ui-menu .ui-menuitem-link .ui-menuitem-icon {
+    float: right;
+}
+
+.ui-menu .ui-menuitem-text {
+    float: right;
+}
+
+.ui-menu .ui-menu-list .ui-menuitem .ui-state-hover, .ui-menu .ui-menu-list .ui-state-hover {
+    background-color: #0277bd;
+    border-radius: 0;
+    border-right: 1px dotted white;
+    color: white;
+}
+
+.ui-menu .ui-menuitem .ui-menuitem-link .ui-menuitem-icon {
+    margin-right: 14px;
+}
+
+.layout-menu li ul li a > i {
+    margin-left: 4px;
 }
