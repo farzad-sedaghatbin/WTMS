@@ -109,3 +109,15 @@ GrayModena.Geometry {
     color: #45ab3b;
     font-weight: bold;
 }
+
+.menulink {
+    direction: rtl;
+}
+
+.layout-menu li ul li a > i {
+    margin-left: 4px;
+}
+
+#color-menu {
+    float: left;
+}
