@@ -18,9 +18,6 @@ public class BaseEntity implements Serializable {
     @JsonProperty
     @Column(name = "STATUS")
     protected String status;
-    @JsonProperty
-    @Transient
-    protected Languages currentLang;
 
     public String getEffectorUser() {
         return effectorUser;
@@ -46,11 +43,4 @@ public class BaseEntity implements Serializable {
         this.status = status;
     }
 
-    public Languages getCurrentLang() {
-        return currentLang;
-    }
-
-    public void setCurrentLang(Languages currentLang) {
-        this.currentLang = currentLang;
-    }
 }
