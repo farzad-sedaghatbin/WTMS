@@ -6,7 +6,7 @@ GrayModena.Geometry {
     float: right;
 }
 
-#top-menu{
+#top-menu {
     float: left;
 }
 
@@ -38,7 +38,7 @@ GrayModena.Geometry {
     vertical-align: top;
 }
 
-#top-menu li ul.active-menu{
+#top-menu li ul.active-menu {
     left: 150px;
 }
 
@@ -120,4 +120,64 @@ GrayModena.Geometry {
 
 #color-menu {
     float: left;
+    margin: 4px 0 0 -35px;
+}
+
+.color-rect-gray::before, .color-rect-blue::before, .color-rect-red::before, .color-rect-cyan::before, .color-rect-indigo::before {
+    content: "----";
+}
+
+.color-rect-gray, .color-rect-blue, .color-rect-red, .color-rect-cyan, .color-rect-indigo {
+    border-radius: 11px;
+    margin-left: 2px;
+}
+
+.color-rect-gray {
+    background-color: #37474f;
+    color: #37474f;
+}
+
+.color-rect-red {
+    background-color: #cc2e45;
+    color: #cc2e45;
+}
+
+.color-rect-blue {
+    background-color: #0277bd;
+    color: #0277bd;
+}
+
+.color-rect-cyan {
+    background-color: #00838f;
+    color: #00838f;
+}
+
+.color-rect-indigo {
+    background-color: #283593;
+    color: #283593;
+}
+
+#color-menu > li > a {
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 26px;
+}
+
+#theme-colors {
+    background-color: #ffffff;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px 0 rgba(43, 59, 93, 0.6);
+    left: 59px;
+    margin: 10px 0 0;
+    overflow: hidden;
+    padding: 10px;
+    position: absolute;
+    transform: perspective(500px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    transition: all 0.5s ease 0s;
+    width: 135px;
+}
+
+.color-rect-cyan::after {
+    content: "-";
+    font-size: 12px;
 }

@@ -1,16 +1,16 @@
 package ir.university.toosi.wtms.web.action.skin;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.service.UserServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.apache.commons.lang.StringUtils;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.component.html.HtmlCommandLink;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,8 +20,10 @@ import java.util.List;
 public class handleSkinAction implements Serializable {
     @Inject
     private UserManagementAction me;
+    @EJB
+    private UserServiceImpl userService;
 
-    private String defaultSkin = "wine";
+    private String defaultSkin = "Gray";
 
     public String getSkin() {
         if (me.getUser() != null
@@ -36,12 +38,12 @@ public class handleSkinAction implements Serializable {
         this.defaultSkin = skin;
     }
 
-    public void changeSkin(ValueChangeEvent event) {
-        defaultSkin = (String) event.getNewValue();
+    public void changeSkin(ActionEvent event) {
+        defaultSkin = (String) ((HtmlCommandLink) event.getSource()).getTitle();
         setCurrentUserSkin();
 
         FacesContext context = FacesContext.getCurrentInstance();
-        String currentPage = context.getViewRoot().getViewId().replaceAll(".xhtml", ".htm");
+        String currentPage = context.getViewRoot().getViewId();
 
         me.redirect(currentPage);
     }
@@ -50,18 +52,17 @@ public class handleSkinAction implements Serializable {
         me.getUser().setSkin(defaultSkin);
 
         me.getGeneralHelper().getWebServiceInfo().setServiceName("/editUser");
-        try {
-            String condition = new ObjectMapper().readValue(new RESTfulClientUtil().restFullService(me.getGeneralHelper().getWebServiceInfo().getServerUrl(), me.getGeneralHelper().getWebServiceInfo().getServiceName(), new ObjectMapper().writeValueAsString(me.getUser())), String.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        userService.editUser(me.getUser());
     }
 
     public List<String> getSkinList() {
         List<String> skinList = new LinkedList<>();
-        skinList.add("wine");
-        skinList.add("ruby");
-        skinList.add("deepMarine");
+        skinList.add("Gray");
+        skinList.add("Blue");
+        skinList.add("Indigo");
+        skinList.add("Cyan");
+        skinList.add("Red");
         return skinList;
     }
 
