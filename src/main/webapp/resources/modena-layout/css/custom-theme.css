@@ -175,9 +175,20 @@ GrayModena.Geometry {
     transform: perspective(500px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
     transition: all 0.5s ease 0s;
     width: 135px;
+    height: 0;
+    display: none;
+}
+
+#theme-colors.show {
+    height: auto;
+    display: block;
 }
 
 .color-rect-cyan::after {
     content: "-";
     font-size: 1px;
+}
+
+#top-menu li ul.active-menu {
+    margin: 9px 0 0 -150px;
 }

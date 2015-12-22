@@ -39,9 +39,9 @@
 
             <ul id="color-menu">
                 <li>
-                    <a class="ripplelink" onclick="$('#theme-colors').show()"><i class="icon-color_lens"></i> <span
+                    <a class="ripplelink" onclick="$('#theme-colors').addClass('show')"><i class="icon-color_lens"></i> <span
                             class="ShowOnMobile">System</span></a>
-                    <ul id="theme-colors" style="display: none">
+                    <ul id="theme-colors">
                         <li>
                             <h:commandLink actionListener="#{handleSkinAction.changeSkin}" title="Gray">
                                 <span class="color-rect-gray"> </span>
