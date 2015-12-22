@@ -179,5 +179,5 @@ GrayModena.Geometry {
 
 .color-rect-cyan::after {
     content: "-";
-    font-size: 12px;
+    font-size: 1px;
 }
