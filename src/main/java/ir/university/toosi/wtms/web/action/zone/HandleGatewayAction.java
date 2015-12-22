@@ -428,7 +428,6 @@ public class HandleGatewayAction implements Serializable {
         newGateway.setEnabled(gatewayEnabled);
         newGateway.setDeleted("0");
         newGateway.setStatus("c");
-        newGateway.setCurrentLang(me.getLanguages());
         newGateway.setEffectorUser(me.getUsername());
         newGateway.setPreRequestGateways(preRequestGatewayIds);
         Gateway insertedGateway = null;
@@ -622,7 +621,6 @@ public class HandleGatewayAction implements Serializable {
         newGatewaySpecialState.setDeleted("0");
         newGatewaySpecialState.setStatus("c");
         newGatewaySpecialState.setUntil(until);
-        newGatewaySpecialState.setCurrentLang(me.getLanguages());
         newGatewaySpecialState.setEffectorUser(me.getUsername());
         if (!feasible(newGatewaySpecialState)) {
             me.addInfoMessage("conflict");

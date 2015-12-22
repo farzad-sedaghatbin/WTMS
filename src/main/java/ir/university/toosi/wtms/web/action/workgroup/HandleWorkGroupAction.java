@@ -1,32 +1,24 @@
 package ir.university.toosi.wtms.web.action.workgroup;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.university.toosi.tms.model.entity.Operation;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.Role;
+import ir.university.toosi.tms.model.entity.WorkGroup;
 import ir.university.toosi.tms.model.service.RoleServiceImpl;
 import ir.university.toosi.tms.model.service.WorkGroupServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.role.HandleRoleAction;
 import ir.university.toosi.wtms.web.action.user.HandleUserAction;
-import ir.university.toosi.tms.model.entity.MenuType;
-import ir.university.toosi.tms.model.entity.Role;
-import ir.university.toosi.tms.model.entity.WorkGroup;
 import ir.university.toosi.wtms.web.converter.WorkgroupConverter;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.SortOrder;
 
-
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -181,7 +173,6 @@ public class HandleWorkGroupAction implements Serializable {
         newWorkgroup.setDeleted("0");
         newWorkgroup.setStatus("c");
         newWorkgroup.setEffectorUser(me.getUsername());
-        newWorkgroup.setCurrentLang(me.getLanguages());
 
         Set<Role> selectedRole = new HashSet<>();
         for (Role role : roleSelectionGrid) {
@@ -253,7 +244,6 @@ public class HandleWorkGroupAction implements Serializable {
         currentWorkGroup.setEnabled(status);
         currentWorkGroup.setRoles(new HashSet<>(handleRoleAction.getRoles().getTarget()));
         currentWorkGroup.setEffectorUser(me.getUsername());
-        currentWorkGroup.setCurrentLang(me.getLanguages());
         currentWorkGroup.setName(name);
         boolean condition = workGroupService.editWorkGroup(currentWorkGroup);
         if (condition) {

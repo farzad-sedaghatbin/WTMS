@@ -1,6 +1,5 @@
 package ir.university.toosi.tms.model.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.dao.OperationDAOImpl;
 import ir.university.toosi.tms.model.entity.*;
 import ir.university.toosi.tms.util.Configuration;
@@ -102,7 +101,6 @@ public class OperationServiceImpl<T extends Operation> {
             entity = (T) operationDAO.create(entity);
             LanguageManagement languageManagement = new LanguageManagement();
             languageManagement.setTitle(entity.getDescription() == null ? "" : entity.getDescription());
-            languageManagement.setType(entity.getCurrentLang());
             languageManagementService.createLanguageManagement(languageManagement);
 
             Set list = new HashSet();

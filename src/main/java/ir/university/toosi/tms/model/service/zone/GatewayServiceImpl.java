@@ -144,7 +144,6 @@ public class GatewayServiceImpl<T extends Gateway> {
             Operation operation = new Operation();
             operation.setName(entity.getName());
             operation.setDescription("Gateway" + operationService.getAllOperation().size());
-            operation.setCurrentLang(entity.getCurrentLang());
             operationService.createOperation(operation);
             T t = (T) GatewayDAO.create(entity);
             Permission permission = new Permission(String.valueOf(t.getId()), t.getName(), PermissionType.GATEWAY);

@@ -1,10 +1,9 @@
 package ir.university.toosi.wtms.web.action;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.ReaderWrapperService;
+import ir.university.toosi.tms.model.entity.*;
+import ir.university.toosi.tms.model.entity.calendar.Calendar;
 import ir.university.toosi.tms.model.entity.personnel.Card;
 import ir.university.toosi.tms.model.entity.zone.Zone;
 import ir.university.toosi.tms.model.service.OperationServiceImpl;
@@ -18,19 +17,7 @@ import ir.university.toosi.tms.util.LangUtil;
 import ir.university.toosi.wtms.web.action.monitoring.HandleMonitoringAction;
 import ir.university.toosi.wtms.web.action.user.HandleUserAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.tms.model.entity.*;
-import ir.university.toosi.tms.model.entity.calendar.Calendar;
-import ir.university.toosi.tms.model.entity.Operation;
-import ir.university.toosi.tms.model.entity.Role;
-import ir.university.toosi.tms.model.entity.User;
-import ir.university.toosi.tms.model.entity.WorkGroup;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
-import ir.university.toosi.wtms.web.util.FacesUtil;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
-import org.primefaces.push.EventBus;
-import org.primefaces.push.EventBusFactory;
-//import org.richfaces.component.Mode;
-//import org.richfaces.component.Positioning;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -41,12 +28,13 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.*;
+
+//import org.richfaces.component.Mode;
+//import org.richfaces.component.Positioning;
 
 /**
  * @author : Hamed Hatami , Arsham Sedaghatbin, Farzad Sedaghatbin, Atefeh Ahmadi
@@ -765,7 +753,6 @@ public class UserManagementAction implements Serializable {
         trafficLog.setStatus("c");
         trafficLog.setEffectorUser("admin");
         trafficLog.setZone(new Zone());
-        trafficLog.setCurrentLang(new Languages());
         trafficLog.setVideo("");
         monitoringAction.sendMessage(trafficLog);
 
