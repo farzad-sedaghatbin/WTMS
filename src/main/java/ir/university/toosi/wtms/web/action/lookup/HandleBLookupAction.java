@@ -1,24 +1,17 @@
 package ir.university.toosi.wtms.web.action.lookup;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.tms.model.entity.BLookup;
+import ir.university.toosi.tms.model.entity.Lookup;
 import ir.university.toosi.tms.model.service.BLookupServiceImpl;
 import ir.university.toosi.tms.model.service.LookupServiceImpl;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
-import ir.university.toosi.tms.model.entity.BLookup;
-import ir.university.toosi.tms.model.entity.Lookup;
-import ir.university.toosi.tms.model.entity.WebServiceInfo;
-import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import org.primefaces.model.SortOrder;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -137,7 +130,6 @@ public class HandleBLookupAction implements Serializable {
         newBLookup.setDeleted("0");
         newBLookup.setStatus("c");
         newBLookup.setEffectorUser(me.getUsername());
-        newBLookup.setCurrentLang(me.getLanguages());
         newBLookup.setLookup(handleLookupAction.getCurrentLookup());
 
 

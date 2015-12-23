@@ -2,18 +2,14 @@ package ir;
 
 import ir.university.toosi.parking.entity.ParkingLog;
 import ir.university.toosi.parking.service.ParkingLogServiceImpl;
-import ir.university.toosi.tms.model.entity.Languages;
 import ir.university.toosi.tms.model.entity.TrafficLog;
 import ir.university.toosi.tms.model.entity.personnel.Card;
-import ir.university.toosi.tms.model.entity.zone.Zone;
-import ir.university.toosi.tms.model.service.EJB3RemoteInterface;
 import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
 import ir.university.toosi.tms.readerwrapper.AccessEventData;
-import ir.university.toosi.tms.readerwrapper.GetAccessEventDataDelegate;
 import ir.university.toosi.tms.readerwrapper.Person;
 import ir.university.toosi.tms.readerwrapper.PersonHolder;
 import ir.university.toosi.tms.util.Configuration;
@@ -143,7 +139,6 @@ public class ReaderWrapperService implements IReaderWrapperService {
         trafficLog.setDeleted("0");
         trafficLog.setStatus("c");
         trafficLog.setZone(trafficLog.getGateway().getZone());
-        trafficLog.setCurrentLang(new Languages());
         trafficLog.setVideo("");
         trafficLogService.createTrafficLog(trafficLog);
 //        try {
@@ -179,7 +174,6 @@ public class ReaderWrapperService implements IReaderWrapperService {
             parkingLog.setPictures("/" + pelak + new Date().getTime());
             parkingLog.setDeleted("0");
             parkingLog.setStatus("c");
-            parkingLog.setCurrentLang(new Languages());
             parkingLog.setNumber(pelak);
             parkingLogService.createParkingLog(parkingLog);
             try {

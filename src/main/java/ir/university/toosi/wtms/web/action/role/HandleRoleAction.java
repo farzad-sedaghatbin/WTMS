@@ -151,7 +151,6 @@ public class HandleRoleAction implements Serializable {
 
     public void doAssignPermission() {
         currentRole.setPermissions(sPermision);
-        currentRole.setCurrentLang(me.getLanguages());
             boolean condition =roleService.editRole(currentRole);
             if (condition) {
                 refresh();
@@ -301,7 +300,6 @@ public class HandleRoleAction implements Serializable {
         currentRole.setName(name);
         currentRole.setOperations(handleOperationAction.getSelectedOperations());
         currentRole.setEffectorUser(me.getUsername());
-        currentRole.setCurrentLang(me.getLanguages());
         boolean condition = roleService.editRole(currentRole);
         if (condition) {
             refresh();
@@ -322,7 +320,6 @@ public class HandleRoleAction implements Serializable {
         newRole.setDeleted("0");
         newRole.setStatus("c");
         newRole.setEffectorUser(me.getUsername());
-        newRole.setCurrentLang(me.getLanguages());
 
         Set<Operation> selectedOperations = new HashSet<>();
         for (Operation operation : handleOperationAction.getSelectedOperations()) {
