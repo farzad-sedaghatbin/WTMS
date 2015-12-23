@@ -123,8 +123,6 @@ public class CardServiceImpl<T extends Card> {
 
     public String deleteCard(T entity) {
         try {
-            EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Card.class.getSimpleName(), EventLogType.DELETE, entity.getEffectorUser());
-
             cardDAO.delete(entity);
             return "operation.occurred";
         } catch (Exception e) {

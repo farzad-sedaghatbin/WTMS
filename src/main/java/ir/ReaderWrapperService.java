@@ -174,7 +174,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
             parkingLog.setPictures("/" + pelak + new Date().getTime());
             parkingLog.setDeleted("0");
             parkingLog.setStatus("c");
-            parkingLog.setNumber(pelak);
+            parkingLog.setNumber(pelak.replace("?","N"));
             parkingLogService.createParkingLog(parkingLog);
             try {
                 createPicture(pic, parkingLog.getPictures());
@@ -222,10 +222,10 @@ public class ReaderWrapperService implements IReaderWrapperService {
 //        if (!folder.exists()) {
 //            folder.mkdir();
 //        }
-        File file = new File(Configuration.getProperty("pic.parking") + picName + "/" + 1 + ".jpg");
+        File file = new File(Configuration.getProperty("pic.parking") + "/" + CalendarUtil.getPersianDateWithoutSlash(LangUtil.LOCALE_FARSI) + picName + "/" + 1 + ".jpg");
         File dir = file.getParentFile();
         if (!dir.exists()){
-            dir.mkdir();
+            dir.mkdirs();
         }
 
         FileOutputStream fileOutputStream = new FileOutputStream(file);

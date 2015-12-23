@@ -39,19 +39,21 @@ public class TrafficLogChart implements Serializable {
     private String toHour;
     private String toMin;
     private String toSec;
+    private String fromDate;
+    private String toDate;
 
     public void begin() {
         refineTimes();
-        List<Object[]> activeTraffics = trafficLogService.searchForChart("000000", "235959", true);
-        List<Object[]> deActiveTraffics = trafficLogService.searchForChart("000000", "235959", false);
+        List<Object[]> activeTraffics = trafficLogService.searchForChart("000000", "235959", "13700101", "15000101", true);
+        List<Object[]> deActiveTraffics = trafficLogService.searchForChart("000000", "235959", "13700101", "15000101", false);
         prepareChart(activeTraffics, deActiveTraffics);
         me.redirect("/charts/traffic-log-chart.xhtml");
     }
 
     public void search() {
         refineTimes();
-        List<Object[]> activeTraffics = trafficLogService.searchForChart(fromHour + fromMin + fromSec, toHour + toMin + toSec, true);
-        List<Object[]> deActiveTraffics = trafficLogService.searchForChart(fromHour + fromMin + fromSec, toHour + toMin + toSec, false);
+        List<Object[]> activeTraffics = trafficLogService.searchForChart(fromHour + fromMin + fromSec, toHour + toMin + toSec, fromDate, toDate, true);
+        List<Object[]> deActiveTraffics = trafficLogService.searchForChart(fromHour + fromMin + fromSec, toHour + toMin + toSec, fromDate, toDate, false);
         prepareChart(activeTraffics, deActiveTraffics);
     }
 
@@ -143,6 +145,13 @@ public class TrafficLogChart implements Serializable {
         if (toSec.length() == 1) {
             toSec = "0" + toSec;
         }
+        if (fromDate == null || fromDate.equals("")) {
+            fromDate = "13700101";
+        }
+
+        if (toDate == null || toDate.equals("")) {
+            toDate = "15000101";
+        }
 
     }
 
@@ -208,5 +217,21 @@ public class TrafficLogChart implements Serializable {
 
     public void setBarChartModel(BarChartModel barChartModel) {
         this.barChartModel = barChartModel;
+    }
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
     }
 }

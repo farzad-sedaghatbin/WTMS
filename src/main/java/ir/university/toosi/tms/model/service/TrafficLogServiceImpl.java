@@ -321,7 +321,7 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
         return TrafficLogDAO;
     }
 
-    public List<Object[]> searchForChart(String fromTime,String toTime,boolean valid) {
-        return TrafficLogDAO.searchForChart(fromTime,toTime,valid);
+    public List<Object[]> searchForChart(String fromTime,String toTime,String fromDate,String toDate,boolean valid) {
+        return TrafficLogDAO.searchForChart(fromTime,toTime,fromDate,toDate,valid);
     }
 }
