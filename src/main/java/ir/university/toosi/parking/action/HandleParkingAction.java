@@ -448,7 +448,7 @@ public class HandleParkingAction implements Serializable {
             return new DefaultStreamedContent();
         address = address + "/" + 1 + ".jpg";
         try {
-            return new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("pic.parking") + address)), "image/jpeg");
+            return new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("pic.parking") + "/" + CalendarUtil.getPersianDateWithoutSlash(ir.university.toosi.tms.util.LangUtil.LOCALE_FARSI) + address)), "image/jpeg");
         } catch (IOException e) {
 //                e.printStackTrace();
         }

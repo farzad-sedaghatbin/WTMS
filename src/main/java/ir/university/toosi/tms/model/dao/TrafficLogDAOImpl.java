@@ -8,6 +8,7 @@ import ir.university.toosi.tms.model.entity.TrafficLog;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -250,12 +251,14 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
         }
     }
 
-    public List<Object[]> searchForChart(String fromTime, String toTime, boolean valid) {
+    public List<Object[]> searchForChart(String fromTime, String toTime,String fromDate,String toDate, boolean valid) {
         try {
 
             return em.createNamedQuery("TrafficLog.searchForChart")
                     .setParameter("fromTime", fromTime)
                     .setParameter("toTime", toTime)
+                    .setParameter("fromDate", fromDate)
+                    .setParameter("toDate", toDate)
                     .setParameter("valid", valid)
                     .getResultList();
         } catch (Exception e) {

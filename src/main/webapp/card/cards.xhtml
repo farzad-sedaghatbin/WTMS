@@ -75,7 +75,7 @@
             </p:dataTable>
 
             <p:dialog header="#{bundle.card}" widgetVar="cardDialog" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="false">
+                      resizable="false" onShow="initDatePicker()">
                 <p:outputPanel id="cardDetail" style="text-align:center;">
                     <f:facet name="header">
                         <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
@@ -109,7 +109,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="#{bundle.person_no}"/>
+                                <h:outputText value="#{bundle.personnel_code}"/>
                             </td>
                             <td>
                                 <h:outputText value="#{handleCardAction.card.person.personnelNo}"/>
@@ -164,8 +164,8 @@
                                 <h:outputText value="#{bundle.start_date}"/>
                             </td>
                             <td>
-                                <p:calendar value="#{handleCardAction.card.startDate}"
-                                            disabled="#{handleCardAction.disableFields}"/>
+                                <p:inputText value="#{handleCardAction.card.startDate}"
+                                            disabled="#{handleCardAction.disableFields}" styleClass="datepicker" converter="dateConverter"/>
                             </td>
                         </tr>
                         <tr>
@@ -173,8 +173,8 @@
                                 <h:outputText value="#{bundle.expiration_date}"/>
                             </td>
                             <td>
-                                <p:calendar value="#{handleCardAction.card.expirationDate}"
-                                            disabled="#{handleCardAction.disableFields}"/>
+                                <p:inputText value="#{handleCardAction.card.expirationDate}"
+                                            disabled="#{handleCardAction.disableFields}" styleClass="datepicker" converter="dateConverter"/>
                             </td>
                         </tr>
                         <tr>
