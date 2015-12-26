@@ -10,7 +10,6 @@
             <p:menuitem value="#{bundle.chart}" url="#" />
         </p:breadCrumb>
         <h:form id="form">
-            <p:panel id="panel" header="#{bundle.search}" style="margin-bottom:10px;">
                 <h:outputText value="#{bundle.from_time}"/>
                 <p:spinner value="#{handleTrafficLogChartAction.fromHour}"
                            step="1" maxValue="23" size="6" minValue="0"/>
@@ -32,13 +31,18 @@
                            step="1" maxValue="59" size="6" minValue="0"/>
 
                 <br/>
+                <h:outputText value="#{bundle.fromDate}"/>
+                <p:inputText value="#{handleTrafficLogChartAction.fromDate}" styleClass="datepicker" converter="dateConverter"/>
+                <br/>
+                <h:outputText value="#{bundle.toDate}"/>
+                <p:inputText value="#{handleTrafficLogChartAction.toDate}" styleClass="datepicker" converter="dateConverter"/>
+                <br/>
                 <p:commandButton value="#{bundle.search}" actionListener="#{handleTrafficLogChartAction.search}"
                                  update="chartPanel"/>
-            </p:panel>
             <p:panelGrid id="chartPanel" columns="2" columnClasses="left,right" style="width:100%">
-                <p:chart type="line" model="#{handleTrafficLogChartAction.lineModel}"
+                <p:chart type="line" model="#{handleTrafficLogChartAction.lineModel}" rendered="true"
                          style="height:400px;"/>
-                <p:chart type="bar" model="#{handleTrafficLogChartAction.barChartModel}"
+                <p:chart type="bar" model="#{handleTrafficLogChartAction.barChartModel}" rendered="true"
                          style="height:400px;"/>
             </p:panelGrid>
         </h:form>

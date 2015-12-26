@@ -22,7 +22,7 @@ import javax.persistence.*;
         ),
         @NamedQuery(
                 name = "TrafficLog.searchForChart",
-                query = "select t.gateway.id,count(t.person.id) from TrafficLog t where t.deleted='0' and t.valid=:valid and t.traffic_time between :fromTime and :toTime group by t.gateway.id"
+                query = "select t.gateway.id,count(t.person.id) from TrafficLog t where t.deleted='0' and t.valid=:valid and t.traffic_time between :fromTime and :toTime and t.traffic_date between :fromDate and :toDate group by t.gateway.id"
         ),
         @NamedQuery(
                 name = "TrafficLog.findById",

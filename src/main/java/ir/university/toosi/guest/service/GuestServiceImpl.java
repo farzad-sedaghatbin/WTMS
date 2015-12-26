@@ -20,6 +20,9 @@ public class GuestServiceImpl<T extends Guest> {
 
     public T create(T entity) throws Exception {
         return (T) guestDao.create(entity);
+
+    }    public T update(T entity)  {
+        return (T) guestDao.update(entity);
     }
     public List<T> todayGuest() throws Exception {
         return (List<T>) guestDao.todayList();

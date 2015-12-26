@@ -98,7 +98,9 @@ public class ParkingLog extends BaseEntity {
     }
 
     public String getNumber() {
-        return number;
+        if (number != null)
+            return number.replace("N", "");
+        return "";
     }
 
     public void setNumber(String number) {

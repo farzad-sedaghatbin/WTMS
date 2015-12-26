@@ -24,10 +24,12 @@ import org.primefaces.model.StreamedContent;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -435,18 +437,18 @@ public class HandleTrafficAction implements Serializable {
         this.dateFilter = dateFilter.replace("/", "");
     }
 
-    public StreamedContent getPic(TrafficLog trafficLog1) {
-        if (trafficLog1 != null) {
-            String address = trafficLog1.getPictures();
-            if (address == null)
-                return new DefaultStreamedContent();
-            address = address + "/" + index + ".jpg";
-            try {
-                new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("pic.person") + address)), "image/jpeg");
-            } catch (IOException e) {
+    public StreamedContent getPic() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest myRequest = (HttpServletRequest) context.getExternalContext().getRequest();
+        String address = myRequest.getParameter("address");
+        if (address == null)
+            return new DefaultStreamedContent();
+        address = address + "/" + 1 + ".jpg";
+        try {
+            return new DefaultStreamedContent(new FileInputStream(new File(Configuration.getProperty("pic.person") + address)), "image/jpeg");
+        } catch (IOException e) {
 //                e.printStackTrace();
-            }
         }
-    return null;
+        return null;
     }
 }

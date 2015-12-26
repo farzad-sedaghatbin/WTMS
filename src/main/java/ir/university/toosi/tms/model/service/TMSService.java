@@ -1,5 +1,8 @@
 package ir.university.toosi.tms.model.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.university.toosi.guest.entity.Guest;
+import ir.university.toosi.guest.service.GuestServiceImpl;
 import ir.university.toosi.tms.model.entity.Map;
 import ir.university.toosi.tms.model.service.calendar.CalendarServiceImpl;
 
@@ -22,6 +25,42 @@ public class TMSService extends Application {
     private CalendarServiceImpl calendarService;
     @EJB
     private MapServiceImpl mapService;
+    @EJB
+    private GuestServiceImpl guestService;
+
+
+    @POST
+    @Path("/newGuest")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String newGuest(Guest guest) {
+        try {
+            return guestService.create(guest) == null ? "false" : "true";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "false";
+    }
+
+    @GET
+    @Path("/todayList")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String todayList() {
+        try {
+            return new ObjectMapper().writeValueAsString(guestService.todayGuest());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "false";
+    }
+
+    @POST
+    @Path("/updateGuest")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String update(Guest guest) {
+        return guestService.update(guest) == null ? "false" : "true";
+    }
 
 
     @POST

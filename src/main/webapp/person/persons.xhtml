@@ -268,6 +268,8 @@
                                     <td>
                                         <p:ring id="custom" value="#{handlePersonAction.persons}" var="person"
                                                 styleClass="image-ring" easing="easeInOutBack">
+                                            #{person.name} #{person.lastName}
+                                            <br/>
                                             <p:graphicImage value="/loadImage?id=#{person.id}"
                                                             styleClass="personPicture"/>
                                             <br/>

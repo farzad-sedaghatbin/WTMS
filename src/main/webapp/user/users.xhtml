@@ -14,7 +14,7 @@
         </p:breadCrumb>
 
         <h:form id="form">
-            <p:contextMenu for="users" rendered="#{me.hasPermission('USERMANAGEMENT')}">
+            <p:contextMenu for="users">
                 <p:menuitem value="#{bundle.view}" update="userDetail" icon="ui-icon-info" oncomplete="PF('userDialog').show()"
                             actionListener="#{handleUserAction.viewMode}"/>
                 <p:menuitem value="#{bundle.edit}" update="userDetail" icon="ui-icon-scissors" oncomplete="PF('userDialog').show()"
@@ -39,7 +39,7 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
-            <p:commandButton value="#{bundle.add}" rendered="#{me.hasPermission('USERMANAGEMENT')}" id="add" update="userDetail" actionListener="#{handleUserAction.add}"
+            <p:commandButton value="#{bundle.add}" id="add" update="userDetail" actionListener="#{handleUserAction.add}"
                              styleClass="ui-priority-primary" onclick="PF('userDialog').show()"/>
 
             <p:dataTable id="users" var="user" value="#{handleUserAction.userList}" rowKey="#{user.id}"
@@ -67,8 +67,9 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="#{bundle.user_info}" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="false">
+            <p:dialog header="#{bundle.user_info}" widgetVar="userDialog" modal="true" showEffect="fade"
+                      hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
+                      minimizable="true" height="500">
                 <p:outputPanel id="userDetail" style="text-align:center;">
                     <f:facet name="header">
                         <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
