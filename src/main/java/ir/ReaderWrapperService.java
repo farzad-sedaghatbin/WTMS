@@ -123,8 +123,8 @@ public class ReaderWrapperService implements IReaderWrapperService {
 
         String address="/" + value.getUserID() + new Date().getTime();
         TrafficLog trafficLog = new TrafficLog();
-        trafficLog.setGateway(trafficLog.getVirdi().getGateway());
         trafficLog.setVirdi(virdiService.findByTerminalId(terminalId));
+        trafficLog.setGateway(trafficLog.getVirdi().getGateway());
         ConvertedCameraUtil.capture(trafficLog.getVirdi().getCamera(),address);
         trafficLog.setTime(LangUtil.getEnglishNumber(CalendarUtil.getTimeWithoutDot(new Date(), new Locale("fa"))));
         trafficLog.setDate(LangUtil.getEnglishNumber(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))));

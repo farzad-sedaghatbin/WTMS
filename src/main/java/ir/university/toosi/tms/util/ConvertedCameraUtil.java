@@ -33,15 +33,15 @@ public class ConvertedCameraUtil {
             int x = 0, y = 0, width = 640, height = 510;
 
             Authenticator.setDefault(new HTTPAuthenticator(camera.getUserName(), camera.getPassword()));
-            ConvertedCameraUtil viewer = new ConvertedCameraUtil();
-            viewer.setLocation(x, y);
-            viewer.setSize(width, height);
+//            ConvertedCameraUtil viewer = new ConvertedCameraUtil();
+//            viewer.setLocation(x, y);
+//            viewer.setSize(width, height);
             MjpegInputStream m = new MjpegInputStream(url.openStream());
             MjpegFrame f;
             f = m.readMjpegFrame();
 //                    ip.setImage((BufferedImage) f.getImage());
 
-            File file = new File(Configuration.getProperty("pic.perosn") + picName + "/" + 1 + ".jpg");
+            File file = new File(Configuration.getProperty("pic.person") + picName + "/" + 1 + ".jpg");
             File dir = file.getParentFile();
             if (!dir.exists()) {
                 dir.mkdir();
