@@ -28,6 +28,8 @@
 
                 <p:column headerText="#{bundle.name}">
                     <h:outputText value="#{trafficLog.person.name}"/>
+                    &#160;&#160;
+                    <h:outputText value="#{trafficLog.person.lastName}"/>
                 </p:column>
 
                 <p:column headerText="#{bundle.gateway}"  sortBy="#{trafficLog.gateway}">
@@ -63,8 +65,9 @@
                     <f:facet name="header">
                         <p:commandLink value="#{bundle.picture}"/>
                     </f:facet>
-                    <p:graphicImage value="#{handleTrafficAction.getPic(trafficLog)}" />
-
+                    <p:graphicImage value="#{handleTrafficAction.pic}" width="150" height="100">
+                        <f:param name="address" value="#{trafficLog.pictures}" />
+                    </p:graphicImage>
                 </p:column>
 
                 <f:facet name="footer">

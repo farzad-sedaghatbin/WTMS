@@ -40,7 +40,9 @@
                                     <f:facet name="header">
                                         <p:commandLink value="#{bundle.picture}"/>
                                     </f:facet>
-                                    <p:graphicImage value="#{handleParkingAction.getPic(parkingLog)}" />
+                                    <p:graphicImage value="#{handleParkingAction.pic}" width="150" height="100">
+                                        <f:param name="address" value="#{parkingLog.pictures}" />
+                                    </p:graphicImage>
 
                                 </p:column>
                             </p:dataTable>
