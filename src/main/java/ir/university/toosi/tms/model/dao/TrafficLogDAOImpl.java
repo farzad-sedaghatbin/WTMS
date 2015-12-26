@@ -8,7 +8,6 @@ import ir.university.toosi.tms.model.entity.TrafficLog;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -213,6 +212,20 @@ public class TrafficLogDAOImpl extends BaseDAOImpl<TrafficLog> {
         try {
 
             List<TrafficLog> trafficLogs = em.createNamedQuery("TrafficLog.findByGateInDuration")
+                    .setParameter("gateId", gateId)
+                    .setParameter("fromDate", date)
+                    .setParameter("toDate", toDate)
+                    .getResultList();
+            if (trafficLogs == null)
+                return null;
+            return trafficLogs;
+        } catch (Exception e) {
+            return null;
+        }
+    }    public List<TrafficLog> findByVirdiInDuration(Long gateId, String date, String toDate) {
+        try {
+
+            List<TrafficLog> trafficLogs = em.createNamedQuery("TrafficLog.findByVirdiInDuration")
                     .setParameter("gateId", gateId)
                     .setParameter("fromDate", date)
                     .setParameter("toDate", toDate)

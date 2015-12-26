@@ -1,6 +1,5 @@
 package ir.university.toosi.tms.model.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.tms.model.dao.TrafficLogDAOImpl;
 import ir.university.toosi.tms.model.entity.EventLogType;
 import ir.university.toosi.tms.model.entity.ReportEntity;
@@ -188,6 +187,12 @@ public class TrafficLogServiceImpl<T extends TrafficLog> {
     public List<T> findByGateInDuration(Long gateId, String date,String toDate) {
         try {
             return (List<T>) TrafficLogDAO.findByGateInDuration(gateId, date, toDate);
+        } catch (Exception e) {
+            return null;
+        }
+    }   public List<T> findByVirdiInDuration(Long gateId, String date,String toDate) {
+        try {
+            return (List<T>) TrafficLogDAO.findByVirdiInDuration(gateId, date, toDate);
         } catch (Exception e) {
             return null;
         }

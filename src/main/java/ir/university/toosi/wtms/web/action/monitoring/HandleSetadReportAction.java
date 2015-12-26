@@ -2,10 +2,12 @@ package ir.university.toosi.wtms.web.action.monitoring;
 
 
 import ir.ReaderWrapperService;
-import ir.university.toosi.tms.model.entity.*;
+import ir.university.toosi.tms.model.entity.MenuType;
+import ir.university.toosi.tms.model.entity.SentryDataModel;
+import ir.university.toosi.tms.model.entity.TrafficLog;
 import ir.university.toosi.tms.model.entity.personnel.Organ;
 import ir.university.toosi.tms.model.entity.personnel.Person;
-import ir.university.toosi.tms.model.entity.zone.Gateway;
+import ir.university.toosi.tms.model.entity.zone.Virdi;
 import ir.university.toosi.tms.model.service.CommentServiceImpl;
 import ir.university.toosi.tms.model.service.TrafficLogServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.OrganServiceImpl;
@@ -17,8 +19,6 @@ import ir.university.toosi.wtms.web.action.HandleCommentAction;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.person.HandlePersonAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
-import ir.university.toosi.wtms.web.util.CalendarUtil;
-import ir.university.toosi.wtms.web.util.LangUtil;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -26,11 +26,11 @@ import javax.faces.model.DataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 
 //import org.richfaces.application.push.TopicKey;
 //import org.richfaces.application.push.TopicsContext;
@@ -125,13 +125,13 @@ public class HandleSetadReportAction implements Serializable {
 
     public void dotrackByGate() {
 
-        eventLogList = logService.findByGateInDuration(Long.valueOf(gatewayId), fromDate, toDate);
+        eventLogList = logService.findByVirdiInDuration(Long.valueOf(gatewayId), fromDate, toDate);
         me.redirect("/setad/report.xhtml");
     }
 
     public void dotrackByOrgan() {
 
-        eventLogList = logService.findByGateInDuration(Long.valueOf(gatewayId), fromDate, toDate);
+        eventLogList = logService.findByOrganInDuration(Long.valueOf(organId), fromDate, toDate);
         me.redirect("/setad/report.xhtml");
     }
 
@@ -145,10 +145,10 @@ public class HandleSetadReportAction implements Serializable {
         personPage = 1;
 
 
-        List<Gateway> gateways = gatewayService.getAllGateway();
-        gatewayItems = new SelectItem[gateways.size()];
+        List<Virdi> virdis = virdiService.getAllVirdis();
+        gatewayItems = new SelectItem[virdis.size()];
         int i = 0;
-        for (Gateway gateway1 : gateways) {
+        for (Virdi gateway1 : virdis) {
             gatewayItems[i++] = new SelectItem(gateway1.getId(), gateway1.getName());
         }
         if (gatewayItems != null)

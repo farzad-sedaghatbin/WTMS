@@ -78,11 +78,11 @@
                                 actionListener="#{handleParkingAction.begin}"/>
                     <p:menuitem id="rm_traffic_chart" value="#{bundle.chart}" icon="icon-report"
                                 actionListener="#{handleTrafficLogChartAction.begin}"/>
-                    <p:menuitem id="rm_trackByperson" value="#{bundle.track_by_person}" icon="icon-report"
+                    <p:menuitem id="rm_trackByperson" value="#{bundle.track_by_person}" rendered="false" icon="icon-report"
                                 actionListener="#{handleMonitoringAction.trackByPerson}"/>
-                    <p:menuitem id="rm_trackByGate" value="#{bundle.track_by_gate}" icon="icon-report"
+                    <p:menuitem id="rm_trackByGate" value="#{bundle.track_by_gate}" rendered="false" icon="icon-report"
                                 actionListener="#{handleMonitoringAction.trackByPersonAndGate}"/>
-                    <p:menuitem id="rm_trackBytime" value="#{bundle.track_by_time}" icon="icon-report"
+                    <p:menuitem id="rm_trackBytime" value="#{bundle.track_by_time}" rendered="false" icon="icon-report"
                                 actionListener="#{handleMonitoringAction.trackByPersonAndTime}"/>
 
                     <p:menuitem id="rm_reportByperson" value="#{bundle.report_by_person}" icon="icon-report"
@@ -117,7 +117,7 @@
 
                 </p:submenu>
 
-                <p:submenu id="guest" label="#{bundle.guest}" icon="icon-menu" >
+                <p:submenu id="guest" label="#{bundle.guest}" rendered="false" icon="icon-menu" >
                     <p:menuitem id="addGuest" value="#{bundle.addGuest}" icon="icon-event"
                                 actionListener="#{addGuest.begin}"/>
                     <p:menuitem id="todayList" value="#{bundle.todayList}"  icon="icon-error"

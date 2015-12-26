@@ -71,7 +71,10 @@ import javax.persistence.*;
                 query = "select t from TrafficLog t where t.person.id=:personId  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"
         ),@NamedQuery(
                 name = "TrafficLog.findByGateInDuration",
-                query = "select t from TrafficLog t where t.gateway.id=:gateId  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"
+                query = "select t from TrafficLog t where t.gateway.id=:gateId  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"    )
+        ,@NamedQuery(
+                name = "TrafficLog.findByVirdiInDuration",
+                query = "select t from TrafficLog t where t.virdi.id=:gateId  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"
         ),@NamedQuery(
                 name = "TrafficLog.findByOrganInDuration",
                 query = "select t from TrafficLog t where t.organ.id=:organId  and (t.traffic_date between :fromDate and :toDate ) order by t.traffic_time desc"
