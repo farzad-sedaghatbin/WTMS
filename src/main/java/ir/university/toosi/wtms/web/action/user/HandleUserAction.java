@@ -393,6 +393,7 @@ public class HandleUserAction implements Serializable {
         }
         currentUser.setEnable(status);
         currentUser.setFirstname(firstname);
+        currentUser.setPassword(password);
         currentUser.setEnable(enabled == true ? "true" : "false");
         currentUser.setLastname(lastname);
         currentUser.setWorkGroups(handleWorkGroupAction.getSelectWorkGroups());

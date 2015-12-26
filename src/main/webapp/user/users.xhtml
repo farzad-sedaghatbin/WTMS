@@ -67,8 +67,9 @@
                 </p:column>
             </p:dataTable>
 
-            <p:dialog header="#{bundle.user_info}" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade"
-                      resizable="false">
+            <p:dialog header="#{bundle.user_info}" widgetVar="userDialog" modal="true" showEffect="fade"
+                      hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
+                      minimizable="true" height="500">
                 <p:outputPanel id="userDetail" style="text-align:center;">
                     <f:facet name="header">
                         <!--<p:graphicImage name="demo/images/car/#{dtContextMenuView.selectedCar.brand}-big.gif"/>-->
