@@ -244,11 +244,6 @@
 
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <p:commandButton action="#{handlePersonAction.exportExcel}" value="#{bundle.export}"/>
-                    </td>
-                </tr>
                 <tr valign="top">
                     <td align="#{me.align}">
                         <p:outputPanel id="gallery" ajaxRendered="true"
@@ -262,6 +257,9 @@
                                                          onclick="PF('PersonPanel').show()"/>
                                         &#160;&#160;
 
+                                    </td>
+                                    <td>
+                                        <p:commandButton action="#{handlePersonAction.exportExcel}" value="#{bundle.export}"/>
                                     </td>
                                 </tr>
                                 <tr>

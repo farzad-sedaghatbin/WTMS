@@ -62,6 +62,11 @@ public class Guest extends BaseEntity {
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Guest> guestSet;
 
+    @Column(name = "pelak")
+    private String pelak;
+    @Column(name = "exitTime")
+    private String exitTime;
+
     public Guest() {
     }
 
@@ -199,5 +204,21 @@ public class Guest extends BaseEntity {
 
     public void setAuthenticateType(String authenticateType) {
         this.authenticateType = authenticateType;
+    }
+
+    public String getPelak() {
+        return pelak;
+    }
+
+    public void setPelak(String pelak) {
+        this.pelak = pelak;
+    }
+
+    public String getExitTime() {
+        return exitTime;
+    }
+
+    public void setExitTime(String exitTime) {
+        this.exitTime = exitTime;
     }
 }
