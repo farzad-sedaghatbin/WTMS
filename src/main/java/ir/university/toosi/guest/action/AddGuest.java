@@ -334,6 +334,10 @@ public class AddGuest implements Serializable {
         log.setDate(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
         log.setTime(CalendarUtil.getTime(new Date(), new Locale("fa")));
         log.setType("خروجی");
+        guest=generalHelper.getGuestService().getGuestDao().findById(guest.getId());
+        guest.setExitTime(CalendarUtil.getTimeWithoutDot(new Date(),new Locale("fa")));
+        getGeneralHelper().getGuestService().update(guest);
+
         me.addInfoMessage("کارت تخصیص داده شده حذف شد");
         try {
             generalHelper.getLogService().create(log);

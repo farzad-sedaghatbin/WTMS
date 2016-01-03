@@ -30,7 +30,7 @@
                     <p:columnToggler datasource="parkingLogTable" trigger="toggler" />
                 </f:facet>
 
-                <p:column headerText="#{bundle.number}">
+                <p:column headerText="#{bundle.number}" sortBy="#{parkingLog.number}" filterBy="#{parkingLog.number}">
                     <h:outputText value="#{parkingLog.number}"/>
                 </p:column>
 

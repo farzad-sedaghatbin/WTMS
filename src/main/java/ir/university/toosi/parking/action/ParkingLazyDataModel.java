@@ -37,6 +37,7 @@ public class ParkingLazyDataModel extends LazyDataModel<ParkingLog> {
             predicate = builder.and(predicate, builder.like(root.<String>get(e.getKey()), "%" + e.getValue() + "%"));
         }
 
+
         if (sortField != null) {
             if (sortOrder.equals(SortOrder.ASCENDING)) {
                 criteria.orderBy(builder.asc(root.get(sortField)));

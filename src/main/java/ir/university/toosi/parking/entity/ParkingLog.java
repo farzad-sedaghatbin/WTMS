@@ -19,7 +19,7 @@ import javax.persistence.*;
         ),
         @NamedQuery(
                 name = "ParkingLog.findParkingInDuration",
-                query = "select t from ParkingLog t where t.traffic_date between :startDate and :endDate"
+                query = "select t from ParkingLog t where t.traffic_date between :startDate and :endDate  order by t.traffic_time desc"
         ),
         @NamedQuery(
                 name = "ParkingLog.findParkingInDurationTime",

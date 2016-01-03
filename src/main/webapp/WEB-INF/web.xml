@@ -23,7 +23,9 @@
     <listener>
         <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
     </listener>
-
+    <session-config>
+        <session-timeout>2000</session-timeout>
+    </session-config>
     <filter>
         <filter-name>Restrict Filter</filter-name>
         <filter-class>ir.university.toosi.wtms.web.filter.RestrictFilter</filter-class>

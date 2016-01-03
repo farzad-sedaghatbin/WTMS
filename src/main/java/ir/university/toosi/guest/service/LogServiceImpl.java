@@ -25,15 +25,17 @@ public class LogServiceImpl<T extends Log> {
     GuestDaoImpl guestService;
 
     public T create(T entity) throws Exception {
-        entity.setGuest(guestService.findById(String.valueOf(entity.getGuest().getId())));
+        entity.setGuest(guestService.findById(entity.getGuest().getId()));
         entity.setCard(cardService.findById(entity.getCard().getId()));
         return (T) guestDao.create(entity);
     }
+
     public List<T> todayLog() throws Exception {
         return (List<T>) guestDao.todayList();
     }
+
     public List<T> duration(String from, String to, String fromH, String toH) throws Exception {
-        return (List<T>) guestDao.durationList(from,to,fromH,toH);
+        return (List<T>) guestDao.durationList(from, to, fromH, toH);
     }
 
 }

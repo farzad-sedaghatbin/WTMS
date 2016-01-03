@@ -16,10 +16,10 @@ import java.util.Locale;
 @Stateless
 @LocalBean
 public class GuestDaoImpl extends BaseDAOImpl<Guest> {
-    public Guest findById(String id) {
+    public Guest findById(long id) {
         try {
             return (Guest) em.createNamedQuery("Guest.findById")
-                    .setParameter("id", Long.valueOf(id))
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (Exception e) {
             return null;

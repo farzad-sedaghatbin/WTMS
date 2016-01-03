@@ -153,8 +153,11 @@ public class HandleMonitoringAction implements Serializable {
 //        RequestContext.getCurrentInstance().update("trafficLogList:test");
 //            me.redirect("/monitoring/sentry-monitor.xhtml");
 //
-        EventBus eventBus = EventBusFactory.getDefault().eventBus();
-        eventBus.publish("/notify", new Boolean(true));
+        EventBusFactory eventBusFactory = EventBusFactory.getDefault();
+        if (eventBusFactory != null) {
+            EventBus eventBus = eventBusFactory.eventBus();
+            eventBus.publish("/notify", new Boolean(true));
+        }
     }
 
     public void sendMessage(ParkingLog log, Boolean t) {
@@ -168,8 +171,12 @@ public class HandleMonitoringAction implements Serializable {
         List carList = carService.findByNumber(log.getNumber());
         if (carList != null && !carList.isEmpty()) log.setHasCar(true);
 
-        EventBus eventBus = EventBusFactory.getDefault().eventBus();
-        eventBus.publish("/notifyParking", new Boolean(true));
+        EventBusFactory eventBusFactory = EventBusFactory.getDefault();
+        if (eventBusFactory != null) {
+            EventBus eventBus = eventBusFactory.eventBus();
+            eventBus.publish("/notifyParking", new Boolean(true));
+        }
+
     }
 
     public void forceOpen(List<SentryDataModel> gate) {

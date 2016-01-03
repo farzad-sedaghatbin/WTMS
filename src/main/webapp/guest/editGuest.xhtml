@@ -113,9 +113,18 @@
                     <h:inputText value="#{addGuest.guest.vFamily}" maxlength="20"/>
                 </td>
             </tr>
+
+            <tr>
+                <td>
+                    <h:outputText value="#{bundle.number}"/>
+                </td>
+                <td>
+                    <p:inputText value="#{addGuest.guest.pelak}" maxlength="20"/>
+                </td>
+            </tr>
             <tr>
                 <td colspan="4" align="center">
-                    <h:commandButton value="#{bundle.save}"
+                    <p:commandButton value="#{bundle.save}"
                                      actionListener="#{addGuest.doEdit}"/>
                 </td>
             </tr>

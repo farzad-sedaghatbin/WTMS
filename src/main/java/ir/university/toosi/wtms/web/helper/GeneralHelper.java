@@ -5,20 +5,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.university.toosi.guest.service.GuestServiceImpl;
 import ir.university.toosi.guest.service.LogServiceImpl;
-import ir.university.toosi.tms.model.service.UserServiceImpl;
-import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
-import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.tms.model.entity.Languages;
-import ir.university.toosi.tms.model.entity.MenuType;
 import ir.university.toosi.tms.model.entity.SystemParameterType;
 import ir.university.toosi.tms.model.entity.WebServiceInfo;
 import ir.university.toosi.tms.model.entity.zone.Zone;
+import ir.university.toosi.tms.model.service.UserServiceImpl;
+import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
+import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 import ir.university.toosi.wtms.web.util.Storage;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -80,6 +78,7 @@ public class GeneralHelper implements Serializable {
 
     @PostConstruct
     public void dd(){
+
         System.out.println("postcons");
         System.out.println(me.getDirection());
     }

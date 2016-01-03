@@ -7,11 +7,11 @@
     <ui:define name="content">
         <p:breadCrumb>
             <p:menuitem value="category" url="#"/>
-            <p:menuitem value="#{bundle.guest}" url="#" />
-            <p:menuitem value="#{bundle.addGuest}" url="#" />
+            <p:menuitem value="#{bundle.guest}" url="#"/>
+            <p:menuitem value="#{bundle.addGuest}" url="#"/>
         </p:breadCrumb>
         <h:form dir="RTL">
-            <p:fieldset legend="#{bundle.addGuest}" style="margin-bottom:20px" >
+            <p:fieldset legend="#{bundle.addGuest}" style="margin-bottom:20px">
 
                 <table dir="rtl">
                     <tr>
@@ -102,6 +102,13 @@
                         <td>
                             <p:spinner
                                     stepFactor="1" max="100" size="6" min="0" value="#{addGuest.guest.guestSize}"/>
+                        </td>
+
+                        <td>
+                            <h:outputText value="#{bundle.number}"/>
+                        </td>
+                        <td>
+                            <p:inputText value="#{addGuest.guest.pelak}" maxlength="20"/>
                         </td>
                     </tr>
 
