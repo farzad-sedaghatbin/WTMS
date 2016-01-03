@@ -29,6 +29,9 @@
                 <p:commandButton value="#{bundle.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
 
+            <p:commandButton value="#{bundle.add}" id="add" update="cardDetail" actionListener="#{handleCardAction.add}"
+                             styleClass="ui-priority-primary" onclick="PF('cardDialog').show()"/>
+
             <p:dataTable id="cards" var="currentCard" widgetVar="thisTable" value="#{handleCardAction.cardList}" rowKey="#{currentCard.id}"
                          selection="#{handleCardAction.currentCard}" selectionMode="single"
                          paginator="true" rows="10"
@@ -62,15 +65,6 @@
                         <p:inputText styleClass="datepicker" onchange="PF('thisTable').filter()" converter="dateConverter" style="width: 100px"/>
                     </f:facet>
                     <h:outputText value="#{currentCard.expirationDate}" converter="dateConverter"/>
-                </p:column>
-                <p:column headerText="#{bundle.firstname}">
-                    <h:outputText value="#{currentCard.person.name}"/>
-                </p:column>
-                <p:column headerText="#{bundle.lastname}">
-                    <h:outputText value="#{currentCard.person.lastName}"/>
-                </p:column>
-                <p:column headerText="#{bundle.personnel_number}">
-                    <h:outputText value="#{currentCard.person.personnelNo}"/>
                 </p:column>
             </p:dataTable>
 
@@ -136,7 +130,7 @@
                                 <p:selectOneMenu disabled="#{handleCardAction.disableFields}"
                                                  value="#{handleCardAction.card.cardStatus.id}"
                                                  valueChangeListener="#{handleCardAction.selectCardStatus}">
-                                    <f:selectItems value="#{handleCardAction.cardStatus}" var="cardStatus"
+                                    <f:selectItems value="#{handleCardAction.cardStatuses}" var="cardStatus"
                                                    itemLabel="#{cardStatus.code}" itemValue="#{cardStatus.id}"/>
                                 </p:selectOneMenu>
                             </td>
@@ -180,7 +174,7 @@
                         <tr>
                             <td colspan="2">
                                 <p:commandButton value="#{bundle.submit}" id="edit" update="cards"
-                                                 actionListener="#{handleCardAction.doEdit}"
+                                                 actionListener="#{handleCardAction.saveOrUpdate}"
                                                  oncomplete="PF('cardDialog').hide()" styleClass="ui-priority-primary"
                                                  rendered="#{not handleCardAction.disableFields}"/>
                             </td>

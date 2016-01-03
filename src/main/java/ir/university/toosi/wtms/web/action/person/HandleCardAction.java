@@ -104,6 +104,7 @@ public class HandleCardAction implements Serializable {
     private String startDateFilter;
     private String expirationDateFilter;
     private boolean disableFields;
+    private boolean editable;
 
 
     public String getCardData() {
@@ -391,10 +392,25 @@ public class HandleCardAction implements Serializable {
     }
 
     public void edit() {
+        setEditable(true);
         setCard(currentCard);
         setDisableFields(false);
         setCard(cardService.findById(getCard().getId()));
 
+    }
+
+    public void add() {
+        setEditable(false);
+        setDisableFields(false);
+        refresh();
+    }
+
+    public void saveOrUpdate() {
+        if (isEditable()) {
+            doEdit();
+        } else {
+            addNewCard();
+        }
     }
 
     public void doEdit() {
@@ -426,32 +442,18 @@ public class HandleCardAction implements Serializable {
     }
 
     public void addNewCard() {
-        getCard().setCode(getCardData().toUpperCase());
-        Person person = null;
-        person = personService.findById(getPersonId());
 
-
-        getCard().setPerson(person);
-        getCard().setCardType(getCardType());
-        getCard().setCardStatus(getCardStatus());
-        getCard().setEffectorUser(me.getUsername());
+        card.setCardType(getCardType());
+        card.setCardStatus(getCardStatus());
+        card.setEffectorUser(me.getUsername());
         Card insertedCard = null;
 
-
-        if (getCard().getId() > 0) {
-            getCard().setDeleted("0");
-            getCard().setStatus("c");
-            cardService.editCard(getCard());
-        } else {
-            insertedCard = cardService.createCard(getCard());
-        }
+        insertedCard = cardService.createCard(card);
 
         if (insertedCard != null) {
-            person.setHasCard(true);
-           personService.editPerson(person);
             refresh();
             me.addInfoMessage("operation.occurred");
-            me.redirect("/card/list-card.htm");
+            me.redirect("/card/cards.xhtml");
         } else {
             me.addInfoMessage("operation.not.occurred");
         }
@@ -522,7 +524,7 @@ public class HandleCardAction implements Serializable {
         cardOwnerFamilyOrder = SortOrder.ASCENDING;
         enablePoll = false;
 
-            personItems =personService.getAllPersonModel();
+        personItems = personService.getAllPersonModel();
 
     }
 
@@ -552,7 +554,7 @@ public class HandleCardAction implements Serializable {
 
     public List<BLookup> getCardTypes() {
         if (cardTypes == null) {
-                cardTypes = bLookupService.getByLookupId(Lookup.CARD_TYPE_ID);
+            cardTypes = bLookupService.getByLookupId(Lookup.CARD_TYPE_ID);
             for (BLookup bLookup : cardTypes) {
                 bLookup.setTitleText(me.getValue(bLookup.getTitle()));
             }
@@ -566,7 +568,7 @@ public class HandleCardAction implements Serializable {
 
     public List<BLookup> getCardStatuses() {
         if (cardStatuses == null) {
-                cardStatuses = bLookupService.getByLookupId(Lookup.CARD_STATUS_ID);
+            cardStatuses = bLookupService.getByLookupId(Lookup.CARD_STATUS_ID);
             for (BLookup bLookup : cardStatuses) {
                 bLookup.setTitleText(me.getValue(bLookup.getTitle()));
             }
@@ -657,17 +659,17 @@ public class HandleCardAction implements Serializable {
             if (type.getCode().equalsIgnoreCase(BLookup.CARD_NORMAL))
                 normalCard = type;
         }
-            for (Card card : notSelectedCard) {
-                card.setCardType(normalCard);
-               cardService.editCard(card);
-            }
-            for (Card card : selectedCards.getTarget()) {
-                card.setCardType(specialCard);
-                cardService.editCard(card);
-            }
-            refresh();
-            me.addInfoMessage("operation.occurred");
-            me.redirect("/card/list-card.htm");
+        for (Card card : notSelectedCard) {
+            card.setCardType(normalCard);
+            cardService.editCard(card);
+        }
+        for (Card card : selectedCards.getTarget()) {
+            card.setCardType(specialCard);
+            cardService.editCard(card);
+        }
+        refresh();
+        me.addInfoMessage("operation.occurred");
+        me.redirect("/card/list-card.htm");
 
     }
 
@@ -1108,5 +1110,13 @@ public class HandleCardAction implements Serializable {
 
     public void setDisableFields(boolean disableFields) {
         this.disableFields = disableFields;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 }
