@@ -82,16 +82,7 @@ public class RoleServiceImpl<T extends Role> {
             entity.setId(getMaximumId());
              /**/
 
-            Role role = new Role(entity.getId(), entity.getDescription(), entity.isEnabled(), new HashSet<Operation>(), new HashSet<Permission>());
-            role = (T) roleDAO.create(role);
-            role.getOperations().clear();
-            role.getOperations().addAll(entity.getOperations());
-//            List<Operation> parentOperation = getParentOperationList(entity.getOperations());
-//            entity.getOperations().addAll(parentOperation);
-//            role.getPermissions().clear();
-//            role.getPermissions().addAll(entity.getPermissions());
-            roleDAO.update(role);
-
+            Role role = (T) roleDAO.create(entity);
             EventLogManager.eventLog(eventLogService, String.valueOf(role.getId()), Role.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
             return (T) role;
         } catch (Exception e) {

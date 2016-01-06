@@ -328,10 +328,11 @@ public class HandleRoleAction implements Serializable {
                 selectedOperations.add(operation);
             }
         }
-       /* if (selectedOperations.size() == 0) {
+        if (selectedOperations.size() == 0) {
             me.addErrorMessage("no_operation_selected");
+            me.redirect("/role/roles.xhtml");
             return;
-        }*/
+        }
 
         newRole.setOperations(selectedOperations);
         Role insertedRole = roleService.createRole(newRole);

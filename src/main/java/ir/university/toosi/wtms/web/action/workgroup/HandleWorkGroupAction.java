@@ -143,6 +143,7 @@ public class HandleWorkGroupAction implements Serializable {
         init();
         setEditable("false");
         roleSelectionGrid = handleRoleAction.getSelectionGrid();
+        handleRoleAction.setSelectedRoles(new HashSet<Role>());
 
         for (Role role : roleSelectionGrid) {
             role.setSelected(false);
@@ -175,7 +176,7 @@ public class HandleWorkGroupAction implements Serializable {
         newWorkgroup.setEffectorUser(me.getUsername());
 
         Set<Role> selectedRole = new HashSet<>();
-        for (Role role : roleSelectionGrid) {
+        for (Role role : handleRoleAction.getSelectedRoles()) {
             selectedRole.add(role);
         }
 

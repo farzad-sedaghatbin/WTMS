@@ -271,7 +271,8 @@ public class HandleUserAction implements Serializable {
         newUser.setEffectorUser(me.getUsername());
         boolean condition = userService.exist(username);
         if (condition) {
-            me.addInfoMessage("operation.not.occurred");
+            me.addErrorMessage("user.exists");
+            me.redirect("/user/users.xhtml");
             return;
         }
 
@@ -285,6 +286,7 @@ public class HandleUserAction implements Serializable {
         }
         if (selectedWorkGroup.size() == 0) {
             me.addErrorMessage("no_workgroup_selected");
+            me.redirect("/user/users.xhtml");
             return;
         }
         newUser.setWorkGroups(selectedWorkGroup);
