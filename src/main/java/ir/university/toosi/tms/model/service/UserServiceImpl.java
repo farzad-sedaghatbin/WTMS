@@ -135,9 +135,9 @@ public class UserServiceImpl<T extends User> {
 
     public T createUser(T entity) {
         try {
-            entity.setId(getMaximumId());
+            entity=(T) userDAO.create(entity);
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), User.class.getSimpleName(), EventLogType.ADD, entity.getEffectorUser());
-            return (T) userDAO.create(entity);
+            return entity;
         } catch (Exception e) {
             return null;
         }

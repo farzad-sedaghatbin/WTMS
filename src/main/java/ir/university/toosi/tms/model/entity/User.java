@@ -55,6 +55,7 @@ public class User extends BaseEntity {
 
     @Id
     @JsonProperty
+    @GeneratedValue
     @Column(name = "id")
     private long id;
     @JsonProperty

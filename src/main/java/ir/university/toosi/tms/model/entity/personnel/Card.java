@@ -105,6 +105,8 @@ public class Card extends BaseEntity {
     @Column(name = "expirationDate")
     private String expirationDate;
     @Transient
+    private boolean selected;
+    @Transient
     public static final String CARD_STATUS_STOLEN = "CARD_STATUS_STOLEN";
     @Transient//
     public static final String CARD_STATUS_LOST = "CARD_STATUS_LOST";         //
@@ -222,5 +224,13 @@ public class Card extends BaseEntity {
 
     public void setForGuest(boolean forGuest) {
         this.forGuest = forGuest;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

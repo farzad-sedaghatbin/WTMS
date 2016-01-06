@@ -156,7 +156,7 @@ public class CalendarUtil {
         if (month.length() < 2) month = "0" + month;
         if (day.length() < 2) day = "0" + day;
 
-        return LangUtil.getEnglishNumber(year + "/" + month + "/" + day);
+        return LangUtil.getFarsiNumber(year + "/" + month + "/" + day);
     }
 
     public static String getPersianDateWithoutSlash(Locale locale) {

@@ -39,7 +39,7 @@ public class CardDAOImpl extends BaseDAOImpl<Card> {
         }
     }    public List<Card> findByGuestId(long id) {
         try {
-            return (List<Card>) em.createNamedQuery("Card.findByPersonId")
+            return (List<Card>) em.createNamedQuery("Card.findByGuestId")
                     .setParameter("id",id)
                     .getResultList();
         } catch (Exception e) {

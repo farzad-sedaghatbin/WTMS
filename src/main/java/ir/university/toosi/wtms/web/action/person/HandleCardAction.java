@@ -556,7 +556,7 @@ public class HandleCardAction implements Serializable {
         if (cardTypes == null) {
             cardTypes = bLookupService.getByLookupId(Lookup.CARD_TYPE_ID);
             for (BLookup bLookup : cardTypes) {
-                bLookup.setTitleText(me.getValue(bLookup.getTitle()));
+                bLookup.setTitleText(bLookup.getTitle());
             }
         }
         return cardTypes;
@@ -570,7 +570,7 @@ public class HandleCardAction implements Serializable {
         if (cardStatuses == null) {
             cardStatuses = bLookupService.getByLookupId(Lookup.CARD_STATUS_ID);
             for (BLookup bLookup : cardStatuses) {
-                bLookup.setTitleText(me.getValue(bLookup.getTitle()));
+                bLookup.setTitleText(bLookup.getTitle());
             }
         }
         return cardStatuses;

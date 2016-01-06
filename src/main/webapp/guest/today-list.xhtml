@@ -14,18 +14,18 @@
         <h:form >
             <p:contextMenu for="GuestTable">
 
-                <p:menuitem value="#{bundle.edit}"  update="editPanel" icon="ui-icon-scissors"
+                <p:menuitem value="#{bundle.edit}" actionListener="#{addGuest.edit}"  update="editPanel" icon="ui-icon-scissors"
                             oncomplete="PF('GuestPanel').show()"/>
-                <p:menuitem value="#{bundle.assign_card}"  icon="ui-icon-card"
+                <p:menuitem value="#{bundle.assign_card}"  icon="ui-icon-card" update="assigncardPanel"
                             oncomplete="PF('AssignCardPanel').show()"
                             actionListener="#{addGuest.assignCard}"/>
                 <p:menuitem value="#{bundle.unassign_card}" icon="ui-icon-person"
-                            oncomplete="PF('unassign_card').show()"
-                            actionListener="#{addGuest.unAssigncard}"/>
-                <p:menuitem value="#{bundle.add_follow}" icon="ui-icon-follow"
+                            oncomplete="PF('unassign_card').show()"/>
+                <p:menuitem value="#{bundle.add_follow}" icon="ui-icon-follow"  actionListener="#{addGuest.assignParticipant}"
                             oncomplete="PF('PersonPanel').show()"/>
 
-
+                <p:menuitem value="#{bundle.show_follower}"  icon="ui-icon-card"  actionListener="#{addGuest.showParticipant}" update="followListPanel"
+                            oncomplete="PF('followList').show()"/>
             </p:contextMenu>
 
             <table border="0" cellpadding="3" cellspacing="3" class="panelLikeTable">
@@ -87,7 +87,6 @@
             <p:dialog header="#{bundle.unassign_card}" widgetVar="unassign_card" modal="true" showEffect="fade"
                       hideEffect="fade"
                       resizable="false">
-                <h:form>
                     <table border="0" cellpadding="3" cellspacing="3" width="85%" class="panelLikeTable">
                         <tr valign="top">
                             <td nowrap="nowrap" align="center">
@@ -104,14 +103,12 @@
                             </td>
                         </tr>
                     </table>
-                </h:form>
 
             </p:dialog>
             <p:dialog header="#{bundle.assign_card}" widgetVar="AssignCardPanel" modal="true" showEffect="fade"
                       hideEffect="fade"
                       resizable="false">
 
-                <h:form>
                     <p:outputPanel id="assigncardPanel" ajaxRendered="true">
 
                         <table border="0" cellpadding="3" cellspacing="3" width="90%" dir="#{me.direction}">
@@ -133,11 +130,8 @@
                                             </p:selectBooleanCheckbox>
                                         </p:column>
 
-                                        <p:column sortBy="#{card.name}">
 
-                                            <h:outputText escape="true" value="#{card.name}"/>
-                                        </p:column>
-                                        <p:column sortBy="#{card.code}">
+                                        <p:column headerText="کد" sortBy="#{card.code}">
 
                                             <h:outputText value="#{card.code}"
                                                     />
@@ -149,8 +143,7 @@
                                                 <h:outputText escape="true" value="#{bundle.card_status}"/>
                                                 <br/>
                                             </f:facet>
-
-                                            <h:outputText escape="true" value="#{card.cardStatus}"/>
+                                            <h:outputText escape="true" value="#{card.cardStatus.title}"/>
                                         </p:column>
 
                                         <f:facet name="footer">
@@ -173,11 +166,52 @@
                             </tr>
                         </table>
                     </p:outputPanel>
-                </h:form>
+            </p:dialog>
+            <p:dialog header="#{bundle.follow}" widgetVar="followList" modal="true" showEffect="fade"
+                      hideEffect="fade"
+                      resizable="false">
+
+                    <p:outputPanel id="followListPanel" ajaxRendered="true">
+
+                        <table border="0" cellpadding="3" cellspacing="3" width="90%" dir="#{me.direction}">
+                            <tr valign="top">
+                                <td align="#{me.align}" nowrap="nowrap">
+                                    <p:dataTable id="followTable"
+                                                 value="#{addGuest.followList}"
+                                                 sortMode="single"
+                                                 var="follow"
+                                                 rows="15"
+                                                 style="BORDER-COLLAPSE: collapse;text-align: center; width:100%;">
+                                        <f:facet name="header">
+                                            لیست <p:commandButton id="toggler2" type="button" value="#{bundle.columns}"
+                                                                  style="float:right" icon="ui-icon-calculator"/>
+                                            <p:columnToggler datasource="followTable" trigger="toggler2"/>
+                                        </f:facet>
+                                        <p:column headerText="#{bundle.name}" sortBy="#{follow.firstname}"
+                                                  filterBy="#{follow.firstname}">
+                                            <h:outputText escape="true" value="#{follow.firstname}"/>
+                                        </p:column>
+
+                                        <p:column headerText="#{bundle.lastname}" sortBy="#{follow.lastname}"
+                                                  filterBy="#{follow.lastname}">
+                                            <h:outputText escape="true" value="#{follow.lastname}"/>
+                                        </p:column>
+                                        <p:column headerText="#{bundle.time}" sortBy="#{follow.time}" filterBy="#{follow.time}"
+                                                >
+                                            <h:outputText escape="true" value="#{follow.time}"/>
+                                        </p:column>
+
+                                    </p:dataTable>
+
+
+                                </td>
+                            </tr>
+
+                        </table>
+                    </p:outputPanel>
             </p:dialog>
             <p:dialog header="#{bundle.follow}" widgetVar="PersonPanel" modal="true" showEffect="fade" hideEffect="fade"
                       resizable="false">
-                <h:form dir="RTL">
                     <p:outputPanel id="handlePersonPanel" ajaxRendered="true">
 
 
@@ -234,13 +268,11 @@
                             </tr>
                         </table>
                     </p:outputPanel>
-                </h:form>
             </p:dialog>
             <p:dialog header="#{bundle.guest}" widgetVar="GuestPanel" modal="true" showEffect="fade"
                       hideEffect="fade"
                       resizable="false">
                 <p:outputPanel id="editPanel" >
-                <h:form dir="RTL">
 
                     <table dir="rtl" >
                         <tr>
@@ -256,6 +288,11 @@
                             </td>
                             <td>
                                 <p:inputText value="#{addGuest.guest.lastname}" maxlength="20"/>
+                            </td>
+                            <td>
+                                <p:graphicImage id="pic" value="#{addGuest.pic}" width="150" height="100">
+                                    <f:param name="pic" value="#{addGuest.guest.id}" />
+                                </p:graphicImage>
                             </td>
                         </tr>
                         <tr>
@@ -348,15 +385,35 @@
                             <td>
                                 <p:inputText value="#{addGuest.guest.vFamily}" maxlength="20"/>
                             </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="#{bundle.organ}"/>
+                            </td>
+                            <td>
+                                <p:inputText value="#{addGuest.guest.vOrgan}" maxlength="20"/>
+                            </td>
+                            <td>
+                                <h:outputText value="#{bundle.number}"/>
+                            </td>
+                            <td>
+                                <p:inputText value="#{addGuest.guest.pelak}" maxlength="20"/>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="4" align="center">
-                                <h:commandButton value="#{bundle.save}"
+                                <p:commandButton value="#{bundle.save}"
                                                  actionListener="#{addGuest.doEdit}"/>
+                                &#160;&#160;
+                                <p:commandButton value="#{bundle.picture}" update="editPanel, pic"
+                                                 actionListener="#{addGuest.takePicture}"/>
+                                &#160;&#160;
+                                <p:commandButton value="#{bundle.print}" ajax="false"
+                                                 actionListener="#{addGuest.print}"/>
                             </td>
                         </tr>
                     </table>
-                </h:form>
                 </p:outputPanel>
             </p:dialog>
         </h:form>

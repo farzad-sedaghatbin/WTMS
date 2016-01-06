@@ -162,6 +162,8 @@ public class ReaderWrapperService implements IReaderWrapperService {
 
     @Override
     public void sendParking(String pelak, byte[] pic) {
+        if(pelak.length()<8)
+            return;
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
         calendar.add(Calendar.SECOND, -10);
