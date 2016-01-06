@@ -2,6 +2,7 @@ package ir.university.toosi.wtms.web.action.operation;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.std.IterableSerializer;
 import ir.university.toosi.tms.model.entity.Operation;
 import ir.university.toosi.tms.model.service.OperationServiceImpl;
 import ir.university.toosi.tms.util.Configuration;
@@ -22,10 +23,7 @@ import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author : Hamed Hatami , Arsham Sedaghatbin, Farzad Sedaghatbin, Atefeh Ahmadi
@@ -70,7 +68,12 @@ public class HandleOperationAction implements Serializable {
         } else {
             for (Object item : event.getItems()) {
                 ((Operation) item).setSelected(false);
-                selectedOperations.remove(item);
+                Iterator<Operation> iterator = selectedOperations.iterator();
+                while (iterator.hasNext()){
+                    if (iterator.next().getName().equals(((Operation) item).getName())){
+                        iterator.remove();
+                    }
+                }
             }
         }
     }

@@ -263,8 +263,8 @@ public class HandleRoleAction implements Serializable {
         for (Operation operation : operationList) {
             operation.setDescription(operation.getDescription());
         }
-        for (Operation currentOperation : currentRole.getOperations()) {
-            for (Operation operation : operationList) {
+        for (Operation currentOperation : operationList) {
+            for (Operation operation : currentRole.getOperations()) {
                 if ((currentOperation.getId() == operation.getId())) {
                     operation.setSelected(true);
                     handleOperationAction.getSelectedOperations().add(operation);
@@ -330,7 +330,6 @@ public class HandleRoleAction implements Serializable {
         }
         if (selectedOperations.size() == 0) {
             me.addErrorMessage("no_operation_selected");
-            me.redirect("/role/roles.xhtml");
             return;
         }
 

@@ -20,10 +20,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author : Hamed Hatami , Arsham Sedaghatbin, Farzad Sedaghatbin, Atefeh Ahmadi
@@ -204,7 +201,12 @@ public class HandleWorkGroupAction implements Serializable {
         } else {
             for (Object item : event.getItems()) {
                 ((WorkGroup) item).setSelected(false);
-                selectWorkGroups.remove(item);
+                Iterator<WorkGroup> iterator = selectWorkGroups.iterator();
+                while (iterator.hasNext()){
+                    if (iterator.next().getName().equals(((WorkGroup) item).getName())){
+                        iterator.remove();
+                    }
+                }
             }
         }
     }

@@ -157,9 +157,8 @@
                         </tr>
                         <tr>
                             <td>
-                                <p:commandButton value="#{bundle.submit}" id="edit" update="users"
-                                                 actionListener="#{handleUserAction.saveOrUpdate}"
-                                                 oncomplete="PF('userDialog').hide()" styleClass="ui-priority-primary"
+                                <p:commandButton value="#{bundle.submit}" id="edit" update="users,messageInfo"
+                                                 actionListener="#{handleUserAction.saveOrUpdate}" styleClass="ui-priority-primary"
                                                  rendered="#{not handleUserAction.disableFields}"/>
                             </td>
                         </tr>

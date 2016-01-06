@@ -115,9 +115,8 @@
                         </tr>
                         <tr>
                             <td>
-                                <p:commandButton value="#{bundle.submit}" id="edit" update="roles"
-                                                 actionListener="#{handleRoleAction.saveOrUpdate}"
-                                                 oncomplete="PF('roleDialog').hide()" styleClass="ui-priority-primary"
+                                <p:commandButton value="#{bundle.submit}" id="edit" update="roles,messageInfo"
+                                                 actionListener="#{handleRoleAction.saveOrUpdate}" styleClass="ui-priority-primary"
                                                  rendered="#{not handleRoleAction.disableFields}"/>
                             </td>
                         </tr>
