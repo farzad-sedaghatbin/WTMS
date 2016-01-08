@@ -321,7 +321,6 @@ public class AddGuest implements Serializable {
     }
 
     public void doAssigncard() {
-//        Card c= cardList.getRowData();
         guest = getGeneralHelper().getGuestService().getGuestDao().findById(guest.getId());
         guest.setHasCard(true);
         getGeneralHelper().getGuestService().getGuestDao().update(guest);
@@ -380,12 +379,14 @@ public class AddGuest implements Serializable {
     public void print() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("name", guest.getFirstname().replace("ی", "ي") + " " + guest.getLastname().replace("ی", "ي"));
+        map.put("user", me.getUser().getFirstname().replace("ی", "ي") + " " + me.getUser().getLastname().replace("ی", "ي"));
         map.put("vname", guest.getvName().replace("ی", "ي") + " " + guest.getvFamily().replace("ی", "ي"));
         map.put("date", CalendarUtil.getPersianDateWithSlash(new Locale("fa")));
         map.put("vorgan", guest.getvOrgan().replace("ی", "ي"));
         map.put("time", LangUtil.getFarsiNumber(guest.getTime()));
         map.put("picture", new ByteArrayInputStream(guest.getPicture()));
-        JasperUtil.generatePDFWithoutDataSource("guest.jrxml", guest.getFirstname() + " " + guest.getLastname() + ".pdf", map);
+        map.put("sign", new ByteArrayInputStream(me.getUser().getUserSign()));
+        JasperUtil.generatePDFWithoutDataSource("guest.jrxml", CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))+CalendarUtil.getTimeWithoutDot(new Date(),new Locale("fa"))+".pdf", map);
     }
 
     public StreamedContent getPic() {

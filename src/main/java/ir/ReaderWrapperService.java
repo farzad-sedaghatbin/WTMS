@@ -131,7 +131,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
         trafficLog.setExit(true);
         trafficLog.setValid(value.isAuthorized());
         trafficLog.setPerson(personService.getPersonByPersonOtherId(String.valueOf(value.getUserID())));
-        trafficLog.setCard(null);
+        trafficLog.setCard(cardService.findByCode(String.valueOf(value.getUserID())));
         trafficLog.setFinger(true);
         trafficLog.setLast(true);
         trafficLog.setOffline(false);

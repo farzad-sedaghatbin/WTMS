@@ -86,7 +86,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h:outputText value="#{bundle.description}:"/>
+                                <h:outputText value="#{bundle.lastname}:"/>
                             </td>
                             <td>
                                 <p:inputText readonly="#{handleUserAction.disableFields}"
@@ -130,6 +130,15 @@
                                                          value="#{handleUserAction.enabled}"
                                                          valueChangeListener="#{handleUserAction.userEnableChange}"/>
                             </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="#{bundle.sign}:"/>
+                            </td>
+                            <td>
+                                <p:fileUpload fileUploadListener="#{handleUserAction.listener}" />
+</td>
+
                         </tr>
                     </table>
                     <table border="0" cellpadding="3" cellspacing="3" width="50%">
