@@ -5,7 +5,6 @@ import ir.university.toosi.guest.entity.Guest;
 import ir.university.toosi.guest.entity.Log;
 import ir.university.toosi.tms.model.entity.WorkGroup;
 import ir.university.toosi.tms.model.entity.personnel.Card;
-import ir.university.toosi.tms.util.Configuration;
 import ir.university.toosi.tms.util.GuestCameraUtil;
 import ir.university.toosi.tms.util.JasperUtil;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
@@ -17,7 +16,6 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.StreamedContent;
 
-
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -26,7 +24,8 @@ import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -350,6 +349,7 @@ public class AddGuest implements Serializable {
             return;
         selectedCard = cards.get(0);
         selectedCard.setGuest(null);
+        selectedCard.setName("");
 
         generalHelper.getCardService().editCard(selectedCard);
         Log log = new Log();
@@ -360,6 +360,7 @@ public class AddGuest implements Serializable {
         log.setType("خروجی");
         guest = generalHelper.getGuestService().getGuestDao().findById(guest.getId());
         guest.setExitTime(CalendarUtil.getTimeWithoutDot(new Date(), new Locale("fa")));
+        guest.setHasCard(false);
         getGeneralHelper().getGuestService().update(guest);
 
         me.addInfoMessage("کارت تخصیص داده شده حذف شد");

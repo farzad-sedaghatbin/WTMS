@@ -122,6 +122,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
     public void addOnGetAccessEventData(int terminalId, AccessEventData value) {
 
         String address="/" + value.getUserID() + new Date().getTime();
+
         TrafficLog trafficLog = new TrafficLog();
         trafficLog.setVirdi(virdiService.findByTerminalId(terminalId));
         trafficLog.setGateway(trafficLog.getVirdi().getGateway());

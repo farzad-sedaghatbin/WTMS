@@ -25,7 +25,7 @@ import javax.persistence.*;
                 query = "select c from Card c where c.deleted <> '1' and c.visible=true "
         ),        @NamedQuery(
                 name = "Card.guest.list",
-                query = "select c from Card c where c.deleted <> '1' and c.visible=true and c.forGuest=true "
+                query = "select c from Card c where c.deleted <> '1' and c.visible=true and c.forGuest=true and c.guest is null"
         ),
         @NamedQuery(
                 name = "Card.findById",
