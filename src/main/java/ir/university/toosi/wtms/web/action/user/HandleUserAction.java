@@ -344,7 +344,9 @@ public class HandleUserAction implements Serializable {
                 }
             }
         }
-
+        if (currentUser.getWorkGroups().isEmpty()){
+            sourceWorkgroups = workGroups;
+        }
         handleWorkGroupAction.setWorkGroupList(workGroups);
         handleWorkGroupAction.setWorkgroups(new DualListModel<WorkGroup>(sourceWorkgroups, targetWorkgroups));
 
@@ -380,6 +382,9 @@ public class HandleUserAction implements Serializable {
             }
         }
 
+        if (currentUser.getWorkGroups().isEmpty()){
+            sourceWorkgroups = workGroups;
+        }
         handleWorkGroupAction.setWorkGroupList(workGroups);
         handleWorkGroupAction.setWorkgroups(new DualListModel<WorkGroup>(sourceWorkgroups, targetWorkgroups));
 

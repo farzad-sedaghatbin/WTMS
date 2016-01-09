@@ -228,6 +228,9 @@ public class HandleRoleAction implements Serializable {
                 }
             }
         }
+        if (currentRole.getOperations().isEmpty()){
+            operationsSource = operationList;
+        }
         handleOperationAction.setOperationList(new ListDataModel<>(operationList));
         handleOperationAction.setOperations(new DualListModel<Operation>(operationsSource, operationsTarget));
     }
@@ -273,6 +276,9 @@ public class HandleRoleAction implements Serializable {
                     operationsSource.add(operation);
                 }
             }
+        }
+        if (currentRole.getOperations().isEmpty()){
+            operationsSource = operationList;
         }
         handleOperationAction.setOperationList(new ListDataModel<>(operationList));
         handleOperationAction.setOperations(new DualListModel<Operation>(operationsSource, operationsTarget));
