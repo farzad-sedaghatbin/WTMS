@@ -136,7 +136,12 @@ public class HandleMonitoringAction implements Serializable {
             dataModel.setGate(log.getGateway().getName());
             dataModel.setPdpName(log.getVirdi().getName());
             dataModel.setPersonId(log.getPerson().getId());
-            dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
+            if(log.getPerson().getName()==null || log.getPerson().getName().length()<=1){
+                dataModel.setName(log.getCard().getName());
+            }else{
+                dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
+            }
+
             sentryDataModels.addFirst(dataModel);
             sentries.put(log.getVirdi().getId(), sentryDataModels);
             trafficLogsbygate = new ArrayList<>();

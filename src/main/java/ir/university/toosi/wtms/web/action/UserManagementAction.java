@@ -395,7 +395,7 @@ public class UserManagementAction implements Serializable {
         }
 //        if (language.containsKey(key))
 //            return language.get(key).getTitle();
-        return key + "_NOT_DEF";
+        return key;
 
     }
 

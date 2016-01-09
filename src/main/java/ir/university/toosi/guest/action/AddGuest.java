@@ -5,24 +5,28 @@ import ir.university.toosi.guest.entity.Guest;
 import ir.university.toosi.guest.entity.Log;
 import ir.university.toosi.tms.model.entity.WorkGroup;
 import ir.university.toosi.tms.model.entity.personnel.Card;
+import ir.university.toosi.tms.util.GuestCameraUtil;
+import ir.university.toosi.tms.util.JasperUtil;
 import ir.university.toosi.wtms.web.action.UserManagementAction;
 import ir.university.toosi.wtms.web.action.user.HandleUserAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
+import ir.university.toosi.wtms.web.util.LangUtil;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.SortOrder;
-
+import org.primefaces.model.StreamedContent;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by M_Danapour on 05/26/2015.
@@ -64,6 +68,7 @@ public class AddGuest implements Serializable {
     private String fromDate;
     private String toDate;
     private DataModel<Guest> guestList;
+    private DataModel<Guest> followList;
 
     public void beginSearch() {
         init();
@@ -98,6 +103,7 @@ public class AddGuest implements Serializable {
 
     public void init() {
         page = "1";
+        person = new Guest();
         setGuest(new Guest());
         for (WorkGroup workGroup : me.getUser().getWorkGroups()) {
             if (workGroup.getName().equalsIgnoreCase("EMPLOYEE")) {
@@ -134,21 +140,37 @@ public class AddGuest implements Serializable {
     }
 
     public void savePersonWith() throws Exception {
+        guest = generalHelper.getGuestService().getGuestDao().findById(guest.getId());
         person.setDate(guest.getDate());
         person.setTime(guest.getTime());
         person.setvFamily(guest.getvFamily());
         person.setvName(guest.getvName());
         person.setGuestSize(0);
-
         person = generalHelper.getGuestService().create(person);
         guest.getGuestSet().add(person);
         generalHelper.getGuestService().getGuestDao().update(guest);
-        beginToday();
         me.addInfoMessage("operation.occurred");
+        beginToday();
 
     }
 
+    public void assignParticipant() {
+        person = new Guest();
+
+    }
+
+    public void showParticipant() {
+        followList = new ListDataModel<>(new ArrayList(guest.getGuestSet()));
+    }
+
+    public void edit() {
+        guest = getGeneralHelper().getGuestService().getGuestDao().findById(guest.getId());
+        hour = guest.getTime().split(":")[0];
+        minute = guest.getTime().split(":")[1];
+    }
+
     public void doEdit() throws Exception {
+        guest.setTime(hour + ":" + minute);
         generalHelper.getGuestService().getGuestDao().update(guest);
         init();
     }
@@ -298,10 +320,11 @@ public class AddGuest implements Serializable {
     }
 
     public void doAssigncard() {
-//        Card c= cardList.getRowData();
+        guest = getGeneralHelper().getGuestService().getGuestDao().findById(guest.getId());
         guest.setHasCard(true);
         getGeneralHelper().getGuestService().getGuestDao().update(guest);
         selectedCard.setGuest(guest);
+        selectedCard.setName(guest.getFirstname() + " " + guest.getLastname());
         generalHelper.getCardService().editCard(selectedCard);
         Log log = new Log();
         log.setGuest(guest);
@@ -326,6 +349,7 @@ public class AddGuest implements Serializable {
             return;
         selectedCard = cards.get(0);
         selectedCard.setGuest(null);
+        selectedCard.setName("");
 
         generalHelper.getCardService().editCard(selectedCard);
         Log log = new Log();
@@ -334,8 +358,9 @@ public class AddGuest implements Serializable {
         log.setDate(CalendarUtil.getPersianDateWithoutSlash(new Locale("fa")));
         log.setTime(CalendarUtil.getTime(new Date(), new Locale("fa")));
         log.setType("خروجی");
-        guest=generalHelper.getGuestService().getGuestDao().findById(guest.getId());
-        guest.setExitTime(CalendarUtil.getTimeWithoutDot(new Date(),new Locale("fa")));
+        guest = generalHelper.getGuestService().getGuestDao().findById(guest.getId());
+        guest.setExitTime(CalendarUtil.getTimeWithoutDot(new Date(), new Locale("fa")));
+        guest.setHasCard(false);
         getGeneralHelper().getGuestService().update(guest);
 
         me.addInfoMessage("کارت تخصیص داده شده حذف شد");
@@ -346,10 +371,42 @@ public class AddGuest implements Serializable {
         }
     }
 
+    public void takePicture() {
+        guest.setPicture(GuestCameraUtil.capture());
+        generalHelper.getGuestService().update(guest);
+
+    }
+
+    public void print() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", guest.getFirstname().replace("ی", "ي") + " " + guest.getLastname().replace("ی", "ي"));
+        map.put("user", me.getUser().getFirstname().replace("ی", "ي") + " " + me.getUser().getLastname().replace("ی", "ي"));
+        map.put("vname", guest.getvName().replace("ی", "ي") + " " + guest.getvFamily().replace("ی", "ي"));
+        map.put("date", CalendarUtil.getPersianDateWithSlash(new Locale("fa")));
+        map.put("vorgan", guest.getvOrgan().replace("ی", "ي"));
+        map.put("time", LangUtil.getFarsiNumber(guest.getTime()));
+        map.put("picture", new ByteArrayInputStream(guest.getPicture()));
+        map.put("sign", new ByteArrayInputStream(me.getUser().getUserSign()));
+        JasperUtil.generatePDFWithoutDataSource("guest.jrxml", CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))+CalendarUtil.getTimeWithoutDot(new Date(),new Locale("fa"))+".pdf", map);
+    }
+
+    public StreamedContent getPic() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest myRequest = (HttpServletRequest) context.getExternalContext().getRequest();
+        String id = myRequest.getParameter("pic");
+        if (id == null)
+            return new DefaultStreamedContent();
+        Guest guest = generalHelper.getGuestService().getGuestDao().findById(Long.parseLong(id));
+        if (guest == null || guest.getPicture() == null)
+            return new DefaultStreamedContent();
+        else
+            return new DefaultStreamedContent(new ByteArrayInputStream(guest.getPicture()), "image/jpeg");
+    }
+
     public void assignCard() {
         if (guest.isHasCard()) {
             me.addInfoMessage("کارت قبلا تخصیص داده شده است");
-            return;
+            beginToday();
         }
         cardList = new ListDataModel<>(generalHelper.getCardService().getAllGuestActiveCard());
     }
@@ -425,5 +482,13 @@ public class AddGuest implements Serializable {
 
     public void setPage(String page) {
         this.page = page;
+    }
+
+    public DataModel<Guest> getFollowList() {
+        return followList;
+    }
+
+    public void setFollowList(DataModel<Guest> followList) {
+        this.followList = followList;
     }
 }

@@ -16,12 +16,15 @@ import ir.university.toosi.wtms.web.action.workgroup.HandleWorkGroupAction;
 import ir.university.toosi.wtms.web.helper.GeneralHelper;
 import ir.university.toosi.tms.model.entity.personnel.Person;
 import ir.university.toosi.wtms.web.util.CalendarUtil;
+import ir.university.toosi.wtms.web.util.ImageUtils;
 import ir.university.toosi.wtms.web.util.RESTfulClientUtil;
 //import org.apache.commons.lang.StringUtils;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.UploadedFile;
 
 
 import javax.ejb.EJB;
@@ -33,6 +36,7 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 //import javax.validation.constraints.AssertTrue;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -130,6 +134,7 @@ public class HandleUserAction implements Serializable {
     private String retypedNewPass;
 
     private boolean disableFields;
+    private byte[] picture;
 
     public void begin() {
         me.setActiveMenu(MenuType.USER);
@@ -137,7 +142,9 @@ public class HandleUserAction implements Serializable {
         me.redirect("/user/users.xhtml");
     }
 
-    public void init() {
+    public void
+    init() {
+        picture = null;
         firstname = "";
         lastname = "";
         nationalCode = "";
@@ -147,7 +154,7 @@ public class HandleUserAction implements Serializable {
         enabled = true;
         password = "";
         newPass = "";
-        retypedNewPass="";
+        retypedNewPass = "";
         roleEnabled = true;
         selectedWorkGroup = null;
         page = 1;
@@ -200,7 +207,7 @@ public class HandleUserAction implements Serializable {
         List<PC> targetPCs = new ArrayList<>();
 
         List<PC> pcs = pcService.getAllPCs();
-        if(currentUser.getPcs()!=null && currentUser.getPcs().size()!=0) {
+        if (currentUser.getPcs() != null && currentUser.getPcs().size() != 0) {
             for (PC pc : pcs) {
 
                 for (PC pc1 : currentUser.getPcs()) {
@@ -211,7 +218,7 @@ public class HandleUserAction implements Serializable {
                     }
                 }
             }
-        }else{
+        } else {
             sourcePCs.addAll(pcs);
         }
         pcList = new DualListModel<>(sourcePCs, targetPCs);
@@ -220,7 +227,7 @@ public class HandleUserAction implements Serializable {
     public void onTransfer(TransferEvent event) {
         if (event.isAdd()) {
             for (Object item : event.getItems()) {
-                pcList.getSource().remove((PC)item);
+                pcList.getSource().remove((PC) item);
                 pcList.getTarget().add((PC) item);
             }
         } else {
@@ -266,6 +273,7 @@ public class HandleUserAction implements Serializable {
         newUser.setFirstname(firstname);
         newUser.setLastname(lastname);
         newUser.setDeleted("0");
+        newUser.setUserSign(picture);
         newUser.setEnable(enabled == true ? "true" : "false");
         newUser.setStatus("c");
         newUser.setEffectorUser(me.getUsername());
@@ -322,7 +330,7 @@ public class HandleUserAction implements Serializable {
         lastname = currentUser.getLastname();
         username = currentUser.getUsername();
         enabled = currentUser.getEnable().equalsIgnoreCase("true") ? true : false;
-
+        picture = currentUser.getUserSign();
         List<WorkGroup> sourceWorkgroups = new ArrayList<>();
         List<WorkGroup> targetWorkgroups = new ArrayList<>();
 
@@ -351,8 +359,9 @@ public class HandleUserAction implements Serializable {
         handleWorkGroupAction.setWorkgroups(new DualListModel<WorkGroup>(sourceWorkgroups, targetWorkgroups));
 
     }
+
     public void viewMode() {
-        view=true;
+        view = true;
         setDisableFields(true);
         currentUser = userService.findById(currentUser.getId());
         firstname = currentUser.getFirstname();
@@ -401,6 +410,7 @@ public class HandleUserAction implements Serializable {
         currentUser.setPassword(password);
         currentUser.setEnable(enabled == true ? "true" : "false");
         currentUser.setLastname(lastname);
+        currentUser.setUserSign(picture);
         currentUser.setWorkGroups(handleWorkGroupAction.getSelectWorkGroups());
         currentUser.setEffectorUser(me.getUsername());
         if (firstname.trim().length() > 0 || lastname.trim().length() > 0)
@@ -417,23 +427,23 @@ public class HandleUserAction implements Serializable {
         }
     }
 
-    public void changePassword(){
-        if (oldPass == null || oldPass.equals("")){
+    public void changePassword() {
+        if (oldPass == null || oldPass.equals("")) {
             init();
             me.addErrorMessage("enter.old.pass");
             me.redirect("/dashboard.xhtml");
         }
-        if (!newPass.equals(me.getUser().getPassword())){
+        if (!newPass.equals(me.getUser().getPassword())) {
             init();
             me.addErrorMessage("oldPass.is.wrong");
             me.redirect("/dashboard.xhtml");
         }
-        if (newPass == null || newPass.equals("") || retypedNewPass ==null || retypedNewPass.equals("")){
+        if (newPass == null || newPass.equals("") || retypedNewPass == null || retypedNewPass.equals("")) {
             init();
             me.addErrorMessage("enter.newPass.or.reNewPass");
             me.redirect("/dashboard.xhtml");
         }
-        if (!newPass.equals(retypedNewPass)){
+        if (!newPass.equals(retypedNewPass)) {
             init();
             me.addErrorMessage("newPass.oldPass.not.match");
             me.redirect("/dashboard.xhtml");
@@ -445,7 +455,7 @@ public class HandleUserAction implements Serializable {
         me.redirect("/dashboard.xhtml");
     }
 
-    public void resetPass(){
+    public void resetPass() {
         currentUser.setPassword("password");
         me.addInfoMessage("pass.reset");
         me.redirect("/user/users.xhtml");
@@ -710,6 +720,32 @@ public class HandleUserAction implements Serializable {
         } else
             status = "false";
 
+    }
+    private UploadedFile file;
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+
+    public void listener(FileUploadEvent event) throws Exception {
+        BufferedImage sourceBufferedImage = ImageUtils.convertByteArrayToBufferedImage(event.getFile().getContents());
+        float scaleRatio = ImageUtils.calculateScaleRatio(sourceBufferedImage.getWidth(), 200);//todo from properties
+        if (scaleRatio > 0 && scaleRatio < 1) {
+            try {
+                sourceBufferedImage = ImageUtils.scaleImage(sourceBufferedImage, scaleRatio);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        setPicture(ImageUtils.imageToByteArray(sourceBufferedImage));
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 
     public String getLock() {

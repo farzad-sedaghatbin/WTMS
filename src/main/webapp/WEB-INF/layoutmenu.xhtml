@@ -8,7 +8,7 @@
     <div class="Animated05" id="layout-menu-cover">
         <h:form>
             <pm:menu>
-                <p:submenu id="usermanagemen" label="#{bundle.user_management}"
+                <p:submenu id="usermanagemen"  rendered="#{me.hasPermission('USERMANAGEMENT')}" label="#{bundle.user_management}"
                            icon="icon-menu">
                     <p:menuitem id="rm_dashboard" value="Dashboard" icon="icon-dvr" rendered="false"/>
 
@@ -91,6 +91,8 @@
                                 actionListener="#{handleSetadReportAction.trackByGate}"/>
                     <p:menuitem id="rm_reportByOrgan" value="#{bundle.report_by_organ}" icon="icon-report"
                                 actionListener="#{handleSetadReportAction.trackByOrgan}"/>
+                    <p:menuitem id="guestReport" value="#{bundle.guestReport}" icon="icon-looks_3"
+                                actionListener="#{addGuest.beginSearch}"/>
 
                 </p:submenu>
                 <p:submenu id="schedule" label="#{bundle.schedule}" rendered="#{me.hasPermission('SCHEDULE')}"
@@ -117,13 +119,12 @@
 
                 </p:submenu>
 
-                <p:submenu id="guest" label="#{bundle.guest}"  icon="icon-menu" >
+                <p:submenu id="guest" label="#{bundle.guest}"  icon="icon-menu"  rendered="#{me.hasPermission('GUEST')}" >
                     <p:menuitem id="addGuest" value="#{bundle.addGuest}" icon="icon-event"
                                 actionListener="#{addGuest.begin}"/>
                     <p:menuitem id="todayList" value="#{bundle.todayList}"  icon="icon-error"
                                 actionListener="#{addGuest.beginToday}"/>
-                    <p:menuitem id="guestReport" value="#{bundle.guestReport}" icon="icon-looks_3"
-                                actionListener="#{addGuest.beginSearch}"/>
+
 
 
                 </p:submenu>

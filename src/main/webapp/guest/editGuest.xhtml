@@ -21,6 +21,12 @@
                 <td>
                     <h:inputText value="#{addGuest.guest.lastname}" maxlength="20"/>
                 </td>
+                <td>
+                    <p:graphicImage id="pic"
+                            value="/guestImage?id=#{addGuest.guest.id}"
+                            styleClass="personPicture"
+                            style="height: 150px;"/>
+                </td>
             </tr>
             <tr>
                 <td>
@@ -126,6 +132,9 @@
                 <td colspan="4" align="center">
                     <p:commandButton value="#{bundle.save}"
                                      actionListener="#{addGuest.doEdit}"/>
+                    &#160;&#160;
+                    <p:commandButton value="#{bundle.picture}" update="pic"
+                                     actionListener="#{addGuest.takePicture}"/>
                 </td>
             </tr>
         </table>

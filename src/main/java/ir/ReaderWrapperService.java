@@ -122,6 +122,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
     public void addOnGetAccessEventData(int terminalId, AccessEventData value) {
 
         String address="/" + value.getUserID() + new Date().getTime();
+
         TrafficLog trafficLog = new TrafficLog();
         trafficLog.setVirdi(virdiService.findByTerminalId(terminalId));
         trafficLog.setGateway(trafficLog.getVirdi().getGateway());
@@ -131,7 +132,7 @@ public class ReaderWrapperService implements IReaderWrapperService {
         trafficLog.setExit(true);
         trafficLog.setValid(value.isAuthorized());
         trafficLog.setPerson(personService.getPersonByPersonOtherId(String.valueOf(value.getUserID())));
-        trafficLog.setCard(null);
+        trafficLog.setCard(cardService.findByCode(String.valueOf(value.getUserID())));
         trafficLog.setFinger(true);
         trafficLog.setLast(true);
         trafficLog.setOffline(false);
@@ -162,6 +163,8 @@ public class ReaderWrapperService implements IReaderWrapperService {
 
     @Override
     public void sendParking(String pelak, byte[] pic) {
+        if(pelak.length()<8)
+            return;
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
         calendar.add(Calendar.SECOND, -10);

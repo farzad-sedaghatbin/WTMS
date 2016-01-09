@@ -53,8 +53,13 @@ public class Guest extends BaseEntity {
     private String vName;
     @Column(name = "vFamily")
     private String vFamily;
+    @Column(name = "vOrgan")
+    private String vOrgan;
     @Column(name = "authenticateType")
     private String authenticateType;
+    @Column(name = "picture")
+    @Lob
+    private byte[] picture;
     @Column(name = "hasCard")
     private boolean hasCard;
     @Column(name = "guestSize")
@@ -159,7 +164,7 @@ public class Guest extends BaseEntity {
     }
 
     public boolean isHasCard() {
-        return hasCard=false;
+        return hasCard;
     }
 
     public void setHasCard(boolean hasCard) {
@@ -220,5 +225,21 @@ public class Guest extends BaseEntity {
 
     public void setExitTime(String exitTime) {
         this.exitTime = exitTime;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
+    }
+
+    public String getvOrgan() {
+        return vOrgan;
+    }
+
+    public void setvOrgan(String vOrgan) {
+        this.vOrgan = vOrgan;
     }
 }

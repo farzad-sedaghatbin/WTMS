@@ -55,6 +55,7 @@ public class User extends BaseEntity {
 
     @Id
     @JsonProperty
+    @GeneratedValue
     @Column(name = "id")
     private long id;
     @JsonProperty
@@ -108,7 +109,8 @@ public class User extends BaseEntity {
     @JsonProperty
     @OneToOne
     private Person person;
-
+    @Lob
+    private byte[] userSign;
 
     @JsonProperty
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
@@ -289,5 +291,13 @@ public class User extends BaseEntity {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public byte[] getUserSign() {
+        return userSign;
+    }
+
+    public void setUserSign(byte[] userSign) {
+        this.userSign = userSign;
     }
 }
