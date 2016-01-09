@@ -395,7 +395,7 @@ public class AddGuest implements Serializable {
         HttpServletRequest myRequest = (HttpServletRequest) context.getExternalContext().getRequest();
         String id = myRequest.getParameter("pic");
         if (id == null)
-            return new DefaultStreamedContent();
+            return new DefaultStreamedContent(new ByteArrayInputStream(me.getGeneralHelper().getAnonymous()),"image/png");
         Guest guest = generalHelper.getGuestService().getGuestDao().findById(Long.parseLong(id));
         if (guest == null || guest.getPicture() == null)
             return new DefaultStreamedContent();

@@ -26,8 +26,12 @@ public class PersianConverter implements Converter {
 
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object object) {
         if (object == null) return null;
-
-        String value = (String) object;
+        String value="";
+        if (object instanceof Integer) {
+            value = String.valueOf((Integer) object);
+        } else {
+            value = (String) object;
+        }
         return LangUtil.getFarsiNumber(value);
     }
 }

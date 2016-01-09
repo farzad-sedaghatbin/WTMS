@@ -65,7 +65,7 @@
                 <h:outputText escape="true" value="#{Guest.time}" converter="persianConverter"/>
             </p:column>
             <p:column  headerText="#{bundle.exit}" sortBy="#{Guest.exitTime}" filterBy="#{Guest.exitTime}">
-                <h:outputText escape="true" value="#{Guest.exitTime}"/>
+                <h:outputText escape="true" value="#{Guest.exitTime}" converter="timeConverter"/>
             </p:column>
 
             <p:column  headerText="#{bundle.follow}" sortBy="#{Guest.guestSize}" filterBy="#{Guest.guestSize}">
