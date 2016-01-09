@@ -13,7 +13,7 @@
             <p:menuitem value="#{bundle.trafficlog}" url="#" />
         </p:breadCrumb>
         <h:form>
-            <p:contextMenu for="parkingLogTable">
+            <p:contextMenu for="trafficLogTable">
                 <p:menuitem value="#{bundle.viewPicture}" update="pictureDetail" icon="ui-icon-info" oncomplete="PF('pictureDialog').show()"/>
             </p:contextMenu>
             <p:dataTable widgetVar="thisTable" id="trafficLogTable" value="#{handleTrafficAction.eventLogList}" var="trafficLog"

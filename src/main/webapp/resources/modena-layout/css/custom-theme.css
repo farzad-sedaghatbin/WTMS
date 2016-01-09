@@ -192,3 +192,8 @@ GrayModena.Geometry {
 #top-menu li ul.active-menu {
     margin: 9px 0 0 -150px;
 }
+
+
+.ui-paginator .ui-paginator-next .ui-icon, .ui-paginator .ui-paginator-prev .ui-icon, .ui-paginator .ui-paginator-first .ui-icon, .ui-paginator .ui-paginator-last .ui-icon {
+    overflow: hidden;
+}
