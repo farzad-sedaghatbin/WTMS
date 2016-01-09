@@ -13,7 +13,9 @@
             <p:menuitem value="#{bundle.trafficlog}" url="#" />
         </p:breadCrumb>
         <h:form>
-
+            <p:contextMenu for="parkingLogTable">
+                <p:menuitem value="#{bundle.viewPicture}" update="pictureDetail" icon="ui-icon-info" oncomplete="PF('pictureDialog').show()"/>
+            </p:contextMenu>
             <p:dataTable widgetVar="thisTable" id="trafficLogTable" value="#{handleTrafficAction.eventLogList}" var="trafficLog"
                          rowKey="#{trafficLog.id}"
                          selection="#{handleTrafficAction.currentTrraficLog}" selectionMode="single"
@@ -75,7 +77,15 @@
                                        page="#{handleTrafficAction.page}"/>
                 </f:facet>
             </p:dataTable>
-
+            <p:dialog header="#{bundle.viewPicture}" widgetVar="pictureDialog" modal="true" showEffect="fade"
+                      hideEffect="fade" resizable="true" maximizable="true" closeOnEscape="true" draggable="true"
+                      minimizable="true">
+                <p:outputPanel id="pictureDetail">
+                    <p:graphicImage value="#{handleTrafficAction.pic}">
+                        <f:param name="address" value="#{handleTrafficAction.currentTrraficLog.pictures}" />
+                    </p:graphicImage>
+                </p:outputPanel>
+            </p:dialog>
         </h:form>
     </ui:define>
 </ui:composition>

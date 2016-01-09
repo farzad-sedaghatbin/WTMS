@@ -62,12 +62,15 @@
                 <h:outputText escape="true" value="#{Guest.lastname}"/>
             </p:column>
             <p:column  headerText="#{bundle.time}" sortBy="#{Guest.time}" filterBy="#{Guest.time}">
-                <h:outputText escape="true" value="#{Guest.time}"/>
+                <h:outputText escape="true" value="#{Guest.time}" converter="persianConverter"/>
+            </p:column>
+            <p:column  headerText="#{bundle.exit}" sortBy="#{Guest.exitTime}" filterBy="#{Guest.exitTime}">
+                <h:outputText escape="true" value="#{Guest.exitTime}"/>
             </p:column>
 
             <p:column  headerText="#{bundle.follow}" sortBy="#{Guest.guestSize}" filterBy="#{Guest.guestSize}">
 
-                <h:outputText escape="true" value="#{Guest.guestSize}"/>
+                <h:outputText escape="true" value="#{Guest.guestSize}" converter="persianConverter"/>
             </p:column>
             <p:column  headerText="#{bundle.picture}" >
 

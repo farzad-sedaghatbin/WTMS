@@ -28,6 +28,6 @@ public class PersianConverter implements Converter {
         if (object == null) return null;
 
         String value = (String) object;
-        return value;
+        return LangUtil.getFarsiNumber(value);
     }
 }
