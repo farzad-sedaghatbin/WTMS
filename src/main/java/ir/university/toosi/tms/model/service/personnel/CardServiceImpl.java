@@ -41,7 +41,9 @@ public class CardServiceImpl<T extends Card> {
         } catch (Exception e) {
             return null;
         }
-    }    public List<T> findByGuestId(long id) {
+    }
+
+    public List<T> findByGuestId(long id) {
         try {
             return (List<T>) cardDAO.findByGuestId(id);
         } catch (Exception e) {
@@ -112,7 +114,9 @@ public class CardServiceImpl<T extends Card> {
         } catch (Exception e) {
             return null;
         }
-    }  public List<T> getAllGuestActiveCard() {
+    }
+
+    public List<T> getAllGuestActiveCard() {
         try {
             return (List<T>) cardDAO.findAll("Card.guest.list", true);
         } catch (Exception e) {
@@ -143,7 +147,7 @@ public class CardServiceImpl<T extends Card> {
     }
 
 
-    public boolean editCard(T entity) {
+    public long editCard(T entity) {
         try {
             EventLogManager.eventLog(eventLogService, String.valueOf(entity.getId()), Card.class.getSimpleName(), EventLogType.EDIT, entity.getEffectorUser());
 
@@ -158,12 +162,14 @@ public class CardServiceImpl<T extends Card> {
             newCard.setVisible(oldCard.isVisible());
             newCard.setStartDate(oldCard.getStartDate());
             newCard.setPerson(oldCard.getPerson());
-            cardDAO.createOld(newCard);
+            newCard.setGuest(oldCard.getGuest());
+            newCard = cardDAO.createOld(newCard);
 
             cardDAO.update(entity);
-            return true;
+
+            return newCard.getId();
         } catch (Exception e) {
-            return false;
+            return 1;
         }
     }
 

@@ -417,8 +417,8 @@ public class HandleCardAction implements Serializable {
         getCard().setCardType(getCardType());
         getCard().setCardStatus(getCardStatus());
         getCard().setEffectorUser(me.getUsername());
-        boolean condition = cardService.editCard(getCard());
-        if (condition) {
+        long condition = cardService.editCard(getCard());
+        if (condition!=1l) {
             refresh();
             me.addInfoMessage("operation.occurred");
             me.redirect("/card/cards.xhtml");
@@ -431,8 +431,8 @@ public class HandleCardAction implements Serializable {
         getCard().setCardType(getCardType());
         getCard().setCardStatus(getCardStatus());
         getCard().setEffectorUser(me.getUsername());
-        boolean condition = cardService.editCard(getCard());
-        if (condition) {
+        long condition = cardService.editCard(getCard());
+        if (condition!=1l) {
             refreshInvis();
             me.addInfoMessage("operation.occurred");
             me.redirect("/card/list-invisible-card.htm");

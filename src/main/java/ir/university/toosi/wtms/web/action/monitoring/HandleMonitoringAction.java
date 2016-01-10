@@ -137,7 +137,11 @@ public class HandleMonitoringAction implements Serializable {
             dataModel.setPdpName(log.getVirdi().getName());
             dataModel.setPersonId(log.getPerson().getId());
             if(log.getPerson().getName()==null || log.getPerson().getName().length()<=1){
-                dataModel.setName(log.getCard().getName());
+                if(log.getCard()!=null) {
+                    dataModel.setName(log.getCard().getName());
+                }else{
+                    dataModel.setName("مهمان ثبت نشده");
+                }
             }else{
                 dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
             }
@@ -265,7 +269,15 @@ public class HandleMonitoringAction implements Serializable {
                 dataModel.setPersonId(log.getPerson().getId());
                 dataModel.setId(log.getId());
                 dataModel.setPdpName(log.getVirdi().getName());
-                dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
+                if(log.getPerson().getName()==null || log.getPerson().getName().length()<=1){
+                    if(log.getCard()!=null) {
+                        dataModel.setName(log.getCard().getName());
+                    }else{
+                        dataModel.setName("مهمان ثبت نشده");
+                    }
+                }else{
+                    dataModel.setName(log.getPerson().getName() + "  " + log.getPerson().getLastName());
+                }
                 trafficLogList.add(dataModel);
             }
             trafficLogsbygate.add((new ArrayList<>(trafficLogList)));

@@ -165,6 +165,7 @@ public class AddGuest implements Serializable {
 
     public void edit() {
         guest = getGeneralHelper().getGuestService().getGuestDao().findById(guest.getId());
+        if(guest.getTime()!=null&& guest.getTime().contains(":"))
         hour = guest.getTime().split(":")[0];
         minute = guest.getTime().split(":")[1];
     }
@@ -323,9 +324,10 @@ public class AddGuest implements Serializable {
         guest = getGeneralHelper().getGuestService().getGuestDao().findById(guest.getId());
         guest.setHasCard(true);
         getGeneralHelper().getGuestService().getGuestDao().update(guest);
+        selectedCard=me.getGeneralHelper().getCardService().findById(selectedCard.getId());
         selectedCard.setGuest(guest);
         selectedCard.setName(guest.getFirstname() + " " + guest.getLastname());
-        generalHelper.getCardService().editCard(selectedCard);
+        long id=generalHelper.getCardService().editCard(selectedCard);
         Log log = new Log();
         log.setGuest(guest);
         log.setCard(selectedCard);
@@ -351,7 +353,7 @@ public class AddGuest implements Serializable {
         selectedCard.setGuest(null);
         selectedCard.setName("");
 
-        generalHelper.getCardService().editCard(selectedCard);
+        long id=generalHelper.getCardService().editCard(selectedCard);
         Log log = new Log();
         log.setGuest(guest);
         log.setCard(selectedCard);
@@ -369,6 +371,7 @@ public class AddGuest implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        beginToday();
     }
 
     public void takePicture() {

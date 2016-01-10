@@ -290,11 +290,11 @@
                                 <p:inputText value="#{addGuest.guest.lastname}" maxlength="20"/>
                             </td>
                             <td>
-                                <p:graphicImage id="pic"
-                                                value="/loadImage?id=#{addGuest.guest.id}"
+                                <h:graphicImage id="pic"
+                                                value="/guestImage?id=#{addGuest.guest.id}"
                                                 style="display:block;height: 150px">
                                     <f:param value="#{handlePersonAction.time}" name="time"/>
-                                </p:graphicImage>
+                                </h:graphicImage>
 
                             </td>
                         </tr>
@@ -342,10 +342,10 @@
                             <td>
 
                                 <p:spinner value="#{addGuest.minute}"
-                                           step="1" maxValue="59" inputSize="1" minValue="0"/>
+                                           step="1" maxValue="59" inputSize="5" minValue="0"/>
                                 &#160;
                                 <p:spinner value="#{addGuest.hour}"
-                                           step="1" maxValue="23" inputSize="1" minValue="0"/>
+                                           step="1" maxValue="23" inputSize="5" minValue="0"/>
                             </td>
                         </tr>
 
