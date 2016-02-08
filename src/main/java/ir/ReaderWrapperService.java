@@ -1,5 +1,6 @@
 package ir;
 
+import ir.university.toosi.guest.service.GuestServiceImpl;
 import ir.university.toosi.parking.entity.ParkingLog;
 import ir.university.toosi.parking.service.ParkingLogServiceImpl;
 import ir.university.toosi.tms.model.entity.TrafficLog;
@@ -49,6 +50,8 @@ public class ReaderWrapperService implements IReaderWrapperService {
     VirdiServiceImpl virdiService;
     @EJB
     CardServiceImpl cardService;
+    @EJB
+    GuestServiceImpl guestService;
     @EJB
     TrafficLogServiceImpl trafficLogService;
     @EJB
@@ -133,6 +136,9 @@ public class ReaderWrapperService implements IReaderWrapperService {
         trafficLog.setValid(value.isAuthorized());
         trafficLog.setPerson(personService.getPersonByPersonOtherId(String.valueOf(value.getUserID())));
         trafficLog.setCard(cardService.findByCode(String.valueOf(value.getUserID())));
+        if(trafficLog.getCard()!=null){
+            trafficLog.setGuest(trafficLog.getCard().getGuest());
+        }
         trafficLog.setFinger(true);
         trafficLog.setLast(true);
         trafficLog.setOffline(false);

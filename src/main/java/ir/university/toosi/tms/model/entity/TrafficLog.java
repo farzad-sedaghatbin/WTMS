@@ -2,6 +2,7 @@ package ir.university.toosi.tms.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ir.university.toosi.guest.entity.Guest;
 import ir.university.toosi.tms.model.entity.personnel.Card;
 import ir.university.toosi.tms.model.entity.personnel.Organ;
 import ir.university.toosi.tms.model.entity.personnel.Person;
@@ -97,6 +98,9 @@ public class TrafficLog extends BaseEntity {
     @OneToOne
     @JsonProperty
     private Person person;
+    @OneToOne
+    @JsonProperty
+    private Guest guest;
     @OneToOne
     @JsonProperty
     private PDP pdp;
@@ -312,4 +316,19 @@ public class TrafficLog extends BaseEntity {
         this.virdi = virdi;
     }
 
+    public Guest getGuest() {
+        return guest;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
+    }
+
+    public byte[] getVirdiPicture() {
+        return virdiPicture;
+    }
+
+    public void setVirdiPicture(byte[] virdiPicture) {
+        this.virdiPicture = virdiPicture;
+    }
 }
