@@ -1,5 +1,6 @@
 package ir;
 
+import ir.university.toosi.tms.readerwrapper.AccesEventHolder;
 import ir.university.toosi.tms.readerwrapper.PersonHolder;
 
 import javax.jws.WebMethod;
@@ -29,9 +30,13 @@ public interface IReaderWrapperService {
 
     @WebMethod
     public void getUserList(int terminalId);
+    @WebMethod
+    public void GetAccessEventData(int terminalId);
 
     @WebMethod
     public void setUserList(int terminalId, PersonHolder personHolder);
+    @WebMethod
+    public void setAccessEventList(int terminalId, AccesEventHolder accesEventHolder);
 
     @WebMethod
     public void addOnGetAccessEventData(int terminalId, ir.university.toosi.tms.readerwrapper.AccessEventData accessEventData);

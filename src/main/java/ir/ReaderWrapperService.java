@@ -10,6 +10,7 @@ import ir.university.toosi.tms.model.service.personnel.CardServiceImpl;
 import ir.university.toosi.tms.model.service.personnel.PersonServiceImpl;
 import ir.university.toosi.tms.model.service.zone.GatewayServiceImpl;
 import ir.university.toosi.tms.model.service.zone.VirdiServiceImpl;
+import ir.university.toosi.tms.readerwrapper.AccesEventHolder;
 import ir.university.toosi.tms.readerwrapper.AccessEventData;
 import ir.university.toosi.tms.readerwrapper.Person;
 import ir.university.toosi.tms.readerwrapper.PersonHolder;
@@ -118,6 +119,44 @@ public class ReaderWrapperService implements IReaderWrapperService {
                 personService.editPerson(person1);
             }
         }
+
+    }
+    @Override
+    public void setAccessEventList(int terminalId, AccesEventHolder accessList) {
+
+        for(int i=0;i<accessList.getAccessEventDatas().length;i++){
+//        for (AccessEventData value : accessList.getAccessEventDatas()) {
+            AccessEventData value=accessList.getAccessEventDatas()[i];
+            String address="/" + value.getUserID() + new Date().getTime();
+
+            TrafficLog trafficLog = new TrafficLog();
+            trafficLog.setVirdi(virdiService.findByTerminalId(terminalId));
+            trafficLog.setGateway(trafficLog.getVirdi().getGateway());
+//            ConvertedCameraUtil.capture(trafficLog.getVirdi().getCamera(),address);
+            trafficLog.setTime(value.getTime());
+            trafficLog.setDate(LangUtil.getEnglishNumber(value.getDate()));
+            trafficLog.setExit(true);
+            trafficLog.setValid(value.isAuthorized());
+            trafficLog.setPerson(personService.getPersonByPersonOtherId(String.valueOf(value.getUserID())));
+            trafficLog.setCard(cardService.findByCode(String.valueOf(value.getUserID())));
+            if(trafficLog.getCard()!=null){
+                trafficLog.setGuest(trafficLog.getCard().getGuest());
+            }
+            trafficLog.setFinger(true);
+            trafficLog.setLast(true);
+            trafficLog.setOffline(true);
+            trafficLog.setPictures(address);
+            trafficLog.setDeleted("0");
+            trafficLog.setStatus("c");
+            trafficLog.setZone(trafficLog.getGateway().getZone());
+            trafficLog.setVideo("");
+            trafficLogService.createTrafficLog(trafficLog);
+        }
+
+    }
+
+    @Override
+    public void GetAccessEventData(int terminalId) {
 
     }
 

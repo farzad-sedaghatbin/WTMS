@@ -13,8 +13,9 @@ import java.io.Serializable;
 
 public class AccessEventData implements Serializable {
     int userID;
-    String dateTime;
-//    byte virduAuthMode;
+    String date;
+    String time;
+    //    byte virduAuthMode;
 //    byte authType;
     boolean authorized;
     String rfid;
@@ -35,15 +36,23 @@ public class AccessEventData implements Serializable {
         this.userID = userID;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public String getDate() {
+        return date;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-//    public byte getVirduAuthMode() {
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    //    public byte getVirduAuthMode() {
 //        return virduAuthMode;
 //    }
 //

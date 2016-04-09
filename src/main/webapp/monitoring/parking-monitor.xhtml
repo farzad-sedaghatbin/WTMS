@@ -42,7 +42,7 @@
                                         <p:commandLink value="#{bundle.picture}"/>
                                     </f:facet>
                                     <p:graphicImage value="#{handleParkingAction.pic}" width="150" height="100">
-                                        <f:param name="address" value="#{parkingLog.pictures}" />
+                                        <f:param name="address" value="#{parkingLog.traffic_date+'/'+parkingLog.pictures}" />
                                     </p:graphicImage>
 
                                 </p:column>

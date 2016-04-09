@@ -388,7 +388,12 @@ public class AddGuest implements Serializable {
         map.put("date", CalendarUtil.getPersianDateWithSlash(new Locale("fa")));
         map.put("vorgan", guest.getvOrgan().replace("ی", "ي"));
         map.put("time", LangUtil.getFarsiNumber(guest.getTime()));
-        map.put("picture", new ByteArrayInputStream(guest.getPicture()));
+        if(guest.getPicture()==null){
+            map.put("picture", new ByteArrayInputStream(me.getGeneralHelper().getAnonymous()));
+
+        }else {
+            map.put("picture", new ByteArrayInputStream(guest.getPicture()));
+        }
         map.put("sign", new ByteArrayInputStream(me.getUser().getUserSign()));
         JasperUtil.generatePDFWithoutDataSource("guest.jrxml", CalendarUtil.getPersianDateWithoutSlash(new Locale("fa"))+CalendarUtil.getTimeWithoutDot(new Date(),new Locale("fa"))+".pdf", map);
     }

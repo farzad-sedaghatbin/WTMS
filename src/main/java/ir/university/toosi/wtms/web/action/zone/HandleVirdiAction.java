@@ -324,7 +324,18 @@ public class HandleVirdiAction implements Serializable {
         virdiNameFilter = "";
     }
 
-    public void fetch() throws MalformedURLException {
+    public void offline() throws MalformedURLException {
+//        readerWrapperService.getUserList(currentVirdi.getTerminalId());
+        URL url = new URL("http://127.0.0.1:8081/ws?wsdl");
+        QName qname = new QName("http://ir/", "ReaderWrapperServiceService");
+
+        Service service = Service.create(url, qname);
+
+        IReaderWrapperService readerWrapperService = service.getPort(IReaderWrapperService.class);
+        readerWrapperService.GetAccessEventData(currentVirdi.getTerminalId());
+        me.redirect("/virdi/virdi.xhtml");
+    }
+   public void fetch() throws MalformedURLException {
 //        readerWrapperService.getUserList(currentVirdi.getTerminalId());
         URL url = new URL("http://127.0.0.1:8081/ws?wsdl");
         QName qname = new QName("http://ir/", "ReaderWrapperServiceService");

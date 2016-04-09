@@ -137,7 +137,7 @@ public class HandleMonitoringAction implements Serializable {
             dataModel.setPdpName(log.getVirdi().getName());
             dataModel.setPersonId(log.getPerson().getId());
             if(log.getPerson().getName()==null || log.getPerson().getName().length()<=1){
-                if(log.getCard()!=null) {
+                if(log.getCard()!=null&&log.getGuest()!=null) {
                     dataModel.setName(log.getGuest().getFirstname() + "  " + log.getGuest().getLastname());
                 }else{
                     dataModel.setName("مهمان ثبت نشده");
@@ -270,7 +270,7 @@ public class HandleMonitoringAction implements Serializable {
                 dataModel.setId(log.getId());
                 dataModel.setPdpName(log.getVirdi().getName());
                 if(log.getPerson().getName()==null || log.getPerson().getName().length()<=1){
-                    if(log.getCard()!=null) {
+                    if(log.getCard()!=null && log.getGuest()!=null ) {
                         dataModel.setName(log.getGuest().getFirstname() + "  " + log.getGuest().getLastname());
                     }else{
                         dataModel.setName("مهمان ثبت نشده");

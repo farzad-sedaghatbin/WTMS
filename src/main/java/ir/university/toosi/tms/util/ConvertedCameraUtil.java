@@ -28,6 +28,9 @@ public class ConvertedCameraUtil {
     public static void capture(Camera camera, String picName) {
         try {
 
+            if(camera == null){
+                return;
+            }
             url = new URL("http://" + camera.getIp() + "/cgi/mjpg/mjpg.cgi");
             String pos = "50x30";
             int x = 0, y = 0, width = 640, height = 510;
