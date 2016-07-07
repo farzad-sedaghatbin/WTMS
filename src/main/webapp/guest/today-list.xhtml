@@ -6,15 +6,22 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        <script type='text/javascript'>
+            var interval = 1; //Interval in seconds, to retrieve images
+            setInterval(function loadImage() {
+                var now=new Date();
+                document.getElementById('webcam1').src='http://192.168.1.231/image.jpg?'+now.getTime();
+            }, interval * 1000);
+        </script>
         <p:breadCrumb>
             <p:menuitem value="category" url="#"/>
             <p:menuitem value="#{bundle.guest}" url="#" />
             <p:menuitem value="#{bundle.todayList}" url="#" />
         </p:breadCrumb>
-        <h:form >
+        <h:form>
             <p:contextMenu for="GuestTable">
 
-                <p:menuitem value="#{bundle.edit}" actionListener="#{addGuest.edit}"  update="editPanel" icon="ui-icon-scissors"
+                <p:menuitem value="#{bundle.edit}" actionListener="#{addGuest.edit}"   update="editPanel" icon="ui-icon-scissors"
                             oncomplete="PF('GuestPanel').show()"/>
                 <p:menuitem value="#{bundle.assign_card}"  icon="ui-icon-card" update="assigncardPanel"
                             oncomplete="PF('AssignCardPanel').show()"
@@ -310,6 +317,9 @@
                             </td>
                             <td>
                                 <p:inputText value="#{addGuest.guest.fatherName}" maxlength="20"/>
+                            </td>
+                            <td>
+                                <img id="webcam1" src="http://192.168.1.231/image.jpg" width="150px" height="150px"></img>
                             </td>
                         </tr>
 

@@ -4,6 +4,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
+
     <h:form dir="RTL">
 
         <table dir="rtl" border="5" cellpadding="2" cellspacing="10">
@@ -22,12 +23,14 @@
                     <h:inputText value="#{addGuest.guest.lastname}" maxlength="20"/>
                 </td>
                 <td>
+
                     <p:graphicImage id="pic"
                             value="/guestImage?id=#{addGuest.guest.id}"
                             styleClass="personPicture"
                             style="height: 150px;"/>
                 </td>
             </tr>
+
             <tr>
                 <td>
                     <h:outputText value="#{bundle.nationalCode}"/>
